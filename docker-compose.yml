@@ -1,0 +1,100 @@
+version: '2'
+
+services:
+
+  graylog:
+    image: graylog2/allinone
+    ports:
+      - 9001:9000
+      - 12201:12201
+      - 12201:12201/udp
+    networks:
+      common_network:
+        aliases:
+          - graylog
+
+  redis:
+    image: redis
+    ports:
+      - "6380:6379"
+    networks:
+      common_network:
+        aliases:
+          - redis
+    depends_on:
+      - graylog
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27117:27017"
+    volumes:
+      - ./mongo_data_dir:/data/db
+    networks:
+      common_network:
+        aliases:
+          - mongodb
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+
+  solr:
+    image: solr
+    ports:
+      - "8984:8983"
+    volumes:
+      - ./solr-cores:/opt/solr/server/solr
+    networks:
+      common_network:
+        aliases:
+          - solr
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+
+  web:
+    build:
+      context: web-service
+    image: web
+    volumes:
+      - ./web-service:/var/www/site
+    ports:
+      - "81:80"
+    networks:
+      common_network:
+        aliases:
+          - web
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+    depends_on:
+      - redis
+      - mongodb
+      - solr
+
+  streammanager:
+    build:
+      context: stream-manager-service
+    image: streammanager
+    networks:
+      common_network:
+        aliases:
+          - streammanager
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201"
+    depends_on:
+      - redis
+      - mongodb
+      - solr
+
+networks:
+  common_network:

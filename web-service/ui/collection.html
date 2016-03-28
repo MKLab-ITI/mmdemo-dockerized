@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>STEP</title>
+    <meta charset="utf-8">
+    <meta name="description" content="Discover how media is shared in Social Networks...">
+    <meta name="robots" content="index, follow"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="Laaposto">
+
+    <link rel="shortcut icon" href="imgs/favicon.ico"/>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Roboto+Slab:400,300,700&subset=latin,cyrillic-ext,greek-ext,greek,latin-ext,cyrillic'
+          rel='stylesheet' type='text/css'>
+
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/feed/hopscotch.css">
+    <link rel="stylesheet" href="css/feed/foundation.css">
+    <link rel="stylesheet" href="css/feed/normalize.css">
+    <link rel="stylesheet" href="css/feed/main.css">
+    <link rel="stylesheet" href="css/dashboard/nv.d3.css">
+    <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.8/mapbox.css' rel='stylesheet'/>
+    <!--END CSS -->
+</head>
+<body>
+<div id="myModal" class="reveal-modal">
+    <h1></h1>
+
+    <p></p>
+    <a class="close-reveal-modal">&#215;</a>
+</div>
+<div id="loadingbar">
+    <dt></dt>
+    <dd></dd>
+</div>
+<div id="slider">
+    <div id="collection"></div>
+    <div id="logo">
+        <h1 style="cursor: pointer">STEP</h1>
+
+        <p data-lang="slider_title">Discover how media is shared in Social Networks...</p>
+    </div>
+    <div id="settings">
+        <div class="nav-sidebar"><span data-lang="slider_search">SEARCH</span></div>
+        <div id="ff-search">
+            <img class="icon-search" src="imgs/search-12.png" alt="search-icon">
+            <input id="query" name="q" type="text" size="40" placeholder="Search..." autocomplete="off">
+            <img class="icon-clear" src="imgs/close-black.png" alt="close-icon">
+        </div>
+        <div class="nav-sidebar"><span data-lang="slider_settings">SETTINGS</span></div>
+        <div class="ff-filter-holder">
+            <span class="ff-filter ff-type-twitter close" id="Twitter"></span>
+            <span class="ff-filter ff-type-google close" id="GooglePlus"></span>
+            <span class="ff-filter ff-type-facebook close" id="Facebook"></span>
+            <span class="ff-filter ff-type-instagram close" id="Instagram"></span>
+            <span class="ff-filter ff-type-flickr close" id="Flickr"></span>
+            <span class="ff-filter ff-type-youtube close" id="Youtube"></span>
+            <span class="ff-filter ff-type-web close" id="Web"></span>
+        </div>
+        <ul class="accordion">
+            <li id="hop4">
+                <a href="#" class="item">
+                    <img src="imgs/lang-16.png" alt="icon"/>
+                    <span class="text" data-lang="slider_settings_language"> LANGUAGE </span>
+                    <img src="imgs/arrow-right-16.png" alt="icon" class="arrow"/>
+                </a>
+                <ul class="inlist" id="languages"></ul>
+            </li>
+            <li id="hop10">
+                <a href="#" class="item">
+                    <img src="imgs/topics-16.png" alt="icon"/>
+                    <span class="text" data-lang="slider_settings_topics"> TOPICS </span>
+                    <img src="imgs/arrow-right-16.png" alt="icon" class="arrow"/>
+                </a>
+                <ul class="inlist top4" id="topics">
+                    <li class="sub5"><a href="#" class="activelan"><p data-query="*">All</p><span
+                            class="label">1K</span></a></li>
+                </ul>
+            </li>
+            <li id="hop8">
+                <a href="#" class="item">
+                    <img src="imgs/retweet-16.png" alt="icon"/>
+                    <span class="text" data-lang="slider_settings_original"> ORIGINAL </span>
+                    <img src="imgs/arrow-right-16.png" alt="icon" class="arrow"/>
+                </a>
+                <ul class="inlist top2">
+                    <li class="sub3"><a href="#" data-lang="settings_all" data-id="all">All</a></li>
+                    <li class="sub3"><a href="#" data-lang="settings_original" data-id="original">Original</a></li>
+                    <li class="sub3"><a href="#" data-lang="settings_share" data-id="share">Share</a></li>
+                </ul>
+            </li>
+            <li id="hop9">
+                <a href="#" class="item">
+                    <img src="imgs/type-16.png" alt="icon"/>
+                    <span class="text" data-lang="slider_settings_type"> TYPE </span>
+                    <img src="imgs/arrow-right-16.png" alt="icon" class="arrow"/>
+                </a>
+                <ul class="inlist top3">
+                    <li class="sub4"><a href="#" data-lang="settings_all" data-id="all">All</a></li>
+                    <li class="sub4"><a href="#" data-lang="settings_media" data-id="media">Media</a></li>
+                    <li class="sub4"><a href="#" data-lang="settings_text" data-id="text">Text</a></li>
+                </ul>
+            </li>
+            <li id="hop11">
+                <a href="#" class="item">
+                    <img src="imgs/date-16.png" alt="icon"/>
+                    <span class="text" data-lang="slider_settings_date"> DATE </span>
+                    <img src="imgs/arrow-right-16.png" alt="icon" class="arrow"/>
+                </a>
+                <ul class="inlist top5">
+                    <div id="date_range">
+                        <input id="range" value="" name="range"/>
+                    </div>
+                </ul>
+            </li>
+            <li id="hop5">
+                <a href="#" class="item">
+                    <img src="imgs/sort-16.png" alt="icon"/>
+                    <span class="text" data-lang="slider_settings_sort"> SORT </span>
+                    <img src="imgs/arrow-right-16.png" alt="icon" class="arrow"/>
+                </a>
+                <ul class="inlist top">
+                    <li class="sub2"><a href="#" data-lang="settings_recency" data-id="recency">Recency</a></li>
+                    <li class="sub2"><a href="#" data-lang="settings_popularity" data-id="popularity">Popularity</a>
+                    </li>
+                    <li class="sub2"><a href="#" data-lang="settings_relevance" data-id="relevance">Relevance</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div id="footer">
+        <ul class="sidebar-actions">
+            <li class="action" id="hop6">
+                <div class="btn-group dropup">
+                    <img src="imgs/share-24.png" alt="icon" class="bottom-icon"/>
+                    <span class="page" data-id="Feed" data-lang="view_feed">Feed</span>
+
+                    <div class="informer">0</div>
+                </div>
+            </li>
+            <li class="action" style="border:0" id="hop7">
+                <div class="btn-group dropup">
+                    <img src="imgs/chart-24.png" alt="icon" class="bottom-icon"/>
+                    <span data-lang="view_dashboard" data-id="Dashboard">Dashboard</span>
+                </div>
+            </li>
+        </ul>
+        <ul class="update">
+            <li><p id="update_field"></p></li>
+
+        </ul>
+        <ul class="sidebar-terms">
+            <li><a href="http://iti.gr/" target="_blank">CERTH-ITI</a></li>
+            <li><a href="http://mklab.iti.gr/" target="_blank">MKLAB</a></li>
+            <li><a href="#" id="help" data-lang="help">HELP</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="menu">
+    <div class="toggle-icon">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+</div>
+<div id="main">
+    <div id="loading" class="opened"><span data-lang="loading">Loading images, please wait.....</span>
+        <img id="loadimg" src="imgs/loading.gif" alt="loading.."/>
+    </div>
+    <ul id="tiles"></ul>
+</div>
+<img id="loadmore" class="opened2" src="imgs/loadmore.gif" alt="loading.."/>
+
+<div id="end" class="effect8">
+    <p></p>
+</div>
+
+<!--DASHBOARD PAGE -->
+<div id="dashboard">
+    <div class="row fullWidth">
+        <div class="small-12 medium-6 large-3 columns">
+            <div class="minibox">
+                <svg class="svg__loading load0" viewBox="0 0 390 120" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect class="svg__loading-twitter" x="0" y="2.76601" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="74.618705" to="74.618705" begin="0s" dur="1.5s"
+                                     values="74.618705; 0; 74.618705; 74.618705; 74.618705"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-google" x="78.7946257" y="17.0006" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="37" to="37" begin="0.1s" dur="1.5s"
+                                     values="37; 0; 37; 37; 37"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-facebook" x="157.589251" y="52.0905" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="57.3021583" to="57.3021583" begin="0.2s" dur="1.5s"
+                                     values="57.3021583; 0; 57.3021583; 57.3021583; 57.3021583"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-instagram" x="236.383877" y="97.112" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="97.3093525" to="97.3093525" begin="0.3s" dur="1.5s"
+                                     values="97.3093525; 0; 97.3093525; 97.3093525; 97.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-flickr" x="315.1785016" y="142.1335" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="77.3093525" to="77.3093525" begin="0.3s" dur="1.5s"
+                                     values="77.3093525; 0; 77.3093525; 77.3093525; 77.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                    </g>
+                </svg>
+                <div class="minitext">
+                    <p id="posts_num">0</p>
+
+                    <p data-lang="statistics_posts">Posts Made</p>
+                    <img src="imgs/message-128.png" alt="message-icon" style="margin-top:-72px;width: 72px;">
+                </div>
+                <div class="details">
+                    <p data-lang="social_mix">Social Mix</p>
+                    <img class="activestat" id="count" src="imgs/arrow-right-24-black.png" alt="arrow-icon">
+                </div>
+            </div>
+        </div>
+        <div class="small-12 medium-6 large-3 columns">
+            <div class="minibox">
+                <svg class="svg__loading load0" viewBox="0 0 390 120" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect class="svg__loading-twitter" x="0" y="2.76601" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="74.618705" to="74.618705" begin="0s" dur="1.5s"
+                                     values="74.618705; 0; 74.618705; 74.618705; 74.618705"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-google" x="78.7946257" y="17.0006" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="37" to="37" begin="0.1s" dur="1.5s"
+                                     values="37; 0; 37; 37; 37"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-facebook" x="157.589251" y="52.0905" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="57.3021583" to="57.3021583" begin="0.2s" dur="1.5s"
+                                     values="57.3021583; 0; 57.3021583; 57.3021583; 57.3021583"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-instagram" x="236.383877" y="97.112" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="97.3093525" to="97.3093525" begin="0.3s" dur="1.5s"
+                                     values="97.3093525; 0; 97.3093525; 97.3093525; 97.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-flickr" x="315.1785016" y="142.1335" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="77.3093525" to="77.3093525" begin="0.3s" dur="1.5s"
+                                     values="77.3093525; 0; 77.3093525; 77.3093525; 77.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                    </g>
+                </svg>
+                <div class="minitext">
+                    <p id="users_num">0</p>
+
+                    <p data-lang="statistics_users">Users Talking</p>
+                    <img src="imgs/users-128.png" alt="users-icon">
+                </div>
+                <div class="details">
+                    <p data-lang="social_mix" style="background-color: #19b698">Social Mix</p>
+                    <img id="users" src="imgs/arrow-right-24.png" alt="arrow-icon">
+                </div>
+            </div>
+        </div>
+        <div class="small-12 medium-6 large-3 columns">
+            <div class="minibox">
+                <svg class="svg__loading load0" viewBox="0 0 390 120" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect class="svg__loading-twitter" x="0" y="2.76601" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="74.618705" to="74.618705" begin="0s" dur="1.5s"
+                                     values="74.618705; 0; 74.618705; 74.618705; 74.618705"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-google" x="78.7946257" y="17.0006" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="37" to="37" begin="0.1s" dur="1.5s"
+                                     values="37; 0; 37; 37; 37"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-facebook" x="157.589251" y="52.0905" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="57.3021583" to="57.3021583" begin="0.2s" dur="1.5s"
+                                     values="57.3021583; 0; 57.3021583; 57.3021583; 57.3021583"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-instagram" x="236.383877" y="97.112" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="97.3093525" to="97.3093525" begin="0.3s" dur="1.5s"
+                                     values="97.3093525; 0; 97.3093525; 97.3093525; 97.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-flickr" x="315.1785016" y="142.1335" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="77.3093525" to="77.3093525" begin="0.3s" dur="1.5s"
+                                     values="77.3093525; 0; 77.3093525; 77.3093525; 77.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                    </g>
+                </svg>
+                <div class="minitext">
+                    <p id="reach_num">0</p>
+
+                    <p data-lang="statistics_reached">Users Reached</p>
+                    <img src="imgs/eye-128.png" alt="eye-icon" style="margin-top:-90px;width: 100px;">
+                </div>
+                <div class="details">
+                    <p data-lang="social_mix" style="background-color: #ea6153">Social Mix</p>
+                    <img id="reach" src="imgs/arrow-right-24.png" alt="arrow-icon">
+                </div>
+            </div>
+        </div>
+        <div class="small-12 medium-6 large-3 columns">
+            <div class="minibox">
+                <svg class="svg__loading load0" viewBox="0 0 390 120" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect class="svg__loading-twitter" x="0" y="2.76601" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="74.618705" to="74.618705" begin="0s" dur="1.5s"
+                                     values="74.618705; 0; 74.618705; 74.618705; 74.618705"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-google" x="78.7946257" y="17.0006" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="37" to="37" begin="0.1s" dur="1.5s"
+                                     values="37; 0; 37; 37; 37"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-facebook" x="157.589251" y="52.0905" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="57.3021583" to="57.3021583" begin="0.2s" dur="1.5s"
+                                     values="57.3021583; 0; 57.3021583; 57.3021583; 57.3021583"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-instagram" x="236.383877" y="97.112" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="97.3093525" to="97.3093525" begin="0.3s" dur="1.5s"
+                                     values="97.3093525; 0; 97.3093525; 97.3093525; 97.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-flickr" x="315.1785016" y="142.1335" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="77.3093525" to="77.3093525" begin="0.3s" dur="1.5s"
+                                     values="77.3093525; 0; 77.3093525; 77.3093525; 77.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                    </g>
+                </svg>
+                <div class="minitext">
+                    <p id="endo_num">0</p>
+
+                    <p data-lang="statistics_endorsements">Endorsements</p>
+                    <img src="imgs/star-128.png" alt="endo-icon">
+                </div>
+                <div class="details">
+                    <p data-lang="social_mix" style="background-color: #00acee">Social Mix</p>
+                    <img id="endorsement" src="imgs/arrow-right-24.png" alt="arrow-icon">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row fullWidth">
+        <div class="small-12 medium-12 large-8 columns" id="timeline_col">
+            <svg class="svg__loading" id="load2" viewBox="0 0 390 120" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 xmlns:xlink="http://www.w3.org/1999/xlink">
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <rect class="svg__loading-twitter" x="0" y="2.76601" width="74.6161228" height="100%">
+                        <animate attributeName="y" from="74.618705" to="74.618705" begin="0s" dur="1.5s"
+                                 values="74.618705; 0; 74.618705; 74.618705; 74.618705"
+                                 keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                 keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline" repeatCount="indefinite"></animate>
+                    </rect>
+                    <rect class="svg__loading-google" x="78.7946257" y="17.0006" width="74.6161228" height="100%">
+                        <animate attributeName="y" from="37" to="37" begin="0.1s" dur="1.5s" values="37; 0; 37; 37; 37"
+                                 keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                 keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline" repeatCount="indefinite"></animate>
+                    </rect>
+                    <rect class="svg__loading-facebook" x="157.589251" y="52.0905" width="74.6161228" height="100%">
+                        <animate attributeName="y" from="57.3021583" to="57.3021583" begin="0.2s" dur="1.5s"
+                                 values="57.3021583; 0; 57.3021583; 57.3021583; 57.3021583"
+                                 keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                 keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline" repeatCount="indefinite"></animate>
+                    </rect>
+                    <rect class="svg__loading-instagram" x="236.383877" y="97.112" width="74.6161228" height="100%">
+                        <animate attributeName="y" from="97.3093525" to="97.3093525" begin="0.3s" dur="1.5s"
+                                 values="97.3093525; 0; 97.3093525; 97.3093525; 97.3093525"
+                                 keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                 keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline" repeatCount="indefinite"></animate>
+                    </rect>
+                    <rect class="svg__loading-flickr" x="315.1785016" y="142.1335" width="74.6161228" height="100%">
+                        <animate attributeName="y" from="77.3093525" to="77.3093525" begin="0.3s" dur="1.5s"
+                                 values="77.3093525; 0; 77.3093525; 77.3093525; 77.3093525"
+                                 keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                 keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline" repeatCount="indefinite"></animate>
+                    </rect>
+                </g>
+            </svg>
+            <div class="box-pad">
+                <div class="box-pad-header" id="timeline_head"><span data-lang="timeline">Timeline</span>
+                            <span style="float: right;">
+                                <img src="imgs/settings-16.png" alt="icon" id="set2" class="arrow2"
+                                     style="width: 14px"/>
+                                <img src="imgs/arrow-right-16.png" alt="icon" id="down2" class="arrow2"/>		
+                                <img src="imgs/x-mark-16.png" alt="icon" id="close2" class="arrow2"
+                                     style="width: 12px"/>
+			    </span>
+                </div>
+                <div id="inner-set2">
+                    <div class="analysis">
+                        <small class="per" data-lang="timeline_per">Per</small>
+                        <span class="analysiszone" data-lang="timeline_hour" id="hours">HOUR</span>
+                    </div>
+                    <div class="analysis activeanalysis">
+                        <small class="per" data-lang="timeline_per">Per</small>
+                        <span class="analysiszone" data-lang="timeline_day" id="days">DAY</span>
+                    </div>
+                    <div class="analysis">
+                        <small class="per" data-lang="timeline_per">Per</small>
+                        <span class="analysiszone" data-lang="timeline_week" id="weeks">WEEK</span>
+                    </div>
+                </div>
+                <p id="erase_analysis"></p>
+                <svg id="chart_line" class="with-3d-shadow with-transitions"></svg>
+            </div>
+        </div>
+        <div class="small-12 medium-12 large-4 columns" id="socialmix_col">
+            <svg class="svg__loading" id="load1" viewBox="0 0 390 120" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 xmlns:xlink="http://www.w3.org/1999/xlink">
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <rect class="svg__loading-twitter" x="0" y="2.76601" width="74.6161228" height="100%">
+                        <animate attributeName="y" from="74.618705" to="74.618705" begin="0s" dur="1.5s"
+                                 values="74.618705; 0; 74.618705; 74.618705; 74.618705"
+                                 keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                 keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline" repeatCount="indefinite"></animate>
+                    </rect>
+                    <rect class="svg__loading-google" x="78.7946257" y="17.0006" width="74.6161228" height="100%">
+                        <animate attributeName="y" from="37" to="37" begin="0.1s" dur="1.5s" values="37; 0; 37; 37; 37"
+                                 keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                 keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline" repeatCount="indefinite"></animate>
+                    </rect>
+                    <rect class="svg__loading-facebook" x="157.589251" y="52.0905" width="74.6161228" height="100%">
+                        <animate attributeName="y" from="57.3021583" to="57.3021583" begin="0.2s" dur="1.5s"
+                                 values="57.3021583; 0; 57.3021583; 57.3021583; 57.3021583"
+                                 keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                 keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline" repeatCount="indefinite"></animate>
+                    </rect>
+                    <rect class="svg__loading-instagram" x="236.383877" y="97.112" width="74.6161228" height="100%">
+                        <animate attributeName="y" from="97.3093525" to="97.3093525" begin="0.3s" dur="1.5s"
+                                 values="97.3093525; 0; 97.3093525; 97.3093525; 97.3093525"
+                                 keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                 keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline" repeatCount="indefinite"></animate>
+                    </rect>
+                    <rect class="svg__loading-flickr" x="315.1785016" y="142.1335" width="74.6161228" height="100%">
+                        <animate attributeName="y" from="77.3093525" to="77.3093525" begin="0.3s" dur="1.5s"
+                                 values="77.3093525; 0; 77.3093525; 77.3093525; 77.3093525"
+                                 keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                 keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline" repeatCount="indefinite"></animate>
+                    </rect>
+                </g>
+            </svg>
+            <div class="box-pad">
+                <div class="box-pad-header" id="socialmix_head"><span data-lang="social_mix">Social Mix</span>
+                            <span style="float: right;">
+                                <img src="imgs/arrow-right-16.png" alt="icon" id="down1" class="arrow2"/>		
+                                <img src="imgs/x-mark-16.png" alt="icon" id="close1" class="arrow2"
+                                     style="width: 12px"/>
+			    </span>
+                </div>
+                <svg id="chart_pie" class="with-transitions"></svg>
+            </div>
+        </div>
+        <div class="small-12 medium-12 large-4 columns" id="heatmap_col">
+            <div class="box-pad">
+                <svg class="svg__loading" id="load3" viewBox="0 0 390 120" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect class="svg__loading-twitter" x="0" y="2.76601" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="74.618705" to="74.618705" begin="0s" dur="1.5s"
+                                     values="74.618705; 0; 74.618705; 74.618705; 74.618705"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-google" x="78.7946257" y="17.0006" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="37" to="37" begin="0.1s" dur="1.5s"
+                                     values="37; 0; 37; 37; 37"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-facebook" x="157.589251" y="52.0905" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="57.3021583" to="57.3021583" begin="0.2s" dur="1.5s"
+                                     values="57.3021583; 0; 57.3021583; 57.3021583; 57.3021583"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-instagram" x="236.383877" y="97.112" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="97.3093525" to="97.3093525" begin="0.3s" dur="1.5s"
+                                     values="97.3093525; 0; 97.3093525; 97.3093525; 97.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-flickr" x="315.1785016" y="142.1335" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="77.3093525" to="77.3093525" begin="0.3s" dur="1.5s"
+                                     values="77.3093525; 0; 77.3093525; 77.3093525; 77.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                    </g>
+                </svg>
+                <div class="box-pad-header no-border" id="heatmap_head"><span data-lang="heatmap">HeatMap</span>
+                            <span style="float: right;">
+                                <img src="imgs/arrow-right-16.png" alt="icon" id="down3" class="arrow2"/>
+                                <img src="imgs/x-mark-16.png" alt="icon" id="close3" class="arrow2"
+                                     style="width: 12px"/>
+			    </span>
+                </div>
+                <div id="heatmap"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row fullWidth">
+        <div class="small-12 medium-12 large-5 columns" id="location_col">
+            <div class="box-pad">
+                <svg class="svg__loading" id="load4" viewBox="0 0 390 120" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect class="svg__loading-twitter" x="0" y="2.76601" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="74.618705" to="74.618705" begin="0s" dur="1.5s"
+                                     values="74.618705; 0; 74.618705; 74.618705; 74.618705"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-google" x="78.7946257" y="17.0006" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="37" to="37" begin="0.1s" dur="1.5s"
+                                     values="37; 0; 37; 37; 37"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-facebook" x="157.589251" y="52.0905" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="57.3021583" to="57.3021583" begin="0.2s" dur="1.5s"
+                                     values="57.3021583; 0; 57.3021583; 57.3021583; 57.3021583"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-instagram" x="236.383877" y="97.112" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="97.3093525" to="97.3093525" begin="0.3s" dur="1.5s"
+                                     values="97.3093525; 0; 97.3093525; 97.3093525; 97.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-flickr" x="315.1785016" y="142.1335" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="77.3093525" to="77.3093525" begin="0.3s" dur="1.5s"
+                                     values="77.3093525; 0; 77.3093525; 77.3093525; 77.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                    </g>
+                </svg>
+                <div class="box-pad-header no-border" id="usersloc_head"><span data-lang="users_location">Users Locations</span>
+                            <span style="float: right;">
+                                <img src="imgs/arrow-right-16.png" alt="icon" id="down4" class="arrow2"/>
+                                <img src="imgs/x-mark-16.png" alt="icon" id="close4" class="arrow2"
+                                     style="width: 12px"/>
+                            </span>
+                </div>
+                <div id="users_locations">
+                    <div id="locations"></div>
+                    <div id="gages">
+                        <div id="g1"></div>
+                        <div id="g2"></div>
+                        <div id="g3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="small-12 medium-12 large-7 columns" id="active_col">
+            <div class="box-pad">
+                <svg class="svg__loading" id="load5" viewBox="0 0 390 120" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect class="svg__loading-twitter" x="0" y="2.76601" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="74.618705" to="74.618705" begin="0s" dur="1.5s"
+                                     values="74.618705; 0; 74.618705; 74.618705; 74.618705"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-google" x="78.7946257" y="17.0006" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="37" to="37" begin="0.1s" dur="1.5s"
+                                     values="37; 0; 37; 37; 37"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-facebook" x="157.589251" y="52.0905" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="57.3021583" to="57.3021583" begin="0.2s" dur="1.5s"
+                                     values="57.3021583; 0; 57.3021583; 57.3021583; 57.3021583"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-instagram" x="236.383877" y="97.112" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="97.3093525" to="97.3093525" begin="0.3s" dur="1.5s"
+                                     values="97.3093525; 0; 97.3093525; 97.3093525; 97.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-flickr" x="315.1785016" y="142.1335" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="77.3093525" to="77.3093525" begin="0.3s" dur="1.5s"
+                                     values="77.3093525; 0; 77.3093525; 77.3093525; 77.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                    </g>
+                </svg>
+                <div class="box-pad-header" id="activeuser_head"><span data-lang="active_users">Active Users</span>
+                            <span style="float: right;">
+                                <img src="imgs/settings-16.png" alt="icon" id="set5" class="arrow2"
+                                     style="width: 14px"/>
+                                <img src="imgs/arrow-right-16.png" alt="icon" id="down5" class="arrow2"/>		
+                                <img src="imgs/x-mark-16.png" alt="icon" id="close5" class="arrow2"
+                                     style="width: 12px"/>
+                            </span>
+                </div>
+                <div id="inner-set5">
+                    <div class="numbers">
+                        <small class="top_title" data-lang="top_number">Top</small>
+                        <span class="topnum" id="num10">10</span>
+                    </div>
+                    <div class="numbers">
+                        <small class="top_title" data-lang="top_number">Top</small>
+                        <span class="topnum" id="num30">30</span>
+                    </div>
+                    <div class="numbers activenumber">
+                        <small class="top_title" data-lang="top_number">Top</small>
+                        <span class="topnum" id="num50">50</span>
+                    </div>
+                    <div class="numbers">
+                        <small class="top_title" data-lang="top_number">Top</small>
+                        <span class="topnum" id="num100">100</span>
+                    </div>
+                    <div class="numbers">
+                        <small class="top_title" data-lang="top_number">Top</small>
+                        <span class="topnum" id="num200">200</span>
+                    </div>
+                </div>
+                <div id="active_users">
+                    <svg id="barchart_users" class="with-3d-shadow with-transitions"></svg>
+                    <div id="users_images"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row fullWidth">
+        <div class="small-12 medium-12 large-12 columns" id="tags_col">
+            <div class="box-pad">
+                <svg class="svg__loading" id="load6" viewBox="0 0 390 120" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect class="svg__loading-twitter" x="0" y="2.76601" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="74.618705" to="74.618705" begin="0s" dur="1.5s"
+                                     values="74.618705; 0; 74.618705; 74.618705; 74.618705"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-google" x="78.7946257" y="17.0006" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="37" to="37" begin="0.1s" dur="1.5s"
+                                     values="37; 0; 37; 37; 37"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-facebook" x="157.589251" y="52.0905" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="57.3021583" to="57.3021583" begin="0.2s" dur="1.5s"
+                                     values="57.3021583; 0; 57.3021583; 57.3021583; 57.3021583"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-instagram" x="236.383877" y="97.112" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="97.3093525" to="97.3093525" begin="0.3s" dur="1.5s"
+                                     values="97.3093525; 0; 97.3093525; 97.3093525; 97.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                        <rect class="svg__loading-flickr" x="315.1785016" y="142.1335" width="74.6161228" height="100%">
+                            <animate attributeName="y" from="77.3093525" to="77.3093525" begin="0.3s" dur="1.5s"
+                                     values="77.3093525; 0; 77.3093525; 77.3093525; 77.3093525"
+                                     keySplines=".75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99; .75 .06 .38 .99"
+                                     keyTimes="0; 0.25; 0.5; 0.75; 1" calcMode="spline"
+                                     repeatCount="indefinite"></animate>
+                        </rect>
+                    </g>
+                </svg>
+                <div class="box-pad-header" id="tags_head"><span data-lang="entities">Entities</span>
+                <span style="float: right;">
+                    <img src="imgs/settings-16.png" alt="icon" id="set6" class="arrow2" style="width: 14px"/>
+                    <img src="imgs/arrow-right-16.png" alt="icon" id="down6" class="arrow2"/>
+                    <img src="imgs/x-mark-16.png" alt="icon" id="close6" class="arrow2" style="width: 12px"/>
+                </span>
+                </div>
+                <div id="inner-set6" style="height:88px">
+                    <div class="numbers_tags">
+                        <small class="top_title" data-lang="top_number">Top</small>
+                        <span class="topnum" id="tag10">10</span>
+                    </div>
+                    <div class="numbers_tags">
+                        <small class="top_title" data-lang="top_number">Top</small>
+                        <span class="topnum" id="tag30">30</span>
+                    </div>
+                    <div class="numbers_tags activenumber_tag">
+                        <small class="top_title" data-lang="top_number">Top</small>
+                        <span class="topnum" id="tag50">50</span>
+                    </div>
+                    <div class="numbers_tags">
+                        <small class="top_title" data-lang="top_number">Top</small>
+                        <span class="topnum" id="tag100">100</span>
+                    </div>
+                    <div class="sort_by" style="width:50%">
+                        <small class="per" data-lang="entities_sort">Sort By</small>
+                        <span class="sortzone" id="type" data-lang="entities_sort_type">TYPE</span>
+                    </div>
+                    <div class="sort_by activesort" style="width:50%">
+                        <small class="per" data-lang="entities_sort">Sort By</small>
+                        <span class="sortzone" id="appearance" data-lang="entities_sort_frequency">FREQUENCY</span>
+                    </div>
+                </div>
+                <p id="animate" data-lang="entity_animate">Animate</p>
+                <div id="tags">
+                    <svg id="tags_all"></svg>
+                    <div id="legend">
+                        <div class="legendcolor" style="background-color:#89A894"></div>
+                        <div class="legendtext" data-lang="entity_person">PERSON</div>
+                        <div class="legendcolor" style="background-color:#0B7189"></div>
+                        <div class="legendtext" data-lang="entity_tag">TAG</div>
+                        <div class="legendcolor" style="background-color:#745B5E"></div>
+                        <div class="legendtext" data-lang="entity_organization">ORGANIZATION</div>
+                    </div>
+                    <div id="animation_wrapper">
+                        <div class="animation_icon">
+                            <svg viewBox="0 0 60 60">
+                                <g>
+                                    <path class="play" fill="#999" d="M24.89,40.84c-0.37,0.22-0.83,0.23-1.2,0.02s-0.6-0.61-0.6-1.04V20.2c0-0.43,0.23-0.83,0.6-1.04
+                                    c0.37-0.21,0.83-0.21,1.2,0.02l16.35,9.81c0.36,0.21,0.58,0.6,0.58,1.02s-0.22,0.81-0.58,1.02L24.89,40.84z"></path>
+                                    <path class="pause hidden" fill="#999" d="M28.03,19.06v21.88c0,0.86-0.7,1.56-1.56,1.56h-3.12c-0.86,0-1.56-0.7-1.56-1.56V19.06
+                                    c0-0.86,0.7-1.56,1.56-1.56h3.12C27.33,17.5,28.03,18.2,28.03,19.06z M38.46,19.06v21.88c0,0.86-0.7,1.56-1.56,1.56h-3.12
+                                    c-0.86,0-1.56-0.7-1.56-1.56V19.06c0-0.86,0.7-1.56,1.56-1.56h3.12C37.76,17.5,38.46,18.2,38.46,19.06z"></path>
+                                    <path class="stroke-bg" fill="none" stroke="#ED5565" stroke-width="7" d="M30,7C17.32,7,7,17.32,7,30
+                                    c0,12.68,10.32,23,23,23c12.68,0,23-10.32,23-23C53,17.32,42.68,7,30,7z"></path>
+                                    <path class="stroke" fill="none" stroke="#999" stroke-width="7" d="M30,7C17.32,7,7,17.32,7,30
+                                    c0,12.68,10.32,23,23,23c12.68,0,23-10.32,23-23C53,17.32,42.68,7,30,7z"></path>
+                                </g>
+                            </svg>
+                        </div>
+                        <div id="date_range_animate">
+                            <input id="range_animate" value="" name="animate"/>
+                        </div>
+                    </div>
+                    <table class="flatTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- JS -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/feed/ajax_abort.js"></script>
+<script src="js/feed/jquery.pageslide.min.js"></script>
+<script src="js/feed/jquery.reveal.js"></script>
+<script src="js/feed/jquery.imagesloaded.js"></script>
+<script src="js/feed/lightbox-2.6.min.js"></script>
+<script src="js/feed/jquery.wookmark.js"></script>
+<script src="js/feed/images.js"></script>
+<script src="js/feed/moment.js"></script>
+<script src="js/feed/ion.rangeSlider.js"></script>
+<script src="js/feed/parse_latest.js"></script>
+
+<script src="js/dashboard/animateNumber.js"></script>
+<script src="js/dashboard/jsapi.js"></script>
+<script src="js/dashboard/d3min.js"></script>
+<script src='js/dashboard/mapbox.js'></script>
+<script src='js/dashboard/leaflet-heat.js'></script>
+<script src="js/dashboard/nv.d3.js"></script>
+<script src="js/dashboard/social_mix.js"></script>
+<script src="js/dashboard/stats.js"></script>
+<script src="js/dashboard/timeline.js"></script>
+<script src="js/dashboard/heatmap.js"></script>
+<script src="js/dashboard/justgage.min.js"></script>
+<script src="js/dashboard/locations.js"></script>
+<script src="js/dashboard/active_users.js"></script>
+<script src="js/dashboard/tagcloud.js"></script>
+<script src="js/feed/hopscotch.min.js"></script>
+
+<script src="js/feed/various.js"></script>
+<script src="js/feed/responsive.js"></script>
+<script src="js/feed/parse_search.js"></script>
+
+<script src="js/feed/parse_languages.js"></script>
+<script src="js/feed/parse_topics.js"></script>
+<script src="js/feed/tour.js"></script>
+<!--END JS -->
+
+</body>
+</html>

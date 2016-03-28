@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>STEP</title>
+    <meta charset="utf-8">
+    <meta name="description" content="Discover how media is shared in Social Networks...">
+    <meta name="robots" content="index, follow"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="Laaposto">
+
+    <link rel="shortcut icon" href="imgs/favicon.ico"/>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Roboto+Slab:400,300,700&subset=latin,cyrillic-ext,greek-ext,greek,latin-ext,cyrillic'
+          rel='stylesheet' type='text/css'>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/feed/foundation.css">
+    <link rel="stylesheet" href="css/index/main.css">
+    <!--END CSS -->
+
+</head>
+<body>
+<div id="myModal" class="reveal-modal">
+    <h1></h1>
+
+    <p></p>
+    <a class="close-reveal-modal">&#215;</a>
+</div>
+<section class="first-section">
+    <div class="row bigWidth">
+        <div class="small-12 medium-12 large-12 columns">
+            <div class="header_menu">
+                <img src="imgs/logo.png" alt="step" class="logo">
+
+                <h2 class="header">STEP</h2>
+                <ul id="mainmenu" class="right">
+                    <li data-lang="menu_discover">Discover</li>
+                    <li data-lang="menu_browse">Browse</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="second-section">
+    <div class="row bigWidth">
+        <div class="small-12 medium-12 large-6 columns">
+            <h2 class="text_white"><span data-lang="section1_search">Search </span><span class="text_blue">#</span>,
+                <span data-lang="section1_monitor">Monitor </span><span class="text_blue">@</span><br>
+                <span class="text-blue text-medium change-text" data-lang="section1_networks">in Social Networks</span>
+            </h2>
+
+            <p class="description"><span data-lang="section1_description">Track & inform about the latest environmental issues</span>,
+                <span class="text_blue" data-lang="section1_description_2">real time</span>
+            </p>
+
+            <div class="btn-primary" id="discover"><span data-lang="menu_discover">Discover</span></div>
+        </div>
+        <div class="small-12 medium-12 large-6 columns" style="overflow:hidden">
+            <div id="data-orbit-section">
+                <ul class="data-orbit-wrap">
+                    <li class="data-strap">
+                        <img class="circle responsive-img" src="imgs/logo_name.png" style="padding: 39px;top: -14px;position: relative;">
+                    </li>
+                    <li class="data-circle-items-wrap">
+                        <ul class="data-circle-items">
+                            <li><span class="ff-filter ff-type-text"></span></li>
+                            <li><span class="ff-filter ff-type-image"></span></li>
+                            <li><span class="ff-filter ff-type-video"></span></li>
+                            <li><span class="ff-filter ff-type-user"></span></li>
+                            <li><span class="ff-filter ff-type-hash"></span></li>
+                        </ul>
+                    </li>
+                    <li class="data-circle-social-wrap">
+                        <ul class="data-circle-social">
+                            <li><span class="ff-filter ff-type-facebook"></span></li>
+                            <li><span class="ff-filter ff-type-twitter"></span></li>
+                            <li><span class="ff-filter ff-type-google"></span></li>
+                            <li><span class="ff-filter ff-type-instagram"></span></li>
+                            <li><span class="ff-filter ff-type-flickr"></span></li>
+                            <li><span class="ff-filter ff-type-youtube"></span></li>
+                            <li><span class="ff-filter ff-type-web"></span></li>
+                        </ul>
+                    </li>
+                    <li class="data-orbit-user">
+                        <img class="circle responsive-img" src="imgs/step_main.png">
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="third-section">
+    <div id="particles-js">
+        <div class="row bigWidth">
+            <div class="small-12 medium-12 large-12 columns">
+                <h3 class="text_title"><span
+                        data-lang="section2_title">Give us your points of interest and you will be</span>
+                    <span class="text_blue" data-lang="section2_title_2"> amazed</span></h3>
+            </div>
+            <div class="small-12 medium-12 large-12 columns" style="text-align:center;z-index: 1">
+                <img id="interest_icon" src="imgs/interest-gray.png" alt="hash" style="top: 5px;position: relative;">
+
+                <div class="input-field" style="padding-bottom: 10px">
+                    <input id="interest" class="user_input" type="text" autocomplete="off">
+                    <label for="interest" data-lang="section2_input_collection">Collection Name</label>
+                    <img class="search_icon" src="imgs/enter-gray.png" id="enter_icon" alt="search">
+                </div>
+                <div id="col_name"></div>
+            </div>
+            <div class="small-12 medium-6 large-6 columns" style="text-align:center;z-index:1">
+                <img id="hash_icon" src="imgs/hash-gray.png" alt="hash">
+
+                <div class="input-field">
+                    <input id="hashtag" class="user_input" type="text" autocomplete="off">
+                    <label for="hashtag" data-lang="section2_input_tags">Place your Tags</label>
+                    <img class="search_icon" src="imgs/search-gray.png" id="search_icon_1" alt="search">
+                </div>
+                <div id="examples_1" class="examples">
+                    <p data-lang="section2_examples">Examples:</p>
+                    <ul>
+                        <li>Pollution</li>
+                        <li>Overpopulation</li>
+                        <li>Waste</li>
+                        <li>Climate change</li>
+                    </ul>
+                </div>
+                <div id="user_tags">
+                    <ul id="tags" class="tags"></ul>
+                </div>
+            </div>
+            <div class="small-12 medium-6 large-6 columns" style="text-align:center;z-index:1">
+                <img id="user_icon" src="imgs/email-gray.png" alt="email">
+
+                <div class="input-field" id="Twitter_input">
+                    <input id="user_Twitter" class="user_input" type="text" autocomplete="off">
+                    <label for="user_Twitter" data-lang="section2_input_Twitter">Place your Users from Twitter</label>
+                    <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
+                    <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
+                </div>
+                <div class="input-field" id="GooglePlus_input">
+                    <input id="user_GooglePlus" class="user_input" type="text" autocomplete="off">
+                    <label for="user_GooglePlus" data-lang="section2_input_GooglePlus">Place your Users from
+                        GooglePlus</label>
+                    <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
+                    <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
+                </div>
+                <div class="input-field" id="Facebook_input">
+                    <input id="user_Facebook" class="user_input" type="text" autocomplete="off">
+                    <label for="user_Facebook" data-lang="section2_input_Facebook">Place your Users from
+                        Facebook</label>
+                    <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
+                    <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
+                </div>
+                <div class="input-field" id="Instagram_input">
+                    <input id="user_Instagram" class="user_input" type="text" autocomplete="off">
+                    <label for="user_Instagram" data-lang="section2_input_Instagram">Place your Users from
+                        Instagram</label>
+                    <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
+                    <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
+                </div>
+                <div class="input-field" id="Youtube_input">
+                    <input id="user_Youtube" class="user_input" type="text" autocomplete="off">
+                    <label for="user_Youtube" data-lang="section2_input_Youtube">Place your Users from Youtube</label>
+                    <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
+                    <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
+                </div>
+                <div class="input-field" id="Web_input">
+                    <input id="user_Web" class="user_input" type="text" autocomplete="off">
+                    <label for="user_Web" data-lang="section2_input_RSS">Place your RSS</label>
+                    <img class="search_icon users_icon" src="imgs/search-gray.png" id="search_icon_3" alt="search">
+                    <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
+                </div>
+                <div class="ff-filter-holder">
+                    <span class="ff-filter-users ff-type-twitter-users open" id="Twitter"></span>
+                    <span class="ff-filter-users ff-type-google-users close" id="GooglePlus"></span>
+                    <span class="ff-filter-users ff-type-facebook-users close" id="Facebook"></span>
+                    <span class="ff-filter-users ff-type-instagram-users close" id="Instagram"></span>
+                    <span class="ff-filter-users ff-type-youtube-users close" id="Youtube"></span>
+                    <span class="ff-filter-users ff-type-web-users close" id="Web"></span>
+                </div>
+                <div class="examples">
+                    <p data-lang="section2_examples">Examples:</p>
+                    <ul>
+                        <li id="example_1">Greenpeace<img class="examples_icon" src="imgs/twitter-16-black.png"></li>
+                        <li id="example_2">WWF<img class="examples_icon" src="imgs/google+-16-black.png"></li>
+                        <li id="example_3">CapeNature<img class="examples_icon" src="imgs/facebook-16-black.png"></li>
+                        <li id="example_4">green4ema<img class="examples_icon" src="imgs/instagram-16-black.png"></li>
+                    </ul>
+                </div>
+                <div id="user_users">
+                    <ul id="users" class="tags"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="fourth-section">
+    <div class="row">
+        <div class="small-12 medium-12 large-12 columns">
+            <h3 class="text_title" style="color: rgba(255, 255, 255, 0.75);padding: 0;margin-bottom: 0;"
+                data-lang="section3_title">All set? Hit
+                the Launch Button</h3>
+
+        </div>
+        <div class="small-12 medium-12 large-12 columns">
+            <div class='stage'>
+                <ul>
+                    <li class="facebook_color"><img src="imgs/facebook-16.png" alt="icon" class="factory_img"></li>
+                    <li class="twitter_color"><img src="imgs/twitter-16.png" alt="icon" class="factory_img"></li>
+                    <li class="instagram_color"><img src="imgs/instagram-16.png" alt="icon" class="factory_img"></li>
+                    <li class="google_color"><img src="imgs/google+-16.png" alt="icon" class="factory_img"></li>
+                    <li class="flickr_color"><img src="imgs/flickr-16.png" alt="icon" class="factory_img"></li>
+                    <li class="youtube_color"><img src="imgs/youtube-16-letter.png" alt="icon" class="factory_img"></li>
+                    <li class="web_color"><img src="imgs/rss.png" alt="icon" class="factory_img"></li>
+                </ul>
+                <div class='band'></div>
+                <div class='factory'>
+                    <div class='screen'></div>
+                    <img src="imgs/logo.png" alt="logo">
+
+                    <div class="start_icon"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<section class="fifth-section">
+    <div class="row">
+        <div class="small-12 medium-12 large-12 columns">
+            <h3 class="text_title_col" data-lang="section4_title">COLLECTIONS</h3>
+
+            <p class="text_p" data-lang="section4_description">Browse all created collections, Inform on latest trending
+                topics</p>
+        </div>
+    </div>
+    <div class="row bigWidth">
+        <div class="small-12 medium-12 large-12 columns">
+            <div class="controls">
+                <div class="btn_material filter active" data-filter="all" data-lang="section4_filter_all">ALL</div>
+                <div class="btn_material filter" data-filter=".running" data-lang="section4_filter_running">RUNNING
+                </div>
+                <div class="btn_material filter" data-filter=".stopped" data-lang="section4_filter_stopped">STOPPED
+                </div>
+            </div>
+            <div id="collection_loader">
+                <div class="square_load"></div>
+                <div class="square_load"></div>
+                <div class="square_load square_last"></div>
+                <div class="square_load square_clear"></div>
+                <div class="square_load"></div>
+                <div class="square_load square_last"></div>
+                <div class="square_load square_clear"></div>
+                <div class="square_load"></div>
+                <div class="square_load square_last"></div>
+            </div>
+            <div id="Container" class="container"></div>
+        </div>
+    </div>
+    <div class="well">
+        <ul id="pagination-demo" class="pagination-sm"></ul>
+    </div>
+</section>
+<section class="sixth-section">
+    <div class="row fullWidth">
+        <div class="small-12 medium-12 large-12 columns">
+            <div class="logo_footer">
+                <div id="social_icons">
+                    <a href="https://www.facebook.com/STEP-H2020-Project-1601518546763779" target="_blank"><img
+                            src="imgs/facebook-24.png"></a>
+                    <a href="https://twitter.com/STEP_H2020" target="_blank"><img src="imgs/twitter-24.png"></a>
+                    <a href="https://plus.google.com/u/0/101276779269050214597/about" target="_blank"><img
+                            src="imgs/google+-24.png"></a>
+                    <a href="https://www.linkedin.com/grps/STEP-H2020-project-8337279/about" target="_blank"><img
+                            src="imgs/linkedin-24.png"></a>
+                </div>
+                <img class="footer_img" src="http://step4youth.eu/wp-content/uploads/2015/09/step_eu.png"
+                     alt="step_eu"/>
+
+                <p style="margin: 0 0 0 10px;"><span style="font-size:16px">©</span> 2015 <a class="text_blue"
+                                                                                             href="http://step4youth.eu/"
+                                                                                             target="_blank"> STEP</a>.
+
+                    <span data-lang="footer_text">All rights reserved</span>.</p>
+
+                <div id="dropdown" class="ddmenu">
+                    <span id="lang">English</span>
+                    <span class="carret"></span>
+                    <ul>
+                        <li id="el">Ελληνικά</li>
+                        <li id="en">English</li>
+                        <li id="it">Italiano</li>
+                        <li id="tr">Türkçe</li>
+                        <li id="sp">Español</li>
+                        <li id="ca">Català</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script id="result-template_twitter" type="text/x-handlebars-template">
+
+    <div class="container_users">
+        <div style="display:none">{{id}}</div>
+        <div style="display:none">{{name}}</div>
+        <div class="background" style="background-image: url({{coverImage}});"></div>
+        <div class="content">
+            <div class="avatar">
+                <img src="{{profileImage}}" alt="avatar">
+            </div>
+            <div class="text">
+                <h4>{{emptyString name}}</h4>
+
+                <p>@{{emptyString username}}</p>
+
+                <p class="description_user">{{trimString description}}</p>
+            </div>
+        </div>
+        <div class="menu">
+            <ul>
+                <li><p>{{statuses_count}}</p>
+
+                    <p>Tweets</p></li>
+                <li><p>{{friends_count}}</p>
+
+                    <p>Following</p></li>
+                <li><p>{{followers_count}}</p>
+
+                    <p>Followers</p></li>
+            </ul>
+        </div>
+    </div>
+</script>
+<script id="result-template_googleplus" type="text/x-handlebars-template">
+    <div class="container_users">
+        <div style="display:none">{{id}}</div>
+        <div style="display:none">{{name}}</div>
+        <div class="background"
+             style="background-image: url('imgs/googleplus-bg.jpg');background-position: 0 0;left:0"></div>
+        <div class="content">
+            <div class="avatar">
+                <img src="{{profileImage}}" alt="avatar"
+                     style="border: 4px solid #d34836; box-shadow: 0 1px 1px rgba(0, 0, 0, .6), 0 -1px 0 #d34836;">
+            </div>
+            <div class="text empty">
+                <h4>{{emptyString name}}</h4>
+
+                <p>{{emptyString username}}</p>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="result-template_facebook" type="text/x-handlebars-template">
+    <div class="container_users">
+        <div style="display:none">{{id}}</div>
+        <div style="display:none">{{name}}</div>
+        <div class="background" style="background-image: url({{coverImage}});"></div>
+        <div class="content">
+            <div class="avatar">
+                <img src="{{profileImage}}" alt="avatar"
+                     style="border: 4px solid #3E4E81; box-shadow: 0 1px 1px rgba(0, 0, 0, .6), 0 -1px 0 #3E4E81;">
+            </div>
+            <div class="text">
+                <h4>{{emptyString name}}</h4>
+
+                <p>{{emptyString username}}</p>
+
+                <p class="description_user">{{trimString description}}</p>
+            </div>
+        </div>
+        <div class="menu">
+            <ul>
+                <li style="top:70px;"><p>{{likes}}</p>
+
+                    <p>Likes</p></li>
+            </ul>
+        </div>
+    </div>
+</script>
+<script id="result-template_instagram" type="text/x-handlebars-template">
+    <div class="container_users">
+        <div style="display:none">{{id}}</div>
+        <div style="display:none">{{name}}</div>
+        <div class="background"
+             style="background-image: url(imgs/instagram-bg.jpg);left:0;background-position: 0 -27px;"></div>
+        <div class="content">
+            <div class="avatar">
+                <img src="{{profileImage}}" alt="avatar"
+                     style="border: 4px solid #ab7d63 ; box-shadow: 0 1px 1px rgba(0, 0, 0, .6), 0 -1px 0 #ab7d63 ;">
+            </div>
+            <div class="text">
+                <h4>{{emptyString name}}</h4>
+
+                <p>{{emptyString username}}</p>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="result-template_youtube" type="text/x-handlebars-template">
+    <div class="container_users">
+        <div style="display:none">{{id}}</div>
+        <div style="display:none"></div>
+        <div class="background"
+             style="background-image: url('imgs/youtube-bg.jpg');background-position: 0 -30px;left:0"></div>
+        <div class="content">
+            <div class="avatar">
+                <img src="{{profileImage}}" alt="avatar"
+                     style="border: 4px solid #E12E34; box-shadow: 0 1px 1px rgba(0, 0, 0, .6), 0 -1px 0 #E12E34;">
+            </div>
+            <div class="text">
+                <h4>{{emptyString name}}</h4>
+
+                <p class="description_user">{{trimString description}}</p>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="empty-template_twitter" type="text/x-handlebars-template">
+    <div class="EmptyMessage">This username is not used in Twitter!</div>
+</script>
+<script id="empty-template_googleplus" type="text/x-handlebars-template">
+    <div class="EmptyMessage">This username is not used in GooglePlus!</div>
+</script>
+<script id="empty-template_facebook" type="text/x-handlebars-template">
+    <div class="EmptyMessage">This username is not used in Facebook!</div>
+</script>
+<script id="empty-template_instagram" type="text/x-handlebars-template">
+    <div class="EmptyMessage">This username is not used in Instagram!</div>
+</script>
+<script id="empty-template_youtube" type="text/x-handlebars-template">
+    <div class="EmptyMessage">This username is not used in Youtube!</div>
+</script>
+
+
+<!-- JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/index/translate.js"></script>
+<script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script src="js/index/network.js"></script>
+<script src="js/index/jquery.mixit.up.js"></script>
+<script src="js/index/jquery.waypoints.min.js"></script>
+<script src="js/index/jquery.imagesloaded.js"></script>
+<script src="js/index/jquery.reveal.js"></script>
+<script src="js/index/jquery.twbsPagination.min.js"></script>
+<script src="js/index/various.js"></script>
+<script src="js/index/handlebar_min.js"></script>
+<script src="js/index/typeahed.js"></script>
+<script src="js/index/autocomplete.js"></script>
+<!-- END JS -->
+</body>
+</html>

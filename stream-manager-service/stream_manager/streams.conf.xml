@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+	<Inputs>
+		<Input id="feeds">
+			<Parameter name="mongo.host"><![CDATA[mongodb]]></Parameter>
+  			<Parameter name="mongo.database"><![CDATA[Demo]]></Parameter>
+			<Parameter name="redis.host"><![CDATA[redis]]></Parameter>
+		</Input>
+	</Inputs>
+
+	<Storages>
+  	<!-- Mongodb storage configuration  -->
+	<Storage id="Mongodb">
+  		<Parameter name="Classpath"><![CDATA[gr.iti.mklab.sfc.storages.MongoDbStorage]]></Parameter>
+  		<Parameter name="mongodb.host"><![CDATA[mongodb]]></Parameter>
+  		<Parameter name="mongodb.database"><![CDATA[Demo]]></Parameter>
+	</Storage>
+
+      	<!-- Solr storage configuaration -->
+      	<Storage id="Solr">
+          	<Parameter name="Classpath"><![CDATA[gr.iti.mklab.sfc.storages.SolrStorage]]></Parameter>
+          	<Parameter name="solr.hostname"><![CDATA[http://solr:8983]]></Parameter>
+           	<Parameter name="solr.service"><![CDATA[solr]]></Parameter>
+        	<Parameter name="solr.items.collection"><![CDATA[Items]]></Parameter>
+         	<Parameter name="solr.mediaitems.collection"><![CDATA[MediaItems]]></Parameter>
+        	<Parameter name="solr.webpages.collection"><![CDATA[WebPages]]></Parameter>
+       		<Parameter name="solr.onlyOriginal"><![CDATA[false]]></Parameter>
+   		</Storage>
+  	</Storages>
+
+ 	<Filters>
+    		<!-- Filter that discards Items with short text -->
+    		<Filter id="LengthFilter">
+       			<Parameter name="Classpath"><![CDATA[gr.iti.mklab.sfc.filters.LengthItemFilter]]></Parameter>
+         		<Parameter name="length"><![CDATA[10]]></Parameter>
+      		</Filter>
+    		<Filter id="TagsFilter">
+       			<Parameter name="Classpath"><![CDATA[gr.iti.mklab.sfc.filters.TagsItemFilter]]></Parameter>
+         		<Parameter name="maxTags"><![CDATA[5]]></Parameter>
+      		</Filter>
+   	</Filters>
+
+   	<Processors>
+		<Processor id="NamedEntitiesDetector">
+         		<Parameter name="Classpath"><![CDATA[gr.iti.mklab.sfc.processors.NamedEntitiesDetector]]></Parameter>
+          		<Parameter name="serializedClassifier"><![CDATA[english.all.3class.distsim.crf.ser.gz]]></Parameter>
+     		</Processor>
+		<!-- LanguageDetector -->
+     		<Processor id="LanguageDetector">
+        		<Parameter name="Classpath"><![CDATA[gr.iti.mklab.sfc.processors.LanguageDetector]]></Parameter>
+          		<Parameter name="profileDirectory"><![CDATA[profiles.sm]]></Parameter>
+    		</Processor>
+	</Processors>
+
+	<Subscribers>
+
+	</Subscribers>
+
+	<Streams>
+
+	<!-- Twitter Stream Handler 
+      	<Stream id="Twitter">
+       		<Parameter name="Classpath">
+           		<![CDATA[gr.iti.mklab.sfc.streams.impl.TwitterStream]]>
+		</Parameter>
+         	<Parameter name="Key"><![CDATA[]]></Parameter>
+         	<Parameter name="Secret"><![CDATA[]]></Parameter>
+         	<Parameter name="AccessToken"><![CDATA[]]></Parameter>
+         	<Parameter name="AccessTokenSecret"><![CDATA[]]></Parameter>
+         	<Parameter name="maxRequests"><![CDATA[180]]></Parameter>
+         	<Parameter name="timeWindow"><![CDATA[15]]></Parameter>
+  	</Stream>
+	-->
+
+		<!--  Facebook Stream Handler
+  	<Stream id="Facebook">
+      		<Parameter name="Classpath">
+      			<![CDATA[gr.iti.mklab.sfc.streams.impl.FacebookStream]]>
+      		</Parameter>
+          	<Parameter name="AccessToken"><![CDATA[]]></Parameter>
+           	<Parameter name="maxRequests"><![CDATA[25]]></Parameter>
+         	<Parameter name="timeWindow"><![CDATA[15]]></Parameter>
+        </Stream>
+				-->
+
+     	<!-- YouTube Handler
+     	<Stream id="Youtube">
+      		<Parameter name="Classpath">
+           		<![CDATA[gr.iti.mklab.sfc.streams.impl.YoutubeStream]]>
+        	</Parameter>
+          	<Parameter name="Key"><![CDATA[]]></Parameter>
+          	<Parameter name="maxResults"><![CDATA[1000]]></Parameter>
+            <Parameter name="maxRequests"><![CDATA[500]]></Parameter>
+         	<Parameter name="timeWindow"><![CDATA[15]]></Parameter>
+  	</Stream>
+		-->
+
+      	<!-- Flickr Stream Handler
+    	<Stream id="Flickr">
+         	<Parameter name="Classpath">
+            	<![CDATA[gr.iti.mklab.sfc.streams.impl.FlickrStream]]>
+         	</Parameter>
+        	<Parameter name="Key"><![CDATA[029eab4d06c40e08670d78055bf61205]]></Parameter>
+           	<Parameter name="Secret"><![CDATA[bc4105126a4dfb8c]]></Parameter>
+        	<Parameter name="maxRequests"><![CDATA[900]]></Parameter>
+         	<Parameter name="timeWindow"><![CDATA[15]]></Parameter>
+       	</Stream>
+				-->
+
+      	<!-- Google+ Stream Handler
+    	<Stream id="GooglePlus">
+   			<Parameter name="Classpath">
+          		<![CDATA[gr.iti.mklab.sfc.streams.impl.GooglePlusStream]]>
+          	</Parameter>
+         	<Parameter name="Key"><![CDATA[]]></Parameter>
+           	<Parameter name="maxRequests"><![CDATA[100]]></Parameter>
+         	<Parameter name="timeWindow"><![CDATA[15]]></Parameter>
+    	</Stream>
+			-->
+      	<!-- Instagram Stream Handler
+      	<Stream id="Instagram">
+          	<Parameter name="Classpath">
+            	<![CDATA[gr.iti.mklab.sfc.streams.impl.InstagramStream]]>
+            </Parameter>
+        	<Parameter name="Key"><![CDATA[]]></Parameter>
+       		<Parameter name="Secret"><![CDATA[]]></Parameter>
+          	<Parameter name="AccessToken"><![CDATA[]]></Parameter>
+            <Parameter name="maxRequests"><![CDATA[150]]></Parameter>
+        	<Parameter name="timeWindow"><![CDATA[15]]></Parameter>
+  	</Stream>
+ 	-->
+      	<!-- RSS Stream Handler
+      	<Stream id="RSS">
+          	<Parameter name="Classpath">
+            		<![CDATA[gr.iti.mklab.sfc.streams.impl.RssStream]]>
+            	</Parameter>
+        	<Parameter name="timeWindow"><![CDATA[30]]></Parameter>
+  	</Stream>
+      	-->
+
+	</Streams>
+</Configuration>

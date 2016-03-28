@@ -734,24 +734,6 @@ $app->get(
     }
 )->name("get_user_collections");
 
-$app->get(
-    '/collection/:uid/:cid',
-    function ($uid, $cid) use($mongoDAO, $textIndex, $utils) {
-
-        $collection = $mongoDAO->getCollection($cid);
-        if($collection == null) {
-            echo json_encode(array());
-            return;
-        }
-
-        if($collection['status'] != 'stopped') {
-            $collection['stopDate'] = 1000 * time();
-        }
-
-        echo json_encode($collection);
-    }
-)->name("get_collection");
-
 $app->post(
     '/collection',
     function () use($app, $mongoDAO, $redisClient) {
@@ -842,6 +824,25 @@ $app->get(
         echo json_encode($deleteMessage);
     }
 )->name("delete_collection");
+
+$app->get(
+    '/collection/:uid/:cid',
+    function ($uid, $cid) use($mongoDAO, $textIndex, $utils) {
+
+        $collection = $mongoDAO->getCollection($cid);
+        if($collection == null) {
+            echo json_encode(array());
+            return;
+        }
+
+        if($collection['status'] != 'stopped') {
+            $collection['stopDate'] = 1000 * time();
+        }
+
+        echo json_encode($collection);
+    }
+)->name("get_collection");
+
 
 try {
   $app->run();

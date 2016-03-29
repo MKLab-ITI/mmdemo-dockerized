@@ -8,6 +8,8 @@ services:
       - 9001:9000
       - 12201:12201
       - 12201:12201/udp
+    volumes:
+      - ./graylog/logs:/var/log/graylog
     networks:
       common_network:
         aliases:

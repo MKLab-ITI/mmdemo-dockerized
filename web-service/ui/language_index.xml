@@ -56,7 +56,7 @@
         <sp>tiempo real</sp>
         <ca>temps real</ca>
     </translation>
-    <translation id="section2_title">
+    <translation id="section2_title_start">
         <en>Give us your points of interest and you will be</en>
         <el>Δώσε μας τα ενδιαφέροντα σου και θα</el>
         <it>Raccontaci dei tuoi interessi e sarai</it>
@@ -64,13 +64,21 @@
         <sp>Danos sus lugares de interés y que será</sp>
         <ca>Digues-nos els teus interessos i seràs</ca>
     </translation>
-    <translation id="section2_title_2">
+    <translation id="section2_title_start_2">
         <en>amazed</en>
         <el>εκπλαγείς</el>
         <it>stupito</it>
         <tr>seni şaşırtalım</tr>
         <sp>sorprendido</sp>
         <ca>sorprès </ca>
+    </translation>
+    <translation id="section2_title_edit">
+        <en>Improve your collection: </en>
+        <el>Βελτίωσε την συλλογή σου: </el>
+        <it>Translation Required</it>
+        <tr>Translation Required</tr>
+        <sp>Translation Required</sp>
+        <ca>Translation Required </ca>
     </translation>
     <translation id="section2_input_collection">
         <en>Collection Name</en>

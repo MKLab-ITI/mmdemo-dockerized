@@ -1,3 +1,5 @@
+var edit_mode = false;
+var edit_id = 0;
 $(window).on("scroll touchmove", function () {
     $('.first-section').toggleClass('tiny', $(document).scrollTop() > 0);
     $('.header_menu').toggleClass('tiny', $(document).scrollTop() > 0);
@@ -43,11 +45,14 @@ $("#hashtag").keyup(function (e) {
         addtag();
     }
 });
-function addtag() {
+function addtag(tag) {
     var flag = 1;
     var count = 100 - $("#tags li").length;
     if (count > 0) {
-        var tag_name = document.getElementById("hashtag").value;
+        var tag_name = tag;
+        if (tag == null) {
+            tag_name = document.getElementById("hashtag").value;
+        }
         var tag_arr = tag_name.split(',');
         $("#hashtag").val("");
         var length = Math.min(count, tag_arr.length);
@@ -91,76 +96,81 @@ $("#user_Web").keyup(function (e) {
         adduser("0", "");
     }
 });
-function adduser($id, $name) {
+function adduser($id, $name, $user, $social) {
     var flag = 1;
     var count = 15 - $("#users li").length;
     if (count > 0) {
-        var tag_name = document.getElementById("user_" + $('.open').attr('id')).value;
-        var tag_arr = tag_name.split(',');
+        var tag_name = $user;
+        if ($user == null) {
+            tag_name = document.getElementById("user_" + $('.open').attr('id')).value;
+        }
+        var social = $social;
+        if ($social == null) {
+            social = $('.open').attr('id');
+        }
         $('#user_' + $('.open').attr('id')).typeahead('val', '');
         $('#user_Web').val("");
-        var length = Math.min(count, tag_arr.length);
-        for (var i = 0; i < length; i++) {
-            if (tag_arr[i] !== "") {
-                flag = 1;
-                $('#users li').children().each(function () {
-                    if ($(this).attr('id') === tag_arr[i] + "------" + $('.open').attr('id') + "------" + $id + "------" + $name) {
-                        $(this).parent().hide('slow', function () {
-                            $(this).remove();
-                        });
-                        flag = 0;
-                    }
-                });
-                var tag = document.getElementById('users');
-                var li = document.createElement('li');
-                $(li).hide().appendTo(tag).fadeIn(400);
 
-                var a = document.createElement('a');
-                a.setAttribute('href', 'javascript:void(0);');
-                a.setAttribute('id', tag_arr[i] + "------" + $('.open').attr('id') + "------" + $id + "------" + $name);
-                a.innerHTML = tag_arr[i];
-                li.appendChild(a);
-
-                var icon = document.createElement('img');
-                icon.setAttribute('class', 'user_icon');
-                a.appendChild(icon);
-                switch ($('.open').attr('id')) {
-                    case "Twitter":
-                        icon.setAttribute('src', 'imgs/twitter-16-black.png');
-                        break;
-                    case "GooglePlus":
-                        icon.setAttribute('src', 'imgs/google+-16-black.png');
-                        break;
-                    case "Facebook":
-                        icon.setAttribute('src', 'imgs/facebook-16-black.png');
-                        break;
-                    case "Instagram":
-                        icon.setAttribute('src', 'imgs/instagram-16-black.png');
-                        break;
-                    case "Flickr":
-                        icon.setAttribute('src', 'imgs/flickr-16-black.png');
-                        break;
-                    case "Youtube":
-                        icon.setAttribute('src', 'imgs/youtube-16-black.png');
-                        break;
-                    case "Web":
-                        icon.setAttribute('src', 'imgs/globe-16-black.png');
-                        break;
+        if (tag_name !== "") {
+            flag = 1;
+            $('#users li').children().each(function () {
+                if ($(this).attr('id') === tag_name + "------" + social + "------" + $id + "------" + $name) {
+                    $(this).parent().hide('slow', function () {
+                        $(this).remove();
+                    });
+                    flag = 0;
                 }
+            });
+            var tag = document.getElementById('users');
+            var li = document.createElement('li');
+            $(li).hide().appendTo(tag).fadeIn(400);
+
+            var a = document.createElement('a');
+            a.setAttribute('href', 'javascript:void(0);');
+            a.setAttribute('id', tag_name + "------" + social + "------" + $id + "------" + $name);
+            a.innerHTML = tag_name;
+            li.appendChild(a);
+
+            var icon = document.createElement('img');
+            icon.setAttribute('class', 'user_icon');
+            a.appendChild(icon);
+            switch (social) {
+                case "Twitter":
+                    icon.setAttribute('src', 'imgs/twitter-16-black.png');
+                    break;
+                case "GooglePlus":
+                    icon.setAttribute('src', 'imgs/google+-16-black.png');
+                    break;
+                case "Facebook":
+                    icon.setAttribute('src', 'imgs/facebook-16-black.png');
+                    break;
+                case "Instagram":
+                    icon.setAttribute('src', 'imgs/instagram-16-black.png');
+                    break;
+                case "Flickr":
+                    icon.setAttribute('src', 'imgs/flickr-16-black.png');
+                    break;
+                case "Youtube":
+                    icon.setAttribute('src', 'imgs/youtube-16-black.png');
+                    break;
+                case "Web":
+                    icon.setAttribute('src', 'imgs/globe-16-black.png');
+                    break;
+            }
 
 
-                var img = document.createElement('img');
-                img.setAttribute('src', 'imgs/delete.png');
-                img.setAttribute('class', 'delete');
-                a.appendChild(img);
+            var img = document.createElement('img');
+            img.setAttribute('src', 'imgs/delete.png');
+            img.setAttribute('class', 'delete');
+            a.appendChild(img);
 
-                if (flag) {
-                    if ($("#users li").length === 15) {
-                        $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', true);
-                    }
+            if (flag) {
+                if ($("#users li").length === 15) {
+                    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', true);
                 }
             }
         }
+
     }
 }
 
@@ -211,8 +221,6 @@ $("#examples_1").find("li").click(function () {
         addtag();
     }
 });
-
-
 $("#example_1").click(function () {
     if ($("#users li").length < 15) {
         var flag = 1;
@@ -525,11 +533,15 @@ $('.stage').click(function (e) {
     }
     else {
         var id = (Math.floor(Math.random() * 90000) + 10000) + "1234567890" + new Date().getTime();
+        if (edit_mode) {
+            id = edit_id;
+        }
+        var title;
         if ($('#col_name').text() !== "") {
-            var title = $('#col_name').text();
+            title = $('#col_name').text();
         }
         else {
-            var title = $('#interest').val();
+            title = $('#interest').val();
         }
         var viewData = {
             "_id": id,
@@ -554,11 +566,18 @@ $('.stage').click(function (e) {
             });
         }
         var temp = JSON.stringify(viewData);
+        var url = api_folder + 'collection';
+        if (edit_mode) {
+            edit_mode = false;
+            url = api_folder + 'collection/edit';
+            $('#edit_col_heading').hide();
+            $('#start_col_heading').show();
+        }
         $.ajax({
             type: 'POST',
-            url: api_folder + 'collection',
+            url: url,
             data: temp,
-            success: function (msg) {
+            success: function () {
                 $('html,body').animate({
                     scrollTop: $(".fifth-section").offset().top - 50
                 }, 800);
@@ -607,6 +626,7 @@ $('.stage').click(function (e) {
                 }
             }
         });
+
 
     }
 });
@@ -661,43 +681,10 @@ $("#Container").on("click", ".delete_icon", function () {
 $("#Container").on("click", ".stop_icon", function () {
 
     var $this = $(this);
-    var id = $this.prev('.delete_icon').attr('id');
-    var title = $this.next().find('h3').html();
-
-    var viewData = {
-        "_id": id,
-        "title": title,
-        "ownerId": "1234567890",
-        "keywords": [],
-        "accounts": []
-    };
-
-    var keywords = $this.siblings('.tags_wrapper').eq(0).find('.tags_p').html();
-    if (keywords !== "-") {
-        keywords = keywords.replace(/, /g, ',');
-        var keywords_arr = keywords.split(',');
-        for (var i = 0; i < keywords_arr.length; i++) {
-            viewData.keywords.push({"keyword": keywords_arr[i]});
-        }
-    }
-    var accounts = $this.siblings('.tags_wrapper').eq(1).find('.tags_p').html();
-    var socials = $this.siblings('.tags_wrapper').eq(1).find('.hide_social').html();
-    if (accounts !== "-") {
-        accounts = accounts.replace(/, /g, ',');
-        socials = socials.replace(/, /g, ',');
-        var accounts_arr = accounts.split(',');
-        var socials_arr = socials.split(',');
-        for (var i = 0; i < accounts_arr.length; i++) {
-            viewData.accounts.push({"name": accounts_arr[i], "source": socials_arr[i], "id": accounts_arr[i]});
-        }
-    }
-
-    var temp = JSON.stringify(viewData);
 
     $.ajax({
-        type: 'POST',
-        url: api_folder + 'collection/edit?stop=true',
-        data: temp,
+        type: 'GET',
+        url: api_folder + 'collection/stop/' + $this.siblings('.delete_icon').attr('id'),
         success: function () {
             $this.closest('.mix').removeClass('running').addClass('stopped');
             $this.siblings('.details').removeClass('run_color').addClass('stop_color');
@@ -743,6 +730,41 @@ $("#Container").on("click", ".stop_icon", function () {
         }
     });
 });
+$("#Container").on("click", ".edit_icon", function () {
+
+    edit_mode = true;
+    var $this = $(this);
+    var id = $this.prev('.delete_icon').attr('id');
+    edit_id = id;
+    var col_name = $this.siblings('.overlay').find('h3').text();
+
+
+    $('#tags,#users').empty();
+    $('#edit_col_heading').show();
+    $('#start_col_heading').hide();
+    $('#edit_col_name').html(col_name);
+    $('#col_name').hide().fadeIn(400).html(col_name + '<img src="imgs/edit-white.png" alt="edit" class="edit"/>');
+    $('html,body').animate({
+        scrollTop: $(".third-section").offset().top - 100
+    }, 800);
+
+    $.ajax({
+        type: 'GET',
+        url: api_folder + 'collection/1234567890/' + id,
+        success: function (e) {
+            $("#interest").val("").blur().prop('disabled', true);
+
+            $.each(e.keywords, function (index, keyword) {
+                addtag(keyword['keyword']);
+            });
+
+            $.each(e.accounts, function (index, user) {
+                adduser(user['id'], user['name'], user['username'], user['source']);
+            });
+        }
+    });
+
+});
 $("#Container").on("click", ".overlay", function () {
     if (translation_param) {
         $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&original=all&type=all&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,Instagram,Web,GooglePlus&since=0&until=1514678400000&view=feed&translation=" + translation_param)
@@ -779,19 +801,21 @@ $.ajax({
 
 
 function get_collections(flag) {
+    var $Container = $('#Container');
+    $Container.empty();
+    $("#collection_loader").show();
     $.ajax({
         type: 'GET',
         url: api_folder + 'collection/1234567890?nPerPage=6&pageNumber=' + pagination,
         dataType: "json",
         success: function (json) {
-            var $Container = $('#Container');
-            $Container.empty();
             var data = json.collections;
             for (var i = 0; i < data.length; i++) {
                 var id = data[i]._id;
                 var status = data[i].status;
                 var title = data[i].title;
                 var stop_icon = '<div class="stop_icon"></div>';
+                var edit_icon = '<div class="edit_icon"></div>';
                 var color_state = "run_color";
                 if (status === "stopped") {
                     stop_icon = '';
@@ -813,18 +837,14 @@ function get_collections(flag) {
 
                 var accounts = data[i].accounts;
                 var users = "";
-                var socials = "";
                 for (var k = 0; k < accounts.length; k++) {
                     users = users + accounts[k].name + ", ";
-                    socials = socials + accounts[k].source + ", ";
                 }
                 if (users !== "") {
                     users = users.slice(0, -2);
-                    socials = socials.slice(0, -2);
                 }
                 else {
                     users = "-";
-                    socials = "-";
                 }
 
                 var items = nFormatter(data[i].items);
@@ -836,7 +856,7 @@ function get_collections(flag) {
                 var date = day + ' ' + month + ' ' + year;
 
 
-                var element = '<div class="mix ' + status + '" ><div class="tiles_li"><div class="outer"><div class="delete_icon" id="' + id + '"></div>' + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20" style="float: left;margin-right: 5px;"><p class="tags_p">' + tags + '</p></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20" style="float: left;margin-right: 5px;"><p class="tags_p">' + users + '</p><p class="hide_social">' + socials + '</p></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></div>';
+                var element = '<div class="mix ' + status + '" ><div class="tiles_li"><div class="outer"><div class="delete_icon" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20" style="float: left;margin-right: 5px;"><p class="tags_p">' + tags + '</p></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20" style="float: left;margin-right: 5px;"><p class="tags_p">' + users + '</p></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></div>';
                 $Container.append(element);
             }
             $Container.imagesLoaded(function () {

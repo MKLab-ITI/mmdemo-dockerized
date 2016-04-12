@@ -180,6 +180,9 @@ body {
     padding: 20px 0;
     text-align: center;
 }
+#edit_col_heading{
+    display: none;
+}
 
 .text_blue {
     color: #47b8e5;
@@ -1245,6 +1248,21 @@ img.responsive-img {
     margin-bottom: -10px;
 }
 
+.edit_icon {
+    background: url("../../imgs/edit_icon.png") no-repeat center;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 10px;
+    right: 45px;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.edit_icon:hover {
+    background: url("../../imgs/edit_icon_blue.png") no-repeat center;
+}
+
 .delete_icon {
     background: url("../../imgs/delete_icon.png") no-repeat center;
     width: 24px;
@@ -1266,7 +1284,7 @@ img.responsive-img {
     height: 24px;
     position: absolute;
     top: 10px;
-    right: 45px;
+    right: 80px;
     z-index: 1;
     cursor: pointer;
 }
@@ -1465,10 +1483,6 @@ img.responsive-img {
     color: #aaa;
     font-weight: bold;
     cursor: pointer
-}
-
-.hide_social {
-    display: none;
 }
 
 .Typeahead-spinner {

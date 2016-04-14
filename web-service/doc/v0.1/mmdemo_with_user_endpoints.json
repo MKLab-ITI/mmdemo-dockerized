@@ -1,0 +1,1164 @@
+{ "swagger": 2.0,
+    "info": {
+        "description": "mmdemo documentation",
+        "version": "1.0.0",
+        "title": "mmdemo",
+        "termsOfService": "https://github.com/MKLab-ITI/mklab-framework-client",
+        "contact": {
+            "name": "mironidis@iti.gr"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "host": "160.40.51.153:8081",
+    "basePath": "/api",
+    "paths": {
+        "/search/users": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Search for users",
+                "description": "",
+                "operationId": "search_users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "q",
+                        "description": "Search username",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "source",
+                        "description": "Social Media",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/users/{uid}": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Returns users details",
+                "description": "",
+                "operationId": "user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "uid",
+                        "description": "Get a user's details",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "users",
+                "description": "",
+                "operationId": "top_users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "since",
+                        "description": "Filter results since a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "until",
+                        "description": "Filter results until a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "n",
+                        "description": "Number of the results",
+                        "required": true,
+                        "type": "integer",
+                        "default": 10
+                    },
+                    {
+                        "in": "query",
+                        "name": "collection",
+                        "description": "Filter by collection ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "original",
+                        "description": "Filter and return only orinigal items",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "type",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "language",
+                        "description": "Filter by language",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "source",
+                        "description": "Filter by source",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "q",
+                        "description": "Query term",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "topicQuery",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/items": {
+            "get": {
+                "tags": [
+                    "items"
+                ],
+                "summary": "",
+                "description": "",
+                "operationId": "getRelations",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "since",
+                        "description": "Filter results since a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "until",
+                        "description": "Filter results until a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "source",
+                        "description": "Filter by source",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "language",
+                        "description": "Filter by language",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "original",
+                        "description": "Filter and return only orinigal items",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "type",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sort",
+                        "description": "Sort",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "q",
+                        "description": "Query term",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "topicQuery",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "collection",
+                        "description": "Filter by collection ID",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/items/{id}": {
+            "get": {
+                "tags": [
+                    "items"
+                ],
+                "summary": "Returns an item",
+                "description": "",
+                "operationId": "item",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "Get an item",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/collection/{uid}": {
+            "get": {
+                "tags": [
+                    "collections"
+                ],
+                "summary": "Returns a user's collections",
+                "description": "",
+                "operationId": "collection_uid",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "uid",
+                        "description": "Qwner Id",
+                        "required": true, 
+                        "type": "string",
+                        "default": "1234567890"
+                    },
+                    {
+                        "in": "query",
+                        "name": "pageNumber",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "default": 1
+                    },
+                    {
+                        "in": "query",
+                        "name": "nPerPage",
+                        "description": "Number of the results",
+                        "required": false,
+                        "type": "integer",
+                        "default": 6
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/collection/{uid}/{cid}": {
+            "get": {
+                "tags": [
+                    "collections"
+                ],
+                "summary": "Returns a user's collection",
+                "description": "",
+                "operationId": "collection_uid_cid",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "uid",
+                        "description": "Qwner Id",
+                        "required": true, 
+                        "type": "string",
+                        "default": "1234567890"
+                    },
+                    {
+                        "in": "path",
+                        "name": "cid",
+                        "description": "Collection Id",
+                        "required": true, 
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "pageNumber",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "default": 1
+                    },
+                    {
+                        "in": "query",
+                        "name": "nPerPage",
+                        "description": "Number of the results",
+                        "required": false,
+                        "type": "integer",
+                        "default": 6
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/collection/{uid}/{cid}": {
+            "get": {
+                "tags": [
+                    "collections"
+                ],
+                "summary": "Returns a user's collection",
+                "description": "",
+                "operationId": "collection_uid_cid",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "uid",
+                        "description": "Qwner Id",
+                        "required": true, 
+                        "type": "string",
+                        "default": "1234567890"
+                    },
+                    {
+                        "in": "path",
+                        "name": "cid",
+                        "description": "Collection Id",
+                        "required": true, 
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "pageNumber",
+                        "description": "Page number",
+                        "required": false,
+                        "type": "integer",
+                        "default": 1
+                    },
+                    {
+                        "in": "query",
+                        "name": "nPerPage",
+                        "description": "Number of the results",
+                        "required": false,
+                        "type": "integer",
+                        "default": 6
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/collection/delete/{cid}": {
+            "get": {
+                "tags": [
+                    "collections"
+                ],
+                "summary": "Deletes a collection",
+                "description": "",
+                "operationId": "delete_collection",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "cid",
+                        "description": "Collection Id",
+                        "required": true, 
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/collection/edit/": {
+            "post": {
+                "tags": [
+                    "collections"
+                ],
+                "summary": "Edits a collection",
+                "description": "",
+                "operationId": "edit_collection",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "stop",
+                        "description": "????",
+                        "required": true, 
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/collection": {
+            "post": {
+                "tags": [
+                    "collections"
+                ],
+                "summary": "Inserts a collection",
+                "description": "",
+                "operationId": "insert_collection",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/top/{field}": {
+            "get": {
+                "tags": [
+                    "statistics"
+                ],
+                "summary": "Inserts a collection",
+                "description": "",
+                "operationId": "top",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "field",
+                        "description": "field",
+                        "required": true, 
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "since",
+                        "description": "since",
+                        "required": false, 
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "until",
+                        "description": "until",
+                        "required": false, 
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "language",
+                        "description": "Filter by language",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "source",
+                        "description": "Filter by source",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "original",
+                        "description": "Filter and return only orinigal items",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "type",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "n",
+                        "description": "Number of results",
+                        "required": false,
+                        "type": "integer",
+                        "default": 20
+                    },
+                    {
+                        "in": "query",
+                        "name": "q",
+                        "description": "Query term",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "collection",
+                        "description": "collection",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "topicQuery",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    }
+                    
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/terms": {
+            "get": {
+                "tags": [
+                    "statistics"
+                ],
+                "summary": "Top terms",
+                "description": "",
+                "operationId": "top_terms",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "since",
+                        "description": "Filter results since a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "until",
+                        "description": "Filter results until a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "n",
+                        "description": "Number of the results",
+                        "required": true,
+                        "type": "integer",
+                        "default": 10
+                    },
+                    {
+                        "in": "query",
+                        "name": "collection",
+                        "description": "Filter by collection ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "original",
+                        "description": "Filter and return only orinigal items",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "type",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "language",
+                        "description": "Filter by language",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "source",
+                        "description": "Filter by source",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "q",
+                        "description": "Query term",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "topicQuery",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/heatmap/points": {
+            "get": {
+                "tags": [
+                    "statistics"
+                ],
+                "summary": "Heatmap points",
+                "description": "",
+                "operationId": "heatmap",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "since",
+                        "description": "Filter results since a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "until",
+                        "description": "Filter results until a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "collection",
+                        "description": "Filter by collection ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "source",
+                        "description": "Filter by source",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "q",
+                        "description": "Query term",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "topicQuery",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "minLat",
+                        "description": "",
+                        "required": false,
+                        "type": "integer",
+                        "default": -90
+                    },
+                    {
+                        "in": "query",
+                        "name": "maxLat",
+                        "description": "",
+                        "required": false,
+                        "type": "integer",
+                        "default": 90
+                    },
+                    {
+                        "in": "query",
+                        "name": "minLong",
+                        "description": "",
+                        "required": false,
+                        "type": "integer",
+                        "default": -180
+                    },
+                    {
+                        "in": "query",
+                        "name": "maxLong",
+                        "description": "",
+                        "required": false,
+                        "type": "integer",
+                        "default": 180
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/timeline": {
+            "get": {
+                "tags": [
+                    "statistics"
+                ],
+                "summary": "Timeline",
+                "description": "",
+                "operationId": "timeline",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "since",
+                        "description": "Filter results since a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "until",
+                        "description": "Filter results until a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "collection",
+                        "description": "Filter by collection ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "source",
+                        "description": "Filter by source",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "q",
+                        "description": "Query term",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "topicQuery",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/statistics": {
+            "get": {
+                "tags": [
+                    "statistics"
+                ],
+                "summary": "Statistics",
+                "description": "",
+                "operationId": "statistics",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "since",
+                        "description": "Filter results since a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "until",
+                        "description": "Filter results until a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "collection",
+                        "description": "Filter by collection ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "source",
+                        "description": "Filter by source",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "q",
+                        "description": "Query term",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "topicQuery",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "time",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/topics": {
+            "get": {
+                "tags": [
+                    "statistics"
+                ],
+                "summary": "Topics",
+                "description": "",
+                "operationId": "topics",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "since",
+                        "description": "Filter results since a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "until",
+                        "description": "Filter results until a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "collection",
+                        "description": "Filter by collection ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "source",
+                        "description": "Filter by source",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "q",
+                        "description": "Query term",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "topicQuery",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "time",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/suggest": {
+            "get": {
+                "tags": [
+                    "statistics"
+                ],
+                "summary": "Suggest",
+                "description": "",
+                "operationId": "suggestions",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "since",
+                        "description": "Filter results since a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "until",
+                        "description": "Filter results until a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "collection",
+                        "description": "Filter by collection ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "source",
+                        "description": "Filter by source",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "q",
+                        "description": "Query term",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "topicQuery",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "time",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        }
+    }
+}

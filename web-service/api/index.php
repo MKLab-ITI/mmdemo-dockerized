@@ -87,6 +87,26 @@ $app->get('/items/:id',
 })->name("item");
 
 /**
+ *  POST /items/:id
+ */
+$app->post('/items/:id',
+    function($id) use ($mongoDAO, $redisClient, $app) {
+
+        $request = $app->request();
+        $monitor = $request->get('monitor');
+
+        $item = $mongoDAO->getItem($id);
+        if($item === null) {
+            $item = array();
+        }
+        else {
+            $redisClient->set($id, $monitor);
+        }
+
+        echo json_encode($item);
+    })->name("monitor_item");
+
+/**
  *  GET /items/:id/comments
  */
 $app->get('/items/:id/comments',
@@ -120,10 +140,12 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
     $query = $request->get('q');
     $topicQuery = $request->get('topicQuery');
     if($topicQuery != null && $topicQuery != '*') {
-        if($query == null)
+        if($query == null) {
             $query = $topicQuery;
-        else
+        }
+        else {
             $query = $query . ' ' . $topicQuery;
+        }
     }
 
     $collectionId = $request->get('collection');

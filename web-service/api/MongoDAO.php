@@ -68,6 +68,12 @@ class MongoDAO {
         return $item;
     }
 
+    public function getItemComments($id) {
+        $collection = $this->db->selectCollection( MongoDAO::$ITEMS );
+        $items = $collection->find(array('reference'=>$id), MongoDAO::$ITEM_FIELDS);
+
+        return $items;
+    }
 
     public function getMediaItem($id) {
         $collection = $this->db->selectCollection( MongoDAO::$MEDIA_ITEMS );

@@ -30,30 +30,40 @@ class Utils {
             return  trim($keyword['keyword']);
         }, $keywords);
 
+        // hash tags
+        $tags = array_filter($keywords, function ($keyword) {
+            return preg_match('/^#/', $keyword);
+        });
+
+        // keywords for free text search
+        $keywords = array_filter($keywords, function ($keyword) {
+            return !preg_match('/^#/', $keyword);
+        });
+
         //$keywords = array_keys($keywords);
         $textQuery = $this->formulateLogicalQuery($keywords);
+        $tagsQuery = $this->formulateLogicalQuery($tags);
 
         $accounts = $collection['accounts'];
         $users = array_map(function ($account) {
             return $account['source']."#".$account['id'];
         }, $accounts);
 
-        $query = null;
+        $query = array();
         if($textQuery != null && $textQuery !== '') {
-            $query = "title:($textQuery) OR tags:($textQuery) OR description:($textQuery)";
+            $query[] = "title:($textQuery) OR description:($textQuery)";
+        }
+
+        if($tagsQuery != null && $tagsQuery !== '') {
+            $query[] = "tags:($tagsQuery)";
         }
 
         if($users != null && count($users) > 0) {
             $usersQuery = implode(' OR ', $users);
-            if($query == null) {
-                $query = "uid:($usersQuery)";
-            }
-            else {
-                $query = "$query OR uid:($usersQuery)";
-            }
+            $query[] = "uid:($usersQuery)";
         }
 
-        return $query;
+        return implode(' OR ', $query);
     }
 
     public function getFilters($since, $until, $source, $original, $type, $language, $query) {
@@ -64,6 +74,7 @@ class Utils {
         if ($query != null && $query != '') {
             $query = urldecode($query);
             $keywords = explode(',', $query);
+
             $filterTextQuery = $this->formulateLogicalQuery($keywords);
             $filters['allText'] = $filterTextQuery;
         }

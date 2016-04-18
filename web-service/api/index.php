@@ -30,73 +30,23 @@ $textIndexService = "solr";
 $textIndexItemsCollection = "Items";
 
 try {
-  $textIndex = new TextIndex($textIndexService, $textIndexItemsCollection);
-  $mongoDAO = new MongoDAO($mongoHost, $mongoDatabase);
-  $utils = new Utils();
+    $textIndex = new TextIndex($textIndexService, $textIndexItemsCollection);
+    $mongoDAO = new MongoDAO($mongoHost, $mongoDatabase);
+    $utils = new Utils();
 
-  $redisParams = array('scheme' => 'tcp', 'host'   => 'redis', 'port' => 6379);
-  $redisClient = new Predis\Client($redisParams);
+    $redisParams = array('scheme' => 'tcp', 'host'   => 'redis', 'port' => 6379);
+    $redisClient = new Predis\Client($redisParams);
 
-  $smWrapper = new SocialMediaWrapper();
+    $smWrapper = new SocialMediaWrapper();
 }
 catch(Exception $e) {
-  $x = array(
-    'trace' => $e->getTrace()
-  );
-
-  $messages = array();
-  $messages[] = $e->getMessage();
-  while($e->getPrevious() != null) {
-    $e = $e->getPrevious();
-    $messages[] = $e->getMessage();
-  }
-  $x['messages'] = $messages;
-
-  echo json_encode($x);
-
-  return;
+    echo json_encode(
+        array(
+            'trace' => $e->getTrace()
+        )
+    );
+    return;
 }
-
-$app->get('/fetch/',
-  function() use ($app) {
-    try {
-      $request = $app->request();
-
-      $url = $request->get('url');
-
-      $ch = curl_init();
-      // set url
-      curl_setopt($ch, CURLOPT_URL, $url);
-      //return the transfer as a string
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-      // $output contains the output string
-      $output = curl_exec($ch);
-      if(!$output) {
-        die('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
-      }
-
-      echo $output;
-      // close curl resource to free up system resources
-      curl_close($ch);
-    }
-    catch(Exception $e) {
-      $x = array(
-        'trace' => $e->getTrace()
-      );
-
-      $messages = array();
-      $messages[] = $e->getMessage();
-      while($e->getPrevious() != null) {
-        $e = $e->getPrevious();
-        $messages[] = $e->getMessage();
-      }
-      $x['messages'] = $messages;
-
-      echo json_encode($x);
-
-    }
-  }
-)->name("test");
 
 /**
  *  GET /users/:id
@@ -132,8 +82,23 @@ $app->get('/items/:id',
         if($item === null) {
             $item = array();
         }
+
         echo json_encode($item);
 })->name("item");
+
+/**
+ *  GET /items/:id/comments
+ */
+$app->get('/items/:id/comments',
+    function($id) use ($mongoDAO) {
+        $comments = array();
+        $item = $mongoDAO->getItem($id);
+        if($item !== null) {
+            $comments = $mongoDAO->getItemComments($id);
+        }
+
+        echo json_encode($comments);
+    })->name("item_comments");
 
 /**
  *  GET /items
@@ -553,6 +518,8 @@ $app->get(
         }
 
 
+        $statistics = array();
+
         $q = null;
         if($collectionId != null) {
             $collection = $mongoDAO->getCollection($collectionId);
@@ -672,6 +639,7 @@ $app->get(
                 $query = $query . ' ' . $topicQuery;
         }
 
+        $facet = array();
         $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query);
         if($collectionId != null) {
             $collection = $mongoDAO->getCollection($collectionId);
@@ -688,7 +656,7 @@ $app->get(
 
 $app->get(
     '/collection/:uid',
-    function ($uid) use($mongoDAO, $textIndex, $utils, $app) {
+    function ($uid) use($mongoDAO, $textIndex, $utils, $app, $redisClient) {
 
 		$request = $app->request();
 
@@ -698,6 +666,11 @@ $app->get(
 		$all = $mongoDAO->getUserCollections($uid);
 		$userCollections = $mongoDAO->getUserCollections($uid, $pageNumber, $nPerPage);
         foreach($userCollections as &$collection) {
+
+            $lastExecution = $redisClient->get($collection['_id']);
+            if($lastExecution != null) {
+                $collection['lastExecution'] = $lastExecution;
+            }
 
             if($collection['status'] != 'stopped') {
                 $collection['stopDate'] = 1000 * time();
@@ -712,11 +685,6 @@ $app->get(
             $filters = $utils->getFilters($since, $until, "*", null, null, null, null);
 
             $collection['filters'] = $filters;
-
-            //$items = $textIndex->countItems($q, $filters);
-            //$collection['items'] = $items;
-            //$facet = $textIndex->getFacet('mediaIds', $q, array(), 1, false);
-			//$collection['facet'] = $facet;
 
 			$facet = $textIndex->getFacetAndCount('mediaIds', $q, $filters, 1, false);
             $collection['items'] = $facet['count'];
@@ -771,46 +739,72 @@ $app->post(
     function () use($app, $mongoDAO, $redisClient) {
         $request = $app->request();
 
-        $stop = $request->get("stop");
         $content = $request->getBody();
         $collection = json_decode($content);
         $cid = $collection->_id;
 
-        if($stop == true || $stop === 'true') {
-            $ops = array('status'=>'stopped', 'updateDate' => 1000 * time(), 'stopDate' => 1000 * time());
+        $previousCollection = $mongoDAO->getCollection($cid);
+        if ($previousCollection != null) {
+
+            // save new collection
+            $collection->updateDate = 1000 * time();
+            $collection->status = "running";
+            $collection->creationDate = $previousCollection['creationDate'];
+            $collection->since = $previousCollection['since'];
+
+            $fieldsToUpdate = array(
+                'title' => $collection->title,
+                'keywords' => $collection->keywords,
+                'accounts' => $collection->accounts,
+                'status'=>'running',
+                'updateDate' => 1000 * time()
+            );
+
+            $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
+
+            $deleteMessage = json_encode($previousCollection);
+            $redisClient->publish("collections:delete", $deleteMessage);
+
+            $newMessage = json_encode($collection);
+            $redisClient->publish("collections:new", $newMessage);
+
+        }
+
+        echo json_encode($collection);
+    }
+)->name("edit_collection");
+
+$app->get(
+    '/collection/start/:cid',
+    function ($cid) use($app, $mongoDAO, $redisClient) {
+
+        $collection = $mongoDAO->getCollection($cid);
+        if($collection != null) {
+            $ops = array('status' => 'running', 'updateDate' => 1000 * time());
+            $mongoDAO->updateCollectionFields($cid, $ops);
+
+            $startMessage = json_encode($collection);
+            $redisClient->publish("collections:new", $startMessage);
+        }
+
+        echo json_encode($collection);
+    }
+)->name("start_collection");
+
+$app->get(
+    '/collection/stop/:cid',
+    function ($cid) use($app, $mongoDAO, $redisClient) {
+
+        $collection = $mongoDAO->getCollection($cid);
+        if($collection != null) {
+            $ops = array('status' => 'stopped', 'updateDate' => 1000 * time(), 'stopDate' => 1000 * time());
             $mongoDAO->updateCollectionFields($cid, $ops);
             $stopMessage = json_encode($collection);
             $redisClient->publish("collections:stop", $stopMessage);
         }
-        else {
-            $previousCollection = $mongoDAO->getCollection($cid);
-            if ($previousCollection != null) {
-
-                // save new collection
-                $collection->updateDate = 1000 * time();
-                $collection->status = "running";
-                $collection->creationDate = $previousCollection->creationDate;
-                $collection->since = $previousCollection->since;
-
-                $fieldsToUpdate = array(
-                    'keywords' => $collection->keywords,
-                    'accounts' => $collection->accounts,
-                    'status'=>'running',
-                    'updateDate' => 1000 * time()
-                );
-
-                $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
-
-                $deleteMessage = json_encode($previousCollection);
-                $redisClient->publish("collections:delete", $deleteMessage);
-
-                $newMessage = json_encode($collection);
-                $redisClient->publish("collections:new", $newMessage);
-            }
-        }
         echo json_encode($collection);
     }
-)->name("edit_collection");
+)->name("stop_collection");
 
 $app->get(
     '/collection/delete/:cid',
@@ -821,18 +815,23 @@ $app->get(
             $deleteMessage = json_encode($collection);
             $redisClient->publish("collections:delete", $deleteMessage);
         }
-        echo json_encode($deleteMessage);
+        echo json_encode($collection);
     }
 )->name("delete_collection");
 
 $app->get(
     '/collection/:uid/:cid',
-    function ($uid, $cid) use($mongoDAO, $textIndex, $utils) {
+    function ($uid, $cid) use($mongoDAO, $textIndex, $utils, $redisClient) {
 
         $collection = $mongoDAO->getCollection($cid);
-        if($collection == null) {
+        if($collection == null || $collection['ownerId'] != $uid) {
             echo json_encode(array());
             return;
+        }
+
+        $lastExecution = $redisClient->get($collection['_id']);
+        if($lastExecution != null) {
+            $collection['lastExecution'] = $lastExecution;
         }
 
         if($collection['status'] != 'stopped') {

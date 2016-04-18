@@ -35,6 +35,10 @@ class Utils {
             return preg_match('/^#/', $keyword);
         });
 
+        $tags = array_map(function ($tag) {
+            return  str_replace("#", "", $tag);
+        }, $tags);
+
         // keywords for free text search
         $keywords = array_filter($keywords, function ($keyword) {
             return !preg_match('/^#/', $keyword);
@@ -55,7 +59,7 @@ class Utils {
         }
 
         if($tagsQuery != null && $tagsQuery !== '') {
-            $query[] = "tags:($tagsQuery)";
+            $query[] = "tags:($tagsQuery)^2";
         }
 
         if($users != null && count($users) > 0) {

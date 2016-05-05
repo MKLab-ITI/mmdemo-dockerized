@@ -57,20 +57,20 @@
         <ca>temps real</ca>
     </translation>
     <translation id="section2_title_start">
-        <en>Give us your points of interest and you will be</en>
-        <el>Δώσε μας τα ενδιαφέροντα σου και θα</el>
-        <it>Raccontaci dei tuoi interessi e sarai</it>
-        <tr>Bize ilgi alanlarını söyle ve</tr>
-        <sp>Danos sus lugares de interés y que será</sp>
-        <ca>Digues-nos els teus interessos i seràs</ca>
+        <en>What do you want to</en>
+        <el>Τι θα ήθελες να</el>
+        <it>What do you want to</it>
+        <tr>What do you want to</tr>
+        <sp>What do you want to</sp>
+        <ca>What do you want to</ca>
     </translation>
     <translation id="section2_title_start_2">
-        <en>amazed</en>
-        <el>εκπλαγείς</el>
-        <it>stupito</it>
-        <tr>seni şaşırtalım</tr>
-        <sp>sorprendido</sp>
-        <ca>sorprès </ca>
+        <en>monitor?</en>
+        <el>παρακολουθήσεις?</el>
+        <it>monitor?</it>
+        <tr>monitor?</tr>
+        <sp>monitor?</sp>
+        <ca>monitor?</ca>
     </translation>
     <translation id="section2_title_edit">
         <en>Improve your collection: </en>

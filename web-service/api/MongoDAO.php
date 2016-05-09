@@ -14,8 +14,12 @@ class MongoDAO {
     private static $STREAM_USERS = 'StreamUser';
     private static $COLLECTIONS = 'Collection';
 
-    private static $ITEM_FIELDS = array('_id'=>1, 'shares'=>1, 'likes'=>1, 'title'=>1, 'tags'=>1, 'user'=>1, 'uid'=>1 ,'source'=>1, 'language'=>1, 'pageUrl'=>1, 'publicationTime'=>1, 'reference'=>1, 'type'=>1, 'location'=>1, 'location.name'=>1, 'location.country'=>1, 'mediaIds'=>1, 'comments'=>1);
+    private static $ITEM_FIELDS = array('_id'=>1, 'shares'=>1, 'likes'=>1, 'title'=>1, 'tags'=>1, 'user'=>1, 'uid'=>1 ,'source'=>1,
+        'language'=>1, 'pageUrl'=>1, 'publicationTime'=>1, 'original'=>1, 'reference'=>1, 'referencedUserId'=>1, 'type'=>1, 'inReply'=>1,
+        'location'=>1, 'location.name'=>1, 'location.country'=>1, 'mediaIds'=>1, 'comments'=>1);
+
     private static $MEDIA_FIELDS = array('_id'=>1, 'shares'=>1, 'likes'=>1, 'views'=>1, 'uid'=>1, 'url'=>1, 'thumbnail'=>1, 'pageUrl'=>1, 'source'=>1, 'publicationTime'=>1, 'indexed'=>1, 'status'=>1, 'reference'=>1, 'title'=>1, 'tags'=>1, 'type'=>1, 'width'=>1, 'height'=>1, 'location'=>1);
+
     private static $USER_FIELDS = array( '_id'=>1,'username'=>1,'name'=>1, 'items'=>1,'friends'=>1,'followers'=>1,'pageUrl'=>1,'profileImage'=>1, 'mentions'=>1, 'shares'=>1);
 
     function __construct($host, $db, $port=27017, $username=null, $password=null) {
@@ -94,7 +98,7 @@ class MongoDAO {
 
     public function getUserByUsername($username) {
         $collection = $this->db->selectCollection(MongoDAO::$STREAM_USERS);
-        $user = $collection->findOne(array('_id' => $id), MongoDAO::$USER_FIELDS);
+        $user = $collection->findOne(array('username' => $username), MongoDAO::$USER_FIELDS);
         if ($user != null) {
             $user['id'] = $user['_id'];
             unset($user['_id']);

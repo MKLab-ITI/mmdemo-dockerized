@@ -90,17 +90,14 @@ $app->get('/items/:id',
  *  POST /items/:id
  */
 $app->post('/items/:id',
-    function($id) use ($mongoDAO, $redisClient, $app) {
-
-        $request = $app->request();
-        $monitor = $request->get('monitor');
+    function($id) use ($mongoDAO, $redisClient) {
 
         $item = $mongoDAO->getItem($id);
         if($item === null) {
             $item = array();
         }
         else {
-            $redisClient->set($id, $monitor);
+            $redisClient->set($id, time());
         }
 
         echo json_encode($item);

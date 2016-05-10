@@ -5,7 +5,7 @@ services:
   graylog:
     image: graylog2/allinone
     ports:
-      - 9001:9000
+      - 9000:9000
       - 12201:12201
       - 12201:12201/udp
     volumes:
@@ -18,7 +18,7 @@ services:
   redis:
     image: redis
     ports:
-      - "6380:6379"
+      - "6379:6379"
     networks:
       common_network:
         aliases:
@@ -33,7 +33,7 @@ services:
   mongodb:
     image: mongo
     ports:
-      - "27117:27017"
+      - "27017:27017"
     volumes:
       - ./mongo_data_dir:/data/db
     networks:
@@ -48,7 +48,7 @@ services:
   solr:
     image: solr
     ports:
-      - "8984:8983"
+      - "8983:8983"
     volumes:
       - ./solr-cores:/opt/solr/server/solr
     networks:
@@ -67,7 +67,7 @@ services:
     volumes:
       - ./web-service:/var/www/site
     ports:
-      - "81:80"
+      - "80:80"
     networks:
       common_network:
         aliases:

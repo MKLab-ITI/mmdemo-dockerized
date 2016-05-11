@@ -2,7 +2,7 @@ mmdemo-dockerized
 ===========================
 
 This project dockerizes the multimedia demo that can be used for the collection of social media items from multiple sources. The only prerequisite is a machine with a running
-instance of [Docker](https://docs.docker.com/engine/quickstart/) and [Docker Compose](https://docs.docker.com/compose/overview/). You can find a running instance of the demo in this [link](http://step-mklab.iti.gr). It uses Docker Compose to buddle all the services into the same [YAML file]((https://github.com/MKLab-ITI/mmdemo-dockerized/blob/master/docker-compose.yml)) and makes easier the deployment of the application.
+instance of [Docker](https://docs.docker.com/engine/quickstart/) and [Docker Compose](https://docs.docker.com/compose/overview/). You can find a running instance of the demo in this [link](http://step-mklab.iti.gr). It uses Docker Compose to buddle all the services into the same [YAML file](https://github.com/MKLab-ITI/mmdemo-dockerized/blob/master/docker-compose.yml) and makes easier the deployment of the application.
 
 The services that multimedia demo is built upon are the following:
 

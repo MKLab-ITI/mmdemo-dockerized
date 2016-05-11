@@ -16,6 +16,7 @@ The services that multimedia demo is built upon are the following:
 ### mongodb,  solr & redis
 
 For these services the official Docker images hosted in Docker hub are used. To ensure data persistence in mongodb and solr, data volumes of Docker are used, as specified in docker-compose.yml. There is no need for data persistence in redis, as at this version of the demo, redis used only as a publish/subscribe service.
+
 ```sh
 mongodb:
     image: mongo
@@ -28,7 +29,7 @@ solr:
         - ./solr-cores:/opt/solr/server/solr
 ```
 
-More specifically, the directory */data/db* inside the container that runs mongodb is mounted to the directory *./mongo_data_dir* on the host machine's local filesystem. You can change this directory to any other local directory. Regarding solr, the directory */opt/solr/server/solr* is mounted in *./solr-cores* or any other directory that contains [solr-cores](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/solr-cores).
+More specifically, the directory */data/db* inside the container that runs mongodb is mounted to the directory *./mongo_data_dir* on the host machine's local filesystem. You can change this directory to any other local directory. Regarding solr, the directory */opt/solr/server/solr* is mounted in *./solr-cores* or any other directory that contains [solr-cores](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/solr-cores). There are three cores, corresponding to three collections: Items, MediaItems and WebPages.
 
 ### web-service
 
@@ -40,9 +41,19 @@ Given that the demo is deployed on a server having IP address xxx.xxx.xxx.xxx, t
 
 ### stream-manager-service
 
-[stream-manager-service](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/stream-manager-service) is a java process on top of Docker built upon [mklab-stream-manager](https://github.com/MKLab-ITI/mklab-stream-manager). The project is cloned from the corresponding github repository and the java executable is generated using mvn during Docker build. This step is quite slow and can take up to 30 minutes as mvn build can be a quite slow procedure.
+[stream-manager-service](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/stream-manager-service) is a java process on top of Docker built upon [mklab-stream-manager](https://github.com/MKLab-ITI/mklab-stream-manager). The project is cloned from the corresponding github repository and the java executable is generated using mvn during Docker build. This step is quite slow and can take up to 30 minutes as mvn build can be a quite slow procedure. The following snippet of stream-manager-service Dockerfile describes this prodedure.
 
-After succesfull building, the [stream_manager/streams.conf.xml](https://github.com/MKLab-ITI/mmdemo-dockerized/blob/master/stream-manager-service/stream_manager/streams.conf.xml) has to be edited. Most parts of that file are set in order to having stream-manager-service work in conjunction with the other services of the demo. The user has only to specify the streams(social media platforms) that are active, and set the corresponding credentials.
+```sh
+RUN git clone https://github.com/MKLab-ITI/mklab-stream-manager.git && \
+    cd mklab-stream-manager	&& \
+    cd checkout tags/mklab-stream-manager-0.3 && \
+	  mvn clean package && \
+    cd /
+```
+
+Note that after cloning from github, the compilation is performed on a specific release of the project tagged as *mklab-stream-manager-0.3*. To use the latest version of stream manager, as cloned from the master branch of the repository, remove the third line of the snippet above *cd checkout tags/mklab-stream-manager-0.3 && \*. 
+
+After succesfull building, in order to be able to run the service correctly, the [stream_manager/streams.conf.xml](https://github.com/MKLab-ITI/mmdemo-dockerized/blob/master/stream-manager-service/stream_manager/streams.conf.xml) has to be edited. Most parts of that file are set in order to having stream-manager-service work in conjunction with the other services of the demo. The user has only to specify the streams(social media platforms) that are active, and set the corresponding credentials.
 
 For example, in order to activate monitoring of twitter comment out the following section and set Key, Secret, AccessToken and AccessTokenSecret:
 ```sh
@@ -109,3 +120,7 @@ Verify the deployment by typing:
 ```sh
 $ docker ps
 ```
+
+## Contact for further details about the project
+
+Manos Schinas (manosetro@iti.gr), Symeon Papadopoulos (papadop@iti.gr)

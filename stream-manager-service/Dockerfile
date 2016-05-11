@@ -6,6 +6,7 @@ RUN apt-get update && \
 
 RUN git clone https://github.com/MKLab-ITI/mklab-stream-manager.git && \
     cd mklab-stream-manager	&& \
+    cd checkout tags/mklab-stream-manager-0.3 && \
 	  mvn clean package && \
     cd /
 

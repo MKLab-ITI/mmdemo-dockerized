@@ -13,6 +13,8 @@ The services that multimedia demo is built upon are the following:
 * [web](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/web-service) - This service consists of two parts: 1) A REST API used to provide access to the colleced social media items and to expose several statistics related to them, and 2) the web interface of this [link](http://step-mklab.iti.gr) demo.
 * [streammanager](https://github.com/MKLab-ITI/mklab-stream-manager) - Stream Manager monitors a set of seven social streams : Twitter, Facebook, Instagram, Google+, Flickr and Youtube to collect content relevant to a set of keywords, a user or a location, using the corresponding APIs that are provides from each service.
 
+![mmdemo architecture](https://raw.githubusercontent.com/MKLab-ITI/mmdemo-dockerized/master/mmdemo_arch.png)
+
 ### mongodb,  solr & redis
 
 For these services the official Docker images hosted in Docker hub are used. To ensure data persistence in mongodb and solr, data volumes of Docker are used, as specified in docker-compose.yml. There is no need for data persistence in redis, as at this version of the demo, redis used only as a publish/subscribe service.
@@ -51,7 +53,7 @@ RUN git clone https://github.com/MKLab-ITI/mklab-stream-manager.git && \
     cd /
 ```
 
-Note that after cloning from github, the compilation is performed on a specific release of the project tagged as *mklab-stream-manager-0.3*. To use the latest version of stream manager, as cloned from the master branch of the repository, remove the third line of the snippet above *cd checkout tags/mklab-stream-manager-0.3 && \*. 
+Note that after cloning from github, the compilation is performed on a specific release of the project tagged as *mklab-stream-manager-0.3*. To use the latest version of stream manager, as cloned from the master branch of the repository, remove the third line of the snippet above *cd checkout tags/mklab-stream-manager-0.3 && \*.
 
 After succesfull building, in order to be able to run the service correctly, the [stream_manager/streams.conf.xml](https://github.com/MKLab-ITI/mmdemo-dockerized/blob/master/stream-manager-service/stream_manager/streams.conf.xml) has to be edited. Most parts of that file are set in order to having stream-manager-service work in conjunction with the other services of the demo. The user has only to specify the streams(social media platforms) that are active, and set the corresponding credentials.
 

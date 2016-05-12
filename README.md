@@ -43,7 +43,7 @@ Given that the demo is deployed on a server having IP address xxx.xxx.xxx.xxx, t
 
 ### stream-manager-service
 
-[stream-manager-service](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/stream-manager-service) is a java process on top of Docker built upon [mklab-stream-manager](https://github.com/MKLab-ITI/mklab-stream-manager). The project is cloned from the corresponding github repository and the java executable is generated using mvn during Docker build. This step is quite slow and can take up to 30 minutes as mvn build can be a quite slow procedure. The following snippet of stream-manager-service Dockerfile describes this prodedure.
+[stream-manager-service](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/stream-manager-service) is a java process on top of Docker built upon [mklab-stream-manager](https://github.com/MKLab-ITI/mklab-stream-manager). The project is cloned from the corresponding github repository and the java executable is generated using mvn during Docker build. This step is quite slow and can take up to 30 minutes as mvn build can be a quite slow procedure. The following snippet of stream-manager-service Dockerfile describes this prodedure:
 
 ```sh
 RUN git clone https://github.com/MKLab-ITI/mklab-stream-manager.git && \
@@ -53,7 +53,11 @@ RUN git clone https://github.com/MKLab-ITI/mklab-stream-manager.git && \
     cd /
 ```
 
-Note that after cloning from github, the compilation is performed on a specific release of the project tagged as *mklab-stream-manager-0.3*. To use the latest version of stream manager, as cloned from the master branch of the repository, remove the third line of the snippet above *cd checkout tags/mklab-stream-manager-0.3 && \*.
+Note that after cloning from github, the compilation is performed on a specific release of the project tagged as *mklab-stream-manager-0.3*. To use the latest version of stream manager, as cloned from the master branch of the repository, remove the third line of the snippet above:
+
+```sh
+    cd checkout tags/mklab-stream-manager-0.3 && \
+```
 
 After succesfull building, in order to be able to run the service correctly, the [stream_manager/streams.conf.xml](https://github.com/MKLab-ITI/mmdemo-dockerized/blob/master/stream-manager-service/stream_manager/streams.conf.xml) has to be edited. Most parts of that file are set in order to having stream-manager-service work in conjunction with the other services of the demo. The user has only to specify the streams(social media platforms) that are active, and set the corresponding credentials.
 

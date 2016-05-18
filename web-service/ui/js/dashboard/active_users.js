@@ -1,5 +1,5 @@
 function show_active_users() {
-    var username, count, id, barchart_values = [], color_bar, icon;
+    var username, count, id, barchart_values = [], color_bar, icon, onerror;
     var top = $(".activenumber .topnum").attr('id').replace('num', '');
 
 
@@ -7,7 +7,7 @@ function show_active_users() {
 
     $.ajax({
         type: "GET",
-        url: api_folder+"users?n=" + top + "&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "users?n=" + top + "&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             var noData, posts_name;
@@ -47,7 +47,7 @@ function show_active_users() {
                 if (id === "Youtube") {
                     username = json[i].name;
                 }
-
+                onerror = false;
                 switch (id) {
                     case "Web":
                         color_bar = "#808080";
@@ -56,6 +56,7 @@ function show_active_users() {
                     case "Twitter":
                         color_bar = "#00acee";
                         icon = "imgs/twitter-16-color.png";
+                        onerror = true;
                         break;
                     case "Facebook":
                         color_bar = "#3b5998";
@@ -84,7 +85,14 @@ function show_active_users() {
                     "color": color_bar,
                     "url": json[i].pageUrl
                 });
-                $('#users_images').append('<div class="user"><p style="float: left;"><img data-url="' + json[i].pageUrl + '"src="' + json[i].profileImage.replace('normal', '400x400') + '" class="user_img" alt="user_img" onerror="imgError2(this); " style="border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' '+posts_name+'</p><img src="' + icon + '" alt="error_icon" class="user_social"/></div>')
+                if (onerror) {
+                    onerror = "imgError2(this,'Twitter','" + json[i].username + "');"
+                }
+                else {
+                    onerror = "imgError2(this,null,null);"
+                }
+                $('#users_images').append('<div class="user"><p style="float: left;"><img data-url="' + json[i].pageUrl + '"src="' + json[i].profileImage.replace('normal', '400x400') + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/></div>')
+
             }
             var data_bar = [{
                 key: "Users",

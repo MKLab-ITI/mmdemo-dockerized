@@ -67,19 +67,19 @@ $('.ff-filter').each(function () {
 });
 $.ajax({
     type: 'GET',
-    url: api_folder+'collection/1234567890/'+collection_param,
+    url: api_folder + 'collection/1234567890/' + collection_param,
     dataType: "json",
     success: function (json) {
-       /* var collection = collection_param;
-        var collections = json.collections;
-        var collection_flag = true;
-        for (var i = 0; i < collections.length; i++) {
-            if (collection === collections[i]._id) {
-                $('#collection').html(collections[i].title);
-                collection_flag = false;
-                break;
-            }
-        }*/
+        /* var collection = collection_param;
+         var collections = json.collections;
+         var collection_flag = true;
+         for (var i = 0; i < collections.length; i++) {
+         if (collection === collections[i]._id) {
+         $('#collection').html(collections[i].title);
+         collection_flag = false;
+         break;
+         }
+         }*/
 
         if (!(json.hasOwnProperty("title"))) {
             $('#collection').html("-");
@@ -820,9 +820,14 @@ function imgError1(image) {
     return true;
 }
 
-function imgError2(image) {
+function imgError2(image, source, username) {
     image.onerror = "";
-    image.src = "imgs/noprofile.gif";
+    if (source === "Twitter") {
+        image.src = "https://twitter.com/" + username + "/profile_image?size=normal";
+    }
+    else {
+        image.src = "imgs/noprofile.gif";
+    }
     return true;
 }
 
@@ -962,7 +967,7 @@ function interval() {
         window.history.pushState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
         $.ajax({
             type: "GET",
-            url: api_folder+"items?collection=" + collection_param + "&q=" + query_param + "&nPerPage=12&pageNumber=1&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+            url: api_folder + "items?collection=" + collection_param + "&q=" + query_param + "&nPerPage=12&pageNumber=1&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
             dataType: "json",
             success: function (json) {
                 if (pagelocation === "latest") {

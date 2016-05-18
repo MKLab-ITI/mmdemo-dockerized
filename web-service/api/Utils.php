@@ -132,4 +132,53 @@ class Utils {
         return $filters;
     }
 
+    public function fetch($url) {
+        try {
+            $ch = curl_init();
+
+            // set url
+            curl_setopt($ch, CURLOPT_URL, $url);
+
+            //return the transfer as a string
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+            // $output contains the output string
+            $output = curl_exec($ch);
+            if(!$output) {
+                return array(
+                    'error' => curl_error($ch), 'code' => curl_errno($ch)
+                );
+            }
+
+            // close curl resource to free up system resources
+            curl_close($ch);
+
+            return array(
+                'content' => $output
+            );
+        }
+        catch(Exception $e) {
+            return array(
+                'error' => $e->getMessage()
+            );
+        }
+    }
+
+    public function parseHtml($html) {
+        $dom = new DOMDocument();
+        $dom->loadHTML($html);
+
+        return $dom;
+    }
+
+    public function extractRSSLinks(DOMDocument $doc) {
+
+        $xpath = new DOMXPath($doc);
+
+        // returns a list of all links with type='application/rss+xml
+        $rssLinks = $xpath->query("//link[@type='application/rss+xml']");
+
+        return $rssLinks;
+    }
+
 }

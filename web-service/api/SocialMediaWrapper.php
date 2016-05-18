@@ -81,7 +81,9 @@ class SocialMediaWrapper {
 
     }
 
-    private function searchTwitter($username) {
+    // ========================== TWITTER =====================================
+
+    public function searchTwitter($username) {
         $users = array();
 
         if($this->twitter == null) {
@@ -105,7 +107,6 @@ class SocialMediaWrapper {
                 "friends_count" => $userFound->friends_count,
                 "favourites_count" => $userFound->favourites_count,
                 "statuses_count" => $userFound->statuses_count,
-                "favourites_count" => $userFound->favourites_count,
                 "profileImage" => $userFound->profile_image_url_https,
                 "coverImage" => $userFound->profile_background_image_url_https,
                 "source" => "Twitter"
@@ -114,13 +115,27 @@ class SocialMediaWrapper {
         return $users;
     }
 
-    private function searchInstagram($username) {
+    public function getTwitterUser($user_id) {
+
+        if($this->twitter == null) {
+            return array();
+        }
+
+        $params = array("user_id" => $user_id);
+        $user = $this->twitter->get("users/show", $params);
+
+        return $user;
+    }
+
+    // ========================== INSTAGRAM =====================================
+
+    public function searchInstagram($q) {
 
         if($this->instagram == null) {
             return array();
         }
 
-        $response = $this->instagram->searchUser($username, 20);
+        $response = $this->instagram->searchUser($q, 20);
         $data = array_map(
             function($entry) {
                 return array(
@@ -136,14 +151,27 @@ class SocialMediaWrapper {
         return $data;
     }
 
-    private function searchFacebook($username) {
+    public function getInstagramAccount($username) {
+
+        if($this->instagram == null) {
+            return array();
+        }
+
+        $user = $this->instagram->getUser($username);
+
+        return $user;
+    }
+
+    // ========================== FACEBOOK =====================================
+
+    public function searchFacebook($q) {
         try {
             if($this->fb == null) {
                 return array();
             }
 
             $fields = 'id,name,username,description,link,cover,picture,likes,is_verified';
-            $response = $this->fb->get("/search?q=$username&fields=$fields&type=page&limit=20");
+            $response = $this->fb->get("/search?q=$q&fields=$fields&type=page&limit=20");
 
             $body = $response->getDecodedBody();
             $data = $body['data'];
@@ -182,7 +210,21 @@ class SocialMediaWrapper {
         }
     }
 
-    private function searchYoutube($username) {
+    public function getFacebookPage($page_id) {
+
+        if($this->fb == null) {
+            return array();
+        }
+
+        $fields = 'id,name,username,description,link,cover,picture,likes,is_verified';
+        $page = $this->fb->get("/$page_id?fields=$fields");
+
+        return $page;
+    }
+
+    // ========================== YOUTUBE =====================================
+
+    public function searchYoutube($q) {
         if($this->youtube == null) {
             return array();
         }
@@ -190,7 +232,7 @@ class SocialMediaWrapper {
         $searchResponse = $this->youtube->search->listSearch('id,snippet',
             array(
                 'type' => 'channel',
-                'q' => $username,
+                'q' => $q,
                 'maxResults' => 20
             )
         );
@@ -209,13 +251,33 @@ class SocialMediaWrapper {
         return $channels;
     }
 
-    private function searchGooglePlus($username) {
+    public function getYoutubeChannel($channel_id) {
+        if($this->youtube == null) {
+            return array();
+        }
+
+        $response = $this->youtube->channels->listChannels("id,snippet,statistics,contentDetails",
+            array(
+                'id' => $channel_id
+            )
+        );
+
+        foreach ($response['items'] as $item) {
+            return $item;
+        }
+
+        return array();
+    }
+
+    // ========================== GOOGLE PLUS =====================================
+
+    public function searchGooglePlus($q) {
         if($this->plus == null) {
             return array();
         }
 
         $optParams = array('maxResults' => 20);
-        $results = $this->plus->people->search($username, $optParams);
+        $results = $this->plus->people->search($q, $optParams);
 
         $users = array();
         foreach ( $results['items'] as $result ) {
@@ -237,4 +299,20 @@ class SocialMediaWrapper {
 
         return $users;
     }
+
+    public function getGooglePlusChannel($user_id) {
+
+        if($this->plus == null) {
+            return array();
+        }
+
+        $optParams = array('maxResults' => "aboutMe,ageRange,birthday,braggingRights,circledByCount,cover,currentLocation,displayName,domain,emails,
+            etag,gender,id,image,isPlusUser,kind,language,name,nickname,objectType,occupation,organizations,
+            placesLived,plusOneCount,relationshipStatus,skills,tagline,url,urls,verified");
+
+        $user = $this->plus->people->get($user_id, $optParams);
+        return $user;
+
+    }
+
 }

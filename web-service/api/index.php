@@ -48,18 +48,6 @@ catch(Exception $e) {
     return;
 }
 
-/**
- *  GET /users/:id
- */
-$app->get('/search/users',
-    function() use ($smWrapper, $app) {
-        $request = $app->request();
-        $q = $request->get('q');
-        $source = $request->get('source');
-
-        echo json_encode($smWrapper->search($q, $source));
-    }
-)->name("usersearch");
 
 /**
  *  GET /users/:id
@@ -84,6 +72,7 @@ $app->get('/items/:id',
         }
 
         echo json_encode($item);
+
 })->name("item");
 
 /**
@@ -97,11 +86,48 @@ $app->post('/items/:id',
             $item = array();
         }
         else {
-            $redisClient->set($id, time());
+            $pieces = explode("#", $id);
+            if(count($pieces) == 2) {
+                $message = array(
+                    "id" => $pieces[1],
+                    "source" => $pieces[0],
+                );
+
+                $redisClient->publish("items:new", $message);
+                $redisClient->set($id, time());
+            }
+
+
         }
 
         echo json_encode($item);
-    })->name("monitor_item");
+    })->name("item_monitor");
+
+/**
+ *  DELETE /items/:id
+ */
+$app->delete('/items/:id',
+    function($id) use ($mongoDAO, $redisClient) {
+
+        $item = $mongoDAO->getItem($id);
+        if($item === null) {
+            $item = array();
+        }
+        else {
+            $pieces = explode("#", $id);
+            if(count($pieces) == 2) {
+                $message = array(
+                    "id" => $pieces[1],
+                    "source" => $pieces[0],
+                );
+
+                $redisClient->publish("items:delete", $message);
+                $redisClient->del($id);
+            }
+        }
+
+        echo json_encode($item);
+    })->name("stop_item_monitor");
 
 /**
  *  GET /items/:id/comments
@@ -861,6 +887,48 @@ $app->get(
     }
 )->name("get_collection");
 
+
+/**
+ *  GET /users/search
+ */
+$app->get('/search/users',
+    function() use ($smWrapper, $app) {
+
+        $request = $app->request();
+        $q = $request->get('q');
+        $source = $request->get('source');
+
+        echo json_encode($smWrapper->search($q, $source));
+    }
+)->name("user_search");
+
+/**
+ *  GET /detect/users
+ */
+$app->get('/detect/users',
+    function() use ($smWrapper, $app) {
+
+        $request = $app->request();
+        $q = $request->get('q');
+
+        $twitterUsers = $smWrapper->searchTwitter($q);
+        $fbUsers = $smWrapper->searchFacebook($q);
+        $googlePlusUsers = $smWrapper->searchGooglePlus($q);
+        $youtubeUsers = $smWrapper->searchYoutube($q);
+        $instagramUsers = $smWrapper->searchInstagram($q);
+
+        $users = array(
+            'twitter' => $twitterUsers,
+            'facebook' => $fbUsers,
+            'googleplus' => $googlePlusUsers,
+            'youtube' => $youtubeUsers,
+            'instagram' => $instagramUsers
+        );
+
+        echo json_encode($users);
+
+    }
+)->name("detect_users");
 
 try {
   $app->run();

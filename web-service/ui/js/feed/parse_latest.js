@@ -1,23 +1,13 @@
-/*var pagelocation = "latest";
-
-if (query_param !== "") {
-    $('.icon-clear').show();
-    $("#ff-search input[type='text']").addClass("searchon");
-    $('#query').val(query_param);
-}
-
-parse_latest(1);*/
-
 function parse_latest(pagenum) {
 
     $.ajax({
         type: "GET",
-        url: api_folder+"items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&q=" + query_param + "&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param+ "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&q=" + query_param + "&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             if (pagelocation === "latest") {
                 var endpage = -1,
-                    title, source, publicationTime, shared, screenname, profileimage, id, page, userpage, thumb, colorclass, iconsource;
+                    title, source, publicationTime, shared, screenname, profileimage, id, page, userpage, thumb, colorclass, iconsource, onerror;
 
 
                 for (var i = 0; i < json.length; i++) {
@@ -52,7 +42,7 @@ function parse_latest(pagenum) {
                     } else {
                         userpage = "404.html";
                     }
-
+                    onerror = false;
                     switch (source) {
                         case "Youtube":
                             shared = nFormatter(json[i].views) + " views";
@@ -63,6 +53,7 @@ function parse_latest(pagenum) {
                             shared = nFormatter(json[i].shares) + " retweets";
                             iconsource = 'imgs/twitter-16-black.png';
                             colorclass = 'color twittercolor';
+                            onerror = true;
                             break;
                         case "Flickr":
                             shared = nFormatter(json[i].views) + " views";
@@ -105,6 +96,12 @@ function parse_latest(pagenum) {
                             iconsource = 'imgs/globe-16-black.png';
                             colorclass = 'color webcolor';
                     }
+                    if (onerror) {
+                        onerror = "imgError2(this,'Twitter','" + json[i].user.username + "');"
+                    }
+                    else {
+                        onerror = "imgError2(this,null,null);"
+                    }
                     id = id.replace(/#/g, "%23");
 
                     var a = new Date(publicationTime * 1);
@@ -138,7 +135,7 @@ function parse_latest(pagenum) {
                         profile.setAttribute('src', profileimage);
                         profile.setAttribute('class', 'ff-userpic');
                         profile.setAttribute('style', 'margin: -15px auto 0');
-                        profile.setAttribute('onerror', 'imgError2(this);');
+                        profile.setAttribute('onerror', onerror);
                         profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                         divouter.appendChild(profile);
 
@@ -208,7 +205,7 @@ function parse_latest(pagenum) {
                         a.setAttribute('href', thumb);
                         a.setAttribute('onclick', 'return false;');
                         a.setAttribute('rel', 'lightbox');
-                        a.setAttribute('rev', '<div style="display:none" class="redirect">' + page + '</div><p class="lbp">' + screenname + '</p><img class="lbimg" src="' + profileimage + '"width=50 height=50 onerror="imgError2(this);" data-link="' + userpage + '"><p class="lbp2">' + title + '</p><p class="lbp3">' + shared + '</p><p class="lbp4">  ' + time + '</p>');
+                        a.setAttribute('rev', '<div style="display:none" class="redirect">' + page + '</div><p class="lbp">' + screenname + '</p><img class="lbimg" src="' + profileimage + '"width=50 height=50 onerror="' + onerror + '" data-link="' + userpage + '"><p class="lbp2">' + title + '</p><p class="lbp3">' + shared + '</p><p class="lbp4">  ' + time + '</p>');
                         divouter.appendChild(a);
 
                         var img = document.createElement('img');
@@ -220,7 +217,7 @@ function parse_latest(pagenum) {
                         var profile = document.createElement('img');
                         profile.setAttribute('src', profileimage);
                         profile.setAttribute('class', 'ff-userpic');
-                        profile.setAttribute('onerror', 'imgError2(this);');
+                        profile.setAttribute('onerror', onerror);
                         profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                         divouter.appendChild(profile);
 
@@ -392,20 +389,20 @@ function more_latest() {
     $(window).unbind('.more_latest');
 
     $(window).bind("scroll.more_latest", function () {
-        if ((($('#main').height()) + 26) <= ($(window).height() + $(window).scrollTop())) {
+        if ((($('#main').height()) + 25) <= ($(window).height() + $(window).scrollTop())) {
 
             $("#loadmore").show();
             pagenum++;
 
             $.ajax({
                 type: "GET",
-                url: api_folder+"items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&q=" + query_param + "&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param+ "&since=" + since_param + "&until=" + until_param,
+                url: api_folder + "items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&q=" + query_param + "&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
                 dataType: "json",
                 success: function (json) {
                     if (pagelocation === "latest") {
                         var end = 0;
                         var endpage = -1,
-                            title, source, publicationTime, shared, screenname, profileimage, id, page, userpage, thumb, colorclass, iconsource;
+                            title, source, publicationTime, shared, screenname, profileimage, id, page, userpage, thumb, colorclass, iconsource, onerror;
 
 
                         for (var i = 0; i < json.length; i++) {
@@ -440,7 +437,7 @@ function more_latest() {
                             } else {
                                 userpage = "404.html";
                             }
-
+                            onerror = false;
                             switch (source) {
                                 case "Youtube":
                                     shared = nFormatter(json[i].views) + " views";
@@ -451,6 +448,7 @@ function more_latest() {
                                     shared = nFormatter(json[i].shares) + " retweets";
                                     iconsource = 'imgs/twitter-16-black.png';
                                     colorclass = 'color twittercolor';
+                                    onerror = true;
                                     break;
                                 case "Flickr":
                                     shared = nFormatter(json[i].views) + " views";
@@ -493,6 +491,12 @@ function more_latest() {
                                     iconsource = 'imgs/globe-16-black.png';
                                     colorclass = 'color webcolor';
                             }
+                            if (onerror) {
+                                onerror = "imgError2(this,'Twitter','" + json[i].user.username + "');"
+                            }
+                            else {
+                                onerror = "imgError2(this,null,null);"
+                            }
                             id = id.replace(/#/g, "%23");
 
                             var a = new Date(publicationTime * 1);
@@ -526,7 +530,7 @@ function more_latest() {
                                 profile.setAttribute('src', profileimage);
                                 profile.setAttribute('class', 'ff-userpic');
                                 profile.setAttribute('style', 'margin: -15px auto 0');
-                                profile.setAttribute('onerror', 'imgError2(this);');
+                                profile.setAttribute('onerror', onerror);
                                 profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                                 divouter.appendChild(profile);
 
@@ -596,7 +600,7 @@ function more_latest() {
                                 a.setAttribute('href', thumb);
                                 a.setAttribute('onclick', 'return false;');
                                 a.setAttribute('rel', 'lightbox');
-                                a.setAttribute('rev', '<div style="display:none" class="redirect">' + page + '</div><p class="lbp">' + screenname + '</p><img class="lbimg" src="' + profileimage + '"width=50 height=50 onerror="imgError2(this);" data-link="' + userpage + '"><p class="lbp2">' + title + '</p><p class="lbp3">' + shared + '</p><p class="lbp4">  ' + time + '</p>');
+                                a.setAttribute('rev', '<div style="display:none" class="redirect">' + page + '</div><p class="lbp">' + screenname + '</p><img class="lbimg" src="' + profileimage + '"width=50 height=50 onerror="' + onerror + '" data-link="' + userpage + '"><p class="lbp2">' + title + '</p><p class="lbp3">' + shared + '</p><p class="lbp4">  ' + time + '</p>');
                                 divouter.appendChild(a);
 
                                 var img = document.createElement('img');
@@ -608,7 +612,7 @@ function more_latest() {
                                 var profile = document.createElement('img');
                                 profile.setAttribute('src', profileimage);
                                 profile.setAttribute('class', 'ff-userpic');
-                                profile.setAttribute('onerror', 'imgError2(this);');
+                                profile.setAttribute('onerror', onerror);
                                 profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                                 divouter.appendChild(profile);
 
@@ -687,12 +691,12 @@ function parse_new(count) {
 
     $.ajax({
         type: "GET",
-        url: api_folder+"items?collection=" + collection_param + "&nPerPage=" + count + "&pageNumber=1&q=" + query_param + "&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param+ "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "items?collection=" + collection_param + "&nPerPage=" + count + "&pageNumber=1&q=" + query_param + "&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             if (pagelocation === "latest") {
                 var endpage = -1,
-                    title, source, publicationTime, shared, screenname, profileimage, id, page, userpage, thumb, colorclass, iconsource;
+                    title, source, publicationTime, shared, screenname, profileimage, id, page, userpage, thumb, colorclass, iconsource, onerror;
 
 
                 for (var i = 0; i < json.length; i++) {
@@ -727,7 +731,7 @@ function parse_new(count) {
                     } else {
                         userpage = "404.html";
                     }
-
+                    onerror = false;
                     switch (source) {
                         case "Youtube":
                             shared = nFormatter(json[i].views) + " views";
@@ -738,6 +742,7 @@ function parse_new(count) {
                             shared = nFormatter(json[i].shares) + " retweets";
                             iconsource = 'imgs/twitter-16-black.png';
                             colorclass = 'color twittercolor';
+                            onerror = true;
                             break;
                         case "Flickr":
                             shared = nFormatter(json[i].views) + " views";
@@ -780,6 +785,12 @@ function parse_new(count) {
                             iconsource = 'imgs/globe-16-black.png';
                             colorclass = 'color webcolor';
                     }
+                    if (onerror) {
+                        onerror = "imgError2(this,'Twitter','" + json[i].user.username + "');"
+                    }
+                    else {
+                        onerror = "imgError2(this,null,null);"
+                    }
                     id = id.replace(/#/g, "%23");
 
                     var display_time = new Date(publicationTime * 1);
@@ -813,7 +824,7 @@ function parse_new(count) {
                         profile.setAttribute('src', profileimage);
                         profile.setAttribute('class', 'ff-userpic');
                         profile.setAttribute('style', 'margin: -15px auto 0');
-                        profile.setAttribute('onerror', 'imgError2(this);');
+                        profile.setAttribute('onerror', onerror);
                         profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                         divouter.appendChild(profile);
 
@@ -883,7 +894,7 @@ function parse_new(count) {
                         a.setAttribute('href', thumb);
                         a.setAttribute('onclick', 'return false;');
                         a.setAttribute('rel', 'lightbox');
-                        a.setAttribute('rev', '<div style="display:none" class="redirect">' + page + '</div><p class="lbp">' + screenname + '</p><img class="lbimg" src="' + profileimage + '"width=50 height=50 onerror="imgError2(this);" data-link="' + userpage + '"><p class="lbp2">' + title + '</p><p class="lbp3">' + shared + '</p><p class="lbp4">  ' + time + '</p>');
+                        a.setAttribute('rev', '<div style="display:none" class="redirect">' + page + '</div><p class="lbp">' + screenname + '</p><img class="lbimg" src="' + profileimage + '"width=50 height=50 onerror="' + onerror + '" data-link="' + userpage + '"><p class="lbp2">' + title + '</p><p class="lbp3">' + shared + '</p><p class="lbp4">  ' + time + '</p>');
                         divouter.appendChild(a);
 
                         var img = document.createElement('img');
@@ -895,7 +906,7 @@ function parse_new(count) {
                         var profile = document.createElement('img');
                         profile.setAttribute('src', profileimage);
                         profile.setAttribute('class', 'ff-userpic');
-                        profile.setAttribute('onerror', 'imgError2(this);');
+                        profile.setAttribute('onerror', onerror);
                         profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                         divouter.appendChild(profile);
 

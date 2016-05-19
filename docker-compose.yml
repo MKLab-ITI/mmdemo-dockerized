@@ -25,10 +25,6 @@ services:
           - redis
     depends_on:
       - graylog
-    logging:
-      driver: gelf
-      options:
-        gelf-address: "udp://localhost:12201"
 
   mongodb:
     image: mongo
@@ -40,10 +36,6 @@ services:
       common_network:
         aliases:
           - mongodb
-    logging:
-      driver: gelf
-      options:
-        gelf-address: "udp://localhost:12201"
 
   solr:
     image: solr
@@ -55,10 +47,6 @@ services:
       common_network:
         aliases:
           - solr
-    logging:
-      driver: gelf
-      options:
-        gelf-address: "udp://localhost:12201"
 
   web:
     build:

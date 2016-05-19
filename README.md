@@ -53,7 +53,7 @@ RUN git clone https://github.com/MKLab-ITI/mklab-stream-manager.git && \
     cd /
 ```
 
-Note that after cloning from github, the compilation is performed on a specific release of the project tagged as *mklab-stream-manager-0.3*. To use the latest version of stream manager, as cloned from the master branch of the repository, remove the third line of the snippet above:
+Note that after cloning from github, the compilation is performed on a specific release of the project tagged as *mklab-stream-manager-0.3*. As *mklab-stream-manager* is under development and new features are added to this project, it is considered as a good practice to use a stable release. However, to use the latest version of stream manager, as cloned from the master branch of the repository, remove the third line of the snippet above:
 
 ```sh
     cd checkout tags/mklab-stream-manager-0.3 && \

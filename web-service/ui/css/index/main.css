@@ -124,7 +124,11 @@ body {
 .logo {
     width: 45px;
 }
-
+#circle_logo{
+    padding: 39px;
+    position: relative;
+    top:30px;
+}
 .header_menu {
     padding: 20px 0;
     transition: padding 500ms;
@@ -1328,7 +1332,7 @@ img.responsive-img {
 }
 
 .footer_img {
-    padding: 20px 0 10px 0;
+    padding: 20px 0 0px 0;
     display: block;
     margin: 0 auto;
 }
@@ -1653,7 +1657,7 @@ img.responsive-img {
 
 #dropdown ul {
     position: absolute;
-    top: -80px;
+    top: -70px;
     width: 190px;
     padding: 0;
     display: none;

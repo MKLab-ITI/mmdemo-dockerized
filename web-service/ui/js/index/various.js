@@ -1,3 +1,35 @@
+if (project_logo !== "") {
+    $('.header_menu').prepend('<img src="' + project_logo + '" alt="logo" class="logo">');
+    $('#circle_logo').attr('src', project_logo);
+}
+if (project_name !== "") {
+    $('.header').text(project_name);
+    document.title = project_name;
+}
+if (project_favicon !== "") {
+    var link = document.createElement('link');
+    link.rel = 'shortcut icon';
+    link.href = project_favicon;
+    document.getElementsByTagName('head')[0].appendChild(link);
+}
+if (is_H2020) {
+    $('#social_icons').after('<img class="footer_img" src="imgs/horizon.png" alt="horizon"/>');
+}
+if (project_url !== "") {
+    $('#project_url').attr('href', project_url).text(project_name);
+}
+if (project_facebook !== "") {
+    $('#social_icons').append('<a href="' + project_facebook + '" target="_blank"><img src="imgs/facebook-24.png"></a>');
+}
+if (project_twitter !== "") {
+    $('#social_icons').append('<a href="' + project_twitter + '" target="_blank"><img src="imgs/twitter-24.png"></a>');
+}
+if (project_googleplus !== "") {
+    $('#social_icons').append('<a href="'+project_googleplus+'" target="_blank"><img src="imgs/google+-24.png"></a>');
+}
+if (project_linkedin !== "") {
+    $('#social_icons').append(' <a href="'+project_linkedin+'" target="_blank"><img src="imgs/linkedin-24.png"></a>');
+}
 var edit_mode = false;
 var edit_id = 0;
 $(window).on("scroll touchmove", function () {

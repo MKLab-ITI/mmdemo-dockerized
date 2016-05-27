@@ -73,6 +73,8 @@ services:
     build:
       context: stream-manager-service
     image: streammanager
+    volumes:
+      - ./stream-manager-service/stream_manager:/stream_manager
     networks:
       common_network:
         aliases:

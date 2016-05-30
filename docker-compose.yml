@@ -58,10 +58,6 @@ services:
       common_network:
         aliases:
           - web
-    logging:
-      driver: gelf
-      options:
-        gelf-address: "udp://localhost:12201"
     depends_on:
       - redis
       - mongodb

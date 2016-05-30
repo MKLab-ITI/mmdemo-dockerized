@@ -31,7 +31,11 @@ solr:
         - ./solr-cores:/opt/solr/server/solr
 ```
 
-More specifically, the directory */data/db* inside the container that runs mongodb is mounted to the directory *./mongo_data_dir* on the host machine's local filesystem. You can change this directory to any other local directory. Regarding solr, the directory */opt/solr/server/solr* is mounted in *./solr-cores* or any other directory that contains [solr-cores](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/solr-cores). There are three cores, corresponding to three collections: Items, MediaItems and WebPages.
+More specifically, the directory */data/db* inside the container that runs mongodb is mounted to the directory *./mongo_data_dir* on the host machine's local filesystem. You can change this directory to any other local directory. Regarding solr, the directory */opt/solr/server/solr* is mounted in *./solr-cores* or any other directory that contains [solr-cores](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/solr-cores). There are three cores, corresponding to three collections: Items, MediaItems and WebPages. Make sure that user that execute tha docker images has r/w rights to these directories. The easiest way is to give full access:
+
+```sh
+  $chmod 777 -R ./solr-cores
+```
 
 ### web-service
 

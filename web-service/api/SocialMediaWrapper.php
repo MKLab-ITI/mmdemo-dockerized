@@ -103,6 +103,7 @@ class SocialMediaWrapper {
                 "username" => $userFound->screen_name,
                 "name" => $userFound->name,
                 "description" => $userFound->description,
+                "link" => "http://twitter.com/" . $userFound->screen_name,
                 "followers_count" => $userFound->followers_count,
                 "friends_count" => $userFound->friends_count,
                 "favourites_count" => $userFound->favourites_count,
@@ -142,6 +143,7 @@ class SocialMediaWrapper {
                     'id' =>  $entry->id,
                     'username' =>  $entry->username,
                     'name' => $entry->full_name,
+                    'link' =>  "http://instagram.com/".$entry->username,
                     'profileImage' => $entry->profile_picture,
                     'source' => 'Instagram'
                 );
@@ -256,14 +258,28 @@ class SocialMediaWrapper {
             return array();
         }
 
-        $response = $this->youtube->channels->listChannels("id,snippet,statistics,contentDetails",
+        $response = $this->youtube->channels->listChannels("id,snippet,statistics",
             array(
                 'id' => $channel_id
             )
         );
 
-        foreach ($response['items'] as $item) {
-            return $item;
+        foreach ($response['items'] as $result) {
+
+            $channel = array(
+                'id' => $result['id'],
+                'username' => isset($result['snippet']['customUrl'])?$result['snippet']['customUrl']:$result['snippet']['title'],
+                'name' => $result['snippet']['title'],
+                'description' => $result['snippet']['description'],
+                'viewCount' => $result['statistics']['viewCount'],
+                'commentCount' => $result['statistics']['commentCount'],
+                'subscriberCount' => $result['statistics']['subscriberCount'],
+                'videoCount' => $result['statistics']['videoCount'],
+                'link' => isset($result['snippet']['customUrl'])?"https://www.youtube.com/c/".$result['snippet']['customUrl']:"https://www.youtube.com/channel/" . $result['id'],
+                'profileImage' => $result['snippet']['thumbnails']['default']['url'],
+                'source' => 'Youtube'
+            );
+            return $channel;
         }
 
         return array();
@@ -300,17 +316,29 @@ class SocialMediaWrapper {
         return $users;
     }
 
-    public function getGooglePlusChannel($user_id) {
+    public function getGooglePlusAccount($user_id) {
 
         if($this->plus == null) {
             return array();
         }
 
-        $optParams = array('maxResults' => "aboutMe,ageRange,birthday,braggingRights,circledByCount,cover,currentLocation,displayName,domain,emails,
-            etag,gender,id,image,isPlusUser,kind,language,name,nickname,objectType,occupation,organizations,
-            placesLived,plusOneCount,relationshipStatus,skills,tagline,url,urls,verified");
+        $optParams = array('fields' => "displayName,id,image,isPlusUser,language,name,nickname,plusOneCount,tagline,url,urls,verified,circledByCount,aboutMe,image/url");
+        $result = $this->plus->people->get($user_id, $optParams);
 
-        $user = $this->plus->people->get($user_id, $optParams);
+        $user = array(
+            'id' => $result['id'],
+            'username' => $result['nickname'],
+            'name' => $result['displayName'],
+            'link' => $result['url'],
+            'source' => 'GooglePlus',
+            'description' => $result['aboutMe'],
+            'profileImage' => $result['image']['url'],
+            'plusOneCount' => $result['plusOneCount'],
+            'circledByCount' => $result['circledByCount'],
+            'verified' => $result['verified'],
+            'profileImage' => $result['image']['url']
+        );
+
         return $user;
 
     }

@@ -96,6 +96,14 @@
         <sp>Coloque las etiquetas</sp>
         <ca>Col·loca  els teus Tags</ca>
     </translation>
+    <translation id="section2_input_users_keyword">
+        <en>Place a keyword</en>
+        <el>Δώσε μια λέξη-κλειδί</el>
+        <it>Place a keyword</it>
+        <tr>Place a keyword</tr>
+        <sp>Place a keyword</sp>
+        <ca>Place a keyword</ca>
+    </translation>
     <translation id="section2_examples">
         <en>Examples:</en>
         <el>Παραδείγματα:</el>
@@ -151,6 +159,38 @@
         <tr>RSS'i ekle</tr>
         <sp>Añada el RSS</sp>
         <ca>Afegeix el teu RSS</ca>
+    </translation>
+    <translation id="section2_done_button">
+        <en>DONE</en>
+        <el>ΤΕΛΟΣ</el>
+        <it>DONE</it>
+        <tr>DONE</tr>
+        <sp>DONE</sp>
+        <ca>DONE</ca>
+    </translation>
+    <translation id="section2_adv_search">
+        <en>Advanced User Search</en>
+        <el>Εξελιγμένη αναζήτηση χρηστών</el>
+        <it>Advanced User Search</it>
+        <tr>Advanced User Search</tr>
+        <sp>Advanced User Search</sp>
+        <ca>Advanced User Search</ca>
+    </translation>
+    <translation id="section2_advanced_loading">
+        <en>Please wait, this may take a few seconds...</en>
+        <el>Παρακαλώ περιμένετε μερικά δευτερόλεπτα...</el>
+        <it>Please wait, this may take a few seconds...</it>
+        <tr>Please wait, this may take a few seconds...</tr>
+        <sp>Please wait, this may take a few seconds...</sp>
+        <ca>Please wait, this may take a few seconds...</ca>
+    </translation>
+    <translation id="section2_no_results">
+        <en>No results for this keyword</en>
+        <el>Κανένα αποτέλεσμα για αυτήν την λέξη</el>
+        <it>No results for this keyword</it>
+        <tr>No results for this keyword</tr>
+        <sp>No results for this keyword</sp>
+        <ca>No results for this keyword</ca>
     </translation>
     <translation id="section3_title">
         <en>All set? Hit the Launch Button</en>

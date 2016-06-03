@@ -14,6 +14,7 @@ if (project_favicon !== "") {
 }
 if (is_H2020) {
     $('#social_icons').after('<img class="footer_img" src="imgs/horizon.png" alt="horizon"/>');
+    $('#dropdown').find('ul').css('top', '-70px');
 }
 if (project_url !== "") {
     $('#project_url').attr('href', project_url).text(project_name);
@@ -25,10 +26,10 @@ if (project_twitter !== "") {
     $('#social_icons').append('<a href="' + project_twitter + '" target="_blank"><img src="imgs/twitter-24.png"></a>');
 }
 if (project_googleplus !== "") {
-    $('#social_icons').append('<a href="'+project_googleplus+'" target="_blank"><img src="imgs/google+-24.png"></a>');
+    $('#social_icons').append('<a href="' + project_googleplus + '" target="_blank"><img src="imgs/google+-24.png"></a>');
 }
 if (project_linkedin !== "") {
-    $('#social_icons').append(' <a href="'+project_linkedin+'" target="_blank"><img src="imgs/linkedin-24.png"></a>');
+    $('#social_icons').append(' <a href="' + project_linkedin + '" target="_blank"><img src="imgs/linkedin-24.png"></a>');
 }
 var edit_mode = false;
 var edit_id = 0;
@@ -48,6 +49,10 @@ $(document).on('focus', input_selector, function () {
         $('#interest_icon').attr('src', 'imgs/interest-blue.png');
         $('#enter_icon').attr('src', 'imgs/enter-blue.png');
     }
+    else if ($(this).attr('id') === "user_advanced") {
+        $('#text_user_icon').attr('src', 'imgs/text_user_blue.png');
+        $('#search_icon_2').attr('src', 'imgs/search-blue.png');
+    }
     else {
         $('#user_icon').attr('src', 'imgs/email-blue.png');
         $('.users_icon').attr('src', 'imgs/search-blue.png');
@@ -65,6 +70,10 @@ $(document).on('blur', input_selector, function () {
             $('#interest_icon').attr('src', 'imgs/interest-gray.png');
             $('#enter_icon').attr('src', 'imgs/enter-gray.png');
         }
+        else if ($(this).attr('id') === "user_advanced") {
+            $('#text_user_icon').attr('src', 'imgs/text_user.png');
+            $('#search_icon_2').attr('src', 'imgs/search-gray.png');
+        }
         else {
             $('#user_icon').attr('src', 'imgs/email-gray.png');
             $('.users_icon').attr('src', 'imgs/search-gray.png');
@@ -77,6 +86,103 @@ $("#hashtag").keyup(function (e) {
         addtag();
     }
 });
+
+var typingTimer;
+var doneTypingInterval = 1000;
+$('#user_advanced').keyup(function () {
+    abort();
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(search_adv_user, doneTypingInterval);
+
+});
+
+function search_adv_user() {
+    if ($('#user_advanced').val().length > 1) {
+        $('#users_images').hide();
+        $('.Typeahead-spinner').show();
+        $('#adv_loading').slideDown();
+        var $user_images = $('#users_images');
+        var $user_adv = $('#users_adv');
+        $user_images.empty();
+        var source = "";
+        $('.open_adv').each(function (i, obj) {
+            source = source + $(this).attr('id').substring(4) + ",";
+        });
+        source = source.slice(0, -1);
+        last_source = source;
+        $.ajax({
+            url: api_folder + 'detect/users?q=' + $('#user_advanced').val() + '&source=' + source,
+            type: 'GET',
+            success: function (json) {
+                if ($user_adv.find("li").length === 15) {
+                    $user_images.addClass('users_full');
+                }
+                for (var i = 0; i < json.length; i++) {
+                    var flag = 0;
+                    $user_adv.find('li').children().each(function () {
+                        if ($(this).attr('id').indexOf(json[i].source + "------" + json[i].id) > -1) {
+                            flag = 1;
+                        }
+                    });
+                    if (flag) {
+                        switch (json[i].source) {
+                            case "Twitter":
+                                $user_images.append('<div class="user" style="background-color: lightgray"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,\'Twitter\',' + json[i].username + ');" style="border-color:#00acee"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].statuses_count) + ' tweets</p><img src="imgs/twitter-16-color.png" class="user_social"></div><div class="data_stats"><ul><li class="three">' + nFormatter_easy(json[i].favourites_count) + '<span>Favorites</span></li><li class="three">' + nFormatter_easy(json[i].followers_count) + '<span>Followers</span></li><li class="three">' + nFormatter_easy(json[i].friends_count) + '<span>Following</span> </li> </ul> </div><img src="imgs/add_user_green.png" class="add_user open_user" data-username="' + json[i].username + '" data-social="Twitter" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
+                                break;
+                            case "GooglePlus":
+                                $user_images.append('<div class="user" style="background-color: lightgray"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#d34836"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].plusOneCount) + ' plusOnes</p><img src="imgs/google+-16-color.png" class="user_social"></div><div class="data_stats"><ul><li class="one">' + nFormatter_easy(json[i].circledByCount) + '<span>Circled By</span></li></ul> </div><img src="imgs/add_user_green.png" class="add_user open_user" data-username="' + json[i].username + '" data-social="GooglePlus" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
+                                break;
+                            case "Facebook":
+                                $user_images.append('<div class="user" style="background-color: lightgray"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#3b5998"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].likes) + ' likes</p><img src="imgs/facebook-5-16.png" class="user_social"></div><div class="data_stats"><ul></ul> </div><img src="imgs/add_user_green.png" class="add_user open_user" data-username="' + json[i].username + '" data-social="Facebook" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
+                                break;
+                            case "Instagram":
+                                $user_images.append('<div class="user" style="background-color: lightgray"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#ab7d63"></p><p class="user_name">' + json[i].username + '</p><br><img src="imgs/instagram-16-color.png" class="user_social"></div><div class="data_stats"><ul></ul> </div><img src="imgs/add_user_green.png" class="add_user open_user" data-username="' + json[i].username + '" data-social="Instagram" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
+                                break;
+                            case "Youtube":
+                                $user_images.append('<div class="user" style="background-color: lightgray"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#FF0202"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].videoCount) + ' videos</p><img src="imgs/youtube-16-color.png" class="user_social"></div><div class="data_stats"><ul><li class="three">' + nFormatter_easy(json[i].subscriberCount) + '<span>Subscribers</span></li><li class="three">' + nFormatter_easy(json[i].viewCount) + '<span>Views</span></li><li class="three">' + nFormatter_easy(json[i].commentCount) + '<span>Comments</span> </li> </ul> </div><img src="imgs/add_user_green.png" class="add_user open_user" data-username="' + json[i].username + '" data-social="Youtube" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
+                                break;
+                        }
+                    }
+                    else {
+                        switch (json[i].source) {
+                            case "Twitter":
+                                $user_images.append('<div class="user"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,\'Twitter\',' + json[i].username + ');" style="border-color:#00acee"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].statuses_count) + ' tweets</p><img src="imgs/twitter-16-color.png" class="user_social"></div><div class="data_stats"><ul><li class="three">' + nFormatter_easy(json[i].favourites_count) + '<span>Favorites</span></li><li class="three">' + nFormatter_easy(json[i].followers_count) + '<span>Followers</span></li><li class="three">' + nFormatter_easy(json[i].friends_count) + '<span>Following</span> </li> </ul> </div><img src="imgs/add_user.png" class="add_user" data-username="' + json[i].username + '" data-social="Twitter" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
+                                break;
+                            case "GooglePlus":
+                                $user_images.append('<div class="user"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#d34836"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].plusOneCount) + ' plusOnes</p><img src="imgs/google+-16-color.png" class="user_social"></div><div class="data_stats"><ul><li class="one">' + nFormatter_easy(json[i].circledByCount) + '<span>Circled By</span></li></ul> </div><img src="imgs/add_user.png" class="add_user" data-username="' + json[i].username + '" data-social="GooglePlus" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
+                                break;
+                            case "Facebook":
+                                $user_images.append('<div class="user"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#3b5998"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].likes) + ' likes</p><img src="imgs/facebook-5-16.png" class="user_social"></div><div class="data_stats"><ul></ul> </div><img src="imgs/add_user.png" class="add_user" data-username="' + json[i].username + '" data-social="Facebook" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
+                                break;
+                            case "Instagram":
+                                $user_images.append('<div class="user"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#ab7d63"></p><p class="user_name">' + json[i].username + '</p><br><img src="imgs/instagram-16-color.png" class="user_social"></div><div class="data_stats"><ul></ul> </div><img src="imgs/add_user.png" class="add_user" data-username="' + json[i].username + '" data-social="Instagram" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
+                                break;
+                            case "Youtube":
+                                $user_images.append('<div class="user"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#FF0202"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].videoCount) + ' videos</p><img src="imgs/youtube-16-color.png" class="user_social"></div><div class="data_stats"><ul><li class="three">' + nFormatter_easy(json[i].subscriberCount) + '<span>Subscribers</span></li><li class="three">' + nFormatter_easy(json[i].viewCount) + '<span>Views</span></li><li class="three">' + nFormatter_easy(json[i].commentCount) + '<span>Comments</span> </li> </ul> </div><img src="imgs/add_user.png" class="add_user" data-username="' + json[i].username + '" data-social="Youtube" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
+                                break;
+                        }
+                    }
+                }
+                $user_images.show();
+                particlesJS("particles-js", particles_settings);
+                $(".Typeahead-spinner,#no_results").hide();
+                $('#adv_loading').slideUp();
+                if (json.length === 0) {
+                    $('#no_results').show();
+                    $('#users_images').hide();
+                }
+            },
+            error: function (e) {
+            }
+        });
+    }
+    else {
+        $(".Typeahead-spinner,#no_results").hide();
+        $('#adv_loading').slideUp();
+        var $user_images = $('#users_images');
+        $user_images.empty();
+    }
+}
 function addtag(tag) {
     var flag = 1;
     var count = 100 - $("#tags li").length;
@@ -101,7 +207,7 @@ function addtag(tag) {
                 });
                 var tag = document.getElementById('tags');
                 var li = document.createElement('li');
-                $(li).hide().appendTo(tag).fadeIn(400);
+                $(li).hide().appendTo(tag).fadeIn(600);
 
                 var a = document.createElement('a');
                 a.setAttribute('href', 'javascript:void(0);');
@@ -146,7 +252,7 @@ function adduser($id, $name, $user, $social) {
         if (tag_name !== "") {
             flag = 1;
             $('#users li').children().each(function () {
-                if ($(this).attr('id') === tag_name + "------" + social + "------" + $id + "------" + $name) {
+                if ($(this).attr('id').indexOf(social + "------" + $id) > -1) {
                     $(this).parent().hide('slow', function () {
                         $(this).remove();
                     });
@@ -155,7 +261,7 @@ function adduser($id, $name, $user, $social) {
             });
             var tag = document.getElementById('users');
             var li = document.createElement('li');
-            $(li).hide().appendTo(tag).fadeIn(400);
+            $(li).hide().appendTo(tag).fadeIn(600);
 
             var a = document.createElement('a');
             a.setAttribute('href', 'javascript:void(0);');
@@ -206,6 +312,68 @@ function adduser($id, $name, $user, $social) {
     }
 }
 
+function adduser_adv($username, $social, $id, $name) {
+    var count = 15 - $("#users_adv li").length;
+    if (count > 0) {
+        var tag = document.getElementById('users_adv');
+        var li = document.createElement('li');
+        $(li).hide().appendTo(tag).fadeIn(600);
+
+        var a = document.createElement('a');
+        a.setAttribute('href', 'javascript:void(0);');
+        a.setAttribute('id', $username + "------" + $social + "------" + $id + "------" + $name);
+        a.innerHTML = $username;
+        li.appendChild(a);
+
+        var icon = document.createElement('img');
+        icon.setAttribute('class', 'user_icon');
+        a.appendChild(icon);
+        switch ($social) {
+            case "Twitter":
+                icon.setAttribute('src', 'imgs/twitter-16-black.png');
+                break;
+            case "GooglePlus":
+                icon.setAttribute('src', 'imgs/google+-16-black.png');
+                break;
+            case "Facebook":
+                icon.setAttribute('src', 'imgs/facebook-16-black.png');
+                break;
+            case "Instagram":
+                icon.setAttribute('src', 'imgs/instagram-16-black.png');
+                break;
+            case "Flickr":
+                icon.setAttribute('src', 'imgs/flickr-16-black.png');
+                break;
+            case "Youtube":
+                icon.setAttribute('src', 'imgs/youtube-16-black.png');
+                break;
+            case "Web":
+                icon.setAttribute('src', 'imgs/globe-16-black.png');
+                break;
+        }
+
+
+        var img = document.createElement('img');
+        img.setAttribute('src', 'imgs/delete.png');
+        img.setAttribute('class', 'delete');
+        a.appendChild(img);
+        if ($("#users_adv li").length === 15) {
+            $('#users_images').addClass('users_full');
+        }
+    }
+}
+function deluser_adv($username, $social, $id, $name) {
+
+    $('#users_adv li').children().each(function () {
+        if ($(this).attr('id').indexOf($social + "------" + $id) > -1) {
+            $(this).parent().hide('slow', function () {
+                $(this).remove();
+            });
+        }
+    });
+    $('#users_images').removeClass('users_full');
+}
+
 $("#interest").keyup(function (e) {
     if (e.keyCode === 13) {
         addname();
@@ -214,7 +382,7 @@ $("#interest").keyup(function (e) {
 function addname() {
     var $interest = $('#interest');
     if ($interest.val().replace(/\s/g, '').length) {
-        $('#col_name').hide().fadeIn(400).html($interest.val() + '<img src="imgs/edit-white.png" alt="edit" class="edit"/>');
+        $('#col_name').hide().fadeIn(600).html($interest.val() + '<img src="imgs/edit-white.png" alt="edit" class="edit"/>');
         $interest.val("");
         $interest.prop('disabled', true);
     }
@@ -232,7 +400,16 @@ $("#user_users").on("click", ".delete", function () {
         $(this).remove();
     });
     $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', false);
+    $('#users_images').removeClass('users_full');
 
+});
+$("#user_users_adv").on("click", ".delete", function () {
+    $(this).closest('li').hide('slow', function () {
+        $(this).remove();
+    });
+    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', false);
+    $('#users_images').removeClass('users_full');
+    $("[data-id=" + $(this).parent().attr('id').split('------')[2] + "]").removeClass('open_user').attr('src', 'imgs/add_user.png').parent().css('background-color', 'transparent');
 });
 $("#search_icon_1").click(function () {
     addtag();
@@ -266,7 +443,7 @@ $("#example_1").click(function () {
         });
         var tag = document.getElementById('users');
         var li = document.createElement('li');
-        $(li).hide().appendTo(tag).fadeIn(400);
+        $(li).hide().appendTo(tag).fadeIn(600);
 
         var a = document.createElement('a');
         a.setAttribute('href', 'javascript:void(0);');
@@ -291,7 +468,45 @@ $("#example_1").click(function () {
         }
     }
 });
-$("#example_1").hover(
+$("#example_5").click(function () {
+    if ($("#users_adv li").length < 15) {
+        var flag = 1;
+        $('#users_adv li').children().each(function () {
+            if ($(this).attr('id') === "Greenpeace------Twitter------3459051------Greenpeace") {
+                $(this).parent().hide('slow', function () {
+                    $(this).remove();
+                });
+                flag = 0;
+            }
+        });
+        var tag = document.getElementById('users_adv');
+        var li = document.createElement('li');
+        $(li).hide().appendTo(tag).fadeIn(600);
+
+        var a = document.createElement('a');
+        a.setAttribute('href', 'javascript:void(0);');
+        a.setAttribute('id', 'Greenpeace------Twitter------3459051------Greenpeace');
+        a.innerHTML = 'Greenpeace';
+        li.appendChild(a);
+
+        var icon = document.createElement('img');
+        icon.setAttribute('class', 'user_icon');
+        icon.setAttribute('src', 'imgs/twitter-16-black.png');
+        a.appendChild(icon);
+
+        var img = document.createElement('img');
+        img.setAttribute('src', 'imgs/delete.png');
+        img.setAttribute('class', 'delete');
+        a.appendChild(img);
+
+        if (flag) {
+            if ($("#users_adv li").length === 15) {
+                $('#users_images').addClass('users_full');
+            }
+        }
+    }
+});
+$(".example_1").hover(
     function () {
         $(this).find('img').attr('src', 'imgs/twitter-16-color.png');
     }, function () {
@@ -312,7 +527,7 @@ $("#example_2").click(function () {
         });
         var tag = document.getElementById('users');
         var li = document.createElement('li');
-        $(li).hide().appendTo(tag).fadeIn(400);
+        $(li).hide().appendTo(tag).fadeIn(600);
 
         var a = document.createElement('a');
         a.setAttribute('href', 'javascript:void(0);');
@@ -337,7 +552,45 @@ $("#example_2").click(function () {
         }
     }
 });
-$("#example_2").hover(
+$("#example_6").click(function () {
+    if ($("#users_adv li").length < 15) {
+        var flag = 1;
+        $('#users_adv li').children().each(function () {
+            if ($(this).attr('id') === "WWF------GooglePlus------114176126428866920097------WWF") {
+                $(this).parent().hide('slow', function () {
+                    $(this).remove();
+                });
+                flag = 0;
+            }
+        });
+        var tag = document.getElementById('users_adv');
+        var li = document.createElement('li');
+        $(li).hide().appendTo(tag).fadeIn(600);
+
+        var a = document.createElement('a');
+        a.setAttribute('href', 'javascript:void(0);');
+        a.setAttribute('id', 'WWF------GooglePlus------114176126428866920097------WWF');
+        a.innerHTML = 'WWF';
+        li.appendChild(a);
+
+        var icon = document.createElement('img');
+        icon.setAttribute('class', 'user_icon');
+        icon.setAttribute('src', 'imgs/google+-16-black.png');
+        a.appendChild(icon);
+
+        var img = document.createElement('img');
+        img.setAttribute('src', 'imgs/delete.png');
+        img.setAttribute('class', 'delete');
+        a.appendChild(img);
+
+        if (flag) {
+            if ($("#users_adv li").length === 15) {
+                $('#users_images').addClass('users_full');
+            }
+        }
+    }
+});
+$(".example_2").hover(
     function () {
         $(this).find('img').attr('src', 'imgs/google+-16-color.png');
     }, function () {
@@ -358,7 +611,7 @@ $("#example_3").click(function () {
         });
         var tag = document.getElementById('users');
         var li = document.createElement('li');
-        $(li).hide().appendTo(tag).fadeIn(400);
+        $(li).hide().appendTo(tag).fadeIn(600);
 
         var a = document.createElement('a');
         a.setAttribute('href', 'javascript:void(0);');
@@ -383,7 +636,45 @@ $("#example_3").click(function () {
         }
     }
 });
-$("#example_3").hover(
+$("#example_7").click(function () {
+    if ($("#users_adv li").length < 15) {
+        var flag = 1;
+        $('#users_adv li').children().each(function () {
+            if ($(this).attr('id') === "CapeNature1------Facebook------137406639638143------CapeNature") {
+                $(this).parent().hide('slow', function () {
+                    $(this).remove();
+                });
+                flag = 0;
+            }
+        });
+        var tag = document.getElementById('users_adv');
+        var li = document.createElement('li');
+        $(li).hide().appendTo(tag).fadeIn(600);
+
+        var a = document.createElement('a');
+        a.setAttribute('href', 'javascript:void(0);');
+        a.setAttribute('id', 'CapeNature1------Facebook------137406639638143------CapeNature');
+        a.innerHTML = 'CapeNature1';
+        li.appendChild(a);
+
+        var icon = document.createElement('img');
+        icon.setAttribute('class', 'user_icon');
+        icon.setAttribute('src', 'imgs/facebook-16-black.png');
+        a.appendChild(icon);
+
+        var img = document.createElement('img');
+        img.setAttribute('src', 'imgs/delete.png');
+        img.setAttribute('class', 'delete');
+        a.appendChild(img);
+
+        if (flag) {
+            if ($("#users_adv li").length === 15) {
+                $('#users_images').addClass('users_full');
+            }
+        }
+    }
+});
+$(".example_3").hover(
     function () {
         $(this).find('img').attr('src', 'imgs/facebook-16-color.png');
     }, function () {
@@ -404,7 +695,7 @@ $("#example_4").click(function () {
         });
         var tag = document.getElementById('users');
         var li = document.createElement('li');
-        $(li).hide().appendTo(tag).fadeIn(400);
+        $(li).hide().appendTo(tag).fadeIn(600);
 
         var a = document.createElement('a');
         a.setAttribute('href', 'javascript:void(0);');
@@ -429,7 +720,45 @@ $("#example_4").click(function () {
         }
     }
 });
-$("#example_4").hover(
+$("#example_8").click(function () {
+    if ($("#users_adv li").length < 15) {
+        var flag = 1;
+        $('#users_adv li').children().each(function () {
+            if ($(this).attr('id') === "green4ema------Instagram------408186628------Environmental Media Assoc.") {
+                $(this).parent().hide('slow', function () {
+                    $(this).remove();
+                });
+                flag = 0;
+            }
+        });
+        var tag = document.getElementById('users_adv');
+        var li = document.createElement('li');
+        $(li).hide().appendTo(tag).fadeIn(600);
+
+        var a = document.createElement('a');
+        a.setAttribute('href', 'javascript:void(0);');
+        a.setAttribute('id', 'green4ema------Instagram------408186628------Environmental Media Assoc.');
+        a.innerHTML = 'green4ema';
+        li.appendChild(a);
+
+        var icon = document.createElement('img');
+        icon.setAttribute('class', 'user_icon');
+        icon.setAttribute('src', 'imgs/facebook-16-black.png');
+        a.appendChild(icon);
+
+        var img = document.createElement('img');
+        img.setAttribute('src', 'imgs/delete.png');
+        img.setAttribute('class', 'delete');
+        a.appendChild(img);
+
+        if (flag) {
+            if ($("#users_adv li").length === 15) {
+                $('#users_images').addClass('users_full');
+            }
+        }
+    }
+});
+$("example_4").hover(
     function () {
         $(this).find('img').attr('src', 'imgs/instagram-16-color.png');
     }, function () {
@@ -477,13 +806,56 @@ $("#discover").click(function () {
     }, 800);
 });
 
-
 $('.ff-filter-users').click(function (e) {
     e.preventDefault();
-    $('.input-field:gt(1)').hide();
+    $('.input-field:gt(1):lt(6)').hide();
     $('#' + $(this).attr('id') + '_input').css('display', 'inline-block');
     $('.ff-filter-users').addClass('close').removeClass('open');
     $(this).removeClass('close').addClass('open');
+});
+
+var last_source = "";
+$('.ff-filter-users_adv').click(function (e) {
+    e.preventDefault();
+    if ($(this).hasClass('close_adv')) {
+        $(this).removeClass('close_adv').addClass('open_adv');
+        if($('.Typeahead-spinner').is(":visible")){
+            abort();
+            search_adv_user();
+        }
+        else{
+            if (last_source.indexOf($(this).attr('id').substring(4)) > -1) {
+                $.when($("#users_images").find("[data-social='" + $(this).attr('id').substring(4) + "']").parent().show(1000)).then(function () {
+                    if ($('#users_images').find('.user:visible').length > 0) {
+                        $('#no_results').hide();
+                    }
+                });
+            }
+            else {
+                if ($('#user_advanced').val().length > 1) {
+                    $('.Typeahead-spinner').show();
+                    abort();
+                    search_adv_user();
+                }
+            }
+        }
+    }
+    else {
+        $(this).removeClass('open_adv').addClass('close_adv');
+        if($('.Typeahead-spinner').is(":visible")){
+            abort();
+            search_adv_user();
+        }
+        else{
+            $.when($("#users_images").find("[data-social='" + $(this).attr('id').substring(4) + "']").parent().hide(1000)).then(function () {
+                if ($('#users_images').find('.user:visible').length === 0) {
+                    if (last_source !== "" &&($('#user_advanced').val().length > 1)) {
+                        $('#no_results').show();
+                    }
+                }
+            });
+        }
+    }
 });
 
 $('.stage').click(function (e) {
@@ -609,7 +981,7 @@ $('.stage').click(function (e) {
             type: 'POST',
             url: url,
             data: temp,
-            success: function () {
+            success: function (json) {
                 $('html,body').animate({
                     scrollTop: $(".fifth-section").offset().top - 50
                 }, 800);
@@ -775,7 +1147,7 @@ $("#Container").on("click", ".edit_icon", function () {
     $('#edit_col_heading').show();
     $('#start_col_heading').hide();
     $('#edit_col_name').html(col_name);
-    $('#col_name').hide().fadeIn(400).html(col_name + '<img src="imgs/edit-white.png" alt="edit" class="edit"/>');
+    $('#col_name').hide().fadeIn(600).html(col_name + '<img src="imgs/edit-white.png" alt="edit" class="edit"/>');
     $('html,body').animate({
         scrollTop: $(".third-section").offset().top - 100
     }, 800);
@@ -962,6 +1334,15 @@ function nFormatter(num) {
     }
     return num;
 }
+function nFormatter_easy(num) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(0).replace(/\.0$/, '') + 'M';
+    }
+    if (num >= 10000) {
+        return (num / 1000).toFixed(0).replace(/\.0$/, '') + 'K';
+    }
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 $("#dropdown").on("click", function (e) {
     e.preventDefault();
@@ -978,4 +1359,72 @@ $("#dropdown").on("click", function (e) {
 $("#dropdown li").click(function () {
     $('#lang').html($(this).text());
     $(location).attr('href', 'index.html?translation=' + $(this).attr('id'));
+});
+
+$("#text_user").click(function () {
+    if ($(this).hasClass('text_user_on')) {
+        $(this).attr('src', 'imgs/text-user.png');
+    }
+    else {
+        $(this).attr('src', 'imgs/text-user-blue.png')
+    }
+    $(this).toggleClass('text_user_on');
+});
+
+$(".advanced").click(function (e) {
+    $('[data-hide="true"]').slideUp(500);
+    $('#advanced_user').slideDown(500);
+    $('#users_adv').html($('#users').html());
+    $('#users').empty();
+});
+
+$(".active_blue").click(function (e) {
+    abort();
+    $('[data-hide="true"]').slideDown(500);
+    $('#advanced_user').slideUp(500);
+    $('#users').html($('#users_adv').html());
+    $('#users_adv').empty();
+    $('#users_images').empty().hide();
+    $('#no_results,.Typeahead-spinner,#adv_loading').hide();
+    $('#user_advanced').val("").blur();
+    if ($("#users li").length === 15) {
+        $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', true);
+    }
+});
+
+function imgError2(image, source, username) {
+    image.onerror = "";
+    if (source === "Twitter") {
+        image.src = "https://twitter.com/" + username + "/profile_image?size=normal";
+    }
+    else {
+        image.src = "imgs/noprofile.gif";
+    }
+    return true;
+}
+
+$("#users_images").on("click", ".user_img", function (e) {
+    e.stopPropagation();
+    window.open($(this).attr('data-url'), '_blank');
+});
+
+$("#users_images").on("click", ".add_user", function (e) {
+    e.stopPropagation();
+    if ($(this).hasClass('open_user')) {
+        $(this).attr('src', 'imgs/add_user.png');
+        $(this).parent().css('background-color', 'transparent');
+        $(this).removeClass('open_user');
+        deluser_adv($(this).attr('data-username'), $(this).attr('data-social'), $(this).attr('data-id'), $(this).attr('data-name'));
+    }
+    else {
+        if (!($('#users_images').hasClass('users_full'))) {
+            $(this).addClass('open_user');
+            $(this).attr('src', 'imgs/add_user_green.png');
+            $(this).parent().css('background-color', 'lightgray');
+            adduser_adv($(this).attr('data-username'), $(this).attr('data-social'), $(this).attr('data-id'), $(this).attr('data-name'));
+        }
+    }
+});
+$("#users_images").on("click", ".user", function () {
+    $(this).find('.add_user').click();
 });

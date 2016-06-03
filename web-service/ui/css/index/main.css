@@ -1363,14 +1363,13 @@ img.responsive-img {
 
 .ff-filter-holder, .ff-filter-holder_adv {
     text-align: center;
-    width: 300px;
+    width: 210px;
     position: absolute;
     top: -14px;
-    right: 0;
+    right: 20px;
 }
-
 .ff-filter-holder_adv {
-    width: 258px;
+    width: 168px;
 }
 
 .ff-filter-holder:before, .ff-filter-holder_adv:before {
@@ -1380,7 +1379,7 @@ img.responsive-img {
     background: rgb(119, 119, 119);
     background: rgba(119, 119, 119, .4);
     top: 28px;
-    left: 59px;
+    left: 10px;
     width: 180px;
     z-index: 0;
 }

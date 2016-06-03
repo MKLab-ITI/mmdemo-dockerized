@@ -31,8 +31,6 @@
     <div class="row bigWidth">
         <div class="small-12 medium-12 large-12 columns">
             <div class="header_menu">
-
-
                 <h2 class="header">Social Tracker</h2>
                 <ul id="mainmenu" class="right">
                     <li data-lang="menu_discover">Discover</li>
@@ -60,7 +58,8 @@
             <div id="data-orbit-section">
                 <ul class="data-orbit-wrap">
                     <li class="data-strap">
-                        <img class="circle responsive-img" id="circle_logo" alt="circle_logo" src="imgs/default_logo.png">
+                        <img class="circle responsive-img" id="circle_logo" alt="circle_logo"
+                             src="imgs/default_logo.png">
                     </li>
                     <li class="data-circle-items-wrap">
                         <ul class="data-circle-items">
@@ -97,11 +96,12 @@
                 <h3 class="text_title" id="start_col_heading"><span
                         data-lang="section2_title_start">What do you want to</span>
                     <span class="text_blue" data-lang="section2_title_start_2"> monitor?</span></h3>
+
                 <h3 class="text_title" id="edit_col_heading"><span
                         data-lang="section2_title_edit">Improve your collection: </span>
                     <span class="text_blue" id="edit_col_name"></span></h3>
             </div>
-            <div class="small-12 medium-12 large-12 columns" style="text-align:center;z-index: 1">
+            <div data-hide="true" class="small-12 medium-12 large-12 columns" style="text-align:center;z-index: 1">
                 <img id="interest_icon" src="imgs/interest-gray.png" alt="hash" style="top: 5px;position: relative;">
 
                 <div class="input-field" style="padding-bottom: 10px">
@@ -111,7 +111,7 @@
                 </div>
                 <div id="col_name"></div>
             </div>
-            <div class="small-12 medium-6 large-6 columns" style="text-align:center;z-index:1">
+            <div data-hide="true" class="small-12 medium-6 large-6 columns" style="text-align:center;z-index:1">
                 <img id="hash_icon" src="imgs/hash-gray.png" alt="hash">
 
                 <div class="input-field">
@@ -132,7 +132,7 @@
                     <ul id="tags" class="tags"></ul>
                 </div>
             </div>
-            <div class="small-12 medium-6 large-6 columns" style="text-align:center;z-index:1">
+            <div data-hide="true" class="small-12 medium-6 large-6 columns" style="text-align:center;z-index:2">
                 <img id="user_icon" src="imgs/email-gray.png" alt="email">
 
                 <div class="input-field" id="Twitter_input">
@@ -182,18 +182,64 @@
                     <span class="ff-filter-users ff-type-youtube-users close" id="Youtube"></span>
                     <span class="ff-filter-users ff-type-web-users close" id="Web"></span>
                 </div>
+                <p class="advanced" data-lang="section2_adv_search">Advanced User Search</p>
+
                 <div class="examples">
                     <p data-lang="section2_examples">Examples:</p>
                     <ul>
-                        <li id="example_1">Greenpeace<img class="examples_icon" src="imgs/twitter-16-black.png"></li>
-                        <li id="example_2">WWF<img class="examples_icon" src="imgs/google+-16-black.png"></li>
-                        <li id="example_3">CapeNature<img class="examples_icon" src="imgs/facebook-16-black.png"></li>
-                        <li id="example_4">green4ema<img class="examples_icon" src="imgs/instagram-16-black.png"></li>
+                        <li class="example_1" id="example_1">Greenpeace<img class="examples_icon"
+                                                                            src="imgs/twitter-16-black.png"></li>
+                        <li class="example_2" id="example_2">WWF<img class="examples_icon"
+                                                                     src="imgs/google+-16-black.png"></li>
+                        <li class="example_3" id="example_3">CapeNature<img class="examples_icon"
+                                                                            src="imgs/facebook-16-black.png"></li>
+                        <li class="example_4" id="example_4">green4ema<img class="examples_icon"
+                                                                           src="imgs/instagram-16-black.png"></li>
                     </ul>
                 </div>
                 <div id="user_users">
                     <ul id="users" class="tags"></ul>
                 </div>
+            </div>
+            <div id="advanced_user" class="small-12 medium-12 large-12 columns"
+                 style="text-align:center;z-index: 1;display: none">
+                <p class="advanced_p" data-lang="section2_adv_search">Advanced User Search</p>
+
+                <div class="ff-filter-holder_adv">
+                    <span class="ff-filter-users_adv ff-type-twitter-users open_adv" id="adv_Twitter"></span>
+                    <span class="ff-filter-users_adv ff-type-google-users open_adv" id="adv_GooglePlus"></span>
+                    <span class="ff-filter-users_adv ff-type-facebook-users open_adv" id="adv_Facebook"></span>
+                    <span class="ff-filter-users_adv ff-type-instagram-users open_adv" id="adv_Instagram"></span>
+                    <span class="ff-filter-users_adv ff-type-youtube-users open_adv" id="adv_Youtube"></span>
+                </div>
+                <img id="text_user_icon" src="imgs/text_user.png" alt="text_user" style="top: 5px;position: relative;">
+
+                <div class="input-field" style="margin-top:0">
+                    <input id="user_advanced" class="user_input" type="text" autocomplete="off">
+                    <label for="user_advanced" data-lang="section2_input_users_keyword">Place a keyword</label>
+                    <img class="search_icon" src="imgs/search-gray.png" id="search_icon_2" alt="search">
+                    <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
+                </div>
+                <div class="examples">
+                    <p data-lang="section2_examples">Examples:</p>
+                    <ul>
+                        <li class="example_1" id="example_5">Greenpeace<img class="examples_icon"
+                                                                            src="imgs/twitter-16-black.png"></li>
+                        <li class="example_2" id="example_6">WWF<img class="examples_icon"
+                                                                     src="imgs/google+-16-black.png"></li>
+                        <li class="example_3" id="example_7">CapeNature<img class="examples_icon"
+                                                                            src="imgs/facebook-16-black.png"></li>
+                        <li class="example_4" id="example_8">green4ema<img class="examples_icon"
+                                                                           src="imgs/instagram-16-black.png"></li>
+                    </ul>
+                </div>
+                <div id="adv_loading" data-lang="section2_advanced_loading">Please wait, this may take a few seconds...</div>
+                <div id="user_users_adv">
+                    <ul id="users_adv" class="tags"></ul>
+                    <p id="no_results" data-lang="section2_no_results">No results for this keyword</p>
+                </div>
+                <div id="users_images"></div>
+                <div class="btn_material active_blue" data-lang="section2_done_button">DONE</div>
             </div>
         </div>
     </div>
@@ -271,9 +317,11 @@
             <div class="logo_footer">
                 <div id="social_icons"></div>
 
-                <p style="margin: 15px 0 0 10px;"><span style="font-size:16px">©</span> 2015 <a class="text_blue" id="project_url"
-                                                                                             href="#"
-                                                                                             target="_blank"> Social Tracker</a>.
+                <p style="margin: 15px 0 0 10px;"><span style="font-size:16px">©</span> 2015 <a class="text_blue"
+                                                                                                id="project_url"
+                                                                                                href="#"
+                                                                                                target="_blank"> Social
+                    Tracker</a>.
 
                     <span data-lang="footer_text">All rights reserved</span>.</p>
 
@@ -432,6 +480,7 @@
 <!-- JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="js/config.js"></script>
+<script src="js/index/ajax_abort.js"></script>
 <script src="js/index/translate.js"></script>
 <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 <script src="js/index/network.js"></script>

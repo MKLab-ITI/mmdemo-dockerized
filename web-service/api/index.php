@@ -925,7 +925,15 @@ $app->get('/detect/users',
             $maxFollowersCounts = max($followersCounts);
             $minFollowersCounts = min($followersCounts);
             array_walk($twitterUsers, function(&$u, $k, $minmax) {
-                $u['significance'] = ($u['followers_count']-$minmax[0])/($minmax[1]-$minmax[0]);
+                if($minmax[1] == 0) {
+                    $u['significance'] = $u['followers_count'];
+                }
+                else if($minmax[1] == $minmax[0]) {
+                    $u['significance'] = $u['followers_count'] / $minmax[1];
+                }
+                else {
+                    $u['significance'] = ($u['followers_count'] - $minmax[0]) / ($minmax[1] - $minmax[0]);
+                }
             }, array($minFollowersCounts, $maxFollowersCounts));
         }
 
@@ -941,7 +949,15 @@ $app->get('/detect/users',
             $maxLikes = max($likes);
             $minLikes = min($likes);
             array_walk($fbUsers, function(&$u, $k, $minmax) {
-                $u['significance'] = ($u['likes']-$minmax[0])/($minmax[1]-$minmax[0]);
+                if($minmax[1] == 0) {
+                    $u['significance'] = $u['likes'];
+                }
+                else if($minmax[1] == $minmax[0]) {
+                    $u['significance'] = $u['likes'] / $minmax[1];
+                }
+                else {
+                    $u['significance'] = ($u['likes'] - $minmax[0]) / ($minmax[1] - $minmax[0]);
+                }
             }, array($minLikes, $maxLikes));
         }
 
@@ -959,7 +975,15 @@ $app->get('/detect/users',
             $maxPlusOne = max($plusOneCounts);
             $minPlusOne = min($plusOneCounts);
             array_walk($googlePlusUsers, function(&$u, $k, $minmax) {
-                $u['significance'] = ($u['plusOneCount']-$minmax[0])/($minmax[1]-$minmax[0]);
+                if($minmax[1] == 0) {
+                    $u['significance'] = $u['plusOneCount'];
+                }
+                else if($minmax[1] == $minmax[0]) {
+                    $u['significance'] = $u['plusOneCount'] / $minmax[1];
+                }
+                else {
+                    $u['significance'] = ($u['plusOneCount'] - $minmax[0]) / ($minmax[1] - $minmax[0]);
+                }
             }, array($minPlusOne, $maxPlusOne));
         }
 
@@ -976,7 +1000,15 @@ $app->get('/detect/users',
             $maxViewCounts = max($viewCounts);
             $minViewCounts = min($viewCounts);
             array_walk($youtubeUsers, function(&$u, $k, $minmax) {
-                $u['significance'] = ($u['viewCount']-$minmax[0])/($minmax[1]-$minmax[0]);
+                if($minmax[1] == 0) {
+                    $u['significance'] = $u['viewCount'];
+                }
+                else if($minmax[1] == $minmax[0]) {
+                    $u['significance'] = $u['viewCount'] / $minmax[1];
+                }
+                else {
+                    $u['significance'] = ($u['viewCount'] - $minmax[0]) / ($minmax[1] - $minmax[0]);
+                }
             }, array($minViewCounts, $maxViewCounts));
         }
 

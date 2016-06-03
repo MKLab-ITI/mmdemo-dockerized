@@ -137,6 +137,10 @@ class SocialMediaWrapper {
         }
 
         $response = $this->instagram->searchUser($q, 20);
+        if(!isset($response->data)) {
+            return array();
+        }
+
         $data = array_map(
             function($entry) {
                 return array(
@@ -243,6 +247,7 @@ class SocialMediaWrapper {
         foreach ($searchResponse['items'] as $searchResult) {
             $channels[]= array(
                 'id' => $searchResult['id']['channelId'],
+                'username' => isset($searchResult['snippet']['customUrl'])?$searchResult['snippet']['customUrl']:$searchResult['snippet']['title'],
                 'name' => $searchResult['snippet']['title'],
                 'description' => $searchResult['snippet']['description'],
                 'url' => "https://www.youtube.com/channel/" . $searchResult['id']['channelId'],
@@ -333,10 +338,9 @@ class SocialMediaWrapper {
             'source' => 'GooglePlus',
             'description' => $result['aboutMe'],
             'profileImage' => $result['image']['url'],
-            'plusOneCount' => $result['plusOneCount'],
-            'circledByCount' => $result['circledByCount'],
-            'verified' => $result['verified'],
-            'profileImage' => $result['image']['url']
+            'plusOneCount' => isset($result['plusOneCount'])?$result['plusOneCount']:0,
+            'circledByCount' => isset($result['circledByCount'])?$result['circledByCount']:0,
+            'verified' => $result['verified']
         );
 
         return $user;

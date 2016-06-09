@@ -1268,8 +1268,8 @@ function get_collections(flag) {
                 $("#collection_loader").hide();
                 if (flag) {
                     var $btn_material = $('.btn_material');
+                    $btn_material.eq(2).click();
                     $btn_material.eq(1).click();
-                    $btn_material.eq(0).click();
                 }
             });
         },

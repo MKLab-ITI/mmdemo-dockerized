@@ -2,7 +2,7 @@ $(function () {
     twitter_autocomplete();
     googleplus_autocomplete();
     facebook_autocomplete();
-    instagram_autocomplete();
+    //instagram_autocomplete();
     youtube_autocomplete();
 });
 

@@ -790,7 +790,6 @@ $app->post(
 
         $previousCollection = $mongoDAO->getCollection($cid);
         if ($previousCollection != null) {
-
             // save new collection
             $collection->updateDate = 1000 * time();
             $collection->status = "running";
@@ -807,12 +806,26 @@ $app->post(
 
             $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
 
-            $deleteMessage = json_encode($previousCollection);
-            $redisClient->publish("collections:delete", $deleteMessage);
-
             $newMessage = json_encode($collection);
-            $redisClient->publish("collections:new", $newMessage);
+            $redisClient->publish("collections:edit", $newMessage);
+        }
+        else {
+          $t = 1000 * time();
+          $collection->creationDate = $t;
+          $collection->updateDate = $t;
+          $collection->since = $t - (24*3600000);
 
+          if(isset($collection->accounts)) {
+              foreach($collection->accounts as $account) {
+                  $account->_id = $account->id;
+              }
+          }
+
+          $collection->status = "running";
+          $mongoDAO->insertCollection($collection);
+
+          $newMessage = json_encode($collection);
+          $redisClient->publish("collections:new", $newMessage);
         }
 
         echo json_encode($collection);

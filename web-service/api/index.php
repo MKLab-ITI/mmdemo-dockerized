@@ -790,11 +790,11 @@ $app->post(
 
         $previousCollection = $mongoDAO->getCollection($cid);
         if ($previousCollection != null) {
-            // save new collection
-            $collection->updateDate = 1000 * time();
-            $collection->status = "running";
-            $collection->creationDate = $previousCollection['creationDate'];
-            $collection->since = $previousCollection['since'];
+            if(isset($collection->accounts)) {
+                foreach($collection->accounts as $account) {
+                    $account->_id = $account->id;
+                }
+            }
 
             $fieldsToUpdate = array(
                 'title' => $collection->title,
@@ -806,8 +806,8 @@ $app->post(
 
             $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
 
-            $newMessage = json_encode($collection);
-            $redisClient->publish("collections:edit", $newMessage);
+            $editMessage = json_encode($collection);
+            $redisClient->publish("collections:edit", $editMessage);
         }
         else {
           $t = 1000 * time();

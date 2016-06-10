@@ -9,9 +9,9 @@ The services that multimedia demo is built upon are the following:
 * [graylog](https://www.graylog.org/) - An Open Source Log Aggregator and Management server. This service aggregates and maintains the logs produced by the rest of the services.
 * [redis](http://redis.io/) - Redis is an open source, in-memory data structure store, used as database, cache and message broker. Used primarily as a publish/subscribe service between different components of the demo.
 * [mongodb](https://www.mongodb.com/) - MongoDB is an open-source, document database. Used to store items collected from social media platforms.  
-* [solr](http://lucene.apache.org/solr/) - Solr is the popular, blazing-fast, open source enterprise search platform built on Apache Lucene. Is used primarily for the indexing of the colleted social media items.
-* [web](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/web-service) - This service consists of two parts: 1) A REST API used to provide access to the colleced social media items and to expose several statistics related to them, and 2) the web interface of this [link](http://step-mklab.iti.gr) demo.
-* [streammanager](https://github.com/MKLab-ITI/mklab-stream-manager) - Stream Manager monitors a set of seven social streams : Twitter, Facebook, Instagram, Google+, Flickr and Youtube to collect content relevant to a set of keywords, a user or a location, using the corresponding APIs that are provides from each service.
+* [solr](http://lucene.apache.org/solr/) - Solr is the popular, blazing-fast, open source enterprise search platform built on Apache Lucene. Is used primarily for the indexing of the collected social media items.
+* [web](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/web-service) - This service consists of two parts: 1) A REST API used to provide access to the collected social media items and to expose several statistics related to them, and 2) the web interface of this [demo](http://step-mklab.iti.gr).
+* [streammanager](https://github.com/MKLab-ITI/mklab-stream-manager) - Stream Manager monitors a set of seven social streams : Twitter, Facebook, Instagram, Google+, Flickr and Youtube to collect content relevant to a set of keywords, users or locations, by using the corresponding APIs that are provided from each platform.
 
 ![mmdemo architecture](https://raw.githubusercontent.com/MKLab-ITI/mmdemo-dockerized/master/mmdemo_arch.png)
 
@@ -98,6 +98,8 @@ graylog:
     volumes:
       - ./graylog/logs:/var/log/graylog
 ```  
+
+### Run the demo
 
 To start the services:
 ```sh

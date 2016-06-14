@@ -931,23 +931,25 @@ $app->get('/detect/users',
         $twitterUsers = array();
         if(in_array("Twitter", $sources)) {
             $twitterUsers = $smWrapper->searchTwitter($q);
-            usort($twitterUsers, function($a, $b) {
-                return ($a['followers_count'] < $b['followers_count']) ? 1 : -1;
-            });
-            $followersCounts = array_map(function($u) {return $u['followers_count'];}, $twitterUsers);
-            $maxFollowersCounts = max($followersCounts);
-            $minFollowersCounts = min($followersCounts);
-            array_walk($twitterUsers, function(&$u, $k, $minmax) {
-                if($minmax[1] == 0) {
-                    $u['significance'] = $u['followers_count'];
-                }
-                else if($minmax[1] == $minmax[0]) {
-                    $u['significance'] = $u['followers_count'] / $minmax[1];
-                }
-                else {
-                    $u['significance'] = ($u['followers_count'] - $minmax[0]) / ($minmax[1] - $minmax[0]);
-                }
-            }, array($minFollowersCounts, $maxFollowersCounts));
+            if(count($twitterUsers) > 0) {
+                usort($twitterUsers, function ($a, $b) {
+                    return ($a['followers_count'] < $b['followers_count']) ? 1 : -1;
+                });
+                $followersCounts = array_map(function ($u) {
+                    return $u['followers_count'];
+                }, $twitterUsers);
+                $maxFollowersCounts = max($followersCounts);
+                $minFollowersCounts = min($followersCounts);
+                array_walk($twitterUsers, function (&$u, $k, $minmax) {
+                    if ($minmax[1] == 0) {
+                        $u['significance'] = $u['followers_count'];
+                    } else if ($minmax[1] == $minmax[0]) {
+                        $u['significance'] = $u['followers_count'] / $minmax[1];
+                    } else {
+                        $u['significance'] = ($u['followers_count'] - $minmax[0]) / ($minmax[1] - $minmax[0]);
+                    }
+                }, array($minFollowersCounts, $maxFollowersCounts));
+            }
         }
 
 
@@ -955,23 +957,25 @@ $app->get('/detect/users',
         $fbUsers = array();
         if(in_array("Facebook", $sources)) {
             $fbUsers = $smWrapper->searchFacebook($q);
-            usort($fbUsers, function($a, $b) {
-                return ($a['likes'] < $b['likes']) ? 1 : -1;
-            });
-            $likes = array_map(function($u) {return $u['likes'];}, $fbUsers);
-            $maxLikes = max($likes);
-            $minLikes = min($likes);
-            array_walk($fbUsers, function(&$u, $k, $minmax) {
-                if($minmax[1] == 0) {
-                    $u['significance'] = $u['likes'];
-                }
-                else if($minmax[1] == $minmax[0]) {
-                    $u['significance'] = $u['likes'] / $minmax[1];
-                }
-                else {
-                    $u['significance'] = ($u['likes'] - $minmax[0]) / ($minmax[1] - $minmax[0]);
-                }
-            }, array($minLikes, $maxLikes));
+            if(count($fbUsers) > 0) {
+                usort($fbUsers, function ($a, $b) {
+                    return ($a['likes'] < $b['likes']) ? 1 : -1;
+                });
+                $likes = array_map(function ($u) {
+                    return $u['likes'];
+                }, $fbUsers);
+                $maxLikes = max($likes);
+                $minLikes = min($likes);
+                array_walk($fbUsers, function (&$u, $k, $minmax) {
+                    if ($minmax[1] == 0) {
+                        $u['significance'] = $u['likes'];
+                    } else if ($minmax[1] == $minmax[0]) {
+                        $u['significance'] = $u['likes'] / $minmax[1];
+                    } else {
+                        $u['significance'] = ($u['likes'] - $minmax[0]) / ($minmax[1] - $minmax[0]);
+                    }
+                }, array($minLikes, $maxLikes));
+            }
         }
 
 
@@ -979,50 +983,58 @@ $app->get('/detect/users',
         $googlePlusUsers = array();
         if(in_array("GooglePlus", $sources)) {
             $googlePlusUsers = $smWrapper->searchGooglePlus($q);
-            $gPlusIds = array_map(function($u) {return $u['id'];}, $googlePlusUsers);
-            $googlePlusUsers = array();
-            foreach($gPlusIds as $id) {
-                $googlePlusUsers[] = $smWrapper->getGooglePlusAccount($id);
+            if(count($googlePlusUsers) > 0) {
+                $gPlusIds = array_map(function ($u) {
+                    return $u['id'];
+                }, $googlePlusUsers);
+                $googlePlusUsers = array();
+                foreach ($gPlusIds as $id) {
+                    $googlePlusUsers[] = $smWrapper->getGooglePlusAccount($id);
+                }
+                $plusOneCounts = array_map(function ($u) {
+                    return $u['plusOneCount'];
+                }, $googlePlusUsers);
+                $maxPlusOne = max($plusOneCounts);
+                $minPlusOne = min($plusOneCounts);
+                array_walk($googlePlusUsers, function (&$u, $k, $minmax) {
+                    if ($minmax[1] == 0) {
+                        $u['significance'] = $u['plusOneCount'];
+                    } else if ($minmax[1] == $minmax[0]) {
+                        $u['significance'] = $u['plusOneCount'] / $minmax[1];
+                    } else {
+                        $u['significance'] = ($u['plusOneCount'] - $minmax[0]) / ($minmax[1] - $minmax[0]);
+                    }
+                }, array($minPlusOne, $maxPlusOne));
             }
-            $plusOneCounts = array_map(function($u) {return $u['plusOneCount'];}, $googlePlusUsers);
-            $maxPlusOne = max($plusOneCounts);
-            $minPlusOne = min($plusOneCounts);
-            array_walk($googlePlusUsers, function(&$u, $k, $minmax) {
-                if($minmax[1] == 0) {
-                    $u['significance'] = $u['plusOneCount'];
-                }
-                else if($minmax[1] == $minmax[0]) {
-                    $u['significance'] = $u['plusOneCount'] / $minmax[1];
-                }
-                else {
-                    $u['significance'] = ($u['plusOneCount'] - $minmax[0]) / ($minmax[1] - $minmax[0]);
-                }
-            }, array($minPlusOne, $maxPlusOne));
         }
 
         // Youtube
         $youtubeUsers = array();
         if(in_array("Youtube", $sources)) {
             $youtubeUsers = $smWrapper->searchYoutube($q);
-            $ytIds = array_map(function($u) {return $u['id'];}, $youtubeUsers);
-            $youtubeUsers = array();
-            foreach($ytIds as $id) {
-                $youtubeUsers[] = $smWrapper->getYoutubeChannel($id);
+            if(count($youtubeUsers) > 0) {
+                $ytIds = array_map(function ($u) {
+                    return $u['id'];
+                }, $youtubeUsers);
+                $youtubeUsers = array();
+                foreach ($ytIds as $id) {
+                    $youtubeUsers[] = $smWrapper->getYoutubeChannel($id);
+                }
+                $viewCounts = array_map(function ($u) {
+                    return $u['viewCount'];
+                }, $youtubeUsers);
+                $maxViewCounts = max($viewCounts);
+                $minViewCounts = min($viewCounts);
+                array_walk($youtubeUsers, function (&$u, $k, $minmax) {
+                    if ($minmax[1] == 0) {
+                        $u['significance'] = $u['viewCount'];
+                    } else if ($minmax[1] == $minmax[0]) {
+                        $u['significance'] = $u['viewCount'] / $minmax[1];
+                    } else {
+                        $u['significance'] = ($u['viewCount'] - $minmax[0]) / ($minmax[1] - $minmax[0]);
+                    }
+                }, array($minViewCounts, $maxViewCounts));
             }
-            $viewCounts = array_map(function($u) {return $u['viewCount'];}, $youtubeUsers);
-            $maxViewCounts = max($viewCounts);
-            $minViewCounts = min($viewCounts);
-            array_walk($youtubeUsers, function(&$u, $k, $minmax) {
-                if($minmax[1] == 0) {
-                    $u['significance'] = $u['viewCount'];
-                }
-                else if($minmax[1] == $minmax[0]) {
-                    $u['significance'] = $u['viewCount'] / $minmax[1];
-                }
-                else {
-                    $u['significance'] = ($u['viewCount'] - $minmax[0]) / ($minmax[1] - $minmax[0]);
-                }
-            }, array($minViewCounts, $maxViewCounts));
         }
 
         // Instagram

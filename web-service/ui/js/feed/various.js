@@ -78,7 +78,7 @@ $('.ff-filter').each(function () {
 var user_id;
 $.ajax({
     type: 'GET',
-    url: api_folder + 'collection/0/' + collection_param,
+    url: api_folder + 'collection/?cid=' + collection_param,
     dataType: "json",
     success: function (json) {
         user_id = json.ownerId;

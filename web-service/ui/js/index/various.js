@@ -1,3 +1,4 @@
+var user_id = gup("user_id");
 if (project_logo !== "") {
     $('.header_menu').prepend('<img src="' + project_logo + '" alt="logo" class="logo">');
     $('#circle_logo').attr('src', project_logo);
@@ -819,11 +820,11 @@ $('.ff-filter-users_adv').click(function (e) {
     e.preventDefault();
     if ($(this).hasClass('close_adv')) {
         $(this).removeClass('close_adv').addClass('open_adv');
-        if($('.Typeahead-spinner').is(":visible")){
+        if ($('.Typeahead-spinner').is(":visible")) {
             abort();
             search_adv_user();
         }
-        else{
+        else {
             if (last_source.indexOf($(this).attr('id').substring(4)) > -1) {
                 $.when($("#users_images").find("[data-social='" + $(this).attr('id').substring(4) + "']").parent().show(1000)).then(function () {
                     if ($('#users_images').find('.user:visible').length > 0) {
@@ -842,14 +843,14 @@ $('.ff-filter-users_adv').click(function (e) {
     }
     else {
         $(this).removeClass('open_adv').addClass('close_adv');
-        if($('.Typeahead-spinner').is(":visible")){
+        if ($('.Typeahead-spinner').is(":visible")) {
             abort();
             search_adv_user();
         }
-        else{
+        else {
             $.when($("#users_images").find("[data-social='" + $(this).attr('id').substring(4) + "']").parent().hide(1000)).then(function () {
                 if ($('#users_images').find('.user:visible').length === 0) {
-                    if (last_source !== "" &&($('#user_advanced').val().length > 1)) {
+                    if (last_source !== "" && ($('#user_advanced').val().length > 1)) {
                         $('#no_results').show();
                     }
                 }
@@ -936,102 +937,102 @@ $('.stage').click(function (e) {
         }
     }
     else {
-        var id = (Math.floor(Math.random() * 90000) + 10000) + "1234567890" + new Date().getTime();
-        if (edit_mode) {
-            id = edit_id;
-        }
-        var title;
-        if ($('#col_name').text() !== "") {
-            title = $('#col_name').text();
-        }
-        else {
-            title = $('#interest').val();
-        }
-        var viewData = {
-            "_id": id,
-            "title": title,
-            "ownerId": "1234567890",
-            "keywords": [],
-            "accounts": []
-        };
-        var $tagsli = $('#tags').find('li');
-        for (var i = 0; i < $tagsli.length; i++) {
-            viewData.keywords.push({"keyword": $tagsli.eq(i).find('a').attr('id')});
-        }
-        var $usersli = $('#users').find('li');
-        for (var i = 0; i < $usersli.length; i++) {
-            var text = $usersli.eq(i).find('a').attr('id');
-            var text_arr = text.split('------');
-            viewData.accounts.push({
-                "username": text_arr[0],
-                "source": text_arr[1],
-                "id": text_arr[2],
-                "name": text_arr[3]
+        if (user_id !== "") {
+            var id = (Math.floor(Math.random() * 90000) + 10000) + user_id + new Date().getTime();
+            if (edit_mode) {
+                id = edit_id;
+            }
+            var title;
+            if ($('#col_name').text() !== "") {
+                title = $('#col_name').text();
+            }
+            else {
+                title = $('#interest').val();
+            }
+            var viewData = {
+                "_id": id,
+                "title": title,
+                "ownerId": user_id,
+                "keywords": [],
+                "accounts": []
+            };
+            var $tagsli = $('#tags').find('li');
+            for (var i = 0; i < $tagsli.length; i++) {
+                viewData.keywords.push({"keyword": $tagsli.eq(i).find('a').attr('id')});
+            }
+            var $usersli = $('#users').find('li');
+            for (var i = 0; i < $usersli.length; i++) {
+                var text = $usersli.eq(i).find('a').attr('id');
+                var text_arr = text.split('------');
+                viewData.accounts.push({
+                    "username": text_arr[0],
+                    "source": text_arr[1],
+                    "id": text_arr[2],
+                    "name": text_arr[3]
+                });
+            }
+            var temp = JSON.stringify(viewData);
+            var url = api_folder + 'collection';
+            if (edit_mode) {
+                edit_mode = false;
+                url = api_folder + 'collection/edit';
+                $('#edit_col_heading').hide();
+                $('#start_col_heading').show();
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: temp,
+                success: function (json) {
+                    $('html,body').animate({
+                        scrollTop: $(".fifth-section").offset().top - 50
+                    }, 800);
+                    get_collections(1);
+                    $('#col_name,#tags,#users').empty();
+                    $('#interest').prop('disabled', false);
+                    $('.user_input').val("").blur();
+
+                },
+                error: function (e) {
+                    switch (translation_param) {
+                        case "en":
+                            $('#myModal h1').html("Oops. Something went wrong!");
+                            $('#myModal p').html("Your collection has not be submitted. Please try again.");
+                            $('#myModal').reveal();
+                            break;
+                        case "el":
+                            $('#myModal h1').html("Κάτι πήγε στραβά!");
+                            $('#myModal p').html("Η συλλογή δεν υποβλήθηκε. Προσπάθησε ξανά.");
+                            $('#myModal').reveal();
+                            break;
+                        case "it":
+                            $('#myModal h1').html("Si e' verificato un problema!");
+                            $('#myModal p').html("La tua raccolta non è stata visualizzata. Prova ancora.");
+                            $('#myModal').reveal();
+                            break;
+                        case "tr":
+                            $('#myModal h1').html("Birşeyler yanlış gitti!");
+                            $('#myModal p').html("Koleksiyonunuz gönderilemedi. Lütfen tekrar deneyiniz.");
+                            $('#myModal').reveal();
+                            break;
+                        case "sp":
+                            $('#myModal h1').html("Algo salió mal!");
+                            $('#myModal p').html("Su colección no ha sido presentada . Por favor, inténtelo de nuevo.");
+                            $('#myModal').reveal();
+                            break;
+                        case "ca":
+                            $('#myModal h1').html("S'ha produït un error!");
+                            $('#myModal p').html("El teu recull no s'ha registrat correctament. Si us plau prova-ho una altra vegada.");
+                            $('#myModal').reveal();
+                            break;
+                        default:
+                            $('#myModal h1').html("Oops. Something went wrong.");
+                            $('#myModal p').html("Your collection has not be submitted. Please try again.");
+                            $('#myModal').reveal();
+                    }
+                }
             });
         }
-        var temp = JSON.stringify(viewData);
-        var url = api_folder + 'collection';
-        if (edit_mode) {
-            edit_mode = false;
-            url = api_folder + 'collection/edit';
-            $('#edit_col_heading').hide();
-            $('#start_col_heading').show();
-        }
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: temp,
-            success: function (json) {
-                $('html,body').animate({
-                    scrollTop: $(".fifth-section").offset().top - 50
-                }, 800);
-                get_collections(1);
-                $('#col_name,#tags,#users').empty();
-                $('#interest').prop('disabled', false);
-                $('.user_input').val("").blur();
-
-            },
-            error: function (e) {
-                switch (translation_param) {
-                    case "en":
-                        $('#myModal h1').html("Oops. Something went wrong!");
-                        $('#myModal p').html("Your collection has not be submitted. Please try again.");
-                        $('#myModal').reveal();
-                        break;
-                    case "el":
-                        $('#myModal h1').html("Κάτι πήγε στραβά!");
-                        $('#myModal p').html("Η συλλογή δεν υποβλήθηκε. Προσπάθησε ξανά.");
-                        $('#myModal').reveal();
-                        break;
-                    case "it":
-                        $('#myModal h1').html("Si e' verificato un problema!");
-                        $('#myModal p').html("La tua raccolta non è stata visualizzata. Prova ancora.");
-                        $('#myModal').reveal();
-                        break;
-                    case "tr":
-                        $('#myModal h1').html("Birşeyler yanlış gitti!");
-                        $('#myModal p').html("Koleksiyonunuz gönderilemedi. Lütfen tekrar deneyiniz.");
-                        $('#myModal').reveal();
-                        break;
-                    case "sp":
-                        $('#myModal h1').html("Algo salió mal!");
-                        $('#myModal p').html("Su colección no ha sido presentada . Por favor, inténtelo de nuevo.");
-                        $('#myModal').reveal();
-                        break;
-                    case "ca":
-                        $('#myModal h1').html("S'ha produït un error!");
-                        $('#myModal p').html("El teu recull no s'ha registrat correctament. Si us plau prova-ho una altra vegada.");
-                        $('#myModal').reveal();
-                        break;
-                    default:
-                        $('#myModal h1').html("Oops. Something went wrong.");
-                        $('#myModal p').html("Your collection has not be submitted. Please try again.");
-                        $('#myModal').reveal();
-                }
-            }
-        });
-
-
     }
 });
 
@@ -1154,7 +1155,7 @@ $("#Container").on("click", ".edit_icon", function () {
 
     $.ajax({
         type: 'GET',
-        url: api_folder + 'collection/1234567890/' + id,
+        url: api_folder + 'collection/' + user_id + '/' + id,
         success: function (e) {
             $("#interest").val("").blur().prop('disabled', true);
 
@@ -1179,30 +1180,37 @@ $("#Container").on("click", ".overlay", function () {
 });
 
 var pagination = 1;
-get_collections(0);
 
-$.ajax({
-    type: 'GET',
-    url: api_folder + 'collection/1234567890?nPerPage=1&pageNumber=1',
-    dataType: "json",
-    success: function (json) {
-        $('#pagination-demo').twbsPagination({
-            totalPages: Math.ceil(json.count / 6),
-            visiblePages: "5",
-            initiateStartPageClick: false,
-            onPageClick: function (event, page) {
-                pagination = page;
-                $('#Container').empty();
-                $("#collection_loader").show();
-                get_collections(1);
-            }
-        });
-    },
-    error: function (e) {
-        $(".well").remove();
-    }
-});
 
+if (user_id != "") {
+    get_collections(0);
+    $.ajax({
+        type: 'GET',
+        url: api_folder + 'collection/' + user_id + '?nPerPage=1&pageNumber=1',
+        dataType: "json",
+        success: function (json) {
+            $('#pagination-demo').twbsPagination({
+                totalPages: Math.ceil(json.count / 6),
+                visiblePages: "5",
+                initiateStartPageClick: false,
+                onPageClick: function (event, page) {
+                    pagination = page;
+                    $('#Container').empty();
+                    $("#collection_loader").show();
+                    get_collections(1);
+                }
+            });
+        },
+        error: function (e) {
+            $("#collection_loader").hide();
+            $(".well").remove();
+        }
+    });
+}
+else {
+    $("#collection_loader").hide();
+    $(".well").remove();
+}
 
 function get_collections(flag) {
     var $Container = $('#Container');
@@ -1210,7 +1218,7 @@ function get_collections(flag) {
     $("#collection_loader").show();
     $.ajax({
         type: 'GET',
-        url: api_folder + 'collection/1234567890?nPerPage=6&pageNumber=' + pagination,
+        url: api_folder + 'collection/' + user_id + '?nPerPage=6&pageNumber=' + pagination,
         dataType: "json",
         success: function (json) {
             var data = json.collections;

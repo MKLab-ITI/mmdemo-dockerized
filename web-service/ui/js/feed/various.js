@@ -75,22 +75,13 @@ $('.ff-filter').each(function () {
         $(this).removeClass('close');
     }
 });
+var user_id;
 $.ajax({
     type: 'GET',
-    url: api_folder + 'collection/1234567890/' + collection_param,
+    url: api_folder + 'collection/0/' + collection_param,
     dataType: "json",
     success: function (json) {
-        /* var collection = collection_param;
-         var collections = json.collections;
-         var collection_flag = true;
-         for (var i = 0; i < collections.length; i++) {
-         if (collection === collections[i]._id) {
-         $('#collection').html(collections[i].title);
-         collection_flag = false;
-         break;
-         }
-         }*/
-
+        user_id = json.ownerId;
         if (!(json.hasOwnProperty("title"))) {
             $('#collection').html("-");
             $("#date_range,#date_range_animate").remove();
@@ -1065,10 +1056,10 @@ function open_slider() {
 
 $('#logo').find('h1').click(function () {
     if (translation_param !== "en") {
-        window.location.href = "index.html?translation=" + translation_param;
+        window.location.href = "index.html?user_id=" + user_id + "&translation=" + translation_param;
     }
     else {
-        window.location.href = "index.html";
+        window.location.href = "index.html?user_id=" + user_id;
     }
 
 });

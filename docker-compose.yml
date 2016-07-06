@@ -16,7 +16,7 @@ services:
           - graylog
 
   redis:
-    image: redis
+    image: redis:3.2
     ports:
       - "6379:6379"
     networks:
@@ -36,11 +36,12 @@ services:
           - mongodb
 
   solr:
-    image: solr
+    image: solr:5.3
     ports:
       - "8983:8983"
     volumes:
       - ./solr-cores:/opt/solr/server/solr
+    command: bin/solr -m 2g -f
     networks:
       common_network:
         aliases:

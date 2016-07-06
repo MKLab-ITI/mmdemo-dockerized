@@ -33,6 +33,7 @@ ENV APACHE_PID_FILE /var/run/apache2.pid
 # Copy site into place.
 ADD api /var/www/site/api
 ADD ui /var/www/site/ui
+ADD rockmongo /var/www/site/rockmongo
 
 # Update the default apache site with the config we created.
 ADD apache-config.conf /etc/apache2/sites-enabled/000-default.conf

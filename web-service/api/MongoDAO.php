@@ -14,11 +14,14 @@ class MongoDAO {
     private static $STREAM_USERS = 'StreamUser';
     private static $COLLECTIONS = 'Collection';
 
+    private static $RELEVANCE_JUDGMENTS = 'RelevanceJudgments';
+
     private static $ITEM_FIELDS = array('_id'=>1, 'shares'=>1, 'likes'=>1, 'title'=>1, 'tags'=>1, 'user'=>1, 'uid'=>1 ,'source'=>1,
-        'language'=>1, 'pageUrl'=>1, 'publicationTime'=>1, 'original'=>1, 'reference'=>1, 'referencedUserId'=>1, 'type'=>1, 'inReply'=>1,
+        'language'=>1, 'pageUrl'=>1, 'publicationTime'=>1, 'original'=>1, 'reference'=>1, 'referencedUserId'=>1, 'type'=>1, 'inReply'=>1, 'mentions'=>1,
         'location'=>1, 'location.name'=>1, 'location.country'=>1, 'mediaIds'=>1, 'comments'=>1);
 
-    private static $MEDIA_FIELDS = array('_id'=>1, 'shares'=>1, 'likes'=>1, 'views'=>1, 'uid'=>1, 'url'=>1, 'thumbnail'=>1, 'pageUrl'=>1, 'source'=>1, 'publicationTime'=>1, 'indexed'=>1, 'status'=>1, 'reference'=>1, 'title'=>1, 'tags'=>1, 'type'=>1, 'width'=>1, 'height'=>1, 'location'=>1);
+    private static $MEDIA_FIELDS = array('_id'=>1, 'shares'=>1, 'likes'=>1, 'views'=>1, 'uid'=>1, 'url'=>1, 'thumbnail'=>1, 'pageUrl'=>1, 'source'=>1,
+        'publicationTime'=>1, 'indexed'=>1, 'status'=>1, 'reference'=>1, 'title'=>1, 'tags'=>1, 'type'=>1, 'width'=>1, 'height'=>1, 'location'=>1);
 
     private static $USER_FIELDS = array( '_id'=>1,'username'=>1,'name'=>1, 'items'=>1,'friends'=>1,'followers'=>1,'pageUrl'=>1,'profileImage'=>1, 'mentions'=>1, 'shares'=>1);
 
@@ -70,6 +73,13 @@ class MongoDAO {
             unset($item['mediaIds']);
         }
         return $item;
+    }
+
+    public function itemExists($id) {
+        $collection = $this->db->selectCollection(MongoDAO::$ITEMS);
+        $c = $collection->count(array('_id' => $id));
+
+        return $c > 0;
     }
 
     public function getItemComments($id) {
@@ -213,6 +223,14 @@ class MongoDAO {
         return $collection;
     }
 
+    public function collectionExists($cid) {
+        $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
+        $query = array("_id" => $cid);
+        $c = $mongoCollection->count($query);
+
+        return $c > 0;
+    }
+
     public function insertCollection($collection) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
         $mongoCollection->insert($collection);
@@ -241,4 +259,21 @@ class MongoDAO {
 
         return $status;
     }
+
+    public function insertRelevanceJudgement($doc) {
+        $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
+        $mongoCollection->insert($doc);
+    }
+
+    public function getRelevanceJudgementsForCollection($cid) {
+        $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
+
+        $q = array("cid" => $cid);
+        $cursor = $mongoCollection->find($q);
+
+        $rj = iterator_to_array($cursor, false);
+        return $rj;
+    }
+
+
 }

@@ -58,6 +58,7 @@ $app->get('/users/:uid',
         if($user === null) {
             $user = array();
         }
+
         echo json_encode($user);
 })->name("user");
 
@@ -96,7 +97,6 @@ $app->post('/items/:id',
                 $redisClient->publish("items:new", $message);
                 $redisClient->set($id, time());
             }
-
 
         }
 
@@ -629,7 +629,7 @@ $app->get(
             $collection = $mongoDAO->getCollection($collectionId);
             if ($collection != null) {
                 $collectionQuery = $utils->formulateCollectionQuery($collection);
-                $filters = $utils->getFilters($since, $until, $source, true, null, $language, $query);
+                $filters = $utils->getFilters($since, $until, $source, 'original', null, $language, $query);
 
                 $count = $textIndex->countItems($collectionQuery, $filters);
 
@@ -644,7 +644,7 @@ $app->get(
                 $clusters = $textIndex->getClusters($collectionQuery, $filters, 1000);
 
                 foreach($clusters as $cluster) {
-                    if($cluster['score'] > 0 && count($cluster['docs'])>=10) {
+                    if($cluster['score'] > 0 && count($cluster['docs']) >= 15) {
                         $topic = array(
                             'label' => $cluster['labels'][0],
                             'query' => implode(',',$cluster['labels']),
@@ -700,6 +700,32 @@ $app->get(
 )->name("suggestions");
 
 $app->get(
+    '/collection/',
+    function() use($mongoDAO, $app) {
+
+        $request = $app->request();
+        $cid = $request->get("cid");
+
+        if(isset($cid)) {
+            $collection = $mongoDAO->getCollection($cid);
+            if($collection == null) {
+                echo json_encode(array());
+                return;
+            }
+
+            if($collection['status'] != 'stopped') {
+                $collection['stopDate'] = 1000 * time();
+            }
+
+            echo json_encode($collection);
+            return;
+        }
+
+        echo json_encode(array('ownerId' => "", 'collections'=>array(), 'count'=>0));
+    }
+)->name("get-no-collection");
+
+$app->get(
     '/collection/:uid',
     function ($uid) use($mongoDAO, $textIndex, $utils, $app, $redisClient) {
 
@@ -731,14 +757,25 @@ $app->get(
 
             $collection['filters'] = $filters;
 
-			$facet = $textIndex->getFacetAndCount('mediaIds', $q, $filters, 1, false);
-            $collection['items'] = $facet['count'];
-            $collection['facet'] = $facet['facet'];
-            if(count($facet['facet']) > 0) {
-                $mId = $facet['facet'][0]['field'];
-                $mItem = $mongoDAO->getMediaItem($mId);
-                if($mItem != null) {
-                    $collection['mediaUrl'] = $mItem['url'];
+            $count = $textIndex->countItems($q, $filters);
+            $collection['items'] = $count;
+
+            $filters = $utils->getFilters($since, $until, "*", null, "media", null, null);
+            $facet = $textIndex->getFacet('mediaIds', $q, $filters, 3, false);
+            $collection['facet'] = $facet;
+
+			//$facet = $textIndex->getFacetAndCount('mediaIds', $q, $filters, 1, false);
+            //$collection['items'] = $facet['count'];
+            //$collection['facet'] = $facet['facet'];
+
+            if(count($collection['facet']) > 0) {
+                foreach($collection['facet'] as $ft) {
+                    $mId = $ft['field'];
+                    $mItem = $mongoDAO->getMediaItem($mId);
+                    if($mItem != null) {
+                        $collection['mediaUrl'] = $mItem['url'];
+                        break;
+                    }
                 }
             }
 
@@ -900,6 +937,41 @@ $app->get(
     }
 )->name("get_collection");
 
+
+$app->post(
+    '/relevance',
+    function() use ($mongoDAO, $app) {
+        $request = $app->request();
+
+        $uid = $request->get('uid');                // user id
+        $cid = $request->get('cid');                // collection id
+        $iid = $request->get('iid');                // item id
+        $relevance = $request->get('relevance');    // relevance judgment [1-5]
+
+        if($relevance > 5 || $relevance < 1) {
+            return;
+        }
+
+        if(!$mongoDAO->collectionExists($cid)) {
+            return;
+        }
+
+        if(!$mongoDAO->itemExists($iid)) {
+            return;
+        }
+
+        $doc = array(
+            "uid"   =>  $uid,
+            "cid"   =>  $cid,
+            "iid"   =>  $iid,
+            "relevance" => $relevance,
+            "timestamp" => 1000 * time()
+        );
+
+        $mongoDAO->insertRelevanceJudgement($doc);
+
+    }
+)->name("post_relevance");
 
 /**
  *  GET /users/search

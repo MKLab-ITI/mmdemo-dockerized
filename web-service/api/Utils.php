@@ -48,6 +48,14 @@ class Utils {
         $textQuery = $this->formulateLogicalQuery($keywords);
         $tagsQuery = $this->formulateLogicalQuery($tags);
 
+        $keywordsToExclude = $collection['keywordsToExclude'];
+        if($keywordsToExclude != null && count($keywordsToExclude) > 1) {
+            $excludedTermsQuery = $this->formulateLogicalQuery($keywordsToExclude);
+
+            $textQuery = $textQuery . " NOT (" . $excludedTermsQuery . ")";
+            $tagsQuery = $tagsQuery . " NOT (" . $excludedTermsQuery . ")";
+        }
+
         $accounts = $collection['accounts'];
         $users = array_map(function ($account) {
             return $account['source']."#".$account['id'];

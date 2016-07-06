@@ -448,7 +448,6 @@ class TextIndex {
         $query->addParam('clustering.engine', 'lingo');
 
         $query->addSort('score', Solarium\QueryType\Select\Query\Query::SORT_DESC);
-        //$query->addSort('sum(product(0.9,sqrt(likes)),product(0.1,sqrt(shares)))', Solarium\QueryType\Select\Query\Query::SORT_DESC);
 
         // set filter queries
         if($filters != null) {

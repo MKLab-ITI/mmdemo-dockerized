@@ -12,6 +12,9 @@
       	<field name="description" type="text_en" indexed="true" stored="false" multiValued="false" />
       	<field name="tags" type="tags" indexed="true" stored="true" multiValued="true" />
 
+				<field name="minhash" type="string" indexed="true" stored="true" multiValued="false" />
+				<field name="signature" type="string" indexed="true" stored="true" multiValued="false" />
+
 	  	<field name="uid" type="string" indexed="true" stored="false" multiValued="false" />
 	  	<field name="username" type="tags" indexed="true" stored="false" multiValued="false" />
 		<field name="reference" type="string" indexed="true" stored="false" multiValued="false" />
@@ -24,7 +27,7 @@
       	<field name="location" type="string" indexed="true" stored="false" multiValued="false" />
       	<field name="city" type="string" indexed="true" stored="false" multiValued="false" />
       	<field name="country" type="string" indexed="true" stored="false" multiValued="false" />
-      	
+
       	<field name="latlon" type="location_latlon" indexed="true" stored="true" multiValued="false" />
 		<field name="latlonRPT" type="location_rpt" indexed="true" stored="true" multiValued="false" />
 
@@ -38,22 +41,22 @@
 		<field name="mentions" type="string" indexed="true" stored="false" multiValued="true" />
 
 		<field name="text" type="text_ws" indexed="true" stored="false" multiValued="false" />
-		
+
 		<field name="allText" type="text_general" indexed="true" stored="false" multiValued="true" />
-		
+
 	  	<field name="text1" type="text_general" indexed="true" stored="false" multiValued="false" />
 	  	<field name="text2" type="text_en_splitting" indexed="true" stored="false" multiValued="false" />
 	  	<field name="text3" type="text_en_splitting_tight" indexed="true" stored="false" multiValued="false" />
 
         <field name="referenceUserId" type="string" indexed="true" stored="false" multiValued="true" />
-            
+
     	<field name="likes" type="long" indexed="true" stored="false" multiValued="false" />
         <field name="comments" type="long" indexed="true" stored="false" multiValued="false" />
         <field name="shares" type="long" indexed="true" stored="false" multiValued="false" />
-        
+
       	<field name="followers" type="long" indexed="true" stored="false" multiValued="false" />
         <field name="friends" type="long" indexed="true" stored="false" multiValued="false" />
-        
+
 		<!-- Type used to index the lat and lon components for the "location" FieldType -->
    		<dynamicField name="*_coordinate"  type="tdouble" indexed="true" stored="false" />
 		<dynamicField name="*_s"  type="string" indexed="true" stored="true" />
@@ -62,7 +65,7 @@
    	</fields>
 
    	<uniqueKey>id</uniqueKey>
-   
+
    	<copyField source="title" dest="text1" />
    	<copyField source="title" dest="text2" />
    	<copyField source="title" dest="text3" />
@@ -104,7 +107,7 @@
       	</fieldType>
 
       	<!-- A text field that only splits on whitespace for exact matching of words -->
-      	<fieldType name="tags" class="solr.TextField" positionIncrementGap="100"> 
+      	<fieldType name="tags" class="solr.TextField" positionIncrementGap="100">
 			<analyzer>
            		<tokenizer class="solr.KeywordTokenizerFactory" />
 			 	<filter class="solr.LowerCaseFilterFactory" />
@@ -182,7 +185,7 @@
             	<filter class="solr.RemoveDuplicatesTokenFilterFactory" />
          	</analyzer>
       	</fieldType>
-      
+
 	  	<!-- Different languages (generally ordered by ISO code) -->
       	<!-- Arabic -->
       	<fieldType name="text_ar" class="solr.TextField" positionIncrementGap="100">
@@ -499,4 +502,3 @@
     	</fieldType>
 	</types>
 </schema>
-

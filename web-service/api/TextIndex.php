@@ -204,15 +204,6 @@ class TextIndex {
                 );
             }
 
-			/*
-            $statsResult = $resultSet->getStats();
-            foreach ($statsResult as $fieldStats) {
-                $statistics[$fieldStats->getName()] = array(
-                    'cardinality' => $fieldStats->getCardinality()
-                );
-            }
-			*/
-
         }
         catch(Exception $e) { return $e; }
 

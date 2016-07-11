@@ -187,6 +187,30 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query);
             $results = $textIndex->searchItems($q, $pageNumber, $nPerPage,  $filters, $sort);
 
+            foreach($results as $result) {
+                $item = $mongoDAO->getItem($result['id']);
+                $item['score'] = $result['score'];
+                if(isset($result['title_hl'])) {
+                    $item['title'] = $result['title_hl'];
+                }
+
+                $items[] = $item;
+            }
+        }
+    }
+    else {
+        // free text search outside collections
+        if($query != null && $query != "") {
+            // Add filters if available
+
+            $query = urldecode($query);
+            $keywords = explode(',', $query);
+
+            $query = $this->formulateLogicalQuery($keywords);
+            $query = "title:($query) OR description:($query)";
+
+            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null);
+            $results = $textIndex->searchItems($query, $pageNumber, $nPerPage,  $filters, $sort);
 
             foreach($results as $result) {
                 $item = $mongoDAO->getItem($result['id']);

@@ -44,6 +44,8 @@ class TextIndex {
             $hl->setSimplePrefix('<span class="highlight">');
             $hl->setSimplePostfix('</span>');
             $hl->setQuery("title:$fq OR allText:$fq");
+            $hl->setFragSize(0);
+            $hl->setMaxAnalyzedChars(1500);
             $hlUsed = true;
         }
 

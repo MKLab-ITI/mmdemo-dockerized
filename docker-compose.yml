@@ -5,17 +5,17 @@ services:
   graylog-mongo:
     image: "mongo:3.0"
     volumes:
-      - /graylog/data/mongo:/data/db
+      - ./graylog/data/mongo:/data/db
   graylog-elasticsearch:
     image: "elasticsearch:2"
     command: "elasticsearch -Des.cluster.name='graylog'"
     volumes:
-      - /graylog/data/elasticsearch:/usr/share/elasticsearch/data
+      - ./graylog/data/elasticsearch:/usr/share/elasticsearch/data
   graylog:
     image: graylog2/server:2.0.1-1
     volumes:
-      - /graylog/data/journal:/usr/share/graylog/data/journal
-      - /graylog/config:/usr/share/graylog/data/config
+      - ./graylog/data/journal:/usr/share/graylog/data/journal
+      - ./graylog/config:/usr/share/graylog/data/config
     environment:
       GRAYLOG_REST_TRANSPORT_URI: http://127.0.0.1:12900
     links:

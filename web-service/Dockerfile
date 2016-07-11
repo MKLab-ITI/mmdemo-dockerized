@@ -6,7 +6,7 @@ RUN apt-get update
 RUN apt-get -y upgrade
 
 # Install apache, PHP, and supplimentary programs. curl and lynx-cur are for debugging the container.
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 php5-dev libapache2-mod-php5 php5-mysql php5-mcrypt php5-gd php-pear php-apc php5-curl curl lynx-cur php-xml
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 php5-dev libapache2-mod-php5 php5-mysql php5-mcrypt php5-gd php-pear php-apc php5-curl curl lynx-cur
 
 # Enable apache mods.
 RUN a2enmod php5
@@ -21,7 +21,6 @@ RUN sed -i "s/error_reporting = .*$/error_reporting = E_ERROR | E_WARNING | E_PA
 RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini
 
 RUN 	echo "extension=mongo.so" >> /etc/php5/apache2/php.ini
-RUN 	echo "extension=dom.so" >> /etc/php5/apache2/php.ini
 
 # Manually set up the apache environment variables
 ENV APACHE_RUN_USER www-data

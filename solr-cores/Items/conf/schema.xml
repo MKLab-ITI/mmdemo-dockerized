@@ -6,9 +6,9 @@
       	<field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
       	<field name="source" type="string" indexed="true" stored="false" multiValued="false" />
 
-		<field name="original" type="boolean" indexed="true" stored="false" multiValued="false" />
+				<field name="original" type="boolean" indexed="true" stored="false" multiValued="false" />
 
-      	<field name="title" type="text_en" indexed="true" stored="true" multiValued="false" />
+      	<field name="title" type="text_en" indexed="true" stored="true" multiValued="false" termVectors="true" termPositions="true" termOffsets="true"/>
       	<field name="description" type="text_en" indexed="true" stored="false" multiValued="false" />
       	<field name="tags" type="tags" indexed="true" stored="true" multiValued="true" />
 
@@ -17,10 +17,10 @@
 
 	  	<field name="uid" type="string" indexed="true" stored="false" multiValued="false" />
 	  	<field name="username" type="tags" indexed="true" stored="false" multiValued="false" />
-		<field name="reference" type="string" indexed="true" stored="false" multiValued="false" />
+			<field name="reference" type="string" indexed="true" stored="false" multiValued="false" />
 
       	<field name="publicationTime" type="long" indexed="true" stored="false" multiValued="false" />
-		<field name="language" type="string" indexed="true" stored="false" multiValued="false" />
+				<field name="language" type="string" indexed="true" stored="false" multiValued="false" />
 
       	<field name="latitude" type="double" indexed="true" stored="false" multiValued="false" />
       	<field name="longitude" type="double" indexed="true" stored="false" multiValued="false" />

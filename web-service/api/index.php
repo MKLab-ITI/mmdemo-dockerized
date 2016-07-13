@@ -73,8 +73,8 @@ $app->get('/items/:id',
         }
 
         echo json_encode($item);
-
-})->name("item");
+    }
+)->name("item");
 
 /**
  *  POST /items/:id
@@ -99,9 +99,9 @@ $app->post('/items/:id',
             }
 
         }
-
         echo json_encode($item);
-    })->name("item_monitor");
+    }
+)->name("start_item_monitor");
 
 /**
  *  DELETE /items/:id
@@ -127,7 +127,8 @@ $app->delete('/items/:id',
         }
 
         echo json_encode($item);
-    })->name("stop_item_monitor");
+    }
+)->name("stop_item_monitor");
 
 /**
  *  GET /items/:id/comments
@@ -141,7 +142,23 @@ $app->get('/items/:id/comments',
         }
 
         echo json_encode($comments);
-    })->name("item_comments");
+    }
+)->name("item_comments");
+
+/**
+ *  GET /items/:id/comments
+ */
+$app->get('/items/:id/statistics',
+    function($id) use ($mongoDAO) {
+        $items_states = array();
+        $item = $mongoDAO->getItem($id);
+        if($item !== null) {
+            $items_states = $mongoDAO->getItemStates($id);
+        }
+
+        echo json_encode($items_states);
+    }
+)->name("item_statistics");
 
 /**
  *  GET /items
@@ -180,17 +197,21 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
     if($collectionId != null) {
         $collection = $mongoDAO->getCollection($collectionId);
         if($collection != null) {
+
+            $judgements = $mongoDAO->getRelevanceJudgements($collection);
+
             // query formulation
             $q = $utils->formulateCollectionQuery($collection);
 
             // Add filters if available
             $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query);
-            $results = $textIndex->searchItems($q, $pageNumber, $nPerPage,  $filters, $sort);
+            $results = $textIndex->searchItems($q, $pageNumber, $nPerPage,  $filters, $sort, $judgements);
 
             foreach($results as $result) {
                 $item = $mongoDAO->getItem($result['id']);
                 $item['score'] = $result['score'];
                 if(isset($result['title_hl'])) {
+                    $item['originalTitle'] = $item['title'];
                     $item['title'] = $result['title_hl'];
                 }
 
@@ -216,6 +237,7 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
                 $item = $mongoDAO->getItem($result['id']);
                 $item['score'] = $result['score'];
                 if(isset($result['title_hl'])) {
+                    $item['originalTitle'] = $item['title'];
                     $item['title'] = $result['title_hl'];
                 }
 
@@ -749,6 +771,7 @@ $app->get(
     }
 )->name("get-no-collection");
 
+
 $app->get(
     '/collection/:uid',
     function ($uid) use($mongoDAO, $textIndex, $utils, $app, $redisClient) {
@@ -788,10 +811,6 @@ $app->get(
             $facet = $textIndex->getFacet('mediaIds', $q, $filters, 3, false);
             $collection['facet'] = $facet;
 
-			//$facet = $textIndex->getFacetAndCount('mediaIds', $q, $filters, 1, false);
-            //$collection['items'] = $facet['count'];
-            //$collection['facet'] = $facet['facet'];
-
             if(count($collection['facet']) > 0) {
                 foreach($collection['facet'] as $ft) {
                     $mId = $ft['field'];
@@ -821,7 +840,7 @@ $app->post(
             $t = 1000 * time();
             $collection->creationDate = $t;
             $collection->updateDate = $t;
-            $collection->since = $t - (24*3600000);
+            $collection->since = $t - (2 * 24 * 3600000);
 
             if(isset($collection->accounts)) {
                 foreach($collection->accounts as $account) {
@@ -871,22 +890,22 @@ $app->post(
             $redisClient->publish("collections:edit", $editMessage);
         }
         else {
-          $t = 1000 * time();
-          $collection->creationDate = $t;
-          $collection->updateDate = $t;
-          $collection->since = $t - (24*3600000);
+            $t = 1000 * time();
+            $collection->creationDate = $t;
+            $collection->updateDate = $t;
+            $collection->since = $t - (2 * 24 * 3600000);
 
-          if(isset($collection->accounts)) {
-              foreach($collection->accounts as $account) {
-                  $account->_id = $account->id;
-              }
-          }
+            if(isset($collection->accounts)) {
+                foreach($collection->accounts as $account) {
+                    $account->_id = $account->id;
+                }
+            }
 
-          $collection->status = "running";
-          $mongoDAO->insertCollection($collection);
+            $collection->status = "running";
+            $mongoDAO->insertCollection($collection);
 
-          $newMessage = json_encode($collection);
-          $redisClient->publish("collections:new", $newMessage);
+            $newMessage = json_encode($collection);
+            $redisClient->publish("collections:new", $newMessage);
         }
 
         echo json_encode($collection);
@@ -970,11 +989,7 @@ $app->post(
         $uid = $request->get('uid');                // user id
         $cid = $request->get('cid');                // collection id
         $iid = $request->get('iid');                // item id
-        $relevance = $request->get('relevance');    // relevance judgment [1-5]
-
-        if($relevance > 5 || $relevance < 1) {
-            return;
-        }
+        $relevance = $request->get('relevance');    // relevance judgment [1(not relevant) - 5(relevant)]
 
         if(!$mongoDAO->collectionExists($cid)) {
             return;
@@ -984,18 +999,16 @@ $app->post(
             return;
         }
 
-        $doc = array(
-            "uid"   =>  $uid,
-            "cid"   =>  $cid,
-            "iid"   =>  $iid,
-            "relevance" => $relevance,
-            "timestamp" => 1000 * time()
-        );
-
-        $mongoDAO->insertRelevanceJudgement($doc);
+        if($relevance <= 5 && $relevance <= 1) {
+            $mongoDAO->insertRelevanceJudgement($uid, $cid, $iid, $relevance);
+        }
+        else if($relevance < 1) {
+            $operation = array('$addToSet' => array('itemsToExclude' => $iid));
+            $mongoDAO->updateCollection($cid, $operation);
+        }
 
     }
-)->name("post_relevance");
+)->name("item_relevance");
 
 /**
  *  GET /users/search

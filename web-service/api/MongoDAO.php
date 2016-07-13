@@ -10,6 +10,7 @@
 class MongoDAO {
 
     private static $ITEMS = 'Item';
+    private static $ITEM_STATES = 'ItemState';
     private static $MEDIA_ITEMS = 'MediaItem';
     private static $STREAM_USERS = 'StreamUser';
     private static $COLLECTIONS = 'Collection';
@@ -34,6 +35,10 @@ class MongoDAO {
             $this->mongo = new MongoClient("$host:$port");
         }
         $this->db = $this->mongo->selectDB($db);
+
+        $rjCollection = $this->db->selectCollection(MongoDAO::RELEVANCE_JUDGMENTS);
+        $rjCollection->ensureIndex(array('cid' => 1, 'relevance' => 1));
+
     }
 
     public function getItem($id) {
@@ -88,6 +93,24 @@ class MongoDAO {
 
         return $items;
     }
+
+    public function getItemStates($id, $t1=null, $t2=null) {
+        $collection = $this->db->selectCollection( MongoDAO::$ITEM_STATES );
+
+        $q = array('_id'=>$id);
+        if($t1 != null && $t2 != null) {
+            $q['timestamp'] = array(
+                '$gte' => $t1,
+                '$lte' => $t2
+            );
+        }
+
+        $items_states = $collection->find($q, array('_id' => -1))->sort(array('timestamp' => 1));
+
+        return $items_states;
+    }
+
+
 
     public function getMediaItem($id) {
         $collection = $this->db->selectCollection( MongoDAO::$MEDIA_ITEMS );
@@ -260,16 +283,31 @@ class MongoDAO {
         return $status;
     }
 
-    public function insertRelevanceJudgement($doc) {
+    public function insertRelevanceJudgement($uid, $cid, $iid, $relevance) {
+
+        $id = $uid . "_" . $cid . "_" . $iid;
+        $q = array('_id'   =>  $id);
+        $doc = array(
+            '_id'   =>  $id,
+            'uid'   =>  $uid,
+            'cid'   =>  $cid,
+            'iid'   =>  $iid,
+            'relevance' => $relevance,
+            'timestamp' => 1000 * time()
+        );
+
         $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
-        $mongoCollection->insert($doc);
+
+        $mongoCollection->update($q, $doc, array("upsert" => true));
     }
 
-    public function getRelevanceJudgementsForCollection($cid) {
+    public function getRelevanceJudgements($cid) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
 
         $q = array("cid" => $cid);
-        $cursor = $mongoCollection->find($q);
+        $sort = array('relevance' => -1);
+
+        $cursor = $mongoCollection->find($q)->sort($sort);
 
         $rj = iterator_to_array($cursor, false);
         return $rj;

@@ -25,18 +25,27 @@ class TextIndex {
     }
 
 
-    public function searchItems($q, $pageNumber=1, $nPerPage=20, $filters=null, $sort=null) {
-
-        // to be used
-        //$helper = $query->getHelper();
+    public function searchItems($q, $pageNumber=1, $nPerPage=20, $filters=null, $sort=null, $judgements=null) {
 
         $query = $this->client->createSelect();
+
+
+        //todo: use relevance feedback to improve discrimination power of the query
+        if($judgements != null && count($judgements > 0)) {
+            $positive = array_filter($judgements, function($rj) { return ($rj['relevence']>3); });
+            $negative = array_filter($judgements, function($rj) { return ($rj['relevence']<3); });
+
+
+        }
+
         if($q != null) {
             $query->setQuery($q);
         }
 
-        $hlUsed = false;
+        // to be used
+        //$helper = $query->getHelper();
 
+        $hlUsed = false;
         if($filters != null && isset($filters['allText'])) {
             $fq = $filters['allText'];
             $hl = $query->getHighlighting();
@@ -458,4 +467,24 @@ class TextIndex {
         return $data['clusters'];
 
     }
+
+    public function getTermVectors($q, $pageNumber=1, $nPerPage=10) {
+        $query = $this->client->createSelect();
+        $query->setQuery($q);
+        $query->setHandler('tvrh');
+
+        $query->addParam('tv.tf', true);
+        $query->addParam('tv.df', true);
+        $query->addParam('tv.tf_idf', true);
+
+        // paging
+        $query->setStart(($pageNumber-1)*$nPerPage);
+        $query->setRows($nPerPage);
+
+        $resultSet = $this->client->execute($query);
+        $data = $resultSet->getData();
+        return $data['termVectors'];
+
+    }
+
 }

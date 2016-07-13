@@ -48,14 +48,16 @@ class Utils {
         $textQuery = $this->formulateLogicalQuery($keywords);
         $tagsQuery = $this->formulateLogicalQuery($tags);
 
+        // excluded keywords
         $keywordsToExclude = $collection['keywordsToExclude'];
-        if($keywordsToExclude != null && count($keywordsToExclude) > 1) {
+        if($keywordsToExclude != null && count($keywordsToExclude) > 0) {
             $excludedTermsQuery = $this->formulateLogicalQuery($keywordsToExclude);
 
             $textQuery = $textQuery . " NOT (" . $excludedTermsQuery . ")";
             $tagsQuery = $tagsQuery . " NOT (" . $excludedTermsQuery . ")";
         }
 
+        // user accounts to follow
         $accounts = $collection['accounts'];
         $users = array_map(function ($account) {
             return $account['source']."#".$account['id'];
@@ -73,6 +75,12 @@ class Utils {
         if($users != null && count($users) > 0) {
             $usersQuery = implode(' OR ', $users);
             $query[] = "uid:($usersQuery)";
+        }
+
+        $itemsToExclude = $collection('itemsToExclude');
+        if($itemsToExclude != null && count($itemsToExclude) > 0) {
+            $idsToExclude = implode(' OR ', $itemsToExclude);
+            $query[] = "-id:($idsToExclude)";
         }
 
         return implode(' OR ', $query);

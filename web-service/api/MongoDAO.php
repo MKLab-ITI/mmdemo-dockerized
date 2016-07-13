@@ -36,7 +36,7 @@ class MongoDAO {
         }
         $this->db = $this->mongo->selectDB($db);
 
-        $rjCollection = $this->db->selectCollection(MongoDAO::RELEVANCE_JUDGMENTS);
+        $rjCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
         $rjCollection->ensureIndex(array('cid' => 1, 'relevance' => 1));
 
     }

@@ -69,10 +69,10 @@
        		<Parameter name="Classpath">
            		<![CDATA[gr.iti.mklab.sfc.streams.impl.TwitterStream]]>
 		</Parameter>
-         	<Parameter name="Key"><![CDATA[LJIfy7mSYReohj6kmvlPkvCHd]]></Parameter>
-         	<Parameter name="Secret"><![CDATA[DQbnxEI4CNXNcfK4gL6Jutwwiq1HidZk7TAF0KSuiLeMH1RWuU]]></Parameter>
-         	<Parameter name="AccessToken"><![CDATA[204974667-sVnxyvHkCHgsRcSg5aCOuSn1DPRtu3C9NQZbrT5z]]></Parameter>
-         	<Parameter name="AccessTokenSecret"><![CDATA[7adyZhOTevj2344AifpjnmKsAIJ41hHHY0jcikT6AsNcu]]></Parameter>
+         	<Parameter name="Key"><![CDATA[]]></Parameter>
+         	<Parameter name="Secret"><![CDATA[]]></Parameter>
+         	<Parameter name="AccessToken"><![CDATA[]]></Parameter>
+         	<Parameter name="AccessTokenSecret"><![CDATA[]]></Parameter>
          	<Parameter name="maxRequests"><![CDATA[180]]></Parameter>
          	<Parameter name="timeWindow"><![CDATA[15]]></Parameter>
   	</Stream>

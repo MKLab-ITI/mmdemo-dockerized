@@ -25,15 +25,13 @@ class TextIndex {
     }
 
 
-    public function searchItems($q, $pageNumber=1, $nPerPage=20, $filters=null, $sort=null, $judgements=null) {
+    public function searchItems($q, $pageNumber=1, $nPerPage=20, $filters=null, $sort=null, $judgements=null, $group=false) {
 
         $query = $this->client->createSelect();
 
         //todo: use relevance feedback to improve discrimination power of the query
         if($judgements != null && count($judgements > 0)) {
-
             $expandedQueryTerms = $this->expandQuery($judgements, $q);
-
         }
 
         if($q != null) {
@@ -54,6 +52,14 @@ class TextIndex {
             $hl->setFragSize(0);
             $hl->setMaxAnalyzedChars(1500);
             $hlUsed = true;
+        }
+
+        if($group) {
+            $grouping = $query->getGrouping();
+            $grouping->addField("minhash");
+            $grouping->setFormat("simple");
+            $grouping->setMainResult(true);
+            $grouping->setSort("publicationTime asc");
         }
 
         // sort by

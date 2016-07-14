@@ -250,6 +250,67 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
 
 })->name("items");
 
+/**
+ *  GET /summary
+ */
+$app->get('/summary', function() use($mongoDAO, $textIndex, $utils, $app) {
+
+    $request = $app->request();
+
+    $since = $request->get('since')==null ? '*' : $request->get('since');
+    $until = $request->get('until')==null ? '*' : $request->get('until');
+
+    $source = $request->get('source');
+    $language = $request->get('language');
+    $original = $request->get('original');
+    $type = $request->get('type');
+
+    $query = $request->get('q');
+    $topicQuery = $request->get('topicQuery');
+    if($topicQuery != null && $topicQuery != '*') {
+        if($query == null) {
+            $query = $topicQuery;
+        }
+        else {
+            $query = $query . ' ' . $topicQuery;
+        }
+    }
+
+    $collectionId = $request->get('collection');
+
+    $nPerPage = $request->get('nPerPage')==null ? 100 : $request->get('nPerPage');
+
+    $items = array();
+    if($collectionId != null) {
+        $collection = $mongoDAO->getCollection($collectionId);
+        if($collection != null) {
+
+            $judgements = $mongoDAO->getRelevanceJudgements($collection);
+
+            // query formulation
+            $q = $utils->formulateCollectionQuery($collection);
+
+            // Add filters if available
+            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query);
+            $results = $textIndex->searchItems($q, 1, $nPerPage,  $filters, 'relevance', $judgements, true);
+
+            foreach($results as $result) {
+                $item = $mongoDAO->getItem($result['id']);
+                $item['score'] = $result['score'];
+                if(isset($result['title_hl'])) {
+                    $item['originalTitle'] = $item['title'];
+                    $item['title'] = $result['title_hl'];
+                }
+
+                $items[] = $item;
+            }
+        }
+    }
+
+    echo json_encode($items);
+
+})->name("summary");
+
 $app->get(
     '/top/:field',
     function ($field) use ($mongoDAO, $textIndex, $utils, $app) {

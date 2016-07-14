@@ -8,9 +8,11 @@
 
 				<field name="original" type="boolean" indexed="true" stored="false" multiValued="false" />
 
-      	<field name="title" type="text_en" indexed="true" stored="true" multiValued="false" termVectors="true" termPositions="true" termOffsets="true"/>
+      	<field name="title" type="text_en" indexed="true" stored="true" multiValued="false"/>
       	<field name="description" type="text_en" indexed="true" stored="false" multiValued="false" />
       	<field name="tags" type="tags" indexed="true" stored="true" multiValued="true" />
+
+				<field name="cleanTitle" type="text_en" indexed="true" stored="true" multiValued="false" termVectors="true" termPositions="true" termOffsets="true"/>
 
 				<field name="minhash" type="string" indexed="true" stored="true" multiValued="false" />
 				<field name="signature" type="string" indexed="true" stored="true" multiValued="false" />

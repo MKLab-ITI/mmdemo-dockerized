@@ -10,7 +10,8 @@ RUN git clone https://github.com/MKLab-ITI/mklab-stream-manager.git && \
 	  mvn clean package && \
     cd /
 
-ADD ./stream_manager /stream_manager
+RUN mkdir /stream_manager
+ADD conf /stream_manager/conf
 
 RUN cp mklab-stream-manager/target/mklab-stream-manager-0.3-SNAPSHOT-with-dependencies.jar /stream_manager/mklab-stream-manager.jar
 
@@ -20,4 +21,4 @@ RUN cp -r mklab-stream-manager/src/main/resources/profiles.sm /stream_manager &&
 WORKDIR /stream_manager
 
 ENTRYPOINT ["java", "-jar", "mklab-stream-manager.jar"]
-CMD ["streams.conf.xml"]
+CMD ["conf/streams.conf.xml"]

@@ -1,4 +1,4 @@
-FROM ubuntu:14.04.4
+FROM ubuntu:15.10
 
 MAINTAINER Manos Schinas <manosetro@iti.gr>
 

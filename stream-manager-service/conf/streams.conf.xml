@@ -51,12 +51,11 @@
           		<Parameter name="profileDirectory"><![CDATA[profiles.sm]]></Parameter>
     		</Processor>
 	   	<!-- MinHashExtractor -->
-                <Processor id="MinHashExtractor">
-                        <Parameter name="Classpath"><![CDATA[gr.iti.mklab.sfc.processors.MinHashExtractor]]></Parameter>
-                        <Parameter name="minhashNum"><![CDATA[32]]></Parameter>
-												<Parameter name="signatureNum"><![CDATA[128]]></Parameter>
-                </Processor>
-
+  		<Processor id="MinHashExtractor">
+      		<Parameter name="Classpath"><![CDATA[gr.iti.mklab.sfc.processors.MinHashExtractor]]></Parameter>
+          <Parameter name="minhashNum"><![CDATA[32]]></Parameter>
+					<Parameter name="signatureNum"><![CDATA[128]]></Parameter>
+  		</Processor>
 	</Processors>
 
 	<Subscribers>

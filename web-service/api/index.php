@@ -1024,6 +1024,19 @@ $app->get('/search/users',
     }
 )->name("user_search");
 
+
+$app->get('/termvectors',
+    function() use ($app, $textIndex) {
+
+        $request = $app->request();
+        $q = $request->get('q');
+
+        $tv = $textIndex->getTermVectors($q, 1, 20);
+
+        echo json_encode(array("query"=>$q, "tv"=>$tv));
+    }
+)->name("user_search");
+
 /**
  *  GET /detect/users
  */

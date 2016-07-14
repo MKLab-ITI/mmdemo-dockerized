@@ -229,7 +229,7 @@ class MongoDAO {
 
         $cursor = $mongoCollection->find($query)->sort(array("creationDate"=>-1));
 		if($pageNumber != null && $nPerPage != null) {
-            $cursor->skip(($pageNumber - 1) * $nPerPage)->limit($nPerPage);
+            $cursor->skip(($pageNumber-1)*$nPerPage)->limit($nPerPage);
         }
 
         $collections = iterator_to_array($cursor, false);

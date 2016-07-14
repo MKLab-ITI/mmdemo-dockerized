@@ -29,12 +29,10 @@ class TextIndex {
 
         $query = $this->client->createSelect();
 
-
         //todo: use relevance feedback to improve discrimination power of the query
         if($judgements != null && count($judgements > 0)) {
-            $positive = array_filter($judgements, function($rj) { return ($rj['relevence']>3); });
-            $negative = array_filter($judgements, function($rj) { return ($rj['relevence']<3); });
 
+            $expandedQueryTerms = $this->expandQuery($judgements, $q);
 
         }
 
@@ -481,10 +479,87 @@ class TextIndex {
         $query->setStart(($pageNumber-1)*$nPerPage);
         $query->setRows($nPerPage);
 
+        $tvs = array();
+
         $resultSet = $this->client->execute($query);
         $data = $resultSet->getData();
-        return $data['termVectors'];
+        $termVectors =  $data['termVectors'];
 
+        $termVectors = array_filter($termVectors, function($k) { return ($k%2==1); }, ARRAY_FILTER_USE_KEY);
+        $termVectors = array_map(function($k){return array("id" => $k[1], "vector"=>$k[3]);}, $termVectors);
+
+        foreach($termVectors as $tv) {
+            $id = $tv['id'];
+            $vector = $tv['vector'];
+            $terms = array_filter($vector, function($k) { return ($k%2==0); }, ARRAY_FILTER_USE_KEY);
+            $values = array_filter($vector, function($k) { return ($k%2==1); }, ARRAY_FILTER_USE_KEY);
+            $values = array_map(function($k){return $k[5];}, $values);
+
+            $norm = array_reduce($values, function($carry, $item) {
+                    $carry += $item;
+                    return $carry;
+                }
+            );
+
+            $tvs[] = array($id =>  array(
+                "vector" => array_combine($terms, $values)),
+                "norm" => $norm
+            );
+        }
+        return $tvs;
+
+    }
+
+    public function expandQuery($judgements, $query) {
+        $positive = array_filter($judgements, function($rj) { return ($rj['relevence'] > 3); });
+        $negative = array_filter($judgements, function($rj) { return ($rj['relevence'] < 3); });
+
+        $positiveIds = array_map(function($entry) { return $entry['iid']; }, $positive);
+        $negativeIds = array_map(function($entry) { return $entry['iid']; }, $negative);
+
+        // get scores of positive items for the collection and the corresponding term vectors
+        $positiveQuery = "id:(".implode(' OR', $positiveIds).")";
+        $positiveTVs = $this->getTermVectors($positiveQuery, 1, count($positiveIds));
+        $positiveItems = $this->searchItems($query, 1, count($positiveIds), array(0 => $positiveQuery));
+
+        // get scores of negative items for the collection and the corresponding term vectors
+        $negativeQuery = "id:(".implode(' OR', $negativeIds).")";
+        $negativeTVs = $this->getTermVectors($negativeQuery, 1, count($negativeIds));
+        $negativeItems = $this->searchItems($query, 1, count($negativeIds), array(0 => $negativeQuery));
+
+        // estimate positive and negative relevance models aggregated by each of the relevance judgements
+        $positiveFeatureVector = estimateRelevanceModel($positiveTVs, $positiveItems);
+        $negativeFeatureVector = estimateRelevanceModel($negativeTVs, $negativeItems);
+
+        // todo: prune feature vectors
+
+        // todo: expanded create query from feature vectors
+
+    }
+
+    public function estimateRelevanceModel($tvs, $items) {
+
+        $featureVector = array();
+
+        $items = array_map(function($item) { return array($item['id'] => $item['score']); }, $items);
+
+        $vocabulary = array();
+        foreach($tvs as $iid => $terms) {
+            $vocabulary = array_merge($vocabulary, array_keys($terms));
+        }
+        $vocabulary = array_unique($vocabulary);
+
+        foreach($vocabulary as $term) {
+            $weight = .0;
+            foreach($tvs as $iid => $terms) {
+                if(isset($terms['vector'][$term]) && isset($items[$iid])) {
+                    $weight = $weight + (($terms['vector'][$term] / $terms['norm'])*$items[$iid]);
+                }
+            }
+            $featureVector[$term] = $weight;
+        }
+
+        return $featureVector;
     }
 
 }

@@ -49,12 +49,14 @@ class Utils {
         $tagsQuery = $this->formulateLogicalQuery($tags);
 
         // excluded keywords
-        $keywordsToExclude = $collection['keywordsToExclude'];
-        if($keywordsToExclude != null && count($keywordsToExclude) > 0) {
-            $excludedTermsQuery = $this->formulateLogicalQuery($keywordsToExclude);
+        if(isset($collection['keywordsToExclude'])) {
+            $keywordsToExclude = $collection['keywordsToExclude'];
+            if ($keywordsToExclude != null && count($keywordsToExclude) > 0) {
+                $excludedTermsQuery = $this->formulateLogicalQuery($keywordsToExclude);
 
-            $textQuery = $textQuery . " NOT (" . $excludedTermsQuery . ")";
-            $tagsQuery = $tagsQuery . " NOT (" . $excludedTermsQuery . ")";
+                $textQuery = $textQuery . " NOT (" . $excludedTermsQuery . ")";
+                $tagsQuery = $tagsQuery . " NOT (" . $excludedTermsQuery . ")";
+            }
         }
 
         // user accounts to follow
@@ -77,10 +79,12 @@ class Utils {
             $query[] = "uid:($usersQuery)";
         }
 
-        $itemsToExclude = $collection('itemsToExclude');
-        if($itemsToExclude != null && count($itemsToExclude) > 0) {
-            $idsToExclude = implode(' OR ', $itemsToExclude);
-            $query[] = "-id:($idsToExclude)";
+        if(isset($collection['itemsToExclude'])) {
+            $itemsToExclude = $collection('itemsToExclude');
+            if ($itemsToExclude != null && count($itemsToExclude) > 0) {
+                $idsToExclude = implode(' OR ', $itemsToExclude);
+                $query[] = "-id:($idsToExclude)";
+            }
         }
 
         return implode(' OR ', $query);

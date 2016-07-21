@@ -152,4 +152,83 @@ class Utils {
         return $filters;
     }
 
+    public static function expandQuery($judgements, $query, $index) {
+        $positive = array_filter($judgements, function($rj) { return ($rj['relevence'] > 3); });
+        $negative = array_filter($judgements, function($rj) { return ($rj['relevence'] < 3); });
+
+        $positiveIds = array_map(function($entry) { return $entry['iid']; }, $positive);
+        $negativeIds = array_map(function($entry) { return $entry['iid']; }, $negative);
+
+        // get scores of positive items for the collection and the corresponding term vectors
+        $positiveQuery = "id:(".implode(' OR', $positiveIds).")";
+        $positiveTVs = $index->getTermVectors($positiveQuery, 1, count($positiveIds));
+        $positiveItems = $index->searchItems($query, 1, count($positiveIds), array(0 => $positiveQuery));
+
+        // get scores of negative items for the collection and the corresponding term vectors
+        $negativeQuery = "id:(".implode(' OR', $negativeIds).")";
+        $negativeTVs = $index->getTermVectors($negativeQuery, 1, count($negativeIds));
+        $negativeItems = $index->searchItems($query, 1, count($negativeIds), array(0 => $negativeQuery));
+
+        // estimate positive and negative relevance models aggregated by each of the relevance judgements
+        $positiveFeatureVector = Utils::estimateRelevanceModel($positiveTVs, $positiveItems);
+        $negativeFeatureVector = Utils::estimateRelevanceModel($negativeTVs, $negativeItems);
+
+        // todo: prune feature vectors
+
+        // todo: expanded create query from feature vectors
+        $query = urldecode($query);
+        $queryTerms = explode(',', $query);
+
+        $query = Utils::interpolate($queryTerms, $positiveFeatureVector, 0.8);
+
+        // For negative boosting: boost documents that do not contain term zzz with a factor w3
+        // q = xxx^w1 yyy^w2 (*:* -zzz)^w3  w3 >> w1, w2
+
+    }
+
+    public function estimateRelevanceModel($tvs, $items) {
+
+        $featureVector = array();
+
+        $items = array_map(function($item) { return array($item['id'] => $item['score']); }, $items);
+
+        $vocabulary = array();
+        foreach($tvs as $iid => $terms) {
+            $vocabulary = array_merge($vocabulary, array_keys($terms));
+        }
+        $vocabulary = array_unique($vocabulary);
+
+        foreach($vocabulary as $term) {
+            $weight = .0;
+            foreach($tvs as $iid => $terms) {
+                if(isset($terms['vector'][$term]) && isset($items[$iid])) {
+                    // doc_score * (tf_idf) / sum(tf_idf)
+                    $weight = $weight + ($items[$iid]*($terms['vector'][$term] / $terms['norm']));
+                }
+            }
+            $featureVector[$term] = $weight;
+        }
+
+        return $featureVector;
+    }
+
+    public static function interpolate($x, $y, $xWeight) {
+
+        $z = array();
+
+        $vocabulary = array();
+        $vocabulary = array_merge($vocabulary, array_keys($x));
+        $vocabulary = array_merge($vocabulary, array_keys($y));
+        $vocabulary = array_unique($vocabulary);
+
+        foreach($vocabulary as $term) {
+            $xw = isset($x[$term]) ? $x[$term] : .0;
+            $yw = isset($y[$term]) ? $y[$term] : .0;
+
+            $weight = ($xWeight*$xw + (1.0-$xWeight)*$yw);
+            $z[$term] = $weight;
+        }
+
+        return $z;
+    }
 }

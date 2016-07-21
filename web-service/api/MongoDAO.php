@@ -176,10 +176,6 @@ class MongoDAO {
         if($sort === 'popularity') {
             $sortBy = array('likes'=>-1);
         }
-        else if($sort === 'relevance') {
-            // TODO: Use significance score for relevance
-            $sortBy = array('likes'=>-1);
-        }
 
         $cursor = $collection->find($query, MongoDAO::$ITEM_FIELDS)
             ->sort($sortBy)

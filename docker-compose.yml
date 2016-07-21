@@ -6,11 +6,15 @@ services:
     image: "mongo:3.0"
     volumes:
       - ./graylog/data/mongo:/data/db
+
   graylog-elasticsearch:
     image: "elasticsearch:2"
     command: "elasticsearch -Des.cluster.name='graylog'"
+    environment:
+      ES_HEAP_SIZE: 1g
     volumes:
       - ./graylog/data/elasticsearch:/usr/share/elasticsearch/data
+
   graylog:
     image: graylog2/server:2.0.1-1
     volumes:
@@ -24,8 +28,8 @@ services:
     ports:
       - "9000:9000"
       - "12900:12900"
-      - "12201:12202"
-      - "12201:12202/udp"
+      - "12201:12201"
+      - "12201/udp:12201/udp"
 
   redis:
     image: redis:3.2
@@ -54,6 +58,8 @@ services:
     volumes:
       - ./solr-cores:/opt/solr/server/solr
     command: bin/solr -m 2g -f
+    environment:
+      LOG4J_PROPS: /opt/solr/server/solr/log4j.properties
     networks:
       common_network:
         aliases:

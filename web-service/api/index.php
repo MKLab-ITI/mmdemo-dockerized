@@ -262,8 +262,9 @@ $app->get('/summary', function() use($mongoDAO, $textIndex, $utils, $app) {
 
     $source = $request->get('source');
     $language = $request->get('language');
-    $original = $request->get('original');
     $type = $request->get('type');
+
+    $length = $request->get('length')==null ? 100 : $request->get('length');
 
     $query = $request->get('q');
     $topicQuery = $request->get('topicQuery');
@@ -278,29 +279,22 @@ $app->get('/summary', function() use($mongoDAO, $textIndex, $utils, $app) {
 
     $collectionId = $request->get('collection');
 
-    $nPerPage = $request->get('nPerPage')==null ? 100 : $request->get('nPerPage');
-
     $items = array();
     if($collectionId != null) {
         $collection = $mongoDAO->getCollection($collectionId);
         if($collection != null) {
 
-            $judgements = $mongoDAO->getRelevanceJudgements($collection);
-
             // query formulation
             $q = $utils->formulateCollectionQuery($collection);
 
             // Add filters if available
-            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query);
-            $results = $textIndex->searchItems($q, 1, $nPerPage,  $filters, 'relevance', $judgements, true);
+            $filters = $utils->getFilters($since, $until, $source, 'original', $type, $language, $query);
 
+            $results = $textIndex->getSummary($q, $length,  $filters);
             foreach($results as $result) {
                 $item = $mongoDAO->getItem($result['id']);
                 $item['score'] = $result['score'];
-                if(isset($result['title_hl'])) {
-                    $item['originalTitle'] = $item['title'];
-                    $item['title'] = $result['title_hl'];
-                }
+                $item['minhash'] = $result['minhash'];
 
                 $items[] = $item;
             }
@@ -749,7 +743,6 @@ $app->get(
                 );
 
                 $clusters = $textIndex->getClusters($collectionQuery, $filters, 1000);
-
                 foreach($clusters as $cluster) {
                     if($cluster['score'] > 0 && count($cluster['docs']) >= 15) {
                         $topic = array(

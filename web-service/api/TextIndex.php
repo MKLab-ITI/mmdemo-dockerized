@@ -31,7 +31,7 @@ class TextIndex {
 
         //todo: use relevance feedback to improve discrimination power of the query
         if($judgements != null && count($judgements > 0)) {
-            $expandedQueryTerms = $this->expandQuery($judgements, $q);
+            $expandedQueryTerms = Utils::expandQuery($judgements, $q, $this);
         }
 
         if($q != null) {
@@ -55,11 +55,7 @@ class TextIndex {
         }
 
         if($group) {
-            $grouping = $query->getGrouping();
-            $grouping->addField("minhash");
-            $grouping->setFormat("simple");
-            $grouping->setMainResult(true);
-            $grouping->setSort("publicationTime asc");
+            $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash min=publicationTime}");
         }
 
         // sort by
@@ -115,6 +111,49 @@ class TextIndex {
                     }
                 }
 
+                $ids[] = $doc;
+            }
+        }
+        catch(Exception $e) {
+            return $e->getMessage();
+        }
+
+        return $ids;
+    }
+
+    public function getSummary($q, $length, $filters=null) {
+
+        $query = $this->client->createSelect();
+
+        if($q != null) {
+            $query->setQuery($q);
+        }
+
+        $query->addSort('score', Solarium\QueryType\Select\Query\Query::SORT_DESC);
+        $query->addSort('sum(product(0.7,likes),product(0.3,shares))', Solarium\QueryType\Select\Query\Query::SORT_DESC);
+
+        // filters
+        if($filters != null) {
+            foreach($filters as $filterKey=>$filterValue) {
+                $query->createFilterQuery($filterKey)->setQuery("$filterKey:($filterValue)");
+            }
+        }
+        $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash min=publicationTime}");
+        $query->addParam("expand", true);
+        $query->addParam("expand.rows", $length);
+
+        $query->setRows($length);
+        $query->setFields(['id', 'score', 'minhash']);
+
+        $ids = array();
+        try {
+            $resultSet = $this->client->execute($query);
+            foreach ($resultSet as $document) {
+                $doc = array(
+                    'id' => $document['id'],
+                    'score' => $document['score'],
+                    'minhash' => $document['minhash']
+                );
                 $ids[] = $doc;
             }
         }
@@ -463,6 +502,8 @@ class TextIndex {
             }
         }
 
+        $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash}");
+
         $query->setRows($rows);
 
         $resultSet = $this->client->execute($query);
@@ -497,7 +538,7 @@ class TextIndex {
         foreach($termVectors as $tv) {
             $id = $tv['id'];
             $vector = $tv['vector'];
-            $terms = array_filter($vector, function($k) { return ($k%2==0); }, ARRAY_FILTER_USE_KEY);
+            $terms = array_filter($vector, function($k) { return ($k%2==0); },  ARRAY_FILTER_USE_KEY);
             $values = array_filter($vector, function($k) { return ($k%2==1); }, ARRAY_FILTER_USE_KEY);
             $values = array_map(function($k){return $k[5];}, $values);
 
@@ -514,58 +555,6 @@ class TextIndex {
         }
         return $tvs;
 
-    }
-
-    public function expandQuery($judgements, $query) {
-        $positive = array_filter($judgements, function($rj) { return ($rj['relevence'] > 3); });
-        $negative = array_filter($judgements, function($rj) { return ($rj['relevence'] < 3); });
-
-        $positiveIds = array_map(function($entry) { return $entry['iid']; }, $positive);
-        $negativeIds = array_map(function($entry) { return $entry['iid']; }, $negative);
-
-        // get scores of positive items for the collection and the corresponding term vectors
-        $positiveQuery = "id:(".implode(' OR', $positiveIds).")";
-        $positiveTVs = $this->getTermVectors($positiveQuery, 1, count($positiveIds));
-        $positiveItems = $this->searchItems($query, 1, count($positiveIds), array(0 => $positiveQuery));
-
-        // get scores of negative items for the collection and the corresponding term vectors
-        $negativeQuery = "id:(".implode(' OR', $negativeIds).")";
-        $negativeTVs = $this->getTermVectors($negativeQuery, 1, count($negativeIds));
-        $negativeItems = $this->searchItems($query, 1, count($negativeIds), array(0 => $negativeQuery));
-
-        // estimate positive and negative relevance models aggregated by each of the relevance judgements
-        $positiveFeatureVector = estimateRelevanceModel($positiveTVs, $positiveItems);
-        $negativeFeatureVector = estimateRelevanceModel($negativeTVs, $negativeItems);
-
-        // todo: prune feature vectors
-
-        // todo: expanded create query from feature vectors
-
-    }
-
-    public function estimateRelevanceModel($tvs, $items) {
-
-        $featureVector = array();
-
-        $items = array_map(function($item) { return array($item['id'] => $item['score']); }, $items);
-
-        $vocabulary = array();
-        foreach($tvs as $iid => $terms) {
-            $vocabulary = array_merge($vocabulary, array_keys($terms));
-        }
-        $vocabulary = array_unique($vocabulary);
-
-        foreach($vocabulary as $term) {
-            $weight = .0;
-            foreach($tvs as $iid => $terms) {
-                if(isset($terms['vector'][$term]) && isset($items[$iid])) {
-                    $weight = $weight + (($terms['vector'][$term] / $terms['norm'])*$items[$iid]);
-                }
-            }
-            $featureVector[$term] = $weight;
-        }
-
-        return $featureVector;
     }
 
 }

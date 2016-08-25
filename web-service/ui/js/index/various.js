@@ -1366,7 +1366,7 @@ $("#dropdown").on("click", function (e) {
 
 $("#dropdown li").click(function () {
     $('#lang').html($(this).text());
-    $(location).attr('href', 'index.html?translation=' + $(this).attr('id'));
+    $(location).attr('href', 'index.html?translation=' + $(this).attr('id') + "&user_id=" + user_id);
 });
 
 $("#text_user").click(function () {

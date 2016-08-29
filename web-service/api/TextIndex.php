@@ -25,7 +25,7 @@ class TextIndex {
     }
 
 
-    public function searchItems($q, $pageNumber=1, $nPerPage=20, $filters=null, $sort=null, $judgements=null, $group=false) {
+    public function searchItems($q, $pageNumber=1, $nPerPage=20, $filters=null, $sort=null, $judgements=null, $unique=false) {
 
         $query = $this->client->createSelect();
 
@@ -54,7 +54,7 @@ class TextIndex {
             $hlUsed = true;
         }
 
-        if($group) {
+        if($unique) {
             $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash min=publicationTime}");
         }
 
@@ -164,7 +164,7 @@ class TextIndex {
         return $ids;
     }
 
-    public function countItems($q, $filters=null) {
+    public function countItems($q, $filters=null, $unique=false) {
         $query = $this->client->createSelect();
         if($query != null) {
             $query->setQuery($q);
@@ -174,6 +174,10 @@ class TextIndex {
             foreach($filters as $filterKey=>$filterValue) {
                 $query->createFilterQuery($filterKey)->setQuery("$filterKey:($filterValue)");
             }
+        }
+
+        if($unique) {
+            $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash min=publicationTime}");
         }
 
         $count = 0;
@@ -186,7 +190,7 @@ class TextIndex {
         return $count;
     }
 
-    public function statistics($fields, $q, $filters=null) {
+    public function statistics($fields, $q, $filters=null, $unique=false) {
         $query = $this->client->createSelect();
         if($query != null) {
             $query->setQuery($q);
@@ -196,6 +200,10 @@ class TextIndex {
             foreach($filters as $filterKey=>$filterValue) {
                 $query->createFilterQuery($filterKey)->setQuery("$filterKey:($filterValue)");
             }
+        }
+
+        if($unique) {
+            $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash min=publicationTime}");
         }
 
         $stats = $query->getStats();
@@ -227,7 +235,7 @@ class TextIndex {
         return $statistics;
     }
 
-    public function fieldsCount($fields, $q, $filters=null) {
+    public function fieldsCount($fields, $q, $filters=null, $unique=false) {
 
         $query = $this->client->createSelect();
         if($query != null) {
@@ -238,6 +246,10 @@ class TextIndex {
             foreach($filters as $filterKey => $filterValue) {
                 $query->createFilterQuery($filterKey)->setQuery("$filterKey:($filterValue)");
             }
+        }
+
+        if($unique) {
+            $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash min=publicationTime}");
         }
 
         $stats = $query->getStats();
@@ -264,7 +276,7 @@ class TextIndex {
         return $statistics;
     }
 
-    public function getFacet($facetField, $q, $filters = array(), $n = 10, $includeAll=true, $prefix=null) {
+    public function getFacet($facetField, $q, $filters = array(), $n = 10, $includeAll=true, $prefix=null, $unique=false) {
 
         // get a select query instance
         $query = $this->client->createSelect();
@@ -276,6 +288,10 @@ class TextIndex {
                 $fq = $filterKey . ':(' . $filterValue . ')';
                 $query->createFilterQuery($filterKey)->setQuery($fq);
             }
+        }
+
+        if($unique) {
+            $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash min=publicationTime}");
         }
 
         // get the facet set component
@@ -305,7 +321,7 @@ class TextIndex {
         return $facets;
     }
 
-    public function getFacetAndCount($facetField, $q, $filters = array(), $n = 10, $includeAll=true, $prefix=null) {
+    public function getFacetAndCount($facetField, $q, $filters = array(), $n = 10, $includeAll=true, $prefix=null, $unique=false) {
 
         // get a select query instance
         $query = $this->client->createSelect();
@@ -317,6 +333,10 @@ class TextIndex {
                 $fq = $filterKey . ':(' . $filterValue . ')';
                 $query->createFilterQuery($filterKey)->setQuery($fq);
             }
+        }
+
+        if($unique) {
+            $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash min=publicationTime}");
         }
 
         // get the facet set component
@@ -444,7 +464,7 @@ class TextIndex {
         return $temp;
     }
 
-    public function getRangeFacet($facetField, $q, $filters, $gap, $start, $end) {
+    public function getRangeFacet($facetField, $q, $filters, $gap, $start, $end, $unique=false) {
 
         // get a select query instance
         $query = $this->client->createSelect();
@@ -456,6 +476,10 @@ class TextIndex {
                 $fq = $filterKey . ':(' . $filterValue . ')';
                 $query->createFilterQuery($filterKey)->setQuery($fq);
             }
+        }
+
+        if($unique) {
+            $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash min=publicationTime}");
         }
 
         // get the facet set component

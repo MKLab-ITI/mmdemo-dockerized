@@ -175,6 +175,8 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
     $original = $request->get('original');
     $type = $request->get('type');
 
+    $unique = $request->get('unique')==null ? false : $request->get('unique');
+
     $sort = $request->get('sort');
 
     $query = $request->get('q');
@@ -205,7 +207,7 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
 
             // Add filters if available
             $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query);
-            $results = $textIndex->searchItems($q, $pageNumber, $nPerPage,  $filters, $sort, $judgements);
+            $results = $textIndex->searchItems($q, $pageNumber, $nPerPage,  $filters, $sort, $judgements, $unique);
 
             foreach($results as $result) {
                 $item = $mongoDAO->getItem($result['id']);
@@ -231,7 +233,7 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             $query = "title:($query) OR description:($query)";
 
             $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null);
-            $results = $textIndex->searchItems($query, $pageNumber, $nPerPage,  $filters, $sort);
+            $results = $textIndex->searchItems($query, $pageNumber, $nPerPage,  $filters, $sort, null, $unique);
 
             foreach($results as $result) {
                 $item = $mongoDAO->getItem($result['id']);
@@ -319,6 +321,8 @@ $app->get(
         $original = $request->get('original');
         $type = $request->get('type');
 
+        $unique = $request->get('unique')==null ? false : $request->get('unique');
+
         $n = $request->get('n') == null ? 20 : $request->get('n');
         $collectionId = $request->get('collection');
 
@@ -343,7 +347,7 @@ $app->get(
 
                         $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query);
 
-                        $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true);
+                        $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, null, $unique);
                         echo json_encode(array('facet'=>$field, 'values' => $facet, 'query'=>$collectionQuery, 'filters' => $filters));
                     }
                     catch(Exception $e) {
@@ -378,6 +382,8 @@ $app->get(
         $language = $request->get('language');
         $source = $request->get('source');
 
+        $unique = $request->get('unique')==null ? false : $request->get('unique');
+
         $query = $request->get('q');
         $topicQuery = $request->get('topicQuery');
         if($topicQuery != null && $topicQuery != '*') {
@@ -395,7 +401,7 @@ $app->get(
 
                     $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query);
 
-                    $facet = $textIndex->getFacet('uid', $collectionQuery, $filters, $n, false);
+                    $facet = $textIndex->getFacet('uid', $collectionQuery, $filters, $n, false, null, $unique);
 
                     $users = array();
                     foreach($facet as $result) {
@@ -433,6 +439,8 @@ $app->get(
         $language = $request->get('language');
         $source = $request->get('source');
 
+        $unique = $request->get('unique')==null ? false : $request->get('unique');
+
         $query = $request->get('q');
         $topicQuery = $request->get('topicQuery');
         if ($topicQuery != null && $topicQuery != '*') {
@@ -450,9 +458,9 @@ $app->get(
 
                     $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query);
 
-                    $tagsFacet = $textIndex->getFacet('tags', $collectionQuery, $filters, ceil($n/3), false);
-                    $personsFacet = $textIndex->getFacet('persons', $collectionQuery, $filters, ceil($n/3), false);
-                    $organizationsFacet = $textIndex->getFacet('organizations', $collectionQuery, $filters, ceil($n/3), false);
+                    $tagsFacet = $textIndex->getFacet('tags', $collectionQuery, $filters, ceil($n/3), false, null, $unique);
+                    $personsFacet = $textIndex->getFacet('persons', $collectionQuery, $filters, ceil($n/3), false, null, $unique);
+                    $organizationsFacet = $textIndex->getFacet('organizations', $collectionQuery, $filters, ceil($n/3), false, null, $unique);
 
                     $terms = array();
                     foreach($tagsFacet as $result) {
@@ -570,6 +578,8 @@ $app->get(
         $language = $request->get('language');
         $source = $request->get('source');
 
+        $unique = $request->get('unique')==null ? false : $request->get('unique');
+
         $collectionId = $request->get('collection');
 
         $query = $request->get('q');
@@ -608,7 +618,7 @@ $app->get(
 
             $start = $gap * ($since / $gap);
             $end = $gap * ($until / $gap);
-            $rangeFacet = $textIndex->getRangeFacet('publicationTime', $q, $filters, $gap, $start, $end);
+            $rangeFacet = $textIndex->getRangeFacet('publicationTime', $q, $filters, $gap, $start, $end, $unique);
             foreach($rangeFacet as $bin) {
                 if($bin['count'] > 0) {
                     $entry = array('timestamp'=>$bin['field'], 'date'=>date($dateFormat, $bin['field']/1000), 'count'=>$bin['count']);
@@ -635,6 +645,8 @@ $app->get(
         $original = $request->get('original');
         $type = $request->get('type');
         $language = $request->get('language');
+
+        $unique = $request->get('unique')==null ? false : $request->get('unique');
 
         $collectionId = $request->get('collection');
 
@@ -675,8 +687,9 @@ $app->get(
                 // Add filters if available
                 $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query);
 
-                $statistics = $textIndex->statistics("likes,shares,followers,friends", $q, $filters);
-                $counts = $textIndex->fieldsCount("uid", $q, $filters);
+                $statistics = $textIndex->statistics("likes,shares,followers,friends", $q, $filters, $unique);
+                $counts = $textIndex->fieldsCount("uid", $q, $filters, $unique);
+
                 $statistics['endorsement'] = $statistics['likes']['sum'];
                 $statistics['reach'] = $statistics['followers']['sum'];
                 $statistics['users'] = $counts['uid']['cardinality'];
@@ -733,7 +746,6 @@ $app->get(
                 $filters = $utils->getFilters($since, $until, $source, 'original', null, $language, $query);
 
                 $count = $textIndex->countItems($collectionQuery, $filters);
-
 
                 $topics[] = array(
                     'label' => 'All',
@@ -835,8 +847,10 @@ $app->get(
 		$pageNumber = $request->get("pageNumber")==null ? 1 : $request->get("pageNumber");
         $nPerPage = $request->get("nPerPage")==null ? 6 : $request->get("nPerPage");
 
-		$all = $mongoDAO->getUserCollections($uid);
-		$userCollections = $mongoDAO->getUserCollections($uid, $pageNumber, $nPerPage);
+        $status = $request->get("status"); // stopped / running
+
+		$all = $mongoDAO->getUserCollections($uid, $status);
+		$userCollections = $mongoDAO->getUserCollections($uid, $status, $pageNumber, $nPerPage);
         foreach($userCollections as &$collection) {
 
             $lastExecution = $redisClient->get($collection['_id']);
@@ -894,7 +908,7 @@ $app->post(
             $t = 1000 * time();
             $collection->creationDate = $t;
             $collection->updateDate = $t;
-            $collection->since = $t - (2 * 24 * 3600000);
+            $collection->since = $t - (15 * 24 * 3600000);
 
             if(isset($collection->accounts)) {
                 foreach($collection->accounts as $account) {
@@ -947,7 +961,7 @@ $app->post(
             $t = 1000 * time();
             $collection->creationDate = $t;
             $collection->updateDate = $t;
-            $collection->since = $t - (2 * 24 * 3600000);
+            $collection->since = $t - (15 * 24 * 3600000);
 
             if(isset($collection->accounts)) {
                 foreach($collection->accounts as $account) {

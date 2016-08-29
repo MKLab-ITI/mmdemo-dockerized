@@ -34,6 +34,9 @@ ADD api /var/www/site/api
 ADD ui /var/www/site/ui
 ADD rockmongo /var/www/site/rockmongo
 
+RUN cd /var/www/site/api && \
+    php composer.phar install
+
 # Update the default apache site with the config we created.
 ADD apache-config.conf /etc/apache2/sites-enabled/000-default.conf
 

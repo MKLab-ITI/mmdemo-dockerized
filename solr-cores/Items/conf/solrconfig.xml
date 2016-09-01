@@ -35,7 +35,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>5.3.0</luceneMatchVersion>
+  <luceneMatchVersion>5.5.2</luceneMatchVersion>
 
   <!-- <lib/> directives can be used to instruct Solr to load any Jars
        identified and use them to resolve any "plugins" specified in
@@ -1395,24 +1395,23 @@
   <searchComponent name="clustering"
                    enable="true"
                    class="solr.clustering.ClusteringComponent" >
-    <lst name="engine">
-      <str name="name">lingo</str>
+                  <lst name="engine">
+                  <str name="name">lingo</str>
 
-      <!-- Class name of a clustering algorithm compatible with the Carrot2 framework.
+                  <!-- Class name of a clustering algorithm compatible with the Carrot2 framework.
+                  Currently available open source algorithms are:
+                  * org.carrot2.clustering.lingo.LingoClusteringAlgorithm
+                  * org.carrot2.clustering.stc.STCClusteringAlgorithm
+                  * org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm
 
-           Currently available open source algorithms are:
-           * org.carrot2.clustering.lingo.LingoClusteringAlgorithm
-           * org.carrot2.clustering.stc.STCClusteringAlgorithm
-           * org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm
-
-           See http://project.carrot2.org/algorithms.html for more information.
+                  See http://project.carrot2.org/algorithms.html for more information.
 
            A commercial algorithm Lingo3G (needs to be installed separately) is defined as:
            * com.carrotsearch.lingo3g.Lingo3GClusteringAlgorithm
-        -->
-      <str name="carrot.algorithm">org.carrot2.clustering.lingo.LingoClusteringAlgorithm</str>
+           -->
+              <str name="carrot.algorithm">org.carrot2.clustering.lingo.LingoClusteringAlgorithm</str>
 
-      <!-- Override location of the clustering algorithm's resources
+              <!-- Override location of the clustering algorithm's resources
            (attribute definitions and lexical resources).
 
            A directory from which to load algorithm-specific stop words,
@@ -1423,8 +1422,8 @@
 
            For an overview of Lingo3G lexical resources, see:
            http://download.carrotsearch.com/lingo3g/manual/#chapter.lexical-resources
-       -->
-      <str name="carrot.resourcesDir">clustering/carrot2</str>
+           -->
+           <str name="carrot.resourcesDir">clustering/carrot2</str>
     </lst>
 
     <!-- An example definition for the STC clustering algorithm. -->
@@ -1680,10 +1679,14 @@
        See more about langId at http://wiki.apache.org/solr/LanguageDetection
     -->
      <updateRequestProcessorChain name="langid">
-       <processor class="org.apache.solr.update.processor.TikaLanguageIdentifierUpdateProcessorFactory">
+       <processor class="org.apache.solr.update.processor.LangDetectLanguageIdentifierUpdateProcessorFactory">
          <str name="langid.fl">title,description</str>
          <str name="langid.langField">language_s</str>
          <str name="langid.fallback">unknown</str>
+         <bool name="langid.map">true</bool>
+         <bool name="langid.map.individual">true</bool>
+         <bool name="langid.map.keepOrig">true</bool>
+         <str name="langid.whitelist">en,fr,de,el,it,es,tr,ca,pt,sv,no,ga,fi,da,nl,ru,ro,cz,bg</str>
        </processor>
        <processor class="solr.LogUpdateProcessorFactory" />
        <processor class="solr.RunUpdateProcessorFactory" />
@@ -1799,7 +1802,8 @@
        <int name="value">5</int>
      </transformer>
 
-     If you want the user to still be able to change it with _value:something_ use this:
+     If you want the user to still be able to change it  Error getting file length for [segments_1]
+with _value:something_ use this:
      <transformer name="mytrans3" class="org.apache.solr.response.transform.ValueAugmenterFactory" >
        <double name="defaultValue">5</double>
      </transformer>

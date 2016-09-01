@@ -51,6 +51,9 @@
       <Parameter name="solr.onlyOriginal">
         <![CDATA[false]]>
       </Parameter>
+      <Parameter name="solr.commitWithin">
+        <![CDATA[15]]>
+      </Parameter>
     </Storage>
   </Storages>
 

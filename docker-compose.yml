@@ -52,12 +52,12 @@ services:
           - mongodb
 
   solr:
-    image: solr:5.5
+    image: solr:5.5.2
     ports:
       - "8983:8983"
     volumes:
       - ./solr-cores:/opt/solr/server/solr
-    command: bin/solr -m 2g -f
+    command: bin/solr -m 4g -f
     environment:
       LOG4J_PROPS: /opt/solr/server/solr/log4j.properties
     networks:

@@ -201,7 +201,7 @@ class SocialMediaWrapper {
                     }
 
                     if(!isset( $page['username'])) {
-                        $page['username'] = "";
+                        $page['username'] = $page['name'];
                     }
 
                     return $page;

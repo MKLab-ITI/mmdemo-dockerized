@@ -218,10 +218,14 @@ class MongoDAO {
     }
 
 
-    public function getUserCollections($uid, $pageNumber=null, $nPerPage=null) {
+    public function getUserCollections($uid, $status=null, $pageNumber=null, $nPerPage=null) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 
         $query = array("ownerId" => $uid);
+
+        if($status != null && ($status==='stopped' || $status==='running')) {
+            $query['status'] = $status;
+        }
 
         $cursor = $mongoCollection->find($query)->sort(array("creationDate"=>-1));
 		if($pageNumber != null && $nPerPage != null) {

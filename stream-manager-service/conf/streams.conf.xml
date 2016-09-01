@@ -1,83 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configuration>
-	<Inputs>
-		<Input id="feeds">
-			<Parameter name="mongo.host"><![CDATA[mongodb]]></Parameter>
-  			<Parameter name="mongo.database"><![CDATA[Demo]]></Parameter>
-			<Parameter name="redis.host"><![CDATA[redis]]></Parameter>
-		</Input>
-	</Inputs>
+  <Inputs>
+    <Input id="feeds">
+      <Parameter name="mongo.host">
+        <![CDATA[mongodb]]>
+      </Parameter>
+      <Parameter name="mongo.database">
+        <![CDATA[Demo]]>
+      </Parameter>
+      <Parameter name="redis.host">
+        <![CDATA[redis]]>
+      </Parameter>
+    </Input>
+  </Inputs>
 
-	<Storages>
-  	<!-- Mongodb storage configuration  -->
-	<Storage id="Mongodb">
-  		<Parameter name="Classpath"><![CDATA[gr.iti.mklab.sfc.storages.MongoDbStorage]]></Parameter>
-  		<Parameter name="mongodb.host"><![CDATA[mongodb]]></Parameter>
-  		<Parameter name="mongodb.database"><![CDATA[Demo]]></Parameter>
-	</Storage>
+  <Storages>
+    <!-- Mongodb storage configuration  -->
+    <Storage id="Mongodb">
+      <Parameter name="Classpath">
+        <![CDATA[gr.iti.mklab.sfc.storages.MongoDbStorage]]>
+      </Parameter>
+      <Parameter name="mongodb.host">
+        <![CDATA[mongodb]]>
+      </Parameter>
+      <Parameter name="mongodb.database">
+        <![CDATA[Demo]]>
+      </Parameter>
+    </Storage>
 
-      	<!-- Solr storage configuaration -->
-      	<Storage id="Solr">
-          	<Parameter name="Classpath"><![CDATA[gr.iti.mklab.sfc.storages.SolrStorage]]></Parameter>
-          	<Parameter name="solr.hostname"><![CDATA[http://solr:8983]]></Parameter>
-           	<Parameter name="solr.service"><![CDATA[solr]]></Parameter>
-        	<Parameter name="solr.items.collection"><![CDATA[Items]]></Parameter>
-         	<Parameter name="solr.mediaitems.collection"><![CDATA[MediaItems]]></Parameter>
-        	<Parameter name="solr.webpages.collection"><![CDATA[WebPages]]></Parameter>
-       		<Parameter name="solr.onlyOriginal"><![CDATA[false]]></Parameter>
-   		</Storage>
-  	</Storages>
+    <!-- Solr storage configuaration -->
+    <Storage id="Solr">
+      <Parameter name="Classpath">
+        <![CDATA[gr.iti.mklab.sfc.storages.SolrStorage]]>
+      </Parameter>
+      <Parameter name="solr.hostname">
+        <![CDATA[http://solr:8983]]>
+      </Parameter>
+      <Parameter name="solr.service">
+        <![CDATA[solr]]>
+      </Parameter>
+      <Parameter name="solr.items.collection">
+        <![CDATA[Items]]>
+      </Parameter>
+      <Parameter name="solr.mediaitems.collection">
+        <![CDATA[MediaItems]]>
+      </Parameter>
+      <Parameter name="solr.webpages.collection">
+        <![CDATA[WebPages]]>
+      </Parameter>
+      <Parameter name="solr.onlyOriginal">
+        <![CDATA[false]]>
+      </Parameter>
+      <Parameter name="solr.commitWithin">
+        <![CDATA[15]]>
+      </Parameter>
+    </Storage>
+  </Storages>
 
- 	<Filters>
-    		<!-- Filter that discards Items with short text -->
-    		<Filter id="LengthFilter">
-       			<Parameter name="Classpath"><![CDATA[gr.iti.mklab.sfc.filters.LengthItemFilter]]></Parameter>
-         		<Parameter name="length"><![CDATA[10]]></Parameter>
-      		</Filter>
-    		<Filter id="TagsFilter">
-       			<Parameter name="Classpath"><![CDATA[gr.iti.mklab.sfc.filters.TagsItemFilter]]></Parameter>
-         		<Parameter name="maxTags"><![CDATA[5]]></Parameter>
-      		</Filter>
-   	</Filters>
+  <Filters>
+    <!-- Filter that discards Items with short text -->
+    <Filter id="LengthFilter">
+      <Parameter name="Classpath">
+        <![CDATA[gr.iti.mklab.sfc.filters.LengthItemFilter]]>
+      </Parameter>
+      <Parameter name="length">
+        <![CDATA[15]]>
+      </Parameter>
+    </Filter>
+    <Filter id="TagsFilter">
+      <Parameter name="Classpath">
+        <![CDATA[gr.iti.mklab.sfc.filters.TagsItemFilter]]>
+      </Parameter>
+      <Parameter name="maxTags">
+        <![CDATA[5]]>
+      </Parameter>
+    </Filter>
+		<Filter id="SwearFilter">
+      <Parameter name="Classpath">
+        <![CDATA[gr.iti.mklab.sfc.filters.SwearItemFilter]]>
+      </Parameter>
+    </Filter>
+		<Filter id="UrlsFilter">
+			<Parameter name="Classpath">
+				<![CDATA[gr.iti.mklab.sfc.filters.UrlItemFilter]]>
+			</Parameter>
+			<Parameter name="maxUrls">
+				<![CDATA[4]]>
+			</Parameter>
+		</Filter>
+		<Filter id="TokensFilter">
+			<Parameter name="Classpath">
+				<![CDATA[gr.iti.mklab.sfc.filters.TokensItemFilter]]>
+			</Parameter>
+			<Parameter name="minTokens">
+				<![CDATA[6]]>
+			</Parameter>
+		</Filter>
+		TokensItemFilter
 
-   	<Processors>
-		<Processor id="NamedEntitiesDetector">
-         		<Parameter name="Classpath"><![CDATA[gr.iti.mklab.sfc.processors.NamedEntitiesDetector]]></Parameter>
-          		<Parameter name="serializedClassifier"><![CDATA[english.all.3class.distsim.crf.ser.gz]]></Parameter>
-     		</Processor>
-		<!-- LanguageDetector -->
-     		<Processor id="LanguageDetector">
-        		<Parameter name="Classpath"><![CDATA[gr.iti.mklab.sfc.processors.LanguageDetector]]></Parameter>
-          		<Parameter name="profileDirectory"><![CDATA[profiles.sm]]></Parameter>
-    		</Processor>
-	   	<!-- MinHashExtractor -->
-  		<Processor id="MinHashExtractor">
-      		<Parameter name="Classpath"><![CDATA[gr.iti.mklab.sfc.processors.MinHashExtractor]]></Parameter>
-          <Parameter name="minhashNum"><![CDATA[32]]></Parameter>
-					<Parameter name="signatureNum"><![CDATA[128]]></Parameter>
-  		</Processor>
-	</Processors>
+  </Filters>
 
-	<Subscribers>
+  <Processors>
+    <!-- Named Entities Extractor -->
+    <Processor id="NamedEntitiesDetector">
+      <Parameter name="Classpath">
+        <![CDATA[gr.iti.mklab.sfc.processors.NamedEntitiesDetector]]>
+      </Parameter>
+      <Parameter name="serializedClassifier">
+        <![CDATA[english.all.3class.distsim.crf.ser.gz]]>
+      </Parameter>
+    </Processor>
+    <!-- LanguageDetector -->
+    <Processor id="LanguageDetector">
+      <Parameter name="Classpath">
+        <![CDATA[gr.iti.mklab.sfc.processors.LanguageDetector]]>
+      </Parameter>
+      <Parameter name="profileDirectory">
+        <![CDATA[profiles.sm]]>
+      </Parameter>
+    </Processor>
+    <!-- MinHashExtractor -->
+    <Processor id="MinHashExtractor">
+      <Parameter name="Classpath">
+        <![CDATA[gr.iti.mklab.sfc.processors.MinHashExtractor]]>
+      </Parameter>
+      <Parameter name="minhashNum">
+        <![CDATA[32]]>
+      </Parameter>
+      <Parameter name="signatureNum">
+        <![CDATA[128]]>
+      </Parameter>
+    </Processor>
+  </Processors>
 
-	</Subscribers>
+  <Subscribers></Subscribers>
 
-	<Streams>
+  <Streams>
 
-	<!-- Twitter Stream Handler -->
-      	<Stream id="Twitter">
-       		<Parameter name="Classpath">
-           		<![CDATA[gr.iti.mklab.sfc.streams.impl.TwitterStream]]>
-		</Parameter>
-         	<Parameter name="Key"><![CDATA[]]></Parameter>
-         	<Parameter name="Secret"><![CDATA[]]></Parameter>
-         	<Parameter name="AccessToken"><![CDATA[]]></Parameter>
-         	<Parameter name="AccessTokenSecret"><![CDATA[]]></Parameter>
-         	<Parameter name="maxRequests"><![CDATA[180]]></Parameter>
-         	<Parameter name="timeWindow"><![CDATA[15]]></Parameter>
-  	</Stream>
+    <!-- Twitter Stream Handler -->
+    <Stream id="Twitter">
+      <Parameter name="Classpath">
+        <![CDATA[gr.iti.mklab.sfc.streams.impl.TwitterStream]]>
+      </Parameter>
+      <Parameter name="Key">
+        <![CDATA[]]>
+      </Parameter>
+      <Parameter name="Secret">
+        <![CDATA[]]>
+      </Parameter>
+      <Parameter name="AccessToken">
+        <![CDATA[]]>
+      </Parameter>
+      <Parameter name="AccessTokenSecret">
+        <![CDATA[]]>
+      </Parameter>
+      <Parameter name="maxRequests">
+        <![CDATA[180]]>
+      </Parameter>
+      <Parameter name="timeWindow">
+        <![CDATA[15]]>
+      </Parameter>
+    </Stream>
 
-		<!--  Facebook Stream Handler
+    <!--  Facebook Stream Handler
   	<Stream id="Facebook">
       		<Parameter name="Classpath">
       			<![CDATA[gr.iti.mklab.sfc.streams.impl.FacebookStream]]>
@@ -88,7 +173,7 @@
         </Stream>
 				-->
 
-     	<!-- YouTube Handler
+    <!-- YouTube Handler
      	<Stream id="Youtube">
       		<Parameter name="Classpath">
            		<![CDATA[gr.iti.mklab.sfc.streams.impl.YoutubeStream]]>
@@ -100,7 +185,7 @@
   	</Stream>
 		-->
 
-      	<!-- Flickr Stream Handler
+    <!-- Flickr Stream Handler
     	<Stream id="Flickr">
          	<Parameter name="Classpath">
             	<![CDATA[gr.iti.mklab.sfc.streams.impl.FlickrStream]]>
@@ -112,7 +197,7 @@
        	</Stream>
 				-->
 
-      	<!-- Google+ Stream Handler
+    <!-- Google+ Stream Handler
     	<Stream id="GooglePlus">
    			<Parameter name="Classpath">
           		<![CDATA[gr.iti.mklab.sfc.streams.impl.GooglePlusStream]]>
@@ -122,7 +207,7 @@
          	<Parameter name="timeWindow"><![CDATA[15]]></Parameter>
     	</Stream>
 			-->
-      	<!-- Instagram Stream Handler
+    <!-- Instagram Stream Handler
       	<Stream id="Instagram">
           	<Parameter name="Classpath">
             	<![CDATA[gr.iti.mklab.sfc.streams.impl.InstagramStream]]>
@@ -134,7 +219,7 @@
         	<Parameter name="timeWindow"><![CDATA[15]]></Parameter>
   	</Stream>
  	-->
-      	<!-- RSS Stream Handler
+    <!-- RSS Stream Handler
       	<Stream id="RSS">
           	<Parameter name="Classpath">
             		<![CDATA[gr.iti.mklab.sfc.streams.impl.RssStream]]>
@@ -143,5 +228,5 @@
   	</Stream>
       	-->
 
-	</Streams>
+  </Streams>
 </Configuration>

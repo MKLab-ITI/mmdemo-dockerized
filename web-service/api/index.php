@@ -196,6 +196,7 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
     $nPerPage = $request->get('nPerPage')==null ? 20 : $request->get('nPerPage');
 
     $items = array();
+    $results = array();
     if($collectionId != null) {
         $collection = $mongoDAO->getCollection($collectionId);
         if($collection != null) {
@@ -208,17 +209,6 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             // Add filters if available
             $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query);
             $results = $textIndex->searchItems($q, $pageNumber, $nPerPage,  $filters, $sort, $judgements, $unique);
-
-            foreach($results as $result) {
-                $item = $mongoDAO->getItem($result['id']);
-                $item['score'] = $result['score'];
-                if(isset($result['title_hl'])) {
-                    $item['originalTitle'] = $item['title'];
-                    $item['title'] = $result['title_hl'];
-                }
-
-                $items[] = $item;
-            }
         }
     }
     else {
@@ -234,18 +224,21 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
 
             $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null);
             $results = $textIndex->searchItems($query, $pageNumber, $nPerPage,  $filters, $sort, null, $unique);
-
-            foreach($results as $result) {
-                $item = $mongoDAO->getItem($result['id']);
-                $item['score'] = $result['score'];
-                if(isset($result['title_hl'])) {
-                    $item['originalTitle'] = $item['title'];
-                    $item['title'] = $result['title_hl'];
-                }
-
-                $items[] = $item;
-            }
         }
+    }
+
+    foreach($results as $result) {
+        $item = $mongoDAO->getItem($result['id']);
+        $item['score'] = $result['score'];
+        $item['minhash'] = $result['minhash'];
+        $item['cleanTitle'] = $result['cleanTitle'];
+
+        if(isset($result['title_hl'])) {
+            $item['originalTitle'] = $item['title'];
+            $item['title'] = $result['title_hl'];
+        }
+
+        $items[] = $item;
     }
 
     echo json_encode($items);
@@ -747,14 +740,10 @@ $app->get(
 
                 $count = $textIndex->countItems($collectionQuery, $filters);
 
-                $topics[] = array(
-                    'label' => 'All',
-                    'query' => '*',
-                    'score' => 1,
-                    'items' => $count
-                );
+                $topics[] = array('label' => 'All', 'query' => '*', 'score' => 1, 'items' => $count);
 
                 $clusters = $textIndex->getClusters($collectionQuery, $filters, 1000);
+                //$clusters = $textIndex->getMultilingualClusters($collectionQuery, $filters, 1000);
                 foreach($clusters as $cluster) {
                     if($cluster['score'] > 0 && count($cluster['docs']) >= 15) {
                         $topic = array(
@@ -763,6 +752,7 @@ $app->get(
                             'score' => $cluster['score'],
                             'items' => round((count($cluster['docs'])/1000) * $count)
                         );
+
                         $topics[] = $topic;
                     }
                 }

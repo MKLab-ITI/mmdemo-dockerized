@@ -88,7 +88,7 @@ class TextIndex {
         $query->setStart(($pageNumber-1)*$nPerPage);
         $query->setRows($nPerPage);
 
-        $query->setFields(['id', 'score']);
+        $query->setFields(['id', 'score', 'minhash', 'cleanTitle']);
 
         $ids = array();
         try {
@@ -98,7 +98,9 @@ class TextIndex {
             foreach ($resultSet as $document) {
                 $doc = array(
                     'id' => $document['id'],
-                    'score' => $document['score']
+                    'score' => $document['score'],
+                    'minhash' => $document['minhash'],
+                    'cleanTitle' => $document['cleanTitle']
                 );
 
                 if($hlUsed) {
@@ -366,7 +368,7 @@ class TextIndex {
         return array('facet'=>$facets, 'count'=>$resultSet->getNumFound());
     }
 
-    public function get2DFacet($facetField, $q, $filters = array(), $minLat=-90, $maxLat=90, $minLong=-180, $maxLong=180) {
+    public function get2DFacet($facetField, $q, $filters = array(), $minLat=-90, $maxLat=90, $minLong=-180, $maxLong=180, $unique=false) {
 
         // get a select query instance
         $query = $this->client->createSelect();
@@ -378,6 +380,10 @@ class TextIndex {
                 $fq = $filterKey . ':(' . $filterValue . ')';
                 $query->createFilterQuery($filterKey)->setQuery($fq);
             }
+        }
+
+        if($unique) {
+            $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash min=publicationTime}");
         }
 
         // get the facet set component
@@ -527,14 +533,50 @@ class TextIndex {
         }
 
         $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash}");
-
         $query->setRows($rows);
 
         $resultSet = $this->client->execute($query);
 
         $data = $resultSet->getData();
         return $data['clusters'];
+    }
 
+    public function getMultilingualClusters($q, $filters = null, $rows=1000) {
+
+        $clusters = array();
+
+        $languages = $this->getFacet('language_s', $q, $filters, 2, false, null, false);
+        foreach($languages as $language) {
+
+            // get a select query instance
+            $query = $this->client->createSelect();
+            $query->setQuery($q);
+            $query->setHandler('clustering');
+            $query->addParam('clustering.engine', 'lingo');
+
+            $query->addParam('carrot.title', "title_".$language['field']);
+            $query->addParam('carrot.snippet', "description_".$language['field']);
+
+            $query->addSort('score', Solarium\QueryType\Select\Query\Query::SORT_DESC);
+
+            // set filter queries
+            if($filters != null) {
+                foreach($filters as $filterKey => $filterValue) {
+                    $fq = $filterKey . ':(' . $filterValue . ')';
+                    $query->createFilterQuery($filterKey)->setQuery($fq);
+                }
+            }
+
+            $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash}");
+            $query->setRows($rows);
+
+            $resultSet = $this->client->execute($query);
+
+            $data = $resultSet->getData();
+            $clusters = array_merge($clusters, $data['clusters']);
+        }
+
+        return $clusters;
     }
 
     public function getTermVectors($q, $pageNumber=1, $nPerPage=10) {

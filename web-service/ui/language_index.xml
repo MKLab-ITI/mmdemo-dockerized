@@ -240,6 +240,62 @@
         <sp>DETENIDO</sp>
         <ca>INTERROMPUT</ca>
     </translation>
+    <translation id="section4_no_collections_1">
+        <en>Create a</en>
+        <el>Δημιούργησε μια</el>
+        <it>Create a</it>
+        <tr>Create a</tr>
+        <sp>Create a</sp>
+        <ca>Create a</ca>
+    </translation>
+    <translation id="section4_no_collections_2">
+        <en>collection</en>
+        <el>συλλογή</el>
+        <it>collection</it>
+        <tr>collection</tr>
+        <sp>collection</sp>
+        <ca>collection</ca>
+    </translation>
+    <translation id="section4_no_collections_3">
+        <en>now and start exploring Social Media!</en>
+        <el>τώρα και άρχισε να εξευρενείς τα Κοινωνικά Δίκτυα!</el>
+        <it>now and start exploring Social Media!</it>
+        <tr>now and start exploring Social Media!</tr>
+        <sp>now and start exploring Social Media!</sp>
+        <ca>now and start exploring Social Media!</ca>
+    </translation>
+    <translation id="section4_no_stopped_1">
+        <en>You haven't any</en>
+        <el>Δεν έχεις καμμία</el>
+        <it>You haven't any</it>
+        <tr>You haven't any</tr>
+        <sp>You haven't any</sp>
+        <ca>You haven't any</ca>
+    </translation>
+    <translation id="section4_no_stopped_2">
+        <en>stopped</en>
+        <el>σταματημένη</el>
+        <it>stopped</it>
+        <tr>stopped</tr>
+        <sp>stopped</sp>
+        <ca>stopped</ca>
+    </translation>
+    <translation id="section4_no_running_2">
+        <en>running</en>
+        <el>ενεργή</el>
+        <it>running</it>
+        <tr>running</tr>
+        <sp>running</sp>
+        <ca>running</ca>
+    </translation>
+    <translation id="section4_no_stopped_3">
+        <en>collections!</en>
+        <el>συλλογή</el>
+        <it>collections!</it>
+        <tr>collections!</tr>
+        <sp>collections!</sp>
+        <ca>collections!</ca>
+    </translation>
     <translation id="footer_text">
         <en>All rights reserved</en>
         <el>Mε επιφύλαξη παντός δικαιώματος</el>

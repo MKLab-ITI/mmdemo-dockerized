@@ -35,13 +35,13 @@
                 if (!locked) {
                     lockModal();                    
                         modal.css({
-                            'top': $(document).scrollTop() - topOffset,
+                            'top': 150,//$(document).scrollTop() - topOffset,
                             'opacity': 0,
                             'visibility': 'visible'
                         });
                         modalBG.fadeIn(options.animationspeed / 2);
                         modal.delay(options.animationspeed / 2).animate({
-                            "top": $(document).scrollTop() + topMeasure + 'px',
+                            "top":'150px',//$(document).scrollTop() + topMeasure + 'px',
                                 "opacity": 1
                         }, options.animationspeed, unlockModal());                                     
                 }
@@ -55,11 +55,11 @@
                     lockModal();                   
                         modalBG.delay(options.animationspeed).fadeOut(options.animationspeed);
                         modal.animate({
-                            "top": $(document).scrollTop() - topOffset + 'px',
+                            "top":150,// $(document).scrollTop() - topOffset + 'px',
                                 "opacity": 0
                         }, options.animationspeed / 2, function () {
                             modal.css({
-                                'top': topMeasure,
+                                'top': 150,//topMeasure,
                                 'opacity': 1,
                                 'visibility': 'hidden'
                             });

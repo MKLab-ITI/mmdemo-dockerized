@@ -233,7 +233,9 @@
                                                                            src="imgs/instagram-16-black.png"></li>-->
                     </ul>
                 </div>
-                <div id="adv_loading" data-lang="section2_advanced_loading">Please wait, this may take a few seconds...</div>
+                <div id="adv_loading" data-lang="section2_advanced_loading">Please wait, this may take a few
+                    seconds...
+                </div>
                 <div id="user_users_adv">
                     <ul id="users_adv" class="tags"></ul>
                     <p id="no_results" data-lang="section2_no_results">No results for this keyword</p>
@@ -244,6 +246,7 @@
         </div>
     </div>
 </section>
+
 <section class="fourth-section">
     <div class="row">
         <div class="small-12 medium-12 large-12 columns">
@@ -273,8 +276,8 @@
             </div>
         </div>
     </div>
-
 </section>
+
 <section class="fifth-section">
     <div class="row">
         <div class="small-12 medium-12 large-12 columns">
@@ -286,13 +289,22 @@
     </div>
     <div class="row bigWidth">
         <div class="small-12 medium-12 large-12 columns">
+            <div class="no_collections">
+                <h1><span data-lang="section4_no_collections_1">Create a</span> <span class="text_blue"
+                                                                                      data-lang="section4_no_collections_2">collection</span>
+                    <span data-lang="section4_no_collections_3">now and start exploring Social Media!</span></h1>
+
+                <div class="btn_discover" data-lang="menu_discover">Discover</div>
+            </div>
             <div class="controls">
-                <div class="btn_material filter active" data-filter="all" data-lang="section4_filter_all">ALL</div>
-                <div class="btn_material filter" data-filter=".running" data-lang="section4_filter_running">RUNNING
+                <div class="btn_material active" id="all" data-lang="section4_filter_all">ALL</div>
+                <div class="btn_material" id="running" data-lang="section4_filter_running">RUNNING
                 </div>
-                <div class="btn_material filter" data-filter=".stopped" data-lang="section4_filter_stopped">STOPPED
+                <div class="btn_material" id="stopped" data-lang="section4_filter_stopped">STOPPED
                 </div>
             </div>
+            <p class="text_p" id="no_stopped"><span data-lang="section4_no_stopped_1">You haven't any</span> <span style="font-weight: bold;color: #E53D00;" data-lang="section4_no_stopped_2">stopped</span> <span data-lang="section4_no_stopped_3">collections!</span></p>
+            <p class="text_p" id="no_running"><span data-lang="section4_no_stopped_1">You haven't any</span> <span style="font-weight: bold;color: #0A8754;" data-lang="section4_no_running_2">running</span> <span data-lang="section4_no_stopped_3">collections!</span></p>
             <div id="collection_loader">
                 <div class="square_load"></div>
                 <div class="square_load"></div>
@@ -304,7 +316,9 @@
                 <div class="square_load"></div>
                 <div class="square_load square_last"></div>
             </div>
-            <div id="Container" class="container"></div>
+            <div id="Container" class="container">
+                <ul id="tiles"></ul>
+            </div>
         </div>
     </div>
     <div class="well">
@@ -484,9 +498,8 @@
 <script src="js/index/translate.js"></script>
 <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 <script src="js/index/network.js"></script>
-<script src="js/index/jquery.mixit.up.js"></script>
+<script src="js/feed/jquery.wookmark.js"></script>
 <script src="js/index/jquery.waypoints.min.js"></script>
-<script src="js/index/jquery.imagesloaded.js"></script>
 <script src="js/index/jquery.reveal.js"></script>
 <script src="js/index/jquery.twbsPagination.min.js"></script>
 <script src="js/index/various.js"></script>

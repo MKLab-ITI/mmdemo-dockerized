@@ -861,6 +861,9 @@ $('.ff-filter-users_adv').click(function (e) {
 
 $('.stage').click(function (e) {
     if (($('#col_name').text() === "") && ($('#interest').val() === "")) {
+        $('html,body').animate({
+            scrollTop: $(".third-section").offset().top - 100
+        }, 800);
         switch (translation_param) {
             case "en":
                 $('#myModal h1').html("Missing Fields!");
@@ -899,6 +902,9 @@ $('.stage').click(function (e) {
         }
     }
     else if (($('#tags li').length === 0 ) && ($('#users').find('li').length === 0)) {
+        $('html,body').animate({
+            scrollTop: $(".third-section").offset().top - 100
+        }, 800);
         switch (translation_param) {
             case "en":
                 $('#myModal').find('h1').html("Missing Fields!");
@@ -937,111 +943,170 @@ $('.stage').click(function (e) {
         }
     }
     else {
-        if (user_id !== "") {
-            var id = (Math.floor(Math.random() * 90000) + 10000) + user_id + new Date().getTime();
-            if (edit_mode) {
-                id = edit_id;
-            }
-            var title;
-            if ($('#col_name').text() !== "") {
-                title = $('#col_name').text();
-            }
-            else {
-                title = $('#interest').val();
-            }
-            var viewData = {
-                "_id": id,
-                "title": title,
-                "ownerId": user_id,
-                "keywords": [],
-                "accounts": []
-            };
-            var $tagsli = $('#tags').find('li');
-            for (var i = 0; i < $tagsli.length; i++) {
-                viewData.keywords.push({"keyword": $tagsli.eq(i).find('a').attr('id')});
-            }
-            var $usersli = $('#users').find('li');
-            for (var i = 0; i < $usersli.length; i++) {
-                var text = $usersli.eq(i).find('a').attr('id');
-                var text_arr = text.split('------');
-                viewData.accounts.push({
-                    "username": text_arr[0],
-                    "source": text_arr[1],
-                    "id": text_arr[2],
-                    "name": text_arr[3]
-                });
-            }
-            var temp = JSON.stringify(viewData);
-            var url = api_folder + 'collection';
-            if (edit_mode) {
-                edit_mode = false;
-                url = api_folder + 'collection/edit';
-                $('#edit_col_heading').hide();
-                $('#start_col_heading').show();
-            }
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: temp,
-                success: function (json) {
-                    $('html,body').animate({
-                        scrollTop: $(".fifth-section").offset().top - 50
-                    }, 800);
-                    get_collections(1);
-                    $('#col_name,#tags,#users').empty();
-                    $('#interest').prop('disabled', false);
-                    $('.user_input').val("").blur();
-
-                },
-                error: function (e) {
-                    switch (translation_param) {
-                        case "en":
-                            $('#myModal h1').html("Oops. Something went wrong!");
-                            $('#myModal p').html("Your collection has not be submitted. Please try again.");
-                            $('#myModal').reveal();
-                            break;
-                        case "el":
-                            $('#myModal h1').html("Κάτι πήγε στραβά!");
-                            $('#myModal p').html("Η συλλογή δεν υποβλήθηκε. Προσπάθησε ξανά.");
-                            $('#myModal').reveal();
-                            break;
-                        case "it":
-                            $('#myModal h1').html("Si e' verificato un problema!");
-                            $('#myModal p').html("La tua raccolta non è stata visualizzata. Prova ancora.");
-                            $('#myModal').reveal();
-                            break;
-                        case "tr":
-                            $('#myModal h1').html("Birşeyler yanlış gitti!");
-                            $('#myModal p').html("Koleksiyonunuz gönderilemedi. Lütfen tekrar deneyiniz.");
-                            $('#myModal').reveal();
-                            break;
-                        case "sp":
-                            $('#myModal h1').html("Algo salió mal!");
-                            $('#myModal p').html("Su colección no ha sido presentada . Por favor, inténtelo de nuevo.");
-                            $('#myModal').reveal();
-                            break;
-                        case "ca":
-                            $('#myModal h1').html("S'ha produït un error!");
-                            $('#myModal p').html("El teu recull no s'ha registrat correctament. Si us plau prova-ho una altra vegada.");
-                            $('#myModal').reveal();
-                            break;
-                        default:
-                            $('#myModal h1').html("Oops. Something went wrong.");
-                            $('#myModal p').html("Your collection has not be submitted. Please try again.");
-                            $('#myModal').reveal();
-                    }
-                }
+        var id = (Math.floor(Math.random() * 90000) + 10000) + user_id + new Date().getTime();
+        if (edit_mode) {
+            id = edit_id;
+        }
+        var title;
+        if ($('#col_name').text() !== "") {
+            title = $('#col_name').text();
+        }
+        else {
+            title = $('#interest').val();
+        }
+        var viewData = {
+            "_id": id,
+            "title": title,
+            "ownerId": user_id,
+            "keywords": [],
+            "accounts": []
+        };
+        var $tagsli = $('#tags').find('li');
+        for (var i = 0; i < $tagsli.length; i++) {
+            viewData.keywords.push({"keyword": $tagsli.eq(i).find('a').attr('id')});
+        }
+        var $usersli = $('#users').find('li');
+        for (var i = 0; i < $usersli.length; i++) {
+            var text = $usersli.eq(i).find('a').attr('id');
+            var text_arr = text.split('------');
+            viewData.accounts.push({
+                "username": text_arr[0],
+                "source": text_arr[1],
+                "id": text_arr[2],
+                "name": text_arr[3]
             });
         }
+        var temp = JSON.stringify(viewData);
+        var url = api_folder + 'collection';
+        if (edit_mode) {
+            edit_mode = false;
+            url = api_folder + 'collection/edit';
+            $('#edit_col_heading').hide();
+            $('#start_col_heading').show();
+        }
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: temp,
+            success: function () {
+                $('html,body').animate({
+                    scrollTop: $(".fifth-section").offset().top - 50
+                }, 800);
+                pagination = 1;
+                $('.controls').find('.btn_material').removeClass('active');
+                $('#all').addClass('active');
+                get_collections(true);
+                $('#col_name,#tags,#users').empty();
+                $('#interest,.user_input').prop('disabled', false);
+                $('.user_input').val("").blur();
+            },
+            error: function (e) {
+                switch (translation_param) {
+                    case "en":
+                        $('#myModal h1').html("Oops. Something went wrong!");
+                        $('#myModal p').html("Your collection has not be submitted. Please try again.");
+                        $('#myModal').reveal();
+                        break;
+                    case "el":
+                        $('#myModal h1').html("Κάτι πήγε στραβά!");
+                        $('#myModal p').html("Η συλλογή δεν υποβλήθηκε. Προσπάθησε ξανά.");
+                        $('#myModal').reveal();
+                        break;
+                    case "it":
+                        $('#myModal h1').html("Si e' verificato un problema!");
+                        $('#myModal p').html("La tua raccolta non è stata visualizzata. Prova ancora.");
+                        $('#myModal').reveal();
+                        break;
+                    case "tr":
+                        $('#myModal h1').html("Birşeyler yanlış gitti!");
+                        $('#myModal p').html("Koleksiyonunuz gönderilemedi. Lütfen tekrar deneyiniz.");
+                        $('#myModal').reveal();
+                        break;
+                    case "sp":
+                        $('#myModal h1').html("Algo salió mal!");
+                        $('#myModal p').html("Su colección no ha sido presentada . Por favor, inténtelo de nuevo.");
+                        $('#myModal').reveal();
+                        break;
+                    case "ca":
+                        $('#myModal h1').html("S'ha produït un error!");
+                        $('#myModal p').html("El teu recull no s'ha registrat correctament. Si us plau prova-ho una altra vegada.");
+                        $('#myModal').reveal();
+                        break;
+                    default:
+                        $('#myModal h1').html("Oops. Something went wrong.");
+                        $('#myModal p').html("Your collection has not be submitted. Please try again.");
+                        $('#myModal').reveal();
+                }
+            }
+        });
     }
 });
-
+$("#Container").on("click", ".restart_icon", function () {
+    var $this = $(this);
+    $.ajax({
+        url: api_folder + 'collection/start/' + $this.siblings('.delete_icon').attr('id'),
+        type: 'GET',
+        success: function () {
+            if ($('.controls').find('.active').attr('id') === "all") {
+                $this.siblings('.details').removeClass('stop_color').addClass('run_color');
+                $this.removeClass('restart_icon').addClass('stop_icon');
+            }
+            else {
+                if (($('.collection').length) === 1 && (pagination > 1)) {
+                    pagination--;
+                }
+                get_collections(true);
+            }
+        },
+        error: function (e) {
+            switch (translation_param) {
+                case "en":
+                    $('#myModal h1').html("Oops. Something went wrong!");
+                    $('#myModal p').html("We couldn't delete this collection. Please try again.");
+                    $('#myModal').reveal();
+                    break;
+                case "el":
+                    $('#myModal h1').html("Κάτι πήγε στραβά!");
+                    $('#myModal p').html("Η συλλογή δεν διαγράφηκε. Προσπάθησε ξανά.");
+                    $('#myModal').reveal();
+                    break;
+                case "it":
+                    $('#myModal h1').html("Si e' verificato un problema!");
+                    $('#myModal p').html("Non e' stato possibile eliminare questa raccolta. Prova ancora.");
+                    $('#myModal').reveal();
+                    break;
+                case "tr":
+                    $('#myModal h1').html("Birşeyler yanlış gitti!");
+                    $('#myModal p').html("Bu koleksiyonu silinemiyor. Lütfen tekrar deneyiniz.");
+                    $('#myModal').reveal();
+                    break;
+                case "sp":
+                    $('#myModal h1').html("Algo salió mal!");
+                    $('#myModal p').html("No hemos podido eliminar esta colección . Por favor, inténtelo de nuevo.");
+                    $('#myModal').reveal();
+                    break;
+                case "ca":
+                    $('#myModal h1').html("S'ha produït un error!");
+                    $('#myModal p').html("Aquest recull no s'ha pogut esborrar. Si us plau prova-ho una altra vegada.");
+                    $('#myModal').reveal();
+                    break;
+                default:
+                    $('#myModal h1').html("Oops. Something went wrong!");
+                    $('#myModal p').html("We couldn't delete this collection. Please try again");
+                    $('#myModal').reveal();
+            }
+        }
+    });
+});
 $("#Container").on("click", ".delete_icon", function () {
     $.ajax({
         url: api_folder + 'collection/delete/' + $(this).attr('id'),
         type: 'GET',
         success: function () {
-            get_collections(1);
+            if ($('.collection').length === 1) {
+                pagination--;
+            }
+            get_collections(true);
         },
         error: function (e) {
             switch (translation_param) {
@@ -1084,16 +1149,21 @@ $("#Container").on("click", ".delete_icon", function () {
     });
 });
 $("#Container").on("click", ".stop_icon", function () {
-
     var $this = $(this);
-
     $.ajax({
         type: 'GET',
         url: api_folder + 'collection/stop/' + $this.siblings('.delete_icon').attr('id'),
         success: function () {
-            $this.closest('.mix').removeClass('running').addClass('stopped');
-            $this.siblings('.details').removeClass('run_color').addClass('stop_color');
-            $this.remove();
+            if ($('.controls').find('.active').attr('id') === "all") {
+                $this.siblings('.details').removeClass('run_color').addClass('stop_color');
+                $this.removeClass('stop_icon').addClass('restart_icon');
+            }
+            else {
+                if (($('.collection').length) === 1 && (pagination > 1)) {
+                    pagination--;
+                }
+                get_collections(true);
+            }
         },
         error: function (e) {
             switch (translation_param) {
@@ -1180,108 +1250,213 @@ $("#Container").on("click", ".overlay", function () {
 });
 
 var pagination = 1;
-
-
 if (user_id != "") {
-    get_collections(0);
-    $.ajax({
-        type: 'GET',
-        url: api_folder + 'collection/' + user_id + '?nPerPage=1&pageNumber=1',
-        dataType: "json",
-        success: function (json) {
-            $('#pagination-demo').twbsPagination({
-                totalPages: Math.ceil(json.count / 6),
-                visiblePages: "5",
-                initiateStartPageClick: false,
-                onPageClick: function (event, page) {
-                    pagination = page;
-                    $('#Container').empty();
-                    $("#collection_loader").show();
-                    get_collections(1);
-                }
-            });
-        },
-        error: function (e) {
-            $("#collection_loader").hide();
-            $(".well").remove();
-        }
-    });
+    get_collections(true);
 }
 else {
-    $("#collection_loader").hide();
-    $(".well").remove();
+    switch (translation_param) {
+        case "en":
+            $('#myModal h1').html("Oops. Something went wrong!");
+            $('#myModal p').html("You have to define a user id.");
+            $('#myModal').reveal();
+            break;
+        case "el":
+            $('#myModal h1').html("Κάτι πήγε στραβά!");
+            $('#myModal p').html("Πρέπει να προσδιορίσετε ένα μοναδικό αναγνωριστικό για τον χρήστη.");
+            $('#myModal').reveal();
+            break;
+        case "it":
+            $('#myModal h1').html("Si e' verificato un problema!");
+            $('#myModal p').html("You have to define a user id.");
+            $('#myModal').reveal();
+            break;
+        case "tr":
+            $('#myModal h1').html("Birşeyler yanlış gitti!");
+            $('#myModal p').html("You have to define a user id.");
+            $('#myModal').reveal();
+            break;
+        case "sp":
+            $('#myModal h1').html("Algo salió mal!");
+            $('#myModal p').html("You have to define a user id.");
+            $('#myModal').reveal();
+            break;
+        case "ca":
+            $('#myModal h1').html("S'ha produït un error!");
+            $('#myModal p').html("You have to define a user id.");
+            $('#myModal').reveal();
+            break;
+        default:
+            $('#myModal h1').html("Oops. Something went wrong!");
+            $('#myModal p').html("You have to define a user id.");
+            $('#myModal').reveal();
+    }
+    $('.fifth-section,.fourth-section,.third-section,#mainmenu,#discover').remove();
+    $('.second-section').css('min-height', $(window).height() - $('.sixth-section').height());
 }
 
 function get_collections(flag) {
-    var $Container = $('#Container');
-    $Container.empty();
+    $('.no_collections,#no_stopped,#no_running').hide();
+    $('.controls,#collection_loader,#Container,.well').show();
+    var $tiles = $('#tiles');
+    var $paginationdemo = $('#pagination-demo');
+    $tiles.empty();
     $("#collection_loader").show();
+    var status_param = $('.controls').find('.active').attr('id');
     $.ajax({
         type: 'GET',
-        url: api_folder + 'collection/' + user_id + '?nPerPage=6&pageNumber=' + pagination,
+        url: api_folder + 'collection/' + user_id + '?nPerPage=6&pageNumber=' + pagination + "&status=" + status_param,
         dataType: "json",
         success: function (json) {
-            var data = json.collections;
-            for (var i = 0; i < data.length; i++) {
-                var id = data[i]._id;
-                var status = data[i].status;
-                var title = data[i].title;
-                var stop_icon = '<div class="stop_icon"></div>';
-                var edit_icon = '<div class="edit_icon"></div>';
-                var color_state = "run_color";
-                if (status === "stopped") {
-                    stop_icon = '';
-                    color_state = "stop_color";
-                }
-                var bg_img = "background-image: url('" + data[i].mediaUrl + "'),url('imgs/placeholder.png');";
-
-                var keywords = data[i].keywords;
-                var tags = "";
-                for (var k = 0; k < keywords.length; k++) {
-                    tags = tags + keywords[k].keyword + ", ";
-                }
-                if (tags !== "") {
-                    tags = tags.slice(0, -2);
-                }
-                else {
-                    tags = "-";
-                }
-
-                var accounts = data[i].accounts;
-                var users = "";
-                for (var k = 0; k < accounts.length; k++) {
-                    users = users + accounts[k].name + ", ";
-                }
-                if (users !== "") {
-                    users = users.slice(0, -2);
-                }
-                else {
-                    users = "-";
-                }
-
-                var items = nFormatter(data[i].items);
-                var a = new Date(data[i].creationDate);
-                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                var year = a.getUTCFullYear();
-                var month = months[a.getUTCMonth()];
-                var day = a.getUTCDate();
-                var date = day + ' ' + month + ' ' + year;
-
-
-                var element = '<div class="mix ' + status + '" ><div class="tiles_li"><div class="outer"><div class="delete_icon" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20" style="float: left;margin-right: 5px;"><p class="tags_p">' + tags + '</p></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20" style="float: left;margin-right: 5px;"><p class="tags_p">' + users + '</p></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></div>';
-                $Container.append(element);
-            }
-            $Container.imagesLoaded(function () {
-                $Container.mixItUp();
-                $("#collection_loader").hide();
+            if (json.count > 0) {
                 if (flag) {
-                    var $btn_material = $('.btn_material');
-                    $btn_material.eq(2).click();
-                    $btn_material.eq(1).click();
+                    if ($paginationdemo.data("twbs-pagination")) {
+                        $paginationdemo.twbsPagination('destroy');
+                    }
+                    $paginationdemo.twbsPagination({
+                        totalPages: Math.ceil(json.count / 6),
+                        visiblePages: "5",
+                        initiateStartPageClick: false,
+                        startPage: pagination,
+                        onPageClick: function (event, page) {
+                            pagination = page;
+                            get_collections(false);
+                        }
+                    });
                 }
-            });
+                var data = json.collections;
+                for (var i = 0; i < data.length; i++) {
+                    var id = data[i]._id;
+                    var status = data[i].status;
+                    var title = data[i].title;
+                    var stop_icon = '<div class="stop_icon"></div>';
+                    var edit_icon = '<div class="edit_icon"></div>';
+                    var color_state = "run_color";
+                    if (status === "stopped") {
+                        stop_icon = '<div class="restart_icon"></div>';
+                        color_state = "stop_color";
+                    }
+                    var bg_img = "background-image:url('imgs/placeholder.png');";
+                    if (data[i].hasOwnProperty('mediaUrl')) {
+                        bg_img = "background-image: url('" + data[i].mediaUrl + "'),url('imgs/placeholder.png');";
+                    }
+
+                    var keywords = data[i].keywords;
+                    var tags = "";
+                    for (var k = 0; k < keywords.length; k++) {
+                        tags = tags + keywords[k].keyword + ", ";
+                    }
+                    if (tags !== "") {
+                        tags = tags.slice(0, -2);
+                    }
+                    else {
+                        tags = "-";
+                    }
+
+                    var accounts = data[i].accounts;
+                    var users = "";
+                    var user_icon = "";
+                    for (var k = 0; k < accounts.length; k++) {
+                        switch (accounts[k].source) {
+                            case "Twitter":
+                                user_icon = "imgs/twitter-16-gray.png";
+                                break;
+                            case "GooglePlus":
+                                user_icon = "imgs/google+-16-gray.png";
+                                break;
+                            case "Facebook":
+                                user_icon = "imgs/facebook-16-share.png";
+                                break;
+                            case "Web":
+                                user_icon = "imgs/globe-16-color.png";
+                                break;
+                            case "Youtube":
+                                user_icon = "imgs/youtube-16-gray.png";
+                                break;
+                        }
+                        users = users + '<p style="white-space: pre;display: inline-block;margin: 0;">' + accounts[k].name + '<img class="user_source" src="' + user_icon + '">, </p>';
+                    }
+                    if (users !== "") {
+                        users = users.slice(0, -6);
+                        users = users + '</p>';
+                    }
+                    else {
+                        users = "-";
+                    }
+
+                    var items = nFormatter(data[i].items);
+                    var a = new Date(data[i].creationDate);
+                    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    var year = a.getUTCFullYear();
+                    var month = months[a.getUTCMonth()];
+                    var day = a.getUTCDate();
+                    var date = day + ' ' + month + ' ' + year;
+
+                    var element = '<li class="collection"><div class="tiles_li"><div class="outer"><div class="delete_icon" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20" style="float: left;margin-right: 5px;"><div class="tags_p">' + tags + '</div></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20" style="float: left;margin-right: 5px;"><div class="tags_p">' + users + '</div></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></li>';
+                    $tiles.append(element);
+                    var options = {
+                        autoResize: true,
+                        container: $('#Container'),
+                        offset: 15,
+                        itemWidth: 340,
+                        outerOffset: 0
+                    };
+                    var handler = $tiles.find('li');
+                    handler.wookmark(options);
+                    $("#collection_loader").hide();
+                }
+            }
+            else {
+                switch (status_param) {
+                    case "all" :
+                        $('.no_collections').show();
+                        $('.controls,#collection_loader,#Container,.well').hide();
+                        break;
+                    case "running" :
+                        $.ajax({
+                            type: 'GET',
+                            url: api_folder + 'collection/' + user_id + '?nPerPage=1&pageNumber=1&status=all',
+                            dataType: "json",
+                            success: function (json) {
+                                if (json.count === 0) {
+                                    $('.no_collections').show();
+                                    $('.controls,#collection_loader,#Container,.well').hide();
+                                }
+                                else {
+                                    $('#collection_loader,.well').hide();
+                                    $('#no_running').show();
+                                }
+                            },
+                            error: function (e) {
+                                $('.no_collections').show();
+                                $('.controls,#collection_loader,#Container,.well').hide();
+                            }
+                        });
+                        break;
+                    case "stopped" :
+                        $.ajax({
+                            type: 'GET',
+                            url: api_folder + 'collection/' + user_id + '?nPerPage=1&pageNumber=1&status=all',
+                            dataType: "json",
+                            success: function (json) {
+                                if (json.count === 0) {
+                                    $('.no_collections').show();
+                                    $('.controls,#collection_loader,#Container,.well').hide();
+                                }
+                                else {
+                                    $('#collection_loader,.well').hide();
+                                    $('#no_stopped').show();
+                                }
+                            },
+                            error: function (e) {
+                                $('.no_collections').show();
+                                $('.controls,#collection_loader,#Container,.well').hide();
+                            }
+                        });
+                }
+            }
         },
         error: function (e) {
+            $("#collection_loader,.well,.controls .btn_material").hide();
             switch (translation_param) {
                 case "en":
                     $('#myModal h1').html("Oops. Something went wrong!");
@@ -1322,6 +1497,19 @@ function get_collections(flag) {
     });
 }
 
+$('.controls').find('.btn_material').click(function () {
+    if (!($(this).hasClass(('active')))) {
+        $('.controls').find('.btn_material').removeClass('active');
+        $(this).addClass('active');
+        pagination = 1;
+        get_collections(true);
+    }
+});
+$('.btn_discover').click(function () {
+    $('html,body').animate({
+        scrollTop: $(".third-section").offset().top - 100
+    }, 800);
+});
 $("#mainmenu li").eq(0).click(function () {
     $('html,body').animate({
         scrollTop: $(".third-section").offset().top - 100

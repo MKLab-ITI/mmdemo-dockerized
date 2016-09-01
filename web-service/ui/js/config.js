@@ -1,6 +1,6 @@
-var api_folder="/api/";
+//var api_folder="/api/";
 /*Don't change it unless you really know what you are doing*/
-
+var api_folder = "http://160.40.50.207/STEPAPI/";
 var project_logo = "";
 /*leave blank for default or insert project logo like project_logo = "http://step-mklab.iti.gr/imgs/logo.png"; */
 

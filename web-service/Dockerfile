@@ -35,6 +35,8 @@ ENV APACHE_PID_FILE /var/run/apache2.pid
 ADD api /var/www/site/api
 ADD ui /var/www/site/ui
 ADD rockmongo /var/www/site/rockmongo
+ADD .htaccess /var/www/site/
+ADD .htpasswd /var/www/site/rockmongo
 
 RUN cd /var/www/site/api && \
     composer install

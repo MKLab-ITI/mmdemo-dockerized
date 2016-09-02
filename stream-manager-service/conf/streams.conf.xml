@@ -96,8 +96,6 @@
 				<![CDATA[6]]>
 			</Parameter>
 		</Filter>
-		TokensItemFilter
-
   </Filters>
 
   <Processors>

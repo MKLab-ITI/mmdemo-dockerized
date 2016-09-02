@@ -1039,6 +1039,15 @@ $app->get(
 )->name("get_collection");
 
 
+$app->get(
+    '/relevance/:cid',
+    function($cid) use ($mongoDAO, $app) {
+        $judgements = $mongoDAO->getRelevanceJudgements($cid);
+
+        echo json_encode($judgements);
+    }
+);
+
 $app->post(
     '/relevance',
     function() use ($mongoDAO, $app) {
@@ -1050,21 +1059,28 @@ $app->post(
         $relevance = $request->get('relevance');    // relevance judgment [1(not relevant) - 5(relevant)]
 
         if(!$mongoDAO->collectionExists($cid)) {
+            echo json_encode(array('msg' => "Collection $cid does not exist."));
             return;
         }
 
         if(!$mongoDAO->itemExists($iid)) {
+            echo json_encode(array('msg' => "Item $iid does not exist."));
             return;
         }
 
-        if($relevance <= 5 && $relevance <= 1) {
+        if($relevance <= 5 && $relevance >= 1) {
             $mongoDAO->insertRelevanceJudgement($uid, $cid, $iid, $relevance);
+            echo json_encode(array('msg' => "Relevance judgement $relevance for $iid in collection $cid inserted from user $uid"));
+            return;
         }
-        else if($relevance < 1) {
+        else if($relevance == 0 ) {
             $operation = array('$addToSet' => array('itemsToExclude' => $iid));
             $mongoDAO->updateCollection($cid, $operation);
+            echo json_encode(array('msg' => "User $uid excluded item $iid from collection $cid"));
+            return;
         }
 
+        echo json_encode(array('msg' => "Relevance judgement for $iid in collection $cid inserted from user $uid failed!"));
     }
 )->name("item_relevance");
 

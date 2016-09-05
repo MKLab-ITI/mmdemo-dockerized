@@ -1275,8 +1275,7 @@ $app->get('/rss/validate',
             $xml = new SimpleXMLElement($content);
             $channel = $xml->channel;
             $source = array(
-                //'id' => hash('sha256', $rssLink),
-                'id' => $host,
+                'id' => hash('sha256', $rssLink),
                 'username' => $rssLink,
                 'name' => ((string) $channel->title),
                 'description' => ((string) $channel->description),

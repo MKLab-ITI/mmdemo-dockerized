@@ -1286,13 +1286,13 @@ $app->get('/rss/validate',
 
             echo json_encode(array(
                 'valid' => true,
-                'source' => $source
+                'rss' => $source
             ));
         }
         catch(Exception $e) {
             echo json_encode(array(
                 'valid' => false,
-                'source' => array()
+                'rss' => array()
             ));
         }
 

@@ -457,7 +457,7 @@
 <script id="result-template_youtube" type="text/x-handlebars-template">
     <div class="container_users">
         <div style="display:none">{{id}}</div>
-        <div style="display:none"></div>
+        <div style="display:none">{{name}}</div>
         <div class="background"
              style="background-image: url('imgs/youtube-bg.jpg');background-position: 0 -30px;left:0"></div>
         <div class="content">
@@ -468,6 +468,7 @@
             <div class="text">
                 <h4>{{emptyString name}}</h4>
 
+                <p>{{emptyString username}}</p>
                 <p class="description_user">{{trimString description}}</p>
             </div>
         </div>

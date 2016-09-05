@@ -809,7 +809,7 @@ $("#discover").click(function () {
 
 $('.ff-filter-users').click(function (e) {
     e.preventDefault();
-    $('.input-field:gt(1):lt(6)').hide();
+    $('.input-field:gt(1):lt(5)').hide();
     $('#' + $(this).attr('id') + '_input').css('display', 'inline-block');
     $('.ff-filter-users').addClass('close').removeClass('open');
     $(this).removeClass('close').addClass('open');

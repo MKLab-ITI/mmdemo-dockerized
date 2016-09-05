@@ -1250,6 +1250,58 @@ $app->get('/detect/users',
     }
 )->name("detect_users");
 
+/**
+ *  GET /detect/users
+ */
+$app->get('/rss/validate',
+    function() use ($app) {
+        $request = $app->request();
+        $rssLink = $request->get('rss');
+
+
+        try {
+
+            $ch = curl_init();
+            $timeout = 5;
+            curl_setopt($ch, CURLOPT_URL, $rssLink);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+            $content = curl_exec($ch);
+            curl_close($ch);
+
+            $sourceUrl = parse_url($rssLink);
+            $host = $sourceUrl['host'];
+
+            $xml = new SimpleXMLElement($content);
+            $channel = $xml->channel;
+            $source = array(
+                //'id' => hash('sha256', $rssLink),
+                'id' => $host,
+                'username' => $rssLink,
+                'name' => ((string) $channel->title),
+                'description' => ((string) $channel->description),
+                'domain' => $host,
+                'source' => 'Web'
+            );
+
+            echo json_encode(array(
+                'valid' => true,
+                'source' => $source
+            ));
+        }
+        catch(Exception $e) {
+            echo json_encode(array(
+                'valid' => false,
+                'source' => array()
+            ));
+        }
+
+
+
+
+    }
+);
+
 try {
   $app->run();
 }

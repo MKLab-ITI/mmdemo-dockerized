@@ -176,7 +176,7 @@ class SocialMediaWrapper {
                 return array();
             }
 
-            $fields = 'id,name,username,description,link,cover,picture,likes,is_verified';
+            $fields = 'id,name,username,description,link,cover,picture,engagement,is_verified';
             $response = $this->fb->get("/search?q=$q&fields=$fields&type=page&limit=20");
 
             $body = $response->getDecodedBody();
@@ -195,6 +195,9 @@ class SocialMediaWrapper {
 
                     $page['verified'] = $page['is_verified'];
                     unset($page['is_verified']);
+
+                    $page['likes'] = $page['engagement']['count'];
+                    unset($page['engagement']);
 
                     if(!isset( $page['description'])) {
                         $page['description'] = "";
@@ -305,7 +308,7 @@ class SocialMediaWrapper {
             $url = $result['url'];
             $uName = str_replace("https://plus.google.com/+", "", $url);
             if(0 === strpos($uName, 'http')) {
-                $uName = "";
+                $uName = $result['displayName'];
             }
 
             $users[]= array(
@@ -332,7 +335,7 @@ class SocialMediaWrapper {
 
         $user = array(
             'id' => $result['id'],
-            'username' => $result['nickname'],
+            'username' => isset($result['nickname'])?$result['nickname']:$result['displayName'],
             'name' => $result['displayName'],
             'link' => $result['url'],
             'source' => 'GooglePlus',

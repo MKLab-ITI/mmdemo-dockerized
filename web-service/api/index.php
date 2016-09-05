@@ -1300,7 +1300,7 @@ $app->get('/rss/validate',
 
 
     }
-);
+)->name("rss_validation");
 
 try {
   $app->run();

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<translations>
+    <translation id="menu_discover">
+        <en>Discover</en>
+        <el>Ανακάλυψε</el>
+        <it>Scopri</it>
+        <tr>Keşfet</tr>
+        <sp>Descubrir</sp>
+        <ca>Descobrir</ca>
+    </translation>
+    <translation id="menu_browse">
+        <en>Browse</en>
+        <el>Εξερεύνησε</el>
+        <it>Esplora</it>
+        <tr>Gözat</tr>
+        <sp>Navegar</sp>
+        <ca>Navega</ca>
+    </translation>
+    <translation id="section1_search">
+        <en>Search </en>
+        <el>Αναζήτησε </el>
+        <it>Cerca </it>
+        <tr>Ara </tr>
+        <sp>Buscar </sp>
+        <ca>Cerca </ca>
+    </translation>
+    <translation id="section1_monitor">
+        <en>Monitor </en>
+        <el>Ακολούθησε&amp;nbsp;</el>
+        <it>Tieni&amp;nbsp;d'occhio&amp;nbsp;</it>
+        <tr>Ekran </tr>
+        <sp>Seguir </sp>
+        <ca>Monitoritza </ca>
+    </translation>
+    <translation id="section1_networks">
+        <en>in Social Networks</en>
+        <el>στα Κοινωνικά Δίκτυα</el>
+        <it>nei Social Networks</it>
+        <tr>Sosyal ağların içinde</tr>
+        <sp>en las redes sociales</sp>
+        <ca>a les xarxes socials</ca>
+    </translation>
+    <translation id="section1_description">
+        <en>Track &amp; inform about the latest environmental issues</en>
+        <el>Ανίχνευσε τα τελευταία περιβαλλοντικά θέματα</el>
+        <it>Resta aggiornato sulle ultime questioni ambientali</it>
+        <tr>Güncel çevresel sorunları takip et &amp; bildir</tr>
+        <sp>Realizar un seguimiento de informar sobre las últimas cuestiones ambientales</sp>
+        <ca>Fer seguiment &amp; i informar sobre les qüestions mediambientals més recents</ca>
+    </translation>
+    <translation id="section1_description_2">
+        <en>real time</en>
+        <el>άμεσα</el>
+        <it>tempo reale (Contenuto immediato)</it>
+        <tr>gerçek zaman</tr>
+        <sp>tiempo real</sp>
+        <ca>temps real</ca>
+    </translation>
+    <translation id="section2_title_start">
+        <en>What do you want to</en>
+        <el>Τι θα ήθελες να</el>
+        <it>What do you want to</it>
+        <tr>What do you want to</tr>
+        <sp>What do you want to</sp>
+        <ca>What do you want to</ca>
+    </translation>
+    <translation id="section2_title_start_2">
+        <en>monitor?</en>
+        <el>παρακολουθήσεις?</el>
+        <it>monitor?</it>
+        <tr>monitor?</tr>
+        <sp>monitor?</sp>
+        <ca>monitor?</ca>
+    </translation>
+    <translation id="section2_title_edit">
+        <en>Improve your collection: </en>
+        <el>Βελτίωσε την συλλογή σου: </el>
+        <it>Translation Required</it>
+        <tr>Translation Required</tr>
+        <sp>Translation Required</sp>
+        <ca>Translation Required </ca>
+    </translation>
+    <translation id="section2_input_collection">
+        <en>Collection Name</en>
+        <el>Όνομα Συλλογής</el>
+        <it>Nome della raccolta</it>
+        <tr>Koleksiyon adı</tr>
+        <sp>Nombre de la colección</sp>
+        <ca>Nom del recull</ca>
+    </translation>
+    <translation id="section2_input_tags">
+        <en>Place your Tags</en>
+        <el>Δώσε τις ετικέτες</el>
+        <it>Inserisci I tuoi tag</it>
+        <tr>Etiket ekle</tr>
+        <sp>Coloque las etiquetas</sp>
+        <ca>Col·loca  els teus Tags</ca>
+    </translation>
+    <translation id="section2_input_users_keyword">
+        <en>Place a keyword</en>
+        <el>Δώσε μια λέξη-κλειδί</el>
+        <it>Place a keyword</it>
+        <tr>Place a keyword</tr>
+        <sp>Place a keyword</sp>
+        <ca>Place a keyword</ca>
+    </translation>
+    <translation id="section2_examples">
+        <en>Examples:</en>
+        <el>Παραδείγματα:</el>
+        <it>Esempi:</it>
+        <tr>Örnekler:</tr>
+        <sp>Ejemplos:</sp>
+        <ca>Exemples:</ca>
+    </translation>
+    <translation id="section2_input_Twitter">
+        <en>Place your Users from Twitter</en>
+        <el>Δώσε τους χρήστες από Twitter</el>
+        <it>Inserisci I tuoi utenti da Twitter</it>
+        <tr>Twitter'dan kullanıcı ekle</tr>
+        <sp>Añada sus usuarios de Twitter</sp>
+        <ca>Afegeix  els teus usuaris de Twitter</ca>
+    </translation>
+    <translation id="section2_input_GooglePlus">
+        <en>Place your Users from GooglePlus</en>
+        <el>Δώσε τους χρήστες από GooglePlus</el>
+        <it>Inserisci I tuoi utenti da GooglePlus</it>
+        <tr>GooglePlus'tan kullanıcı ekle</tr>
+        <sp>Añada sus usuarios de GooglePlus</sp>
+        <ca>Afegeix els teus usuaris de GooglePlus</ca>
+    </translation>
+    <translation id="section2_input_Facebook">
+        <en>Place your Users from Facebook</en>
+        <el>Δώσε τους χρήστες από Facebook</el>
+        <it>Inserisci I tuoi utenti da Facebook</it>
+        <tr>Facebook'tan kullanıcı ekle</tr>
+        <sp>Añada sus usuarios de Facebook</sp>
+        <ca>Afegeix  els teus usuaris de Facebook</ca>
+    </translation>
+    <translation id="section2_input_Instagram">
+        <en>Place your Users from Instagram</en>
+        <el>Δώσε τους χρήστες από Instagram</el>
+        <it>Inserisci I tuoi utenti da Instagram</it>
+        <tr>Instagram'dan kullanıcı ekle</tr>
+        <sp>Añada sus usuarios de Instagram</sp>
+        <ca>Afegeix els teus usuaris de Instagram</ca>
+    </translation>
+    <translation id="section2_input_Youtube">
+        <en>Place your Users from Youtube</en>
+        <el>Δώσε τους χρήστες από Youtube</el>
+        <it>Inserisci I tuoi utenti da Youtube</it>
+        <tr>Youtube'dan kullanıcı ekle</tr>
+        <sp>Añada sus usuarios de Youtube</sp>
+        <ca>Afegeix els teus usuaris de Youtube</ca>
+    </translation>
+    <translation id="section2_input_RSS">
+        <en>Place your RSS</en>
+        <el>Δώσε τα RSS</el>
+        <it>Inserisci I tuoi RSS</it>
+        <tr>RSS'i ekle</tr>
+        <sp>Añada el RSS</sp>
+        <ca>Afegeix el teu RSS</ca>
+    </translation>
+    <translation id="section2_done_button">
+        <en>DONE</en>
+        <el>ΤΕΛΟΣ</el>
+        <it>DONE</it>
+        <tr>DONE</tr>
+        <sp>DONE</sp>
+        <ca>DONE</ca>
+    </translation>
+    <translation id="section2_adv_search">
+        <en>Advanced User Search</en>
+        <el>Εξελιγμένη αναζήτηση χρηστών</el>
+        <it>Advanced User Search</it>
+        <tr>Advanced User Search</tr>
+        <sp>Advanced User Search</sp>
+        <ca>Advanced User Search</ca>
+    </translation>
+    <translation id="section2_advanced_loading">
+        <en>Please wait, this may take a few seconds...</en>
+        <el>Παρακαλώ περιμένετε μερικά δευτερόλεπτα...</el>
+        <it>Please wait, this may take a few seconds...</it>
+        <tr>Please wait, this may take a few seconds...</tr>
+        <sp>Please wait, this may take a few seconds...</sp>
+        <ca>Please wait, this may take a few seconds...</ca>
+    </translation>
+    <translation id="section2_no_results">
+        <en>No results for this keyword</en>
+        <el>Κανένα αποτέλεσμα για αυτήν την λέξη</el>
+        <it>No results for this keyword</it>
+        <tr>No results for this keyword</tr>
+        <sp>No results for this keyword</sp>
+        <ca>No results for this keyword</ca>
+    </translation>
+    <translation id="section3_title">
+        <en>All set? Hit the Launch Button</en>
+        <el>Όλα έτοιμα? Πάτα την εκκίνηση</el>
+        <it>Tutto pronto? Premi il pulsante di avvio</it>
+        <tr>Hazır mısın? Başlatma butonuna tıkla</tr>
+        <sp>¿Todo listo? Pulse el botón de inicio</sp>
+        <ca>Tot preparat? Prem el botó d'inici</ca>
+    </translation>
+    <translation id="section4_title">
+        <en>Collections</en>
+        <el>Συλλογές</el>
+        <it>Raccolte</it>
+        <tr>Koleksiyonlar</tr>
+        <sp>Colecciones</sp>
+        <ca>Reculls/recopilacions</ca>
+    </translation>
+    <translation id="section4_description">
+        <en>Browse all created collections, Inform on latest trending topics</en>
+        <el>Εξερεύνησε όλες τις συλλογές, Ενημερώσου για τα πιο δημοφιλή θέματα</el>
+        <it>Esplora tutte le raccolte create, informati sui piu' recenti e popolari argomenti</it>
+        <tr>Oluşturulan tüm koleksiyonlara gözat, son çıkan trend konular bildir</tr>
+        <sp>Navegar por todas las colecciones creadas , Informar sobre los últimos temas de tendencias</sp>
+        <ca>Navega per tots els reculls creats, Informa sobre els trending topics més recents</ca>
+    </translation>
+    <translation id="section4_filter_all">
+        <en>ALL</en>
+        <el>ΟΛΕΣ</el>
+        <it>TUTTO</it>
+        <tr>HEPSİ</tr>
+        <sp>TODAS</sp>
+        <ca>TOT</ca>
+    </translation>
+    <translation id="section4_filter_running">
+        <en>RUNNING</en>
+        <el>ΕΝΕΡΓΕΣ</el>
+        <it>ATTIVO</it>
+        <tr>ÇALIŞIYOR</tr>
+        <sp>CORRIENDO</sp>
+        <ca>ACTIU</ca>
+    </translation>
+    <translation id="section4_filter_stopped">
+        <en>STOPPED</en>
+        <el>ΣΤΑΜΑΤΗΜΕΝΕΣ</el>
+        <it>INTERROTTO</it>
+        <tr>DURDU</tr>
+        <sp>DETENIDO</sp>
+        <ca>INTERROMPUT</ca>
+    </translation>
+    <translation id="section4_no_collections_1">
+        <en>Create a</en>
+        <el>Δημιούργησε μια</el>
+        <it>Create a</it>
+        <tr>Create a</tr>
+        <sp>Create a</sp>
+        <ca>Create a</ca>
+    </translation>
+    <translation id="section4_no_collections_2">
+        <en>collection</en>
+        <el>συλλογή</el>
+        <it>collection</it>
+        <tr>collection</tr>
+        <sp>collection</sp>
+        <ca>collection</ca>
+    </translation>
+    <translation id="section4_no_collections_3">
+        <en>now and start exploring Social Media!</en>
+        <el>τώρα και άρχισε να εξευρενείς τα Κοινωνικά Δίκτυα!</el>
+        <it>now and start exploring Social Media!</it>
+        <tr>now and start exploring Social Media!</tr>
+        <sp>now and start exploring Social Media!</sp>
+        <ca>now and start exploring Social Media!</ca>
+    </translation>
+    <translation id="section4_no_stopped_1">
+        <en>You haven't any</en>
+        <el>Δεν έχεις καμμία</el>
+        <it>You haven't any</it>
+        <tr>You haven't any</tr>
+        <sp>You haven't any</sp>
+        <ca>You haven't any</ca>
+    </translation>
+    <translation id="section4_no_stopped_2">
+        <en>stopped</en>
+        <el>σταματημένη</el>
+        <it>stopped</it>
+        <tr>stopped</tr>
+        <sp>stopped</sp>
+        <ca>stopped</ca>
+    </translation>
+    <translation id="section4_no_running_2">
+        <en>running</en>
+        <el>ενεργή</el>
+        <it>running</it>
+        <tr>running</tr>
+        <sp>running</sp>
+        <ca>running</ca>
+    </translation>
+    <translation id="section4_no_stopped_3">
+        <en>collections!</en>
+        <el>συλλογή</el>
+        <it>collections!</it>
+        <tr>collections!</tr>
+        <sp>collections!</sp>
+        <ca>collections!</ca>
+    </translation>
+    <translation id="footer_text">
+        <en>All rights reserved</en>
+        <el>Mε επιφύλαξη παντός δικαιώματος</el>
+        <it>Tutti I diritti riservati</it>
+        <tr>Tüm hakları saklıdır</tr>
+        <sp>Todos los derechos reservados</sp>
+        <ca>Tots els drets reservats</ca>
+    </translation>
+</translations>

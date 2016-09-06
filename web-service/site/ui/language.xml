@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<translations>
+    <translation id="slider_title">
+        <en>Discover how media is shared in Social Networks...</en>
+        <el>Ανακάλυψε πως διαμοιράζονται τα μέσα στα Κοινωνικά Δίκτυα...</el>
+        <it>Scopri come il media è condiviso sui social network...</it>
+        <tr>Medyanın sosyal ağlarda nasıl paylaşıldığını keşfet...</tr>
+        <sp>Descubre cómo los medios se comparte en las redes sociales...</sp>
+        <ca>Descubre cómo los medios se comparte en las redes sociales...</ca>
+    </translation>
+    <translation id="slider_search">
+        <en>SEARCH</en>
+        <el>ΑΝΑΖΗΤΗΣΗ</el>
+        <it>CERCA</it>
+        <tr>ARA</tr>
+        <sp>BUSCAR</sp>
+        <ca>CERCA</ca>
+    </translation>
+    <translation id="slider_settings">
+        <en>SETTINGS</en>
+        <el>ΡΥΘΜΙΣΕΙΣ</el>
+        <it>IMPOSTAZIONI</it>
+        <tr>AYARLAR</tr>
+        <sp>AJUSTES</sp>
+        <ca>AJUSTOS</ca>
+    </translation>
+    <translation id="slider_settings_language">
+        <en>LANGUAGE</en>
+        <el>ΓΛΩΣΣΑ</el>
+        <it>LINGUA</it>
+        <tr>DİL</tr>
+        <sp>IDIOMA</sp>
+        <ca>IDIOMA</ca>
+    </translation>
+    <translation id="slider_settings_topics">
+        <en>TOPICS</en>
+        <el>ΘΕΜΑΤΑ</el>
+        <it>TEMI</it>
+        <tr>KONULAR</tr>
+        <sp>TEMAS</sp>
+        <ca>TEMES</ca>
+    </translation>
+    <translation id="slider_settings_original">
+        <en>ORIGINAL</en>
+        <el>ΠΗΓΗ</el>
+        <it>ORIGINALE</it>
+        <tr>ORİJİNAL</tr>
+        <sp>ORIGINAL</sp>
+        <ca>ORIGINAL</ca>
+    </translation>
+    <translation id="slider_settings_type">
+        <en>TYPE</en>
+        <el>ΤΥΠΟΣ</el>
+        <it>TIPO</it>
+        <tr>TÜR</tr>
+        <sp>TIPO</sp>
+        <ca>TIPUS</ca>
+    </translation>
+    <translation id="slider_settings_date">
+        <en>DATE</en>
+        <el>ΗΜΕΡΟΜΗΝΙΑ</el>
+        <it>DATA</it>
+        <tr>TARİH</tr>
+        <sp>FECHA</sp>
+        <ca>DATA</ca>
+    </translation>
+    <translation id="slider_settings_sort">
+        <en>SORT</en>
+        <el>ΤΑΞΙΝΟΜΗΣΗ</el>
+        <it>ORDINA</it>
+        <tr>SIRALA</tr>
+        <sp>ORDENAR</sp>
+        <ca>CLASSIFICA</ca>
+    </translation>
+    <translation id="settings_all">
+        <en>All</en>
+        <el>Όλα</el>
+        <it>Tutto</it>
+        <tr>TÜMÜ</tr>
+        <sp>Todas</sp>
+        <ca>TOT/S</ca>
+    </translation>
+    <translation id="settings_original">
+        <en>Original</en>
+        <el>Δημοσίευση</el>
+        <it>Originale</it>
+        <tr>Orijinal</tr>
+        <sp>Original</sp>
+        <ca>Original</ca>
+    </translation>
+    <translation id="settings_share">
+        <en>Share</en>
+        <el>Μεταδημοσίευση</el>
+        <it>Condividi</it>
+        <tr>Paylaş</tr>
+        <sp>Compartir</sp>
+        <ca>Comparteix</ca>
+    </translation>
+    <translation id="settings_media">
+        <en>Media</en>
+        <el>Πολυμέσα</el>
+        <it>Media</it>
+        <tr>Medya</tr>
+        <sp>Medios de comunicación</sp>
+        <ca>Media o mitjans de comunicació</ca>
+    </translation>
+    <translation id="settings_text">
+        <en>Text</en>
+        <el>Κείμενο</el>
+        <it>Testo</it>
+        <tr>Metin</tr>
+        <sp>Texto</sp>
+        <ca>Text</ca>
+    </translation>
+    <translation id="settings_recency">
+        <en>Recency</en>
+        <el>Χρονικά</el>
+        <it>Recente</it>
+        <tr>Yenilik</tr>
+        <sp>Frescura</sp>
+        <ca>Recent</ca>
+    </translation>
+    <translation id="settings_popularity">
+        <en>Popularity</en>
+        <el>Διασημότητα</el>
+        <it>Popolarità</it>
+        <tr>Popülerlik</tr>
+        <sp>Popularidad</sp>
+        <ca>Popularitat</ca>
+    </translation>
+    <translation id="settings_relevance">
+        <en>Relevance</en>
+        <el>Σχετικότητα</el>
+        <it>Rilevanza</it>
+        <tr>Benzerlik</tr>
+        <sp>Pertinencia</sp>
+        <ca>Rellevància</ca>
+    </translation>
+    <translation id="view_feed">
+        <en>Feed</en>
+        <el>Ροή</el>
+        <it>Feed</it>
+        <tr>Feed</tr>
+        <sp>Alimentar</sp>
+        <ca>Feed</ca>
+    </translation>
+    <translation id="view_dashboard">
+        <en>Dashboard</en>
+        <el>Πίνακας</el>
+        <it>Bacheca</it>
+        <tr>Panel</tr>
+        <sp>Tablero</sp>
+        <ca>Escriptori</ca>
+    </translation>
+    <translation id="help">
+        <en>HELP</en>
+        <el>ΒΟΗΘΕΙΑ</el>
+        <it>AIUTO</it>
+        <tr>YARDIM</tr>
+        <sp>AYUDA</sp>
+        <ca>AJUDA</ca>
+    </translation>
+    <translation id="loading">
+        <en>Loading images, please wait.....</en>
+        <el>Φόρτωση εικόνων, παρακαλώ περιμένετε.....</el>
+        <it>Caricamento immagini, attendi per favore.....</it>
+        <tr>Resimler yükleniyor, lütfen bekleyiniz.....</tr>
+        <sp>Carga de imágenes, por favor espere.....</sp>
+        <ca>Carregant imatges, si us plau espera...</ca>
+    </translation>
+
+
+    <translation id="statistics_posts">
+        <en>Posts made</en>
+        <el>Δημοσιεύσεις</el>
+        <it>Post</it>
+        <tr>Yapılan gönderiler</tr>
+        <sp>Mensajes</sp>
+        <ca>Comentaris realizats</ca>
+    </translation>
+    <translation id="statistics_users">
+        <en>Users Talking</en>
+        <el>Χρήστες</el>
+        <it>Utenti</it>
+        <tr>Kullanıcılar konuşuyor</tr>
+        <sp>Los usuarios que hablan</sp>
+        <ca>Usuaris connectats</ca>
+    </translation>
+    <translation id="statistics_reached">
+        <en>Users Reached</en>
+        <el>Θέαση</el>
+        <it>Consultati</it>
+        <tr>Ulaşılan kullanıcılar</tr>
+        <sp>Usuarios ha sobrepasado</sp>
+        <ca>Usuaris involucrats</ca>
+    </translation>
+    <translation id="statistics_endorsements">
+        <en>Endorsements</en>
+        <el>Φιλοφρονήσεις</el>
+        <it>Approvati</it>
+        <tr>Onaylananlar</tr>
+        <sp>Atenciones</sp>
+        <ca>Adhesions</ca>
+    </translation>
+    <translation id="social_mix">
+        <en>Social Mix</en>
+        <el>Κοινωνικά Δίκτυα</el>
+        <it>Reti sociali</it>
+        <tr>Sosyal Karışım</tr>
+        <sp>Mezcla Social</sp>
+        <ca>Xarxes socials</ca>
+    </translation>
+    <translation id="timeline">
+        <en>Timeline</en>
+        <el>Χρονοδιάγραμμα</el>
+        <it>Orario</it>
+        <tr>Zaman tüneli</tr>
+        <sp>Calendario</sp>
+        <ca>Termini</ca>
+    </translation>
+    <translation id="timeline_per">
+        <en>Per</en>
+        <el>Ανά</el>
+        <it>Per</it>
+        <tr>Her</tr>
+        <sp>Por</sp>
+        <ca>Per</ca>
+    </translation>
+    <translation id="timeline_hour">
+        <en>HOUR</en>
+        <el>ΩΡΑ</el>
+        <it>ORA</it>
+        <tr>SAAT</tr>
+        <sp>HORA</sp>
+        <ca>HORA</ca>
+    </translation>
+    <translation id="timeline_day">
+        <en>DAY</en>
+        <el>ΗΜΕΡΑ</el>
+        <it>GIORNO</it>
+        <tr>GÜN</tr>
+        <sp>DÍA</sp>
+        <ca>DÍA</ca>
+    </translation>
+    <translation id="timeline_week">
+        <en>WEEK</en>
+        <el>ΕΒΔΟΜΑΔΑ</el>
+        <it>SETTIMANA</it>
+        <tr>HAFTA</tr>
+        <sp>SEMANA</sp>
+        <ca>SETMANA</ca>
+    </translation>
+    <translation id="heatmap">
+        <en>Heatmap</en>
+        <el>Χάρτης Σημείων</el>
+        <it>Mappa di calore web</it>
+        <tr>Isı haritası</tr>
+        <sp>Mapa de puntos</sp>
+        <ca>Mapa web</ca>
+    </translation>
+    <translation id="users_location">
+        <en>Users Locations</en>
+        <el>Τοποθεσία Xρηστών</el>
+        <it>Posizione dell'utente</it>
+        <tr>Konum</tr>
+        <sp>Ubicación del usuario</sp>
+        <ca>Localització dels usuaris</ca>
+    </translation>
+    <translation id="active_users">
+        <en>Active Users</en>
+        <el>Ενεργοί Χρήστες</el>
+        <it>Utenti attivi</it>
+        <tr>Aktif kullanıcılar</tr>
+        <sp>Los usuarios activos</sp>
+        <ca>Usuaris actius</ca>
+    </translation>
+    <translation id="entities">
+        <en>Entities</en>
+        <el>Οντότητες</el>
+        <it>Entità</it>
+        <tr>Girişler</tr>
+        <sp>Entidades</sp>
+        <ca>Entitats</ca>
+    </translation>
+    <translation id="top_number">
+        <en>Top</en>
+        <el>Πρώτοι</el>
+        <it>Top</it>
+        <tr>Yukarı</tr>
+        <sp>Parte superior</sp>
+        <ca>Top</ca>
+    </translation>
+    <translation id="entities_sort">
+        <en>Sort By</en>
+        <el>Ανά</el>
+        <it>Ordina per</it>
+        <tr>Sırala</tr>
+        <sp>Ordenar por</sp>
+        <ca>Ordenat per</ca>
+    </translation>
+    <translation id="entities_sort_type">
+        <en>TYPE</en>
+        <el>ΤΥΠΟ</el>
+        <it>TIPO</it>
+        <tr>TÜR</tr>
+        <sp>TIPO</sp>
+        <ca>TIPUS</ca>
+    </translation>
+    <translation id="entities_sort_frequency">
+        <en>FREQUENCY</en>
+        <el>ΣΥΧΝΟΤΗΤΑ</el>
+        <it>FREQUENZA</it>
+        <tr>SIKLIK</tr>
+        <sp>FRECUENCIA</sp>
+        <ca>FREQUENCIA</ca>
+    </translation>
+    <translation id="entity_person">
+        <en>PERSON</en>
+        <el>ATOMO</el>
+        <it>PERSONA</it>
+        <tr>KİŞİ</tr>
+        <sp>PERSONA</sp>
+        <ca>PERSONA</ca>
+    </translation>
+    <translation id="entity_tag">
+        <en>TAG</en>
+        <el>ETIKETA</el>
+        <it>TAG</it>
+        <tr>ETİKET</tr>
+        <sp>ETIQUETA</sp>
+        <ca>ETIQUETA</ca>
+    </translation>
+    <translation id="entity_organization">
+        <en>ORGANIZATION</en>
+        <el>ΟΡΓΑΝΙΣΜΟΣ</el>
+        <it>ORGANIZZAZIONE</it>
+        <tr>ORGANİZASYON</tr>
+        <sp>ORGANIZACIÓN</sp>
+        <ca>ORGANITZACIO</ca>
+    </translation>
+    <translation id="entity_animate">
+        <en>Animate</en>
+        <el>Χρονοδιάγραμμα</el>
+        <it>Animazione</it>
+        <tr>Animasyon</tr>
+        <sp>Animar</sp>
+        <ca>Animació</ca>
+    </translation>
+</translations>

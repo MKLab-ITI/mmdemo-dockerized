@@ -1274,13 +1274,16 @@ $app->get('/rss/validate',
 
             $xml = new SimpleXMLElement($content);
             $channel = $xml->channel;
+
+            $title = (string) $channel->title;
+
             $source = array(
-                'id' => hash('sha256', $rssLink),
+                'id' => "RSS#".hash('sha256', $rssLink),
                 'username' => $rssLink,
-                'name' => ((string) $channel->title),
+                'name' => ($title==null || $title=="") ? $host : "$title ($host)",
                 'description' => ((string) $channel->description),
                 'domain' => $host,
-                'source' => 'Web'
+                'source' => 'RSS'
             );
 
             echo json_encode(array(

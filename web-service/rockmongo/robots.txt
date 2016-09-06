@@ -1,6 +1,0 @@
-#
-# robots.txt for RockMongo
-#
-
-User-agent: *
-Disallow: /

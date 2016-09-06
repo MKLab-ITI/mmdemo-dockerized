@@ -70,7 +70,7 @@ services:
       context: web-service
     image: web
     volumes:
-      - ./web-service:/var/www/site
+      - ./web-service/site:/var/www/site
     ports:
       - "80:80"
     networks:
@@ -86,6 +86,8 @@ services:
     build:
       context: stream-manager-service
     image: streammanager
+    volumes:
+      - ./stream-manager-service/conf:/stream_manager/conf
     networks:
       common_network:
         aliases:

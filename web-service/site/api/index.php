@@ -1272,7 +1272,7 @@ $app->get('/rss/validate',
             $host = $sourceUrl['host'];
 
             $xml = new SimpleXMLElement($content);
-            $channel = $xml->channel;
+            $channel = isset($xml->channel) ? $xml->channel : $xml;
 
             $title = (string) $channel->title;
 
@@ -1296,10 +1296,6 @@ $app->get('/rss/validate',
                 'rss' => array()
             ));
         }
-
-
-
-
     }
 )->name("rss_validation");
 

@@ -14,6 +14,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN a2enmod php5
 RUN a2enmod rewrite
 RUN php5enmod mcrypt
+RUN a2enmod headers
 
 RUN pecl install mongo
 
@@ -32,11 +33,7 @@ ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_PID_FILE /var/run/apache2.pid
 
 # Copy site into place.
-ADD api /var/www/site/api
-ADD ui /var/www/site/ui
-ADD rockmongo /var/www/site/rockmongo
-ADD .htaccess /var/www/site/
-ADD .htpasswd /var/www/site/rockmongo
+ADD site /var/www/site
 
 RUN cd /var/www/site/api && \
     composer install

@@ -1108,6 +1108,9 @@ $("#Container").on("click", ".delete_icon", function () {
         success: function () {
             if ($('.collection').length === 1) {
                 pagination--;
+                if (pagination === 0) {
+                    pagination = 1;
+                }
             }
             get_collections(true);
         },

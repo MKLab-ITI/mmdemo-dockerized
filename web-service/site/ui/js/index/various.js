@@ -115,7 +115,7 @@ function search_adv_user() {
             url: api_folder + 'detect/users?q=' + $('#user_advanced').val() + '&source=' + source,
             type: 'GET',
             success: function (json) {
-                if ($user_adv.find("li").length === 15) {
+                if ($user_adv.find("li").length === 100) {
                     $user_images.addClass('users_full');
                 }
                 for (var i = 0; i < json.length; i++) {
@@ -186,7 +186,7 @@ function search_adv_user() {
 }
 function addtag(tag) {
     var flag = 1;
-    var count = 100 - $("#tags li").length;
+    var count = 20 - $("#tags li").length;
     if (count > 0) {
         var tag_name = tag;
         if (tag == null) {
@@ -222,7 +222,7 @@ function addtag(tag) {
                 a.appendChild(img);
 
                 if (flag) {
-                    if ($("#tags li").length === 100) {
+                    if ($("#tags li").length === 20) {
                         $("#hashtag").prop('disabled', true);
                     }
                 }
@@ -237,7 +237,7 @@ $("#user_Web").keyup(function (e) {
 });
 function adduser($id, $name, $user, $social) {
     var flag = 1;
-    var count = 15 - $("#users li").length;
+    var count = 100 - $("#users li").length;
     if (count > 0) {
         var tag_name = $user;
         if ($user == null) {
@@ -304,7 +304,7 @@ function adduser($id, $name, $user, $social) {
             a.appendChild(img);
 
             if (flag) {
-                if ($("#users li").length === 15) {
+                if ($("#users li").length === 100) {
                     $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', true);
                 }
             }
@@ -314,7 +314,7 @@ function adduser($id, $name, $user, $social) {
 }
 
 function adduser_adv($username, $social, $id, $name) {
-    var count = 15 - $("#users_adv li").length;
+    var count = 100 - $("#users_adv li").length;
     if (count > 0) {
         var tag = document.getElementById('users_adv');
         var li = document.createElement('li');
@@ -358,7 +358,7 @@ function adduser_adv($username, $social, $id, $name) {
         img.setAttribute('src', 'imgs/delete.png');
         img.setAttribute('class', 'delete');
         a.appendChild(img);
-        if ($("#users_adv li").length === 15) {
+        if ($("#users_adv li").length === 100) {
             $('#users_images').addClass('users_full');
         }
     }
@@ -426,13 +426,16 @@ $("#search_icon_3").click(function () {
 });
 
 $("#examples_1").find("li").click(function () {
-    if ($("#tags li").length < 100) {
+    $("label[for='hashtag']").removeClass('active');
+    $('#hash_icon').attr('src', 'imgs/hash-gray.png');
+    $('#search_icon_1').attr('src', 'imgs/search-gray.png');
+    if ($("#tags li").length < 20) {
         $("#hashtag").val($(this).html());
         addtag();
     }
 });
 $("#example_1").click(function () {
-    if ($("#users li").length < 15) {
+    if ($("#users li").length < 100) {
         var flag = 1;
         $('#users li').children().each(function () {
             if ($(this).attr('id') === "Greenpeace------Twitter------3459051------Greenpeace") {
@@ -463,14 +466,14 @@ $("#example_1").click(function () {
         a.appendChild(img);
 
         if (flag) {
-            if ($("#users li").length === 15) {
+            if ($("#users li").length === 100) {
                 $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', true);
             }
         }
     }
 });
 $("#example_5").click(function () {
-    if ($("#users_adv li").length < 15) {
+    if ($("#users_adv li").length < 100) {
         var flag = 1;
         $('#users_adv li').children().each(function () {
             if ($(this).attr('id') === "Greenpeace------Twitter------3459051------Greenpeace") {
@@ -501,7 +504,7 @@ $("#example_5").click(function () {
         a.appendChild(img);
 
         if (flag) {
-            if ($("#users_adv li").length === 15) {
+            if ($("#users_adv li").length === 100) {
                 $('#users_images').addClass('users_full');
             }
         }
@@ -516,7 +519,7 @@ $(".example_1").hover(
 );
 
 $("#example_2").click(function () {
-    if ($("#users li").length < 15) {
+    if ($("#users li").length < 100) {
         var flag = 1;
         $('#users li').children().each(function () {
             if ($(this).attr('id') === "WWF------GooglePlus------114176126428866920097------WWF") {
@@ -547,14 +550,14 @@ $("#example_2").click(function () {
         a.appendChild(img);
 
         if (flag) {
-            if ($("#users li").length === 15) {
+            if ($("#users li").length === 100) {
                 $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', true);
             }
         }
     }
 });
 $("#example_6").click(function () {
-    if ($("#users_adv li").length < 15) {
+    if ($("#users_adv li").length < 100) {
         var flag = 1;
         $('#users_adv li').children().each(function () {
             if ($(this).attr('id') === "WWF------GooglePlus------114176126428866920097------WWF") {
@@ -585,7 +588,7 @@ $("#example_6").click(function () {
         a.appendChild(img);
 
         if (flag) {
-            if ($("#users_adv li").length === 15) {
+            if ($("#users_adv li").length === 100) {
                 $('#users_images').addClass('users_full');
             }
         }
@@ -600,7 +603,7 @@ $(".example_2").hover(
 );
 
 $("#example_3").click(function () {
-    if ($("#users li").length < 15) {
+    if ($("#users li").length < 100) {
         var flag = 1;
         $('#users li').children().each(function () {
             if ($(this).attr('id') === "CapeNature1------Facebook------137406639638143------CapeNature") {
@@ -631,14 +634,14 @@ $("#example_3").click(function () {
         a.appendChild(img);
 
         if (flag) {
-            if ($("#users li").length === 15) {
+            if ($("#users li").length === 100) {
                 $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', true);
             }
         }
     }
 });
 $("#example_7").click(function () {
-    if ($("#users_adv li").length < 15) {
+    if ($("#users_adv li").length < 100) {
         var flag = 1;
         $('#users_adv li').children().each(function () {
             if ($(this).attr('id') === "CapeNature1------Facebook------137406639638143------CapeNature") {
@@ -669,7 +672,7 @@ $("#example_7").click(function () {
         a.appendChild(img);
 
         if (flag) {
-            if ($("#users_adv li").length === 15) {
+            if ($("#users_adv li").length === 100) {
                 $('#users_images').addClass('users_full');
             }
         }
@@ -684,7 +687,7 @@ $(".example_3").hover(
 );
 
 $("#example_4").click(function () {
-    if ($("#users li").length < 15) {
+    if ($("#users li").length < 100) {
         var flag = 1;
         $('#users li').children().each(function () {
             if ($(this).attr('id') === "green4ema------Instagram------408186628------Environmental Media Assoc.") {
@@ -715,14 +718,14 @@ $("#example_4").click(function () {
         a.appendChild(img);
 
         if (flag) {
-            if ($("#users li").length === 15) {
+            if ($("#users li").length === 100) {
                 $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', true);
             }
         }
     }
 });
 $("#example_8").click(function () {
-    if ($("#users_adv li").length < 15) {
+    if ($("#users_adv li").length < 100) {
         var flag = 1;
         $('#users_adv li').children().each(function () {
             if ($(this).attr('id') === "green4ema------Instagram------408186628------Environmental Media Assoc.") {
@@ -753,7 +756,7 @@ $("#example_8").click(function () {
         a.appendChild(img);
 
         if (flag) {
-            if ($("#users_adv li").length === 15) {
+            if ($("#users_adv li").length === 100) {
                 $('#users_images').addClass('users_full');
             }
         }
@@ -1105,6 +1108,9 @@ $("#Container").on("click", ".delete_icon", function () {
         success: function () {
             if ($('.collection').length === 1) {
                 pagination--;
+                if (pagination === 0) {
+                    pagination = 1;
+                }
             }
             get_collections(true);
         },
@@ -1373,7 +1379,7 @@ function get_collections(flag) {
                                 user_icon = "imgs/youtube-16-gray.png";
                                 break;
                         }
-                        users = users + '<p style="white-space: pre;display: inline-block;margin: 0;">' + accounts[k].name + '<img class="user_source" src="' + user_icon + '">, </p>';
+                        users = users + '<p style="white-space: pre-wrap;display: inline-block;margin: 0;">' + accounts[k].name + '<img class="user_source" src="' + user_icon + '">, </p>';
                     }
                     if (users !== "") {
                         users = users.slice(0, -6);
@@ -1583,7 +1589,7 @@ $(".active_blue").click(function (e) {
     $('#users_images').empty().hide();
     $('#no_results,.Typeahead-spinner,#adv_loading').hide();
     $('#user_advanced').val("").blur();
-    if ($("#users li").length === 15) {
+    if ($("#users li").length === 100) {
         $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', true);
     }
 });

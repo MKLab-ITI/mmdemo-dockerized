@@ -230,11 +230,34 @@ function addtag(tag) {
         }
     }
 }
-$("#user_Web").keyup(function (e) {
+$("#user_RSS").keyup(function (e) {
+    var $spinner = $('.Typeahead-spinner');
+    $('#valid_rss').slideUp();
     if (e.keyCode === 13) {
-        adduser("0", "");
+        if ($spinner.is(":visible")) {
+            abort();
+        }
+        $spinner.show();
+        $.ajax({
+            url: api_folder + 'rss/validate?rss=' + encodeURIComponent($(this).val()),
+            type: 'GET',
+            success: function (json) {
+                $spinner.hide();
+                if (json.valid) {
+                    adduser(json.rss.id, json.rss.name, json.rss.username, "RSS");
+                }
+                else {
+                    $('#valid_rss').slideDown();
+                }
+            },
+            error: function (e) {
+                $spinner.hide();
+                $('#valid_rss').slideDown();
+            }
+        });
     }
 });
+
 function adduser($id, $name, $user, $social) {
     var flag = 1;
     var count = 100 - $("#users li").length;
@@ -248,7 +271,6 @@ function adduser($id, $name, $user, $social) {
             social = $('.open').attr('id');
         }
         $('#user_' + $('.open').attr('id')).typeahead('val', '');
-        $('#user_Web').val("");
 
         if (tag_name !== "") {
             flag = 1;
@@ -268,6 +290,10 @@ function adduser($id, $name, $user, $social) {
             a.setAttribute('href', 'javascript:void(0);');
             a.setAttribute('id', tag_name + "------" + social + "------" + $id + "------" + $name);
             a.innerHTML = tag_name;
+            if ($social === "RSS") {
+                a.innerHTML = $name;
+                $('#user_RSS').val("");
+            }
             li.appendChild(a);
 
             var icon = document.createElement('img');
@@ -292,8 +318,8 @@ function adduser($id, $name, $user, $social) {
                 case "Youtube":
                     icon.setAttribute('src', 'imgs/youtube-16-black.png');
                     break;
-                case "Web":
-                    icon.setAttribute('src', 'imgs/globe-16-black.png');
+                case "RSS":
+                    icon.setAttribute('src', 'imgs/rss-16-black.png');
                     break;
             }
 
@@ -305,7 +331,7 @@ function adduser($id, $name, $user, $social) {
 
             if (flag) {
                 if ($("#users li").length === 100) {
-                    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', true);
+                    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
                 }
             }
         }
@@ -348,8 +374,8 @@ function adduser_adv($username, $social, $id, $name) {
             case "Youtube":
                 icon.setAttribute('src', 'imgs/youtube-16-black.png');
                 break;
-            case "Web":
-                icon.setAttribute('src', 'imgs/globe-16-black.png');
+            case "RSS":
+                icon.setAttribute('src', 'imgs/rss-16-black.png');
                 break;
         }
 
@@ -400,7 +426,7 @@ $("#user_users").on("click", ".delete", function () {
     $(this).closest('li').hide('slow', function () {
         $(this).remove();
     });
-    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', false);
+    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', false);
     $('#users_images').removeClass('users_full');
 
 });
@@ -408,7 +434,7 @@ $("#user_users_adv").on("click", ".delete", function () {
     $(this).closest('li').hide('slow', function () {
         $(this).remove();
     });
-    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', false);
+    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', false);
     $('#users_images').removeClass('users_full');
     $("[data-id=" + $(this).parent().attr('id').split('------')[2] + "]").removeClass('open_user').attr('src', 'imgs/add_user.png').parent().css('background-color', 'transparent');
 });
@@ -422,7 +448,7 @@ $("#enter_icon").click(function () {
 });
 $("#search_icon_3").click(function () {
     adduser("0", "");
-    $("#user_Web").blur();
+    $("#user_RSS").blur();
 });
 
 $("#examples_1").find("li").click(function () {
@@ -467,7 +493,7 @@ $("#example_1").click(function () {
 
         if (flag) {
             if ($("#users li").length === 100) {
-                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', true);
+                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
             }
         }
     }
@@ -551,7 +577,7 @@ $("#example_2").click(function () {
 
         if (flag) {
             if ($("#users li").length === 100) {
-                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', true);
+                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
             }
         }
     }
@@ -635,7 +661,7 @@ $("#example_3").click(function () {
 
         if (flag) {
             if ($("#users li").length === 100) {
-                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', true);
+                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
             }
         }
     }
@@ -719,7 +745,7 @@ $("#example_4").click(function () {
 
         if (flag) {
             if ($("#users li").length === 100) {
-                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', true);
+                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
             }
         }
     }
@@ -812,10 +838,12 @@ $("#discover").click(function () {
 
 $('.ff-filter-users').click(function (e) {
     e.preventDefault();
-    $('.input-field:gt(1):lt(5)').hide();
+    $('.input-field:gt(1):lt(5), .Typeahead-spinner').hide();
     $('#' + $(this).attr('id') + '_input').css('display', 'inline-block');
     $('.ff-filter-users').addClass('close').removeClass('open');
     $(this).removeClass('close').addClass('open');
+    $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
+    $('#user_RSS').val("").blur();
 });
 
 var last_source = "";
@@ -1248,10 +1276,10 @@ $("#Container").on("click", ".edit_icon", function () {
 });
 $("#Container").on("click", ".overlay", function () {
     if (translation_param) {
-        $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&original=all&type=all&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,Instagram,Web,GooglePlus&since=0&until=1514678400000&view=feed&translation=" + translation_param)
+        $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&original=all&type=all&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=0&until=1514678400000&view=feed&translation=" + translation_param)
     }
     else {
-        $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&original=all&type=all&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,Instagram,Web,GooglePlus&since=0&until=1514678400000&view=feed&translation=en")
+        $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&original=all&type=all&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=0&until=1514678400000&view=feed&translation=en")
     }
 });
 
@@ -1360,6 +1388,7 @@ function get_collections(flag) {
 
                     var accounts = data[i].accounts;
                     var users = "";
+                    var users_style = "margin-top:-13px";
                     var user_icon = "";
                     for (var k = 0; k < accounts.length; k++) {
                         switch (accounts[k].source) {
@@ -1372,21 +1401,22 @@ function get_collections(flag) {
                             case "Facebook":
                                 user_icon = "imgs/facebook-16-share.png";
                                 break;
-                            case "Web":
-                                user_icon = "imgs/globe-16-color.png";
+                            case "RSS":
+                                user_icon = "imgs/rss-16-gray.png";
                                 break;
                             case "Youtube":
                                 user_icon = "imgs/youtube-16-gray.png";
                                 break;
                         }
-                        users = users + '<p style="white-space: pre-wrap;display: inline-block;margin: 0;">' + accounts[k].name + '<img class="user_source" src="' + user_icon + '">, </p>';
+                        users = users + accounts[k].name + '<img class="user_source" src="' + user_icon + '">,&nbsp;';
                     }
                     if (users !== "") {
-                        users = users.slice(0, -6);
-                        users = users + '</p>';
+                        users = users.slice(0, -7);
+                        users = '<p>' + users + '</p>';
                     }
                     else {
                         users = "-";
+                        users_style = "";
                     }
 
                     var items = nFormatter(data[i].items);
@@ -1397,7 +1427,7 @@ function get_collections(flag) {
                     var day = a.getUTCDate();
                     var date = day + ' ' + month + ' ' + year;
 
-                    var element = '<li class="collection"><div class="tiles_li"><div class="outer"><div class="delete_icon" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20" style="float: left;margin-right: 5px;"><div class="tags_p">' + tags + '</div></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20" style="float: left;margin-right: 5px;"><div class="tags_p">' + users + '</div></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></li>';
+                    var element = '<li class="collection"><div class="tiles_li"><div class="outer"><div class="delete_icon" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20" style="float: left;margin-right: 5px;"><div class="tags_p">' + tags + '</div></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20" style="float: left;margin-right: 5px;"><div class="tags_p" style='+users_style+'>' + users + '</div></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></li>';
                     $tiles.append(element);
                     var options = {
                         autoResize: true,
@@ -1590,7 +1620,7 @@ $(".active_blue").click(function (e) {
     $('#no_results,.Typeahead-spinner,#adv_loading').hide();
     $('#user_advanced').val("").blur();
     if ($("#users li").length === 100) {
-        $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_Web,#user_Youtube").prop('disabled', true);
+        $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
     }
 });
 

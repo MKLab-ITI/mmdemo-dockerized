@@ -6,9 +6,7 @@ function parse_latest(pagenum) {
         dataType: "json",
         success: function (json) {
             if (pagelocation === "latest") {
-                var endpage = -1,
-                    title, source, publicationTime, shared, screenname, profileimage, id, page, userpage, thumb, colorclass, iconsource, onerror;
-
+                var title, source, publicationTime, shared, screenname, profileimage, id, page, userpage, thumb, colorclass, iconsource, onerror, style_favicon, style_icon;
 
                 for (var i = 0; i < json.length; i++) {
 
@@ -17,19 +15,15 @@ function parse_latest(pagenum) {
                     if (title === "") {
                         title = "-";
                     }
-
+                    style_favicon = "";
+                    style_icon = "";
                     source = json[i].source;
                     publicationTime = json[i].publicationTime;
-                    shared = json[i].likes + " views";
 
                     screenname = json[i].user.username;
 
                     profileimage = json[i].user.profileImage;
                     id = json[i].id;
-
-                    if (id.indexOf('Youtube') > -1) {
-                        screenname = json[i].user.name;
-                    }
 
                     if (json[i].hasOwnProperty('pageUrl')) {
                         page = json[i].pageUrl;
@@ -46,6 +40,7 @@ function parse_latest(pagenum) {
                     switch (source) {
                         case "Youtube":
                             shared = nFormatter(json[i].views) + " views";
+                            screenname = json[i].user.name;
                             iconsource = 'imgs/youtube-16-black.png';
                             colorclass = 'color youtubecolor';
                             break;
@@ -75,26 +70,19 @@ function parse_latest(pagenum) {
                             iconsource = 'imgs/instagram-16-black.png';
                             colorclass = 'color instagramcolor';
                             break;
-                        case "Web":
-                            shared = nFormatter(json[i].shares) + " popularity";
-                            if (page.indexOf("/", 10) === -1) {
-                                endpage = page.length();
-                            } else {
-                                endpage = page.indexOf("/", 10);
-                            }
-                            userpage = page.substring(0, endpage);
-                            if (page.indexOf("//www") > 0) {
-                                screenname = page.substring(page.indexOf("://") + 7, endpage);
-                            } else {
-                                screenname = page.substring(page.indexOf("://") + 3, endpage);
-                            }
-                            iconsource = 'imgs/globe-16-black.png';
-                            colorclass = 'color webcolor';
+                        case "RSS":
+                            shared = nFormatter(json[i].shares) + " shares";
+                            screenname = json[i].user.name;
+                            profileimage = 'http://www.google.com/s2/favicons?domain=' + userpage;
+                            style_favicon = "width:32px;height:32px";
+                            style_icon = "top:37px";
+                            iconsource = 'imgs/rss-16-black.png';
+                            colorclass = 'color rsscolor';
                             break;
                         default:
                             shared = "0 views";
-                            iconsource = 'imgs/globe-16-black.png';
-                            colorclass = 'color webcolor';
+                            iconsource = 'imgs/rss-16-black.png';
+                            colorclass = 'color rsscolor';
                     }
                     if (onerror) {
                         onerror = "imgError2(this,'Twitter','" + json[i].user.username + "');"
@@ -134,7 +122,7 @@ function parse_latest(pagenum) {
                         var profile = document.createElement('img');
                         profile.setAttribute('src', profileimage);
                         profile.setAttribute('class', 'ff-userpic');
-                        profile.setAttribute('style', 'margin: -15px auto 0');
+                        profile.setAttribute('style', 'margin: -15px auto 0;' + style_favicon);
                         profile.setAttribute('onerror', onerror);
                         profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                         divouter.appendChild(profile);
@@ -160,8 +148,14 @@ function parse_latest(pagenum) {
 
                         var icon2outer = document.createElement('div');
                         icon2outer.setAttribute('class', 'icon2outer');
+                        icon2outer.setAttribute('style', style_icon);
                         if (typeof InstallTrigger !== 'undefined') {
-                            icon2outer.setAttribute('style', 'top:35px;');
+                            if (style_icon !== "") {
+                                icon2outer.setAttribute('style', 'top:37px;');
+                            }
+                            else {
+                                icon2outer.setAttribute('style', 'top:55px;');
+                            }
                         }
                         icon2outer.setAttribute('onclick', 'redirect("' + page + '");');
                         a.appendChild(icon2outer);
@@ -217,6 +211,7 @@ function parse_latest(pagenum) {
                         var profile = document.createElement('img');
                         profile.setAttribute('src', profileimage);
                         profile.setAttribute('class', 'ff-userpic');
+                        profile.setAttribute('style', style_favicon);
                         profile.setAttribute('onerror', onerror);
                         profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                         divouter.appendChild(profile);
@@ -401,8 +396,7 @@ function more_latest() {
                 success: function (json) {
                     if (pagelocation === "latest") {
                         var end = 0;
-                        var endpage = -1,
-                            title, source, publicationTime, shared, screenname, profileimage, id, page, userpage, thumb, colorclass, iconsource, onerror;
+                        var title, source, publicationTime, shared, screenname, profileimage, id, page, userpage, thumb, colorclass, iconsource, onerror, style_favicon, style_icon;
 
 
                         for (var i = 0; i < json.length; i++) {
@@ -412,19 +406,15 @@ function more_latest() {
                             if (title === "") {
                                 title = "-";
                             }
-
+                            style_favicon = "";
+                            style_icon = "";
                             source = json[i].source;
                             publicationTime = json[i].publicationTime;
-                            shared = json[i].likes + " views";
-
                             screenname = json[i].user.username;
 
                             profileimage = json[i].user.profileImage;
                             id = json[i].id;
 
-                            if (id.indexOf('Youtube') > -1) {
-                                screenname = json[i].user.name;
-                            }
 
                             if (json[i].hasOwnProperty('pageUrl')) {
                                 page = json[i].pageUrl;
@@ -441,6 +431,7 @@ function more_latest() {
                             switch (source) {
                                 case "Youtube":
                                     shared = nFormatter(json[i].views) + " views";
+                                    screenname = json[i].user.name;
                                     iconsource = 'imgs/youtube-16-black.png';
                                     colorclass = 'color youtubecolor';
                                     break;
@@ -470,26 +461,19 @@ function more_latest() {
                                     iconsource = 'imgs/instagram-16-black.png';
                                     colorclass = 'color instagramcolor';
                                     break;
-                                case "Web":
-                                    shared = nFormatter(json[i].shares) + " popularity";
-                                    if (page.indexOf("/", 10) === -1) {
-                                        endpage = page.length();
-                                    } else {
-                                        endpage = page.indexOf("/", 10);
-                                    }
-                                    userpage = page.substring(0, endpage);
-                                    if (page.indexOf("//www") > 0) {
-                                        screenname = page.substring(page.indexOf("://") + 7, endpage);
-                                    } else {
-                                        screenname = page.substring(page.indexOf("://") + 3, endpage);
-                                    }
-                                    iconsource = 'imgs/globe-16-black.png';
-                                    colorclass = 'color webcolor';
+                                case "RSS":
+                                    shared = nFormatter(json[i].shares) + " shares";
+                                    screenname = json[i].user.name;
+                                    profileimage = 'http://www.google.com/s2/favicons?domain=' + userpage;
+                                    style_favicon = "width:32px;height:32px;";
+                                    style_icon = "top:37px";
+                                    iconsource = 'imgs/rss-16-black.png';
+                                    colorclass = 'color rsscolor';
                                     break;
                                 default:
                                     shared = "0 views";
-                                    iconsource = 'imgs/globe-16-black.png';
-                                    colorclass = 'color webcolor';
+                                    iconsource = 'imgs/rss-16-black.png';
+                                    colorclass = 'color rsscolor';
                             }
                             if (onerror) {
                                 onerror = "imgError2(this,'Twitter','" + json[i].user.username + "');"
@@ -529,7 +513,7 @@ function more_latest() {
                                 var profile = document.createElement('img');
                                 profile.setAttribute('src', profileimage);
                                 profile.setAttribute('class', 'ff-userpic');
-                                profile.setAttribute('style', 'margin: -15px auto 0');
+                                profile.setAttribute('style', 'margin: -15px auto 0;' + style_favicon);
                                 profile.setAttribute('onerror', onerror);
                                 profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                                 divouter.appendChild(profile);
@@ -554,9 +538,17 @@ function more_latest() {
                                 divouter.appendChild(icon);
 
                                 var icon2outer = document.createElement('div');
+                                icon2outer.setAttribute('style', style_icon);
                                 icon2outer.setAttribute('class', 'icon2outer');
                                 if (typeof InstallTrigger !== 'undefined') {
-                                    icon2outer.setAttribute('style', 'top:35px;');
+                                    if (typeof InstallTrigger !== 'undefined') {
+                                        if (style_icon !== "") {
+                                            icon2outer.setAttribute('style', 'top:37px;');
+                                        }
+                                        else {
+                                            icon2outer.setAttribute('style', 'top:55px;');
+                                        }
+                                    }
                                 }
                                 icon2outer.setAttribute('onclick', 'redirect("' + page + '");');
                                 a.appendChild(icon2outer);
@@ -612,6 +604,7 @@ function more_latest() {
                                 var profile = document.createElement('img');
                                 profile.setAttribute('src', profileimage);
                                 profile.setAttribute('class', 'ff-userpic');
+                                profile.setAttribute('style', style_favicon);
                                 profile.setAttribute('onerror', onerror);
                                 profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                                 divouter.appendChild(profile);
@@ -695,8 +688,7 @@ function parse_new(count) {
         dataType: "json",
         success: function (json) {
             if (pagelocation === "latest") {
-                var endpage = -1,
-                    title, source, publicationTime, shared, screenname, profileimage, id, page, userpage, thumb, colorclass, iconsource, onerror;
+                var title, source, publicationTime, shared, screenname, profileimage, id, page, userpage, thumb, colorclass, iconsource, onerror, style_favicon, style_icon;
 
 
                 for (var i = 0; i < json.length; i++) {
@@ -706,19 +698,15 @@ function parse_new(count) {
                     if (title === "") {
                         title = "-";
                     }
-
+                    style_favicon = "";
+                    style_icon = "";
                     source = json[i].source;
                     publicationTime = json[i].publicationTime;
-                    shared = json[i].likes + " views";
 
                     screenname = json[i].user.username;
 
                     profileimage = json[i].user.profileImage;
                     id = json[i].id;
-
-                    if (id.indexOf('Youtube') > -1) {
-                        screenname = json[i].user.name;
-                    }
 
                     if (json[i].hasOwnProperty('pageUrl')) {
                         page = json[i].pageUrl;
@@ -735,6 +723,7 @@ function parse_new(count) {
                     switch (source) {
                         case "Youtube":
                             shared = nFormatter(json[i].views) + " views";
+                            screenname = json[i].user.name;
                             iconsource = 'imgs/youtube-16-black.png';
                             colorclass = 'color youtubecolor';
                             break;
@@ -764,26 +753,19 @@ function parse_new(count) {
                             iconsource = 'imgs/instagram-16-black.png';
                             colorclass = 'color instagramcolor';
                             break;
-                        case "Web":
-                            shared = nFormatter(json[i].shares) + " popularity";
-                            if (page.indexOf("/", 10) === -1) {
-                                endpage = page.length();
-                            } else {
-                                endpage = page.indexOf("/", 10);
-                            }
-                            userpage = page.substring(0, endpage);
-                            if (page.indexOf("//www") > 0) {
-                                screenname = page.substring(page.indexOf("://") + 7, endpage);
-                            } else {
-                                screenname = page.substring(page.indexOf("://") + 3, endpage);
-                            }
-                            iconsource = 'imgs/globe-16-black.png';
-                            colorclass = 'color webcolor';
+                        case "RSS":
+                            shared = nFormatter(json[i].shares) + " shares";
+                            screenname = json[i].user.name;
+                            profileimage = 'http://www.google.com/s2/favicons?domain=' + userpage;
+                            style_favicon = "width:32px;height:32px;";
+                            style_icon = "top:37px";
+                            iconsource = 'imgs/rss-16-black.png';
+                            colorclass = 'color rsscolor';
                             break;
                         default:
                             shared = "0 views";
-                            iconsource = 'imgs/globe-16-black.png';
-                            colorclass = 'color webcolor';
+                            iconsource = 'imgs/rss-16-black.png';
+                            colorclass = 'color rsscolor';
                     }
                     if (onerror) {
                         onerror = "imgError2(this,'Twitter','" + json[i].user.username + "');"
@@ -823,7 +805,7 @@ function parse_new(count) {
                         var profile = document.createElement('img');
                         profile.setAttribute('src', profileimage);
                         profile.setAttribute('class', 'ff-userpic');
-                        profile.setAttribute('style', 'margin: -15px auto 0');
+                        profile.setAttribute('style', 'margin: -15px auto 0;' + style_favicon);
                         profile.setAttribute('onerror', onerror);
                         profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                         divouter.appendChild(profile);
@@ -849,8 +831,16 @@ function parse_new(count) {
 
                         var icon2outer = document.createElement('div');
                         icon2outer.setAttribute('class', 'icon2outer');
+                        icon2outer.setAttribute('style', style_icon);
                         if (typeof InstallTrigger !== 'undefined') {
-                            icon2outer.setAttribute('style', 'top:35px;');
+                            if (typeof InstallTrigger !== 'undefined') {
+                                if (style_icon !== "") {
+                                    icon2outer.setAttribute('style', 'top:37px;');
+                                }
+                                else {
+                                    icon2outer.setAttribute('style', 'top:55px;');
+                                }
+                            }
                         }
                         icon2outer.setAttribute('onclick', 'redirect("' + page + '");');
                         a.appendChild(icon2outer);
@@ -906,6 +896,7 @@ function parse_new(count) {
                         var profile = document.createElement('img');
                         profile.setAttribute('src', profileimage);
                         profile.setAttribute('class', 'ff-userpic');
+                        profile.setAttribute('style', style_favicon);
                         profile.setAttribute('onerror', onerror);
                         profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                         divouter.appendChild(profile);

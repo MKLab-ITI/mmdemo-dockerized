@@ -78,7 +78,7 @@
                             <li><span class="ff-filter ff-type-instagram"></span></li>
                             <li><span class="ff-filter ff-type-flickr"></span></li>
                             <li><span class="ff-filter ff-type-youtube"></span></li>
-                            <li><span class="ff-filter ff-type-web"></span></li>
+                            <li><span class="ff-filter ff-type-rss"></span></li>
                         </ul>
                     </li>
                     <li class="data-orbit-user">
@@ -168,11 +168,17 @@
                     <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
                 </div>
-                <div class="input-field" id="Web_input">
-                    <input id="user_Web" class="user_input" type="text" autocomplete="off">
-                    <label for="user_Web" data-lang="section2_input_RSS">Place your RSS</label>
+                <div class="input-field" id="RSS_input">
+                    <input id="user_RSS" class="user_input" type="text" autocomplete="off">
+                    <label for="user_RSS" data-lang="section2_input_RSS">Place your RSS</label>
                     <img class="search_icon users_icon" src="imgs/search-gray.png" id="search_icon_3" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
+                    <div class="tt-menu" id="valid_rss">
+                        <div class="tt-dataset tt-dataset-0">
+                            <div class="EmptyMessage">Not a valid RSS</div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="ff-filter-holder">
                     <span class="ff-filter-users ff-type-twitter-users open" id="Twitter"></span>
@@ -180,7 +186,7 @@
                     <span class="ff-filter-users ff-type-facebook-users close" id="Facebook"></span>
                     <!--<span class="ff-filter-users ff-type-instagram-users close" id="Instagram"></span>-->
                     <span class="ff-filter-users ff-type-youtube-users close" id="Youtube"></span>
-                    <span class="ff-filter-users ff-type-web-users close" id="Web"></span>
+                    <span class="ff-filter-users ff-type-rss-users close" id="RSS"></span>
                 </div>
                 <p class="advanced" data-lang="section2_adv_search">Advanced User Search</p>
 
@@ -264,7 +270,7 @@
                     <li class="google_color"><img src="imgs/google+-16.png" alt="icon" class="factory_img"></li>
                     <li class="flickr_color"><img src="imgs/flickr-16.png" alt="icon" class="factory_img"></li>
                     <li class="youtube_color"><img src="imgs/youtube-16-letter.png" alt="icon" class="factory_img"></li>
-                    <li class="web_color"><img src="imgs/rss.png" alt="icon" class="factory_img"></li>
+                    <li class="rss_color"><img src="imgs/rss.png" alt="icon" class="factory_img"></li>
                 </ul>
                 <div class='band'></div>
                 <div class='factory'>
@@ -484,9 +490,9 @@
 <script id="empty-template_facebook" type="text/x-handlebars-template">
     <div class="EmptyMessage">This username is not used in Facebook!</div>
 </script>
-<script id="empty-template_instagram" type="text/x-handlebars-template">
+<!--<script id="empty-template_instagram" type="text/x-handlebars-template">
     <div class="EmptyMessage">This username is not used in Instagram!</div>
-</script>
+</script>-->
 <script id="empty-template_youtube" type="text/x-handlebars-template">
     <div class="EmptyMessage">This username is not used in Youtube!</div>
 </script>

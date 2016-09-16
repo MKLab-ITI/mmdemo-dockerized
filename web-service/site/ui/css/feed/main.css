@@ -213,15 +213,12 @@ html, body {
     background-image: url("../../imgs/youtube-16.png")
 }
 
-.ff-type-web {
-    background: dodgerblue;
-    background-image: url("../../imgs/globe-16-black.png");
-    background-repeat: no-repeat;
-    background-position: center
+.ff-type-rss {
+    background: dodgerblue url("../../imgs/rss-16-black.png") no-repeat center;
 }
 
-.ff-type-web:hover {
-    background-image: url("../../imgs/globe-16.png")
+.ff-type-rss:hover {
+    background-image: url("../../imgs/rss-16.png")
 }
 
 .close {
@@ -658,7 +655,12 @@ html, body {
     font-size: 12px;
     width: 195px;
     border-bottom: 1px solid #ccc;
-    margin-left: -8px
+    margin-left: -8px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    padding: 0 10px;
 }
 
 #main {
@@ -787,7 +789,7 @@ html, body {
     background-color: #d34836
 }
 
-.webcolor {
+.rsscolor {
     background-color: dodgerblue
 }
 
@@ -1363,7 +1365,10 @@ html, body {
     font: bold 15px 'Roboto Slab', sans-serif;
     color: #999999;
     margin: 15px 0 0 5px;
-    float: left
+    float: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .user_count {

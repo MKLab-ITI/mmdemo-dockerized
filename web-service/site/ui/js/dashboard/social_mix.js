@@ -5,7 +5,7 @@ function draw_social_mix(flag,view) {
         flickr = 0,
         youtube = 0,
         instagram = 0,
-        web = 0,
+        rss = 0,
         google = 0;
 
     $.ajax({
@@ -37,8 +37,8 @@ function draw_social_mix(flag,view) {
                     case "Instagram":
                         instagram = count;
                         break;
-                    case "Web":
-                        web = count;
+                    case "RSS":
+                        rss = count;
                         break;
                 }
             }
@@ -68,9 +68,9 @@ function draw_social_mix(flag,view) {
                 y: instagram,
                 image_path: "./imgs/instagram-16-color.png"
             }, {
-                key: "Web",
-                y: web,
-                image_path: "./imgs/globe-16-color.png"
+                key: "RSS",
+                y: rss,
+                image_path: "./imgs/rss-16-color.png"
             }];
 
             var dummy_data = [{
@@ -98,9 +98,9 @@ function draw_social_mix(flag,view) {
                 y: 0,
                 image_path: "./imgs/instagram-16-color.png"
             }, {
-                key: "<img src=" + "./imgs/globe-16-color.png" + ">",
+                key: "<img src=" + "./imgs/rss-16-color.png" + ">",
                 y: 0,
-                image_path: "./imgs/globe-16-color.png"
+                image_path: "./imgs/rss-16-color.png"
             }, {
                 key: "<img src=" + "./imgs/white.png" + ">",
                 y: 100,
@@ -140,7 +140,7 @@ function draw_social_mix(flag,view) {
                     .noData(noData)
                     .labelThreshold(.05)
                     .showLabels(true)
-                    .color(['#3b5998', '#00acee', '#ff0084', '#FF0202', '#d34836', '#ab7d63', '#808080', '#ffffff'])
+                    .color(['#3b5998', '#00acee', '#ff0084', '#FF0202', '#d34836', '#ab7d63', '#1e90ff', '#ffffff'])
                     .labelsOutside(true)
                     .showLegend(false)
                     .title("Posts")

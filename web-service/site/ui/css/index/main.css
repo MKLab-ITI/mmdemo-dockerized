@@ -3,14 +3,17 @@
         display: none;
     }
 }
+
 @media only screen and (max-width: 770px) {
     .no_collections {
         width: 400px !important;
     }
-    .no_collections h1{
+
+    .no_collections h1 {
         width: auto !important;
     }
 }
+
 @media only screen and (max-width: 550px) {
     .no_collections {
         width: 270px !important;
@@ -515,7 +518,7 @@ img.responsive-img {
     animation: counterClockwiseRotate 25s linear infinite
 }
 
-#data-orbit-section .data-orbit-wrap > li > ul.data-circle-social span.icon-youtube {
+/*#data-orbit-section .data-orbit-wrap > li > ul.data-circle-social span.icon-youtube {
     color: #fff;
     background: #E12E34
 }
@@ -539,7 +542,7 @@ img.responsive-img {
 #data-orbit-section .data-orbit-wrap > li > ul.data-circle-social span.icon-web {
     color: #fff;
     background: dodgerblue
-}
+}*/
 
 #data-orbit-section .data-orbit-wrap > li.data-orbit-user {
     overflow: hidden;
@@ -612,7 +615,7 @@ img.responsive-img {
     background: #E12E34 url("../../imgs/youtube-16-letter.png") no-repeat 6px;
 }
 
-.ff-type-web {
+.ff-type-rss {
     background: dodgerblue url("../../imgs/rss.png") no-repeat center;
 }
 
@@ -686,7 +689,7 @@ img.responsive-img {
     color: #47b8e5;
 }
 
-#GooglePlus_input, #Facebook_input, #Instagram_input, #Web_input, #Youtube_input {
+#GooglePlus_input, #Facebook_input, #Instagram_input, #RSS_input, #Youtube_input {
     display: none;
 }
 
@@ -785,16 +788,16 @@ img.responsive-img {
 
 .tags li, .tags a {
     float: left;
-    height: 34px;
-    line-height: 34px;
+    min-height: 34px;
+    line-height: 24px;
     position: relative;
     font-size: 11px;
-    padding-bottom: 50px;
+    padding-bottom: 10px;
 }
 
 .tags a {
     margin-left: 20px;
-    padding: 0 10px 0 12px;
+    padding: 5px 10px 0 12px;
     background: #47b8e5;
     color: #fff;
     text-decoration: none;
@@ -806,7 +809,8 @@ img.responsive-img {
     border-top-right-radius: 4px;
     font-size: 17px;
     font-weight: bold;
-    cursor: default
+    cursor: default;
+    word-break: break-all;
 }
 
 .tags a:before {
@@ -891,7 +895,7 @@ img.responsive-img {
     background-color: #E12E34;
 }
 
-.web_color {
+.rss_color {
     background-color: dodgerblue;
 }
 
@@ -1190,7 +1194,7 @@ img.responsive-img {
     border-bottom: 2px solid #e9e9e9;
     width: 330px;
     margin-left: -8px;
-    padding: 10px 0 7px 10px;
+    padding: 10px 10px 7px 10px;
     text-align: left;
 }
 
@@ -1201,6 +1205,10 @@ img.responsive-img {
     font-weight: bold;
     margin: 0;
     line-height: 20px;
+}
+
+.tags_p p {
+    margin-bottom: 0;
 }
 
 .details {
@@ -1308,6 +1316,7 @@ img.responsive-img {
 .restart_icon:hover {
     background: url("../../imgs/restart_icon_blue.png") no-repeat center;
 }
+
 .start_icon {
     background: url("../../imgs/start.png") no-repeat center;
     width: 50px;
@@ -1321,10 +1330,11 @@ img.responsive-img {
 .start_icon:hover {
     background: url("../../imgs/start_red.png") no-repeat center;
 }
-.user_source{
-    margin-left: 2px;
-    margin-top: -3px;
+
+.user_source {
+    margin: -3px 2px 0;
 }
+
 #mainmenu .active {
     background-color: rgba(256, 256, 256, 0.1);
     color: #94B0DA !important;
@@ -1452,12 +1462,12 @@ img.responsive-img {
     background-image: url("../../imgs/youtube-16.png")
 }
 
-.ff-type-web-users {
-    background: dodgerblue url("../../imgs/globe-16-black.png") no-repeat center;
+.ff-type-rss-users {
+    background: dodgerblue url("../../imgs/rss-16-black.png") no-repeat center;
 }
 
-.ff-type-web-users:hover {
-    background-image: url("../../imgs/globe-16.png")
+.ff-type-rss-users:hover {
+    background-image: url("../../imgs/rss-16.png")
 }
 
 .close, .close_adv {
@@ -2077,13 +2087,22 @@ img.responsive-img {
     min-width: 212px;
 }
 
-#no_stopped,#no_running{
+#no_stopped, #no_running {
     top: 150px;
     position: absolute;
     display: none;
     left: 50%;
     margin-left: -170px;
 }
+
+#valid_rss {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 100;
+    display: none;
+}
+
 @keyframes enter {
     0% {
         opacity: 0;

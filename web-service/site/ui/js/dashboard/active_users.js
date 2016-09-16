@@ -1,5 +1,5 @@
 function show_active_users() {
-    var username, count, id, barchart_values = [], color_bar, icon, onerror;
+    var username, count, id, barchart_values = [], color_bar, icon, onerror, profile_url, userpage, favicon_style;
     var top = $(".activenumber .topnum").attr('id').replace('num', '');
 
 
@@ -44,14 +44,17 @@ function show_active_users() {
                 username = json[i].username;
                 count = json[i].count;
                 id = json[i].id.substring(0, json[i].id.indexOf('#'));
-                if (id === "Youtube") {
-                    username = json[i].name;
-                }
+                profile_url = json[i].profileImage.replace('normal', '400x400');
+                userpage = json[i].pageUrl;
+                favicon_style = "";
                 onerror = false;
                 switch (id) {
-                    case "Web":
-                        color_bar = "#808080";
-                        icon = "imgs/globe-16-color.png";
+                    case "RSS":
+                        color_bar = "#1e90ff";
+                        icon = "imgs/rss-16-color.png";
+                        username = json[i].name;
+                        profile_url = 'http://www.google.com/s2/favicons?domain=' + userpage;
+                        favicon_style = "padding: 20px;";
                         break;
                     case "Twitter":
                         color_bar = "#00acee";
@@ -67,6 +70,7 @@ function show_active_users() {
                         icon = "imgs/flickr-16-color.png";
                         break;
                     case "Youtube":
+                        username = json[i].name;
                         color_bar = "#FF0202";
                         icon = "imgs/youtube-16-color.png";
                         break;
@@ -91,7 +95,7 @@ function show_active_users() {
                 else {
                     onerror = "imgError2(this,null,null);"
                 }
-                $('#users_images').append('<div class="user"><p style="float: left;"><img data-url="' + json[i].pageUrl + '"src="' + json[i].profileImage.replace('normal', '400x400') + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/></div>')
+                $('#users_images').append('<div class="user"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/></div>')
 
             }
             var data_bar = [{
@@ -120,8 +124,8 @@ function show_active_users() {
                 chart.tooltip.contentGenerator(function (key) {
                     var image;
                     switch (key.data.color) {
-                        case "#808080":
-                            image = "imgs/globe-16-color.png";
+                        case "#1e90ff":
+                            image = "imgs/rss-16-color.png";
                             break;
                         case "#00acee":
                             image = "imgs/twitter-16-color.png";

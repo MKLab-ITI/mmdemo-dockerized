@@ -54,7 +54,7 @@ function draw_hashtags(source) {
                     "animation-play-state": "running",
                     "animation": "dash " + delay + "s linear infinite running"
                 });
-                url_call = api_folder+"terms?n=300&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param;
+                url_call = api_folder+"terms?n=300&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param;
             }
             else {
                 for (var time = 0; time < timeouts.length; time++) {
@@ -63,7 +63,7 @@ function draw_hashtags(source) {
                 timeouts = [];
                 $('#animation_wrapper').slideUp(1000);
                 $('#animate').show();
-                url_call = api_folder+"terms?n=" + top + "&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param;
+                url_call = api_folder+"terms?n=" + top + "&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param;
             }
             var noData;
             switch (translation_param) {
@@ -343,7 +343,7 @@ function draw_hashtags(source) {
             var nodes = this.nodes;
             $.ajax({
                 type: "GET",
-                url: api_folder+"terms?n=" + top + "&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + start + "&until=" + end,
+                url: api_folder+"terms?n=" + top + "&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + start + "&until=" + end,
                 dataType: "json",
                 success: function (json) {
                     var len = json.length;
@@ -440,7 +440,7 @@ function draw_hashtags(source) {
             var nodes = this.nodes;
             $.ajax({
                 type: "GET",
-                url: api_folder+"terms?n=" + top + "&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + start + "&until=" + end,
+                url: api_folder+"terms?n=" + top + "&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + start + "&until=" + end,
                 dataType: "json",
                 success: function (json) {
                     $('.flatTable tbody').empty();

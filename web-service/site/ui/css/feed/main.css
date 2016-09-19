@@ -552,13 +552,13 @@ html, body {
     top: 256px;
     bottom: 19px;
     border-left: 1px solid #e2e2e2;
-    height: -moz-calc(100% - 466px);
-    height: -webkit-calc(100% - 466px);
-    height: calc(100% - 466px)
+    height: -moz-calc(100% - 508px);
+    height: -webkit-calc(100% - 508px);
+    height: calc(100% - 508px)
 }
 
 .top:before {
-    top: 466px
+    top: 508px
 }
 
 .top2:before {
@@ -573,20 +573,24 @@ html, body {
     display: none;
 }
 
+.top6:before {
+    top: 424px
+}
+
 .top4:before {
     top: 298px
 }
 
 .dash:before {
-    height: -moz-calc(100% - 424px);
-    height: -webkit-calc(100% - 424px);
-    height: calc(100% - 424px)
+    height: -moz-calc(100% - 466px);
+    height: -webkit-calc(100% - 466px);
+    height: calc(100% - 466px)
 }
 
 .dash2:before {
-    height: -moz-calc(100% - 424px);
-    height: -webkit-calc(100% - 424px);
-    height: calc(100% - 424px)
+    height: -moz-calc(100% - 466px);
+    height: -webkit-calc(100% - 466px);
+    height: calc(100% - 466px)
 }
 
 .inlist li a:before {

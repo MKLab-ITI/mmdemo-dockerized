@@ -1,4 +1,4 @@
-function draw_social_mix(flag,view) {
+function draw_social_mix(flag, view) {
 
     var twitter = 0,
         facebook = 0,
@@ -10,11 +10,11 @@ function draw_social_mix(flag,view) {
 
     $.ajax({
         type: "GET",
-        url: api_folder+"statistics?collection="+collection_param+"&language=" + language_param + "&original="+original_param+"&type="+type_param+"&source="+source_param+"&topicQuery="+topic_param+"&q="+query_param+ "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "statistics?collection=" + collection_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&q=" + query_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             var stream, count;
-            var $sources=json.sources;
+            var $sources = json.sources;
             for (var i = 0; i < $sources.length; i++) {
                 stream = $sources[i].field;
                 count = $sources[i][view];
@@ -110,16 +110,16 @@ function draw_social_mix(flag,view) {
             var noData;
             switch (translation_param) {
                 case "en":
-                    noData="No Data Available";
+                    noData = "No Data Available";
                     break;
                 case "el":
-                    noData="Δεν υπάρχουν δεδομένα";
+                    noData = "Δεν υπάρχουν δεδομένα";
                     break;
                 case "it":
-                    noData="Nessun dato disponibile";
+                    noData = "Nessun dato disponibile";
                     break;
                 case "tr":
-                    noData="Uygun veri bulunamadı";
+                    noData = "Uygun veri bulunamadı";
                     break;
                 case "sp":
                     noData = "Datos no disponibles";
@@ -128,14 +128,18 @@ function draw_social_mix(flag,view) {
                     noData = "No hi ha dades disponibles";
                     break;
                 default:
-                    noData="No Data Available"
+                    noData = "No Data Available"
             }
             nv.addGraph(function () {
 
                 var chart = nv.models.pieChart()
-                    .x(function (d) {return d.key;})
-                    .y(function (d) {return d.y;})
-                    .padAngle(0)                    
+                    .x(function (d) {
+                        return d.key;
+                    })
+                    .y(function (d) {
+                        return d.y;
+                    })
+                    .padAngle(0)
                     .donutRatio(0.65)
                     .noData(noData)
                     .labelThreshold(.05)
@@ -145,7 +149,7 @@ function draw_social_mix(flag,view) {
                     .showLegend(false)
                     .title("Posts")
                     .donut(true);
-                
+
                 if (json.sources.length === 0) {
                     $('#load1').hide();
                     $('#chart_pie').animate({opacity: 1}, 400);
@@ -169,7 +173,7 @@ function draw_social_mix(flag,view) {
                     $('#load1').hide();
                     $('#chart_pie').animate({opacity: 1}, 400);
                 });
-               
+
                 nv.utils.windowResize(chart.update);
                 return chart;
             });

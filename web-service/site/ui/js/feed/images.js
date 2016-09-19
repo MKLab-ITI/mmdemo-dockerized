@@ -79,37 +79,45 @@ function loadimage(end, page, pagenum) {
         if ((page === "latest") && (pagelocation === "latest")) {
             if ((pagenum === 1) && (end !== 1)) {
                 $('#loadingbar').show();
-                $('#loadingbar').css('width', '14%');
+                $('#loadingbar').css('width', '11%');
                 parse_latest(2);
             }
             if ((pagenum === 2) && (end !== 1)) {
-                $('#loadingbar').css('width', '28%');
+                $('#loadingbar').css('width', '22%');
                 parse_latest(3);
             }
             if ((pagenum === 3) && (end !== 1)) {
-                $('#loadingbar').css('width', '42%');
+                $('#loadingbar').css('width', '33%');
                 parse_latest(4);
             }
             if ((pagenum === 4) && (end !== 1)) {
-                $('#loadingbar').css('width', '57%');
+                $('#loadingbar').css('width', '44%');
                 parse_latest(5);
             }
             if ((pagenum === 5) && (end !== 1)) {
-                $('#loadingbar').css('width', '71%');
+                $('#loadingbar').css('width', '55%');
                 parse_latest(6);
             }
             if ((pagenum === 6) && (end !== 1)) {
-                $('#loadingbar').css('width', '85%');
+                $('#loadingbar').css('width', '66%');
                 parse_latest(7);
             }
             if ((pagenum === 7) && (end !== 1)) {
+                $('#loadingbar').css('width', '77%');
+                parse_latest(8);
+            }
+            if ((pagenum === 8) && (end !== 1)) {
+                $('#loadingbar').css('width', '88%');
+                parse_latest(9);
+            }
+            if ((pagenum === 9) && (end !== 1)) {
                 $('#loadingbar').css('width', '105%');
                 setTimeout(function () {
                     $('#loadingbar').hide();
                     $('#loadingbar').css('width', '0%');
                 }, 500);
                 more_latest();
-                parse_latest(8);
+                parse_latest(10);
             }
         }
     });

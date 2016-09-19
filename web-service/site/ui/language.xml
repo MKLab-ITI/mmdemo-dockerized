@@ -72,6 +72,30 @@
         <sp>ORDENAR</sp>
         <ca>CLASSIFICA</ca>
     </translation>
+    <translation id="slider_settings_unique">
+        <en>UNIQUE</en>
+        <el>ΜΟΝΑΔΙΚΑ</el>
+        <it>UNIQUE</it>
+        <tr>UNIQUE</tr>
+        <sp>UNIQUE</sp>
+        <ca>UNIQUE</ca>
+    </translation>
+    <translation id="settings_false">
+        <en>False</en>
+        <el>Ψευδή</el>
+        <it>False</it>
+        <tr>False</tr>
+        <sp>False</sp>
+        <ca>False</ca>
+    </translation>
+    <translation id="settings_true">
+        <en>True</en>
+        <el>Αληθή</el>
+        <it>True</it>
+        <tr>True</tr>
+        <sp>True</sp>
+        <ca>True/S</ca>
+    </translation>
     <translation id="settings_all">
         <en>All</en>
         <el>Όλα</el>

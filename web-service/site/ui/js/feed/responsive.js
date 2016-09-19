@@ -16,23 +16,23 @@ function resizedw(trigger) {
     
     if($("#hop5").is(":visible")){    
         
-        if ($(window).height() > 938) {
+        if ($(window).height() > 980) {
             $("#footer").css({'bottom': '0','position': 'absolute','margin-top': '0'});
-        } else if ($(window).height() < 729) {
+        } else if ($(window).height() < 771) {
             $("#footer").css({'bottom': 'auto','position': 'relative','margin-top': '10px'});     
         } else {
-            setTimeout(function(){ $("#footer").css({'position': 'relative','margin-top': '0','bottom': -($("#slider").height() - 724) + 'px'}); }, 700);
+            setTimeout(function(){ $("#footer").css({'position': 'relative','margin-top': '0','bottom': -($("#slider").height() - 766) + 'px'}); }, 700);
         }
         
     }
     else{ 
         
-        if ($(window).height() > 874) {
+        if ($(window).height() > 916) {
             $("#footer").css({'bottom': '0','position': 'absolute','margin-top': '0'});
-        } else if ($(window).height() < 671) {
+        } else if ($(window).height() < 713) {
             $("#footer").css({'bottom': 'auto','position': 'relative','margin-top': '13px'});
         } else {
-            setTimeout(function(){$("#footer").css({'position': 'relative','margin-top': '0','bottom': -($("#slider").height() - 659) + 'px'}); }, 700);
+            setTimeout(function(){$("#footer").css({'position': 'relative','margin-top': '0','bottom': -($("#slider").height() - 701) + 'px'}); }, 700);
         }
         
     }

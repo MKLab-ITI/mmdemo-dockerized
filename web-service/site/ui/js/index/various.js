@@ -130,6 +130,7 @@ function search_adv_user() {
             success: function (json) {
                 if ($user_adv.find("li").length === 100) {
                     $user_images.addClass('users_full');
+                    $('#max_users,#max_users_advanced').slideDown();
                 }
                 for (var i = 0; i < json.length; i++) {
                     var flag = 0;
@@ -234,6 +235,7 @@ function addtag(tag) {
                 if (flag) {
                     if ($("#tags li").length === 20) {
                         $("#hashtag,#tag_advanced").prop('disabled', true);
+                        $('#max_tags,#max_tags_advanced').slideDown();
                     }
                 }
             }
@@ -277,6 +279,7 @@ function addtag_advanced(tag) {
                 if (flag) {
                     if ($("#tags_adv li").length === 20) {
                         $("#hashtag,#tag_advanced").prop('disabled', true);
+                        $('#max_tags,#max_tags_advanced').slideDown();
                     }
                 }
             }
@@ -411,6 +414,7 @@ function adduser($id, $name, $user, $social) {
             if (flag) {
                 if ($("#users li").length === 100) {
                     $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
+                    $('#max_users,#max_users_advanced').slideDown();
                 }
             }
         }
@@ -465,6 +469,7 @@ function adduser_adv($username, $social, $id, $name) {
         a.appendChild(img);
         if ($("#users_adv li").length === 100) {
             $('#users_images').addClass('users_full');
+            $('#max_users,#max_users_advanced').slideDown();
         }
     }
 }
@@ -479,6 +484,7 @@ function deluser_adv($social, $id) {
         }
     });
     $('#users_images').removeClass('users_full');
+    $('#max_users,#max_users_advanced').slideUp();
 }
 
 $("#interest").keyup(function (e) {
@@ -501,6 +507,7 @@ $("#user_tags,#user_tags_adv").on("click", ".delete", function () {
         $(this).remove();
     });
     $("#hashtag,#tag_advanced").prop('disabled', false);
+    $('#max_tags,#max_tags_advanced').slideUp();
 
 });
 $("#user_users").on("click", ".delete", function () {
@@ -509,6 +516,7 @@ $("#user_users").on("click", ".delete", function () {
         $(this).remove();
     });
     $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', false);
+    $('#max_users,#max_users_advanced').slideUp();
     $('#users_images').removeClass('users_full');
 
 });
@@ -518,6 +526,7 @@ $("#user_users_adv").on("click", ".delete", function () {
         $(this).remove();
     });
     $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', false);
+    $('#max_users,#max_users_advanced').slideUp();
     $('#users_images').removeClass('users_full');
     $("[data-id=" + $(this).parent().attr('id').split('------')[2] + "]").removeClass('open_user').attr('src', 'imgs/add_user.png').parent().css('background-color', 'transparent');
 });
@@ -612,6 +621,7 @@ $("#example_1").click(function () {
         if (flag) {
             if ($("#users li").length === 100) {
                 $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
+                $('#max_users,#max_users_advanced').slideDown();
             }
         }
     }
@@ -651,6 +661,7 @@ $("#example_5").click(function () {
         if (flag) {
             if ($("#users_adv li").length === 100) {
                 $('#users_images').addClass('users_full');
+                $('#max_users,#max_users_advanced').slideDown();
             }
         }
     }
@@ -698,6 +709,7 @@ $("#example_2").click(function () {
         if (flag) {
             if ($("#users li").length === 100) {
                 $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
+                $('#max_users,#max_users_advanced').slideDown();
             }
         }
     }
@@ -737,6 +749,7 @@ $("#example_6").click(function () {
         if (flag) {
             if ($("#users_adv li").length === 100) {
                 $('#users_images').addClass('users_full');
+                $('#max_users,#max_users_advanced').slideDown();
             }
         }
     }
@@ -784,6 +797,7 @@ $("#example_3").click(function () {
         if (flag) {
             if ($("#users li").length === 100) {
                 $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
+                $('#max_users,#max_users_advanced').slideDown();
             }
         }
     }
@@ -823,6 +837,7 @@ $("#example_7").click(function () {
         if (flag) {
             if ($("#users_adv li").length === 100) {
                 $('#users_images').addClass('users_full');
+                $('#max_users,#max_users_advanced').slideDown();
             }
         }
     }
@@ -1100,6 +1115,7 @@ $('.stage').click(function (e) {
         }
     }
     else {
+        $('#max_tags,#max_tags_advanced,#max_users,#max_users_advanced').slideUp();
         var id = (Math.floor(Math.random() * 90000) + 10000) + user_id + new Date().getTime();
         if (edit_mode) {
             id = edit_id;
@@ -1748,7 +1764,7 @@ $("#advanced_tag_search").click(function (e) {
     var el = document.getElementById('expression');
     Sortable.create(el, {
         scroll: false,
-        onUpdate: function (evt) {
+        onUpdate: function () {
             $('#error_expr').slideUp();
             $('.error_operator').removeClass('error_operator');
         }
@@ -2140,6 +2156,7 @@ $("#done_users").click(function () {
     $('#user_advanced').val("").blur();
     if ($("#users li").length === 100) {
         $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
+        $('#max_users,#max_users_advanced').slideDown();
     }
 });
 $("#done_tags").click(function (e) {

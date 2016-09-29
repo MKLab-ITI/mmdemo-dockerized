@@ -112,6 +112,30 @@
         <sp>Ejemplos:</sp>
         <ca>Exemples:</ca>
     </translation>
+    <translation id="section2_info">
+        <en>Info: </en>
+        <el>Πληροφορία: </el>
+        <it>Info: </it>
+        <tr>Info: </tr>
+        <sp>Info: </sp>
+        <ca>Info: </ca>
+    </translation>
+    <translation id="section2_max_tags">
+        <en>Max number (20) of tags reached.</en>
+        <el>Ο μέγιστος αριθμός (20) ετικετών επιτεύχθει.</el>
+        <it>Max number (20) of tags reached.</it>
+        <tr>Max number (20) of tags reached.</tr>
+        <sp>Max number (20) of tags reached.</sp>
+        <ca>Max number (20) of tags reached.</ca>
+    </translation>
+    <translation id="section2_max_users">
+        <en>Max number (100) of users reached.</en>
+        <el>Ο μέγιστος αριθμός (100) χρηστών επιτεύχθει.</el>
+        <it>Max number (100) of users reached.</it>
+        <tr>Max number (100) of users reached.</tr>
+        <sp>Max number (100) of users reached.</sp>
+        <ca>Max number (100) of users reached.</ca>
+    </translation>
     <translation id="section2_input_Twitter">
         <en>Place your Users from Twitter</en>
         <el>Δώσε τους χρήστες από Twitter</el>

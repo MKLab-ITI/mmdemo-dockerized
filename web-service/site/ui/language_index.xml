@@ -169,12 +169,52 @@
         <ca>DONE</ca>
     </translation>
     <translation id="section2_adv_search">
-        <en>Advanced User Search</en>
-        <el>Εξελιγμένη αναζήτηση χρηστών</el>
-        <it>Advanced User Search</it>
-        <tr>Advanced User Search</tr>
-        <sp>Advanced User Search</sp>
-        <ca>Advanced User Search</ca>
+        <en>Users suggestion</en>
+        <el>Προτεινόμενοι χρήστες</el>
+        <it>Users suggestion</it>
+        <tr>Users suggestion</tr>
+        <sp>Users suggestion</sp>
+        <ca>Users suggestion</ca>
+    </translation>
+    <translation id="section2_adv_tags">
+        <en>Advanced Tags</en>
+        <el>Σύνθετες Ετικέτες</el>
+        <it>Advanced Tags</it>
+        <tr>Advanced Tags</tr>
+        <sp>Advanced Tags</sp>
+        <ca>Advanced Tags</ca>
+    </translation>
+    <translation id="section2_dragzone_title">
+        <en>Enter tags, drag and format logical expressions:</en>
+        <el>Εισάγετε ετικέτες, σύρετε και σχηματίστε λογικές εκφράσεις:</el>
+        <it>Enter tags, drag and format logical expressions:</it>
+        <tr>Enter tags, drag and format logical expressions:</tr>
+        <sp>Enter tags, drag and format logical expressions:</sp>
+        <ca>Enter tags, drag and format logical expressions:</ca>
+    </translation>
+    <translation id="section2_add_expr">
+        <en>Add</en>
+        <el>Προσθήκη</el>
+        <it>Add</it>
+        <tr>Add</tr>
+        <sp>Add</sp>
+        <ca>Add</ca>
+    </translation>
+    <translation id="section2_error">
+        <en>Error: </en>
+        <el>Λάθος: </el>
+        <it>Error: </it>
+        <tr>Error: </tr>
+        <sp>Error: </sp>
+        <ca>Error: </ca>
+    </translation>
+    <translation id="section2_clear_expr">
+        <en>Clear</en>
+        <el>Καθαρισμός</el>
+        <it>Clear</it>
+        <tr>Clear</tr>
+        <sp>Clear</sp>
+        <ca>Clear</ca>
     </translation>
     <translation id="section2_advanced_loading">
         <en>Please wait, this may take a few seconds...</en>

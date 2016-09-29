@@ -54,6 +54,10 @@ $(document).on('focus', input_selector, function () {
         $('#text_user_icon').attr('src', 'imgs/text_user_blue.png');
         $('#search_icon_2').attr('src', 'imgs/search-blue.png');
     }
+    else if ($(this).attr('id') === "tag_advanced") {
+        $('#logic_icon').attr('src', 'imgs/logic_32_blue.png');
+        $('#search_icon_4').attr('src', 'imgs/search-blue.png');
+    }
     else {
         $('#user_icon').attr('src', 'imgs/email-blue.png');
         $('.users_icon').attr('src', 'imgs/search-blue.png');
@@ -75,6 +79,10 @@ $(document).on('blur', input_selector, function () {
             $('#text_user_icon').attr('src', 'imgs/text_user.png');
             $('#search_icon_2').attr('src', 'imgs/search-gray.png');
         }
+        else if ($(this).attr('id') === "tag_advanced") {
+            $('#logic_icon').attr('src', 'imgs/logic_32_gray.png');
+            $('#search_icon_4').attr('src', 'imgs/search-gray.png');
+        }
         else {
             $('#user_icon').attr('src', 'imgs/email-gray.png');
             $('.users_icon').attr('src', 'imgs/search-gray.png');
@@ -84,7 +92,12 @@ $(document).on('blur', input_selector, function () {
 
 $("#hashtag").keyup(function (e) {
     if (e.keyCode === 13) {
-        addtag();
+        addtag($(this).val().toLowerCase());
+    }
+});
+$("#tag_advanced").keyup(function (e) {
+    if (e.keyCode === 13) {
+        addtag_dragarea($(this).val().toLowerCase());
     }
 });
 
@@ -188,32 +201,29 @@ function addtag(tag) {
     var flag = 1;
     var count = 20 - $("#tags li").length;
     if (count > 0) {
-        var tag_name = tag;
-        if (tag == null) {
-            tag_name = document.getElementById("hashtag").value;
-        }
-        var tag_arr = tag_name.split(',');
+        var tag_arr = tag.split(',');
         $("#hashtag").val("");
         var length = Math.min(count, tag_arr.length);
         for (var i = 0; i < length; i++) {
-            if (tag_arr[i] !== "") {
+            if (/\S/.test(tag_arr[i])) {
                 flag = 1;
                 $('#tags li').children().each(function () {
                     if ($(this).attr('id') === tag_arr[i].replace(/^\s+|\s+$/g, '')) {
-                        $(this).parent().hide('slow', function () {
+                        var height = $(this).parent().height();
+                        $(this).parent().css('height', height).hide('slow', function () {
                             $(this).remove();
                         });
                         flag = 0;
                     }
                 });
-                var tag = document.getElementById('tags');
+                var tags = document.getElementById('tags');
                 var li = document.createElement('li');
-                $(li).hide().appendTo(tag).fadeIn(600);
+                $(li).hide().appendTo(tags).fadeIn(600);
 
                 var a = document.createElement('a');
                 a.setAttribute('href', 'javascript:void(0);');
                 a.setAttribute('id', tag_arr[i].replace(/^\s+|\s+$/g, ''));
-                a.innerHTML = tag_arr[i];
+                a.innerHTML = tag_arr[i].replace(/^\s+|\s+$/g, '');
                 li.appendChild(a);
 
                 var img = document.createElement('img');
@@ -223,9 +233,77 @@ function addtag(tag) {
 
                 if (flag) {
                     if ($("#tags li").length === 20) {
-                        $("#hashtag").prop('disabled', true);
+                        $("#hashtag,#tag_advanced").prop('disabled', true);
                     }
                 }
+            }
+        }
+    }
+}
+function addtag_advanced(tag) {
+    var flag = 1;
+    var count = 20 - $("#tags_adv li").length;
+    if (count > 0) {
+        var tag_arr = tag.split(',');
+        $("#tag_advanced").val("");
+        var length = Math.min(count, tag_arr.length);
+        for (var i = 0; i < length; i++) {
+            if (/\S/.test(tag_arr[i])) {
+                flag = 1;
+                $('#tags_adv li').children().each(function () {
+                    if ($(this).attr('id') === tag_arr[i].replace(/^\s+|\s+$/g, '')) {
+                        var height = $(this).parent().height();
+                        $(this).parent().css('height', height).hide('slow', function () {
+                            $(this).remove();
+                        });
+                        flag = 0;
+                    }
+                });
+                var tags_adv = document.getElementById('tags_adv');
+                var li = document.createElement('li');
+                $(li).hide().appendTo(tags_adv).fadeIn(600);
+
+                var a = document.createElement('a');
+                a.setAttribute('href', 'javascript:void(0);');
+                a.setAttribute('id', tag_arr[i].replace(/^\s+|\s+$/g, ''));
+                a.innerHTML = tag_arr[i].replace(/^\s+|\s+$/g, '');
+                li.appendChild(a);
+
+                var img = document.createElement('img');
+                img.setAttribute('src', 'imgs/delete.png');
+                img.setAttribute('class', 'delete');
+                a.appendChild(img);
+
+                if (flag) {
+                    if ($("#tags_adv li").length === 20) {
+                        $("#hashtag,#tag_advanced").prop('disabled', true);
+                    }
+                }
+            }
+        }
+    }
+}
+function addtag_dragarea(tag) {
+    var $expression = $('#expression');
+    var tag_arr = tag.split(',');
+    $("#tag_advanced").val("");
+    var flag = true;
+    for (var i = 0; i < tag_arr.length; i++) {
+        if (/\S/.test(tag_arr[i])) {
+            $expression.children().each(function () {
+                if ($(this).attr('id') === tag_arr[i].replace(/^\s+|\s+$/g, '')) {
+                    $('.shake').eq(0).removeClass('shake');
+                    var $this = $(this);
+                    setTimeout(function () {
+                        $this.addClass('shake');
+                    }, 50);
+                    flag = false;
+                }
+            });
+            if (flag) {
+                $('#error_expr').slideUp();
+                $('.error_operator').removeClass('error_operator');
+                $('<li id="' + tag_arr[i].replace(/^\s+|\s+$/g, '') + '" class="tag_operator operator">' + tag_arr[i].replace(/^\s+|\s+$/g, '') + '<img src="imgs/delete.png" class="delete_expression"></li>').hide().appendTo($expression).show('normal');
             }
         }
     }
@@ -276,7 +354,8 @@ function adduser($id, $name, $user, $social) {
             flag = 1;
             $('#users li').children().each(function () {
                 if ($(this).attr('id').indexOf(social + "------" + $id) > -1) {
-                    $(this).parent().hide('slow', function () {
+                    var height = $(this).parent().height();
+                    $(this).parent().css('height', height).hide('slow', function () {
                         $(this).remove();
                     });
                     flag = 0;
@@ -389,11 +468,12 @@ function adduser_adv($username, $social, $id, $name) {
         }
     }
 }
-function deluser_adv($username, $social, $id, $name) {
+function deluser_adv($social, $id) {
 
     $('#users_adv li').children().each(function () {
         if ($(this).attr('id').indexOf($social + "------" + $id) > -1) {
-            $(this).parent().hide('slow', function () {
+            var height = $(this).parent().height();
+            $(this).parent().css('height', height).hide('slow', function () {
                 $(this).remove();
             });
         }
@@ -415,15 +495,17 @@ function addname() {
     }
 }
 
-$("#user_tags").on("click", ".delete", function () {
-    $(this).closest('li').hide('slow', function () {
+$("#user_tags,#user_tags_adv").on("click", ".delete", function () {
+    var height = $(this).closest('li').height();
+    $(this).closest('li').css('height', height).hide('slow', function () {
         $(this).remove();
     });
-    $("#hashtag").prop('disabled', false);
+    $("#hashtag,#tag_advanced").prop('disabled', false);
 
 });
 $("#user_users").on("click", ".delete", function () {
-    $(this).closest('li').hide('slow', function () {
+    var height = $(this).closest('li').height();
+    $(this).closest('li').css('height', height).hide('slow', function () {
         $(this).remove();
     });
     $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', false);
@@ -431,16 +513,44 @@ $("#user_users").on("click", ".delete", function () {
 
 });
 $("#user_users_adv").on("click", ".delete", function () {
-    $(this).closest('li').hide('slow', function () {
+    var height = $(this).closest('li').height();
+    $(this).closest('li').css('height', height).hide('slow', function () {
         $(this).remove();
     });
     $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', false);
     $('#users_images').removeClass('users_full');
     $("[data-id=" + $(this).parent().attr('id').split('------')[2] + "]").removeClass('open_user').attr('src', 'imgs/add_user.png').parent().css('background-color', 'transparent');
 });
+var $expression = $("#expression");
+$expression.on("click", ".delete_expression", function (e) {
+    var height = $(this).parent().height();
+    $(this).parent().css('height', height).hide('slow', function () {
+        $(this).remove();
+    });
+    $('#error_expr').slideUp();
+    $('.error_operator').removeClass('error_operator');
+});
+$expression.on("click", ".delete_parenthesis", function (e) {
+    var height = $(this).parent().height();
+    $(this).parent().css('height', height).hide('slow', function () {
+        $(this).remove();
+    });
+    $('.' + $(this).attr('class').split(' ')[1]).parent().css('height', height).hide('slow', function () {
+        $(this).remove();
+    });
+    $('#error_expr').slideUp();
+    $('.error_operator').removeClass('error_operator');
+});
 $("#search_icon_1").click(function () {
-    addtag();
-    $("#hashtag").blur();
+    var $hashtag = $("#hashtag");
+    addtag($hashtag.val().toLowerCase());
+    $hashtag.blur();
+});
+$("#search_icon_4").click(function () {
+    $("label[for='tag_advanced']").removeClass('active');
+    $('#logic_icon').attr('src', 'imgs/logic_32_gray.png');
+    $('#search_icon_4').attr('src', 'imgs/search-gray.png');
+    addtag_dragarea($("#tag_advanced").val().toLowerCase());
 });
 $("#enter_icon").click(function () {
     addname();
@@ -456,8 +566,15 @@ $("#examples_1").find("li").click(function () {
     $('#hash_icon').attr('src', 'imgs/hash-gray.png');
     $('#search_icon_1').attr('src', 'imgs/search-gray.png');
     if ($("#tags li").length < 20) {
-        $("#hashtag").val($(this).html());
-        addtag();
+        addtag($(this).html().toLowerCase());
+    }
+});
+$("#examples_2").find("li").click(function () {
+    $("label[for='tag_advanced']").removeClass('active');
+    $('#logic_icon').attr('src', 'imgs/logic_32_gray.png');
+    $('#search_icon_4').attr('src', 'imgs/search-gray.png');
+    if ($("#tags_adv li").length < 20) {
+        addtag_advanced($(this).html());
     }
 });
 $("#example_1").click(function () {
@@ -465,7 +582,8 @@ $("#example_1").click(function () {
         var flag = 1;
         $('#users li').children().each(function () {
             if ($(this).attr('id') === "Greenpeace------Twitter------3459051------Greenpeace") {
-                $(this).parent().hide('slow', function () {
+                var height = $(this).parent().height();
+                $(this).parent().css('height', height).hide('slow', function () {
                     $(this).remove();
                 });
                 flag = 0;
@@ -503,7 +621,8 @@ $("#example_5").click(function () {
         var flag = 1;
         $('#users_adv li').children().each(function () {
             if ($(this).attr('id') === "Greenpeace------Twitter------3459051------Greenpeace") {
-                $(this).parent().hide('slow', function () {
+                var height = $(this).parent().height();
+                $(this).parent().css('height', height).hide('slow', function () {
                     $(this).remove();
                 });
                 flag = 0;
@@ -549,7 +668,8 @@ $("#example_2").click(function () {
         var flag = 1;
         $('#users li').children().each(function () {
             if ($(this).attr('id') === "WWF------GooglePlus------114176126428866920097------WWF") {
-                $(this).parent().hide('slow', function () {
+                var height = $(this).parent().height();
+                $(this).parent().css('height', height).hide('slow', function () {
                     $(this).remove();
                 });
                 flag = 0;
@@ -587,7 +707,8 @@ $("#example_6").click(function () {
         var flag = 1;
         $('#users_adv li').children().each(function () {
             if ($(this).attr('id') === "WWF------GooglePlus------114176126428866920097------WWF") {
-                $(this).parent().hide('slow', function () {
+                var height = $(this).parent().height();
+                $(this).parent().css('height', height).hide('slow', function () {
                     $(this).remove();
                 });
                 flag = 0;
@@ -633,7 +754,8 @@ $("#example_3").click(function () {
         var flag = 1;
         $('#users li').children().each(function () {
             if ($(this).attr('id') === "CapeNature1------Facebook------137406639638143------CapeNature") {
-                $(this).parent().hide('slow', function () {
+                var height = $(this).parent().height();
+                $(this).parent().css('height', height).hide('slow', function () {
                     $(this).remove();
                 });
                 flag = 0;
@@ -671,7 +793,8 @@ $("#example_7").click(function () {
         var flag = 1;
         $('#users_adv li').children().each(function () {
             if ($(this).attr('id') === "CapeNature1------Facebook------137406639638143------CapeNature") {
-                $(this).parent().hide('slow', function () {
+                var height = $(this).parent().height();
+                $(this).parent().css('height', height).hide('slow', function () {
                     $(this).remove();
                 });
                 flag = 0;
@@ -712,89 +835,92 @@ $(".example_3").hover(
     }
 );
 
-$("#example_4").click(function () {
-    if ($("#users li").length < 100) {
-        var flag = 1;
-        $('#users li').children().each(function () {
-            if ($(this).attr('id') === "green4ema------Instagram------408186628------Environmental Media Assoc.") {
-                $(this).parent().hide('slow', function () {
-                    $(this).remove();
-                });
-                flag = 0;
-            }
-        });
-        var tag = document.getElementById('users');
-        var li = document.createElement('li');
-        $(li).hide().appendTo(tag).fadeIn(600);
 
-        var a = document.createElement('a');
-        a.setAttribute('href', 'javascript:void(0);');
-        a.setAttribute('id', 'green4ema------Instagram------408186628------Environmental Media Assoc.');
-        a.innerHTML = 'green4ema';
-        li.appendChild(a);
+/*$("#example_8").click(function () {
+ if ($("#users_adv li").length < 100) {
+ var flag = 1;
+ $('#users_adv li').children().each(function () {
+ if ($(this).attr('id') === "green4ema------Instagram------408186628------Environmental Media Assoc.") {
+ var height = $(this).parent().height();
+ $(this).parent().css('height', height).hide('slow', function () {
+ $(this).remove();
+ });
+ flag = 0;
+ }
+ });
+ var tag = document.getElementById('users_adv');
+ var li = document.createElement('li');
+ $(li).hide().appendTo(tag).fadeIn(600);
 
-        var icon = document.createElement('img');
-        icon.setAttribute('class', 'user_icon');
-        icon.setAttribute('src', 'imgs/facebook-16-black.png');
-        a.appendChild(icon);
+ var a = document.createElement('a');
+ a.setAttribute('href', 'javascript:void(0);');
+ a.setAttribute('id', 'green4ema------Instagram------408186628------Environmental Media Assoc.');
+ a.innerHTML = 'green4ema';
+ li.appendChild(a);
 
-        var img = document.createElement('img');
-        img.setAttribute('src', 'imgs/delete.png');
-        img.setAttribute('class', 'delete');
-        a.appendChild(img);
+ var icon = document.createElement('img');
+ icon.setAttribute('class', 'user_icon');
+ icon.setAttribute('src', 'imgs/facebook-16-black.png');
+ a.appendChild(icon);
 
-        if (flag) {
-            if ($("#users li").length === 100) {
-                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
-            }
-        }
-    }
-});
-$("#example_8").click(function () {
-    if ($("#users_adv li").length < 100) {
-        var flag = 1;
-        $('#users_adv li').children().each(function () {
-            if ($(this).attr('id') === "green4ema------Instagram------408186628------Environmental Media Assoc.") {
-                $(this).parent().hide('slow', function () {
-                    $(this).remove();
-                });
-                flag = 0;
-            }
-        });
-        var tag = document.getElementById('users_adv');
-        var li = document.createElement('li');
-        $(li).hide().appendTo(tag).fadeIn(600);
+ var img = document.createElement('img');
+ img.setAttribute('src', 'imgs/delete.png');
+ img.setAttribute('class', 'delete');
+ a.appendChild(img);
 
-        var a = document.createElement('a');
-        a.setAttribute('href', 'javascript:void(0);');
-        a.setAttribute('id', 'green4ema------Instagram------408186628------Environmental Media Assoc.');
-        a.innerHTML = 'green4ema';
-        li.appendChild(a);
+ if (flag) {
+ if ($("#users_adv li").length === 100) {
+ $('#users_images').addClass('users_full');
+ }
+ }
+ }
+ });
+ $("#example_4").click(function () {
+ if ($("#users li").length < 100) {
+ var flag = 1;
+ $('#users li').children().each(function () {
+ if ($(this).attr('id') === "green4ema------Instagram------408186628------Environmental Media Assoc.") {
+ var height = $(this).parent().height();
+ $(this).parent().css('height', height).hide('slow', function () {
+ $(this).remove();
+ });
+ flag = 0;
+ }
+ });
+ var tag = document.getElementById('users');
+ var li = document.createElement('li');
+ $(li).hide().appendTo(tag).fadeIn(600);
 
-        var icon = document.createElement('img');
-        icon.setAttribute('class', 'user_icon');
-        icon.setAttribute('src', 'imgs/facebook-16-black.png');
-        a.appendChild(icon);
+ var a = document.createElement('a');
+ a.setAttribute('href', 'javascript:void(0);');
+ a.setAttribute('id', 'green4ema------Instagram------408186628------Environmental Media Assoc.');
+ a.innerHTML = 'green4ema';
+ li.appendChild(a);
 
-        var img = document.createElement('img');
-        img.setAttribute('src', 'imgs/delete.png');
-        img.setAttribute('class', 'delete');
-        a.appendChild(img);
+ var icon = document.createElement('img');
+ icon.setAttribute('class', 'user_icon');
+ icon.setAttribute('src', 'imgs/facebook-16-black.png');
+ a.appendChild(icon);
 
-        if (flag) {
-            if ($("#users_adv li").length === 100) {
-                $('#users_images').addClass('users_full');
-            }
-        }
-    }
-});
-$("example_4").hover(
-    function () {
-        $(this).find('img').attr('src', 'imgs/instagram-16-color.png');
-    }, function () {
-        $(this).find('img').attr('src', 'imgs/instagram-16-black.png');
-    }
-);
+ var img = document.createElement('img');
+ img.setAttribute('src', 'imgs/delete.png');
+ img.setAttribute('class', 'delete');
+ a.appendChild(img);
+
+ if (flag) {
+ if ($("#users li").length === 100) {
+ $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
+ }
+ }
+ }
+ });
+ $("example_4").hover(
+ function () {
+ $(this).find('img').attr('src', 'imgs/instagram-16-color.png');
+ }, function () {
+ $(this).find('img').attr('src', 'imgs/instagram-16-black.png');
+ }
+ );*/
 
 
 $("#col_name").on("click", ".edit", function () {
@@ -1427,7 +1553,7 @@ function get_collections(flag) {
                     var day = a.getUTCDate();
                     var date = day + ' ' + month + ' ' + year;
 
-                    var element = '<li class="collection"><div class="tiles_li"><div class="outer"><div class="delete_icon" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20" style="float: left;margin-right: 5px;"><div class="tags_p">' + tags + '</div></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20" style="float: left;margin-right: 5px;"><div class="tags_p" style='+users_style+'>' + users + '</div></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></li>';
+                    var element = '<li class="collection"><div class="tiles_li"><div class="outer"><div class="delete_icon" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20" style="float: left;margin-right: 5px;"><div class="tags_p">' + tags + '</div></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20" style="float: left;margin-right: 5px;"><div class="tags_p" style=' + users_style + '>' + users + '</div></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></li>';
                     $tiles.append(element);
                     var options = {
                         autoResize: true,
@@ -1603,14 +1729,407 @@ $("#text_user").click(function () {
     $(this).toggleClass('text_user_on');
 });
 
-$(".advanced").click(function (e) {
+$("#advanced_user_search").click(function (e) {
     $('[data-hide="true"]').slideUp(500);
     $('#advanced_user').slideDown(500);
     $('#users_adv').html($('#users').html());
     $('#users').empty();
+    $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
+    $('#user_RSS').val("").blur();
 });
 
-$(".active_blue").click(function (e) {
+$("#advanced_tag_search").click(function (e) {
+    var $tags = $('#tags');
+    $('[data-hide="true"]').slideUp(500);
+    $('#advanced_tag').slideDown(500);
+    $('#tags_adv').html($tags.html());
+    $tags.empty();
+    $('#hashtag').val("").blur();
+    var el = document.getElementById('expression');
+    Sortable.create(el, {
+        scroll: false,
+        onUpdate: function (evt) {
+            $('#error_expr').slideUp();
+            $('.error_operator').removeClass('error_operator');
+        }
+    });
+});
+$('#add_expr').click(function () {
+
+    var valid_expr = true;
+    var string_expr = "";
+    var $expression = $('#expression');
+    var $error_exp = $('#error_expr');
+
+    // cannot start with AND or OR or NOT
+    if ($expression.find('li').eq(0).hasClass('logic_operator')) {
+        $expression.find('li').eq(0).addClass('error_operator');
+        switch (translation_param) {
+            case "en":
+                $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
+                break;
+            case "el":
+                $error_exp.slideDown().find('span').html("Η λογική έκφραση δεν μπορεί να ξεκινάει με λογικό τελεστή.");
+                break;
+            case "it":
+                $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
+                break;
+            case "tr":
+                $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
+                break;
+            case "sp":
+                $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
+                break;
+            case "ca":
+                $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
+                break;
+            default:
+                $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
+        }
+        valid_expr = false;
+        return;
+    }
+
+    // cannot end with AND or OR or NOT
+    if ($expression.find('li').last().hasClass('logic_operator')) {
+        $expression.find('li').last().addClass('error_operator');
+        switch (translation_param) {
+            case "en":
+                $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
+                break;
+            case "el":
+                $error_exp.slideDown().find('span').html("Η λογική έκφραση δεν μπορεί να τελειώνει με λογικό τελεστή.");
+                break;
+            case "it":
+                $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
+                break;
+            case "tr":
+                $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
+                break;
+            case "sp":
+                $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
+                break;
+            case "ca":
+                $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
+                break;
+            default:
+                $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
+        }
+        valid_expr = false;
+        return;
+    }
+
+    // there can't be two tags next to each other
+    $('.tag_operator').each(function () {
+        if ($(this).next('li').hasClass("tag_operator")) {
+            $(this).addClass('error_operator');
+            switch (translation_param) {
+                case "en":
+                    $error_exp.slideDown().find('span').html("You cannot use two tags next to each other.");
+                    break;
+                case "el":
+                    $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις δυο ετικέτες τη μια δίπλα στην άλλη.");
+                    break;
+                case "it":
+                    $error_exp.slideDown().find('span').html("You cannot use two tags next to each other.");
+                    break;
+                case "tr":
+                    $error_exp.slideDown().find('span').html("You cannot use two tags next to each other.");
+                    break;
+                case "sp":
+                    $error_exp.slideDown().find('span').html("You cannot use two tags next to each other.");
+                    break;
+                case "ca":
+                    $error_exp.slideDown().find('span').html("You cannot use two tags next to each other.");
+                    break;
+                default:
+                    $error_exp.slideDown().find('span').html("You cannot use two tags next to each other.");
+            }
+            valid_expr = false;
+        }
+    });
+    if (!(valid_expr)) {
+        return;
+    }
+
+    // there can't be two logical operators next to each other
+    $('.logic_operator').each(function () {
+        if ($(this).next('li').hasClass("logic_operator")) {
+            $(this).addClass('error_operator');
+            switch (translation_param) {
+                case "en":
+                    $error_exp.slideDown().find('span').html("You cannot use two logical operators next to each other.");
+                    break;
+                case "el":
+                    $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις δυο λογικούς τελεστές τον ένα δίπλα στον άλλο.");
+                    break;
+                case "it":
+                    $error_exp.slideDown().find('span').html("You cannot use two logical operators next to each other.");
+                    break;
+                case "tr":
+                    $error_exp.slideDown().find('span').html("You cannot use two logical operators next to each other.");
+                    break;
+                case "sp":
+                    $error_exp.slideDown().find('span').html("You cannot use two logical operators next to each other.");
+                    break;
+                case "ca":
+                    $error_exp.slideDown().find('span').html("You cannot use two logical operators next to each other.");
+                    break;
+                default:
+                    $error_exp.slideDown().find('span').html("You cannot use two logical operators next to each other.");
+            }
+            valid_expr = false;
+        }
+    });
+    if (!(valid_expr)) {
+        return;
+    }
+
+    $('.parenthesis_operator').each(function () {
+        // "(" cannot open immediately after ")"
+        if ($(this).hasClass("close_parenthesis")) {
+            if ($(this).next('li').hasClass("open_parenthesis")) {
+                $(this).next('li').addClass('error_operator');
+                switch (translation_param) {
+                    case "en":
+                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a closing parenthesis \"]\".");
+                        break;
+                    case "el":
+                        $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις μια ανοιχτή παρένθεση \"[\" ακριβώς μετά από μια κλειστή \"]\"");
+                        break;
+                    case "it":
+                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a closing parenthesis \"]\".");
+                        break;
+                    case "tr":
+                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a closing parenthesis \"]\".");
+                        break;
+                    case "sp":
+                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a closing parenthesis \"]\".");
+                        break;
+                    case "ca":
+                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a closing parenthesis \"]\".");
+                        break;
+                    default:
+                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a closing parenthesis \"]\".");
+                }
+                valid_expr = false;
+            }
+        }
+        // ")" cannot close immediately after "("
+        if ($(this).hasClass("open_parenthesis")) {
+            if ($(this).next('li').hasClass("close_parenthesis")) {
+                $(this).next('li').addClass('error_operator');
+                switch (translation_param) {
+                    case "en":
+                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after an opening parenthesis \"[\".");
+                        break;
+                    case "el":
+                        $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις μια κλειστή παρένθεση \"]\" ακριβώς μετά από μια ανοιχτή \"[\".");
+                        break;
+                    case "it":
+                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after an opening parenthesis \"[\".");
+                        break;
+                    case "tr":
+                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after an opening parenthesis \"[\".");
+                        break;
+                    case "sp":
+                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after an opening parenthesis \"[\".");
+                        break;
+                    case "ca":
+                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after an opening parenthesis \"[\".");
+                        break;
+                    default:
+                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after an opening parenthesis \"[\".");
+                }
+                valid_expr = false;
+            }
+        }
+        // cannot close bracket immediately after a logical operator
+        if ($(this).hasClass("close_parenthesis")) {
+            if ($(this).prev('li').hasClass("logic_operator")) {
+                $(this).addClass('error_operator');
+                switch (translation_param) {
+                    case "en":
+                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after a logical operator.");
+                        break;
+                    case "el":
+                        $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις μια κλειστή παρένθεση \"]\" ακριβώς μετά από ένα λογικό τελεστή.");
+                        break;
+                    case "it":
+                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after a logical operator.");
+                        break;
+                    case "tr":
+                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after a logical operator.");
+                        break;
+                    case "sp":
+                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after a logical operator.");
+                        break;
+                    case "ca":
+                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after a logical operator.");
+                        break;
+                    default:
+                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after a logical operator.");
+                }
+                valid_expr = false;
+            }
+        }
+        //cannot use logical sign "&" or "|" right after opening a bracket
+        if ($(this).hasClass("open_parenthesis")) {
+            if ($(this).next('li').hasClass("logic_operator")) {
+                $(this).next('li').addClass('error_operator');
+                switch (translation_param) {
+                    case "en":
+                        $error_exp.slideDown().find('span').html("You cannot use a logical operator right after an opening parenthesis \"[\".");
+                        break;
+                    case "el":
+                        $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις ένα λογικό τελεστή ακριβώς μετά από μια ανοιχτή παρένθεση \"[\".");
+                        break;
+                    case "it":
+                        $error_exp.slideDown().find('span').html("You cannot use a logical operator right after an opening parenthesis \"[\".");
+                        break;
+                    case "tr":
+                        $error_exp.slideDown().find('span').html("You cannot use a logical operator right after an opening parenthesis \"[\".");
+                        break;
+                    case "sp":
+                        $error_exp.slideDown().find('span').html("You cannot use a logical operator right after an opening parenthesis \"[\".");
+                        break;
+                    case "ca":
+                        $error_exp.slideDown().find('span').html("You cannot use a logical operator right after an opening parenthesis \"[\".");
+                        break;
+                    default:
+                        $error_exp.slideDown().find('span').html("You cannot use a logical operator right after an opening parenthesis \"[\".");
+                }
+                valid_expr = false;
+            }
+        }
+        // cannot open a bracket right after a hashtag
+        if ($(this).hasClass("open_parenthesis")) {
+            if ($(this).prev('li').hasClass("tag_operator")) {
+                $(this).addClass('error_operator');
+                switch (translation_param) {
+                    case "en":
+                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a tag.");
+                        break;
+                    case "el":
+                        $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις μια ανοιχτή παρένθεση \"[\" ακριβώς μετά από μια ετικέτα.");
+                        break;
+                    case "it":
+                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a tag.");
+                        break;
+                    case "tr":
+                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a tag.");
+                        break;
+                    case "sp":
+                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a tag.");
+                        break;
+                    case "ca":
+                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a tag.");
+                        break;
+                    default:
+                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a tag.");
+                }
+                valid_expr = false;
+            }
+        }
+        // cannot use a tag right after closing a bracket
+        if ($(this).hasClass("close_parenthesis")) {
+            if ($(this).next('li').hasClass("tag_operator")) {
+                $(this).next('li').addClass('error_operator');
+                switch (translation_param) {
+                    case "en":
+                        $error_exp.slideDown().find('span').html("You cannot use a tag right after a closing parenthesis \"]\".");
+                        break;
+                    case "el":
+                        $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις μια ετικέτα ακριβώς μετά από μια κλειστή παρένθεση \"]\".");
+                        break;
+                    case "it":
+                        $error_exp.slideDown().find('span').html("You cannot use a tag right after a closing parenthesis \"]\".");
+                        break;
+                    case "tr":
+                        $error_exp.slideDown().find('span').html("You cannot use a tag right after a closing parenthesis \"]\".");
+                        break;
+                    case "sp":
+                        $error_exp.slideDown().find('span').html("You cannot use a tag right after a closing parenthesis \"]\".");
+                        break;
+                    case "ca":
+                        $error_exp.slideDown().find('span').html("You cannot use a tag right after a closing parenthesis \"]\".");
+                        break;
+                    default:
+                        $error_exp.slideDown().find('span').html("You cannot use a tag right after a closing parenthesis \"]\".");
+                }
+                valid_expr = false;
+            }
+        }
+    });
+    if (!(valid_expr)) {
+        return;
+    }
+
+    if (valid_expr) {
+        $('.error_operator').removeClass('error_operator');
+        $error_exp.slideUp();
+        $('#clear_expr').click();
+        $('.operator').each(function () {
+            if ($(this).hasClass("open_parenthesis")) {
+                string_expr = string_expr + "(";
+            }
+            else if ($(this).hasClass("close_parenthesis")) {
+                string_expr = string_expr + ")";
+            }
+            else if ($(this).hasClass("and_operator")) {
+                string_expr = string_expr + " AND ";
+            }
+            else if ($(this).hasClass("or_operator")) {
+                string_expr = string_expr + " OR ";
+            }
+            else if ($(this).hasClass("not_operator")) {
+                string_expr = string_expr + " NOT ";
+            }
+            else if ($(this).hasClass("tag_operator")) {
+                string_expr = string_expr + $(this).attr('id');
+            }
+        });
+        while ((string_expr.slice(-1) === ")") && (string_expr.charAt(0) === "(")) {
+            string_expr = string_expr.slice(1, -1);
+        }
+        addtag_advanced(string_expr);
+    }
+
+});
+
+$('#clear_expr').click(function () {
+    parenthesis_count = 0;
+    $('#expression').children().fadeOut(500).promise().then(function () {
+        $('#expression').empty();
+    });
+    $('#error_expr').slideUp();
+});
+
+var parenthesis_count = 0;
+$('#parenthesis_add').click(function () {
+    $('#error_expr').slideUp();
+    $('.error_operator').removeClass('error_operator');
+    parenthesis_count++;
+    $('<li class="parenthesis_operator close_parenthesis operator">]<img src="imgs/delete.png" class="delete_parenthesis rand-' + parenthesis_count + '"></li>').hide().appendTo('#expression').show('normal');
+    $('<li class="parenthesis_operator open_parenthesis operator">[<img src="imgs/delete.png" class="delete_parenthesis rand-' + parenthesis_count + '"></li>').hide().prependTo('#expression').show('normal');
+});
+$('#and_add').click(function () {
+    $('#error_expr').slideUp();
+    $('.error_operator').removeClass('error_operator');
+    $('<li class="logic_operator and_operator operator">AND<img src="imgs/delete.png" class="delete_expression"></li>').hide().appendTo('#expression').show('normal');
+});
+$('#or_add').click(function () {
+    $('#error_expr').slideUp();
+    $('.error_operator').removeClass('error_operator');
+    $('<li class="logic_operator or_operator operator" style="width: 64px">OR<img src="imgs/delete.png" class="delete_expression"></li>').hide().appendTo('#expression').show('normal');
+});
+$('#not_add').click(function () {
+    $('#error_expr').slideUp();
+    $('.error_operator').removeClass('error_operator');
+    $('<li class="logic_operator not_operator operator">NOT<img src="imgs/delete.png" class="delete_expression"></li>').hide().appendTo('#expression').show('normal');
+});
+
+$("#done_users").click(function () {
     abort();
     $('[data-hide="true"]').slideDown(500);
     $('#advanced_user').slideUp(500);
@@ -1622,6 +2141,15 @@ $(".active_blue").click(function (e) {
     if ($("#users li").length === 100) {
         $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
     }
+});
+$("#done_tags").click(function (e) {
+    $('[data-hide="true"]').slideDown(500);
+    $('#advanced_tag').slideUp(500);
+    $('#tags').html($('#tags_adv').html());
+    $('#tags_adv,#expression').empty();
+    $('#tag_advanced').val("").blur();
+    parenthesis_count = 0;
+    $('#error_expr').slideUp();
 });
 
 function imgError2(image, source, username) {
@@ -1646,7 +2174,7 @@ $("#users_images").on("click", ".add_user", function (e) {
         $(this).attr('src', 'imgs/add_user.png');
         $(this).parent().css('background-color', 'transparent');
         $(this).removeClass('open_user');
-        deluser_adv($(this).attr('data-username'), $(this).attr('data-social'), $(this).attr('data-id'), $(this).attr('data-name'));
+        deluser_adv($(this).attr('data-social'), $(this).attr('data-id'));
     }
     else {
         if (!($('#users_images').hasClass('users_full'))) {

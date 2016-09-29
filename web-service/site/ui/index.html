@@ -13,6 +13,7 @@
 
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Roboto+Slab:400,300,700&subset=latin,cyrillic-ext,greek-ext,greek,latin-ext,cyrillic'
           rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <!-- CSS -->
     <link rel="stylesheet" href="css/feed/foundation.css">
@@ -119,13 +120,15 @@
                     <label for="hashtag" data-lang="section2_input_tags">Place your Tags</label>
                     <img class="search_icon" src="imgs/search-gray.png" id="search_icon_1" alt="search">
                 </div>
+                <p class="advanced" id="advanced_tag_search" data-lang="section2_adv_tags">Advanced Tags</p>
+
                 <div id="examples_1" class="examples">
                     <p data-lang="section2_examples">Examples:</p>
                     <ul>
-                        <li>Pollution</li>
-                        <li>Overpopulation</li>
-                        <li>Waste</li>
-                        <li>Climate change</li>
+                        <li>pollution</li>
+                        <li>overpopulation</li>
+                        <li>waste</li>
+                        <li>climate change</li>
                     </ul>
                 </div>
                 <div id="user_tags">
@@ -173,6 +176,7 @@
                     <label for="user_RSS" data-lang="section2_input_RSS">Place your RSS</label>
                     <img class="search_icon users_icon" src="imgs/search-gray.png" id="search_icon_3" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
+
                     <div class="tt-menu" id="valid_rss">
                         <div class="tt-dataset tt-dataset-0">
                             <div class="EmptyMessage">Not a valid RSS</div>
@@ -188,17 +192,17 @@
                     <span class="ff-filter-users ff-type-youtube-users close" id="Youtube"></span>
                     <span class="ff-filter-users ff-type-rss-users close" id="RSS"></span>
                 </div>
-                <p class="advanced" data-lang="section2_adv_search">Advanced User Search</p>
+                <p class="advanced" id="advanced_user_search" data-lang="section2_adv_search">Users suggestion</p>
 
                 <div class="examples">
                     <p data-lang="section2_examples">Examples:</p>
                     <ul>
-                        <li class="example_1" id="example_1">Greenpeace<img class="examples_icon"
-                                                                            src="imgs/twitter-16-black.png"></li>
-                        <li class="example_2" id="example_2">WWF<img class="examples_icon"
-                                                                     src="imgs/google+-16-black.png"></li>
-                        <li class="example_3" id="example_3">CapeNature<img class="examples_icon"
-                                                                            src="imgs/facebook-16-black.png"></li>
+                        <li id="example_1">Greenpeace<img class="examples_icon"
+                                                          src="imgs/twitter-16-black.png"></li>
+                        <li id="example_2">WWF<img class="examples_icon"
+                                                   src="imgs/google+-16-black.png"></li>
+                        <li id="example_3">CapeNature<img class="examples_icon"
+                                                          src="imgs/facebook-16-black.png"></li>
                         <!--<li class="example_4" id="example_4">green4ema<img class="examples_icon"
                                                                            src="imgs/instagram-16-black.png"></li>-->
                     </ul>
@@ -207,9 +211,8 @@
                     <ul id="users" class="tags"></ul>
                 </div>
             </div>
-            <div id="advanced_user" class="small-12 medium-12 large-12 columns"
-                 style="text-align:center;z-index: 1;display: none">
-                <p class="advanced_p" data-lang="section2_adv_search">Advanced User Search</p>
+            <div id="advanced_user" class="small-12 medium-12 large-12 columns">
+                <p class="advanced_p" data-lang="section2_adv_search">Users suggestion</p>
 
                 <div class="ff-filter-holder_adv">
                     <span class="ff-filter-users_adv ff-type-twitter-users open_adv" id="adv_Twitter"></span>
@@ -218,7 +221,7 @@
                     <!--<span class="ff-filter-users_adv ff-type-instagram-users open_adv" id="adv_Instagram"></span>-->
                     <span class="ff-filter-users_adv ff-type-youtube-users open_adv" id="adv_Youtube"></span>
                 </div>
-                <img id="text_user_icon" src="imgs/text_user.png" alt="text_user" style="top: 5px;position: relative;">
+                <img id="text_user_icon" src="imgs/text_user.png" alt="text_user">
 
                 <div class="input-field" style="margin-top:0">
                     <input id="user_advanced" class="user_input" type="text" autocomplete="off">
@@ -229,12 +232,12 @@
                 <div class="examples">
                     <p data-lang="section2_examples">Examples:</p>
                     <ul>
-                        <li class="example_1" id="example_5">Greenpeace<img class="examples_icon"
-                                                                            src="imgs/twitter-16-black.png"></li>
-                        <li class="example_2" id="example_6">WWF<img class="examples_icon"
-                                                                     src="imgs/google+-16-black.png"></li>
-                        <li class="example_3" id="example_7">CapeNature<img class="examples_icon"
-                                                                            src="imgs/facebook-16-black.png"></li>
+                        <li id="example_5">Greenpeace<img class="examples_icon"
+                                                          src="imgs/twitter-16-black.png"></li>
+                        <li id="example_6">WWF<img class="examples_icon"
+                                                   src="imgs/google+-16-black.png"></li>
+                        <li id="example_7">CapeNature<img class="examples_icon"
+                                                          src="imgs/facebook-16-black.png"></li>
                         <!--<li class="example_4" id="example_8">green4ema<img class="examples_icon"
                                                                            src="imgs/instagram-16-black.png"></li>-->
                     </ul>
@@ -247,7 +250,51 @@
                     <p id="no_results" data-lang="section2_no_results">No results for this keyword</p>
                 </div>
                 <div id="users_images"></div>
-                <div class="btn_material active_blue" data-lang="section2_done_button">DONE</div>
+                <div class="btn_material" id="done_users" data-lang="section2_done_button">DONE</div>
+            </div>
+
+            <div id="advanced_tag" class="small-12 medium-12 large-12 columns">
+                <p class="advanced_p" data-lang="section2_adv_tags" >Advanced Tags</p>
+                <img id="logic_icon" src="imgs/logic_32_gray.png" alt="text_user">
+
+                <div class="input-field" style="margin-top:0">
+                    <input id="tag_advanced" class="user_input" type="text" autocomplete="off">
+                    <label for="tag_advanced" data-lang="section2_input_tags">Place your Tags</label>
+                    <img class="search_icon" src="imgs/search-gray.png" id="search_icon_4" alt="search">
+                </div>
+                <div id="examples_2" class="examples">
+                    <p data-lang="section2_examples">Examples:</p>
+                    <ul>
+                        <li>pollution AND waste</li>
+                        <li>plastic OR recycle</li>
+                        <li>(clean OR electric) AND vehicles</li>
+                    </ul>
+                </div>
+                <div id="user_tags_adv">
+                    <ul id="tags_adv" class="tags"></ul>
+                </div>
+                <p class="drag_area_title" data-lang="section2_dragzone_title">Enter tags, drag and format logical expressions:</p>
+
+                <div id="actions_expression">
+                    <div class="round_button" id="add_expr" data-lang="section2_add_expr">Add</div>
+                    <div class="round_button" id="clear_expr" data-lang="section2_clear_expr">Clear</div>
+                </div>
+                <div id="drag_area">
+                    <ul id="expression" class="list_tags"></ul>
+                </div>
+                <div id="add_operators">
+                    <p id="parenthesis_add">+ [ ]</p>
+
+                    <p id="and_add">+ AND</p>
+
+                    <p id="or_add">+ OR</p>
+
+                    <p id="not_add">+ NOT</p>
+                </div>
+                <div id="error_expr">
+                    <strong data-lang="section2_error">Error: </strong><span></span>
+                </div>
+                <div class="btn_material" id="done_tags" data-lang="section2_done_button">DONE</div>
             </div>
         </div>
     </div>
@@ -309,8 +356,14 @@
                 <div class="btn_material" id="stopped" data-lang="section4_filter_stopped">STOPPED
                 </div>
             </div>
-            <p class="text_p" id="no_stopped"><span data-lang="section4_no_stopped_1">You haven't any</span> <span style="font-weight: bold;color: #E53D00;" data-lang="section4_no_stopped_2">stopped</span> <span data-lang="section4_no_stopped_3">collections!</span></p>
-            <p class="text_p" id="no_running"><span data-lang="section4_no_stopped_1">You haven't any</span> <span style="font-weight: bold;color: #0A8754;" data-lang="section4_no_running_2">running</span> <span data-lang="section4_no_stopped_3">collections!</span></p>
+            <p class="text_p" id="no_stopped"><span data-lang="section4_no_stopped_1">You haven't any</span> <span
+                    style="font-weight: bold;color: #E53D00;" data-lang="section4_no_stopped_2">stopped</span> <span
+                    data-lang="section4_no_stopped_3">collections!</span></p>
+
+            <p class="text_p" id="no_running"><span data-lang="section4_no_stopped_1">You haven't any</span> <span
+                    style="font-weight: bold;color: #0A8754;" data-lang="section4_no_running_2">running</span> <span
+                    data-lang="section4_no_stopped_3">collections!</span></p>
+
             <div id="collection_loader">
                 <div class="square_load"></div>
                 <div class="square_load"></div>
@@ -475,6 +528,7 @@
                 <h4>{{emptyString name}}</h4>
 
                 <p>{{emptyString username}}</p>
+
                 <p class="description_user">{{trimString description}}</p>
             </div>
         </div>
@@ -500,6 +554,7 @@
 
 <!-- JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="js/index/jquery_drag.js"></script>
 <script src="js/config.js"></script>
 <script src="js/index/ajax_abort.js"></script>
 <script src="js/index/translate.js"></script>

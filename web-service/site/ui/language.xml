@@ -6,7 +6,7 @@
         <it>Scopri come il media è condiviso sui social network...</it>
         <tr>Medyanın sosyal ağlarda nasıl paylaşıldığını keşfet...</tr>
         <sp>Descubre cómo los medios se comparte en las redes sociales...</sp>
-        <ca>Descubre cómo los medios se comparte en las redes sociales...</ca>
+        <ca>Descobriu com comparteixen les xarxes socials els mitjans de comunicació…</ca>
     </translation>
     <translation id="slider_search">
         <en>SEARCH</en>
@@ -22,7 +22,7 @@
         <it>IMPOSTAZIONI</it>
         <tr>AYARLAR</tr>
         <sp>AJUSTES</sp>
-        <ca>AJUSTOS</ca>
+        <ca>CONFIGURACIÓ</ca>
     </translation>
     <translation id="slider_settings_language">
         <en>LANGUAGE</en>
@@ -64,14 +64,6 @@
         <sp>FECHA</sp>
         <ca>DATA</ca>
     </translation>
-    <translation id="slider_settings_sort">
-        <en>SORT</en>
-        <el>ΤΑΞΙΝΟΜΗΣΗ</el>
-        <it>ORDINA</it>
-        <tr>SIRALA</tr>
-        <sp>ORDENAR</sp>
-        <ca>CLASSIFICA</ca>
-    </translation>
     <translation id="slider_settings_unique">
         <en>UNIQUE</en>
         <el>ΜΟΝΑΔΙΚΑ</el>
@@ -79,6 +71,22 @@
         <tr>UNIQUE</tr>
         <sp>UNIQUE</sp>
         <ca>UNIQUE</ca>
+    </translation>
+    <translation id="slider_settings_sort">
+        <en>SORT</en>
+        <el>ΤΑΞΙΝΟΜΗΣΗ</el>
+        <it>ORDINA</it>
+        <tr>SIRALA</tr>
+        <sp>ORDENAR</sp>
+        <ca>ORDENA</ca>
+    </translation>
+    <translation id="settings_all">
+        <en>All</en>
+        <el>Όλα</el>
+        <it>Tutto</it>
+        <tr>TÜMÜ</tr>
+        <sp>Todas</sp>
+        <ca>Tot</ca>
     </translation>
     <translation id="settings_false">
         <en>False</en>
@@ -94,15 +102,7 @@
         <it>True</it>
         <tr>True</tr>
         <sp>True</sp>
-        <ca>True/S</ca>
-    </translation>
-    <translation id="settings_all">
-        <en>All</en>
-        <el>Όλα</el>
-        <it>Tutto</it>
-        <tr>TÜMÜ</tr>
-        <sp>Todas</sp>
-        <ca>TOT/S</ca>
+        <ca>True</ca>
     </translation>
     <translation id="settings_original">
         <en>Original</en>
@@ -126,7 +126,7 @@
         <it>Media</it>
         <tr>Medya</tr>
         <sp>Medios de comunicación</sp>
-        <ca>Media o mitjans de comunicació</ca>
+        <ca>Mitjans de comunicació</ca>
     </translation>
     <translation id="settings_text">
         <en>Text</en>
@@ -190,17 +190,16 @@
         <it>Caricamento immagini, attendi per favore.....</it>
         <tr>Resimler yükleniyor, lütfen bekleyiniz.....</tr>
         <sp>Carga de imágenes, por favor espere.....</sp>
-        <ca>Carregant imatges, si us plau espera...</ca>
+        <ca>Carregant imatges, espereu...</ca>
     </translation>
-
-
+    <!-- DASHBOARD-->
     <translation id="statistics_posts">
         <en>Posts made</en>
         <el>Δημοσιεύσεις</el>
         <it>Post</it>
         <tr>Yapılan gönderiler</tr>
         <sp>Mensajes</sp>
-        <ca>Comentaris realizats</ca>
+        <ca>Publicacions realitzades</ca>
     </translation>
     <translation id="statistics_users">
         <en>Users Talking</en>
@@ -232,7 +231,7 @@
         <it>Reti sociali</it>
         <tr>Sosyal Karışım</tr>
         <sp>Mezcla Social</sp>
-        <ca>Xarxes socials</ca>
+        <ca>Relacions socials</ca>
     </translation>
     <translation id="timeline">
         <en>Timeline</en>
@@ -240,7 +239,7 @@
         <it>Orario</it>
         <tr>Zaman tüneli</tr>
         <sp>Calendario</sp>
-        <ca>Termini</ca>
+        <ca>Cronologia</ca>
     </translation>
     <translation id="timeline_per">
         <en>Per</en>
@@ -280,7 +279,7 @@
         <it>Mappa di calore web</it>
         <tr>Isı haritası</tr>
         <sp>Mapa de puntos</sp>
-        <ca>Mapa web</ca>
+        <ca>Mapa de calor</ca>
     </translation>
     <translation id="users_location">
         <en>Users Locations</en>
@@ -312,7 +311,7 @@
         <it>Top</it>
         <tr>Yukarı</tr>
         <sp>Parte superior</sp>
-        <ca>Top</ca>
+        <ca>Els més…</ca>
     </translation>
     <translation id="entities_sort">
         <en>Sort By</en>
@@ -336,7 +335,7 @@
         <it>FREQUENZA</it>
         <tr>SIKLIK</tr>
         <sp>FRECUENCIA</sp>
-        <ca>FREQUENCIA</ca>
+        <ca>FREQÜÈNCIA</ca>
     </translation>
     <translation id="entity_person">
         <en>PERSON</en>
@@ -360,7 +359,7 @@
         <it>ORGANIZZAZIONE</it>
         <tr>ORGANİZASYON</tr>
         <sp>ORGANIZACIÓN</sp>
-        <ca>ORGANITZACIO</ca>
+        <ca>ORGANITZACIÓ</ca>
     </translation>
     <translation id="entity_animate">
         <en>Animate</en>

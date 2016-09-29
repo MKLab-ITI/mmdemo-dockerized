@@ -908,7 +908,7 @@ function minutes() {
                     $("#update_field").html("Último mensaje: -");
                     break;
                 case "ca":
-                    $("#update_field").html("Darrer missatge: -");
+                    $("#update_field").html("Darrer element en la vista actual: -");
                     break;
                 default:
                     $("#update_field").html("Last item in current view: -");
@@ -989,7 +989,7 @@ function minutes() {
                     $("#update_field").html("Último mensaje:&nbsp;" + now + "&nbsp;" + range + " hace");
                     break;
                 case "ca":
-                    $("#update_field").html("Darrer missatge:&nbsp;" + now + "&nbsp;" + range + " fa");
+                    $("#update_field").html("Darrer element en la vista actual:&nbsp;" + now + "&nbsp;" + range + " fa");
                     break;
                 default:
                     $("#update_field").html("Last item in current view:&nbsp;" + now + "&nbsp;" + range + " ago");

@@ -6,7 +6,7 @@
         <it>Scopri</it>
         <tr>Keşfet</tr>
         <sp>Descubrir</sp>
-        <ca>Descobrir</ca>
+        <ca>Descobreix</ca>
     </translation>
     <translation id="menu_browse">
         <en>Browse</en>
@@ -30,7 +30,7 @@
         <it>Tieni&amp;nbsp;d'occhio&amp;nbsp;</it>
         <tr>Ekran </tr>
         <sp>Seguir </sp>
-        <ca>Monitoritza </ca>
+        <ca>Controla </ca>
     </translation>
     <translation id="section1_networks">
         <en>in Social Networks</en>
@@ -46,7 +46,7 @@
         <it>Resta aggiornato sulle ultime questioni ambientali</it>
         <tr>Güncel çevresel sorunları takip et &amp; bildir</tr>
         <sp>Realizar un seguimiento de informar sobre las últimas cuestiones ambientales</sp>
-        <ca>Fer seguiment &amp; i informar sobre les qüestions mediambientals més recents</ca>
+        <ca>Fes seguiment i informa sobre les qüestions mediambientals més recents</ca>
     </translation>
     <translation id="section1_description_2">
         <en>real time</en>
@@ -54,7 +54,7 @@
         <it>tempo reale (Contenuto immediato)</it>
         <tr>gerçek zaman</tr>
         <sp>tiempo real</sp>
-        <ca>temps real</ca>
+        <ca>en temps real </ca>
     </translation>
     <translation id="section2_title_start">
         <en>What do you want to</en>
@@ -75,10 +75,10 @@
     <translation id="section2_title_edit">
         <en>Improve your collection: </en>
         <el>Βελτίωσε την συλλογή σου: </el>
-        <it>Translation Required</it>
-        <tr>Translation Required</tr>
-        <sp>Translation Required</sp>
-        <ca>Translation Required </ca>
+        <it>Improve your collection: </it>
+        <tr>Improve your collection: </tr>
+        <sp>Improve your collection: </sp>
+        <ca>Improve your collection: </ca>
     </translation>
     <translation id="section2_input_collection">
         <en>Collection Name</en>
@@ -88,14 +88,6 @@
         <sp>Nombre de la colección</sp>
         <ca>Nom del recull</ca>
     </translation>
-    <translation id="section2_input_tags">
-        <en>Place your Tags</en>
-        <el>Δώσε τις ετικέτες</el>
-        <it>Inserisci I tuoi tag</it>
-        <tr>Etiket ekle</tr>
-        <sp>Coloque las etiquetas</sp>
-        <ca>Col·loca  els teus Tags</ca>
-    </translation>
     <translation id="section2_input_users_keyword">
         <en>Place a keyword</en>
         <el>Δώσε μια λέξη-κλειδί</el>
@@ -103,6 +95,14 @@
         <tr>Place a keyword</tr>
         <sp>Place a keyword</sp>
         <ca>Place a keyword</ca>
+    </translation>
+    <translation id="section2_input_tags">
+        <en>Place your Tags</en>
+        <el>Δώσε τις ετικέτες</el>
+        <it>Inserisci I tuoi tag</it>
+        <tr>Etiket ekle</tr>
+        <sp>Coloque las etiquetas</sp>
+        <ca>Col·loqueu les vostres etiquetes</ca>
     </translation>
     <translation id="section2_examples">
         <en>Examples:</en>
@@ -118,7 +118,7 @@
         <it>Inserisci I tuoi utenti da Twitter</it>
         <tr>Twitter'dan kullanıcı ekle</tr>
         <sp>Añada sus usuarios de Twitter</sp>
-        <ca>Afegeix  els teus usuaris de Twitter</ca>
+        <ca>Afegiu  els vostres usuaris de Twitter</ca>
     </translation>
     <translation id="section2_input_GooglePlus">
         <en>Place your Users from GooglePlus</en>
@@ -126,7 +126,7 @@
         <it>Inserisci I tuoi utenti da GooglePlus</it>
         <tr>GooglePlus'tan kullanıcı ekle</tr>
         <sp>Añada sus usuarios de GooglePlus</sp>
-        <ca>Afegeix els teus usuaris de GooglePlus</ca>
+        <ca>Afegiu  els vostres usuaris de GooglePlus</ca>
     </translation>
     <translation id="section2_input_Facebook">
         <en>Place your Users from Facebook</en>
@@ -134,7 +134,7 @@
         <it>Inserisci I tuoi utenti da Facebook</it>
         <tr>Facebook'tan kullanıcı ekle</tr>
         <sp>Añada sus usuarios de Facebook</sp>
-        <ca>Afegeix  els teus usuaris de Facebook</ca>
+        <ca>Afegiu  els vostres usuaris de Facebook</ca>
     </translation>
     <translation id="section2_input_Instagram">
         <en>Place your Users from Instagram</en>
@@ -142,7 +142,7 @@
         <it>Inserisci I tuoi utenti da Instagram</it>
         <tr>Instagram'dan kullanıcı ekle</tr>
         <sp>Añada sus usuarios de Instagram</sp>
-        <ca>Afegeix els teus usuaris de Instagram</ca>
+        <ca>Afegiu  els vostres usuaris d'Instagram</ca>
     </translation>
     <translation id="section2_input_Youtube">
         <en>Place your Users from Youtube</en>
@@ -150,7 +150,7 @@
         <it>Inserisci I tuoi utenti da Youtube</it>
         <tr>Youtube'dan kullanıcı ekle</tr>
         <sp>Añada sus usuarios de Youtube</sp>
-        <ca>Afegeix els teus usuaris de Youtube</ca>
+        <ca>Afegiu  els vostres usuaris de Youtube</ca>
     </translation>
     <translation id="section2_input_RSS">
         <en>Place your RSS</en>
@@ -158,47 +158,7 @@
         <it>Inserisci I tuoi RSS</it>
         <tr>RSS'i ekle</tr>
         <sp>Añada el RSS</sp>
-        <ca>Afegeix el teu RSS</ca>
-    </translation>
-    <translation id="section2_done_button">
-        <en>DONE</en>
-        <el>ΤΕΛΟΣ</el>
-        <it>DONE</it>
-        <tr>DONE</tr>
-        <sp>DONE</sp>
-        <ca>DONE</ca>
-    </translation>
-    <translation id="section2_adv_search">
-        <en>Users suggestion</en>
-        <el>Προτεινόμενοι χρήστες</el>
-        <it>Users suggestion</it>
-        <tr>Users suggestion</tr>
-        <sp>Users suggestion</sp>
-        <ca>Users suggestion</ca>
-    </translation>
-    <translation id="section2_adv_tags">
-        <en>Advanced Tags</en>
-        <el>Σύνθετες Ετικέτες</el>
-        <it>Advanced Tags</it>
-        <tr>Advanced Tags</tr>
-        <sp>Advanced Tags</sp>
-        <ca>Advanced Tags</ca>
-    </translation>
-    <translation id="section2_dragzone_title">
-        <en>Enter tags, drag and format logical expressions:</en>
-        <el>Εισάγετε ετικέτες, σύρετε και σχηματίστε λογικές εκφράσεις:</el>
-        <it>Enter tags, drag and format logical expressions:</it>
-        <tr>Enter tags, drag and format logical expressions:</tr>
-        <sp>Enter tags, drag and format logical expressions:</sp>
-        <ca>Enter tags, drag and format logical expressions:</ca>
-    </translation>
-    <translation id="section2_add_expr">
-        <en>Add</en>
-        <el>Προσθήκη</el>
-        <it>Add</it>
-        <tr>Add</tr>
-        <sp>Add</sp>
-        <ca>Add</ca>
+        <ca>Afegiu el vostre RSS</ca>
     </translation>
     <translation id="section2_error">
         <en>Error: </en>
@@ -216,6 +176,38 @@
         <sp>Clear</sp>
         <ca>Clear</ca>
     </translation>
+    <translation id="section2_add_expr">
+        <en>Add</en>
+        <el>Προσθήκη</el>
+        <it>Add</it>
+        <tr>Add</tr>
+        <sp>Add</sp>
+        <ca>Add</ca>
+    </translation>
+    <translation id="section2_dragzone_title">
+        <en>Enter tags, drag and format logical expressions:</en>
+        <el>Εισάγετε ετικέτες, σύρετε και σχηματίστε λογικές εκφράσεις:</el>
+        <it>Enter tags, drag and format logical expressions:</it>
+        <tr>Enter tags, drag and format logical expressions:</tr>
+        <sp>Enter tags, drag and format logical expressions:</sp>
+        <ca>Enter tags, drag and format logical expressions:</ca>
+    </translation>
+    <translation id="section2_adv_tags">
+        <en>Advanced Tags</en>
+        <el>Σύνθετες Ετικέτες</el>
+        <it>Advanced Tags</it>
+        <tr>Advanced Tags</tr>
+        <sp>Advanced Tags</sp>
+        <ca>Advanced Tags</ca>
+    </translation>
+    <translation id="section2_adv_search">
+        <en>Users suggestion</en>
+        <el>Προτεινόμενοι χρήστες</el>
+        <it>Users suggestion</it>
+        <tr>Users suggestion</tr>
+        <sp>Users suggestion</sp>
+        <ca>Users suggestion</ca>
+    </translation>
     <translation id="section2_advanced_loading">
         <en>Please wait, this may take a few seconds...</en>
         <el>Παρακαλώ περιμένετε μερικά δευτερόλεπτα...</el>
@@ -232,13 +224,21 @@
         <sp>No results for this keyword</sp>
         <ca>No results for this keyword</ca>
     </translation>
+    <translation id="section2_done_button">
+        <en>DONE</en>
+        <el>ΤΕΛΟΣ</el>
+        <it>DONE</it>
+        <tr>DONE</tr>
+        <sp>DONE</sp>
+        <ca>DONE</ca>
+    </translation>
     <translation id="section3_title">
         <en>All set? Hit the Launch Button</en>
         <el>Όλα έτοιμα? Πάτα την εκκίνηση</el>
         <it>Tutto pronto? Premi il pulsante di avvio</it>
         <tr>Hazır mısın? Başlatma butonuna tıkla</tr>
         <sp>¿Todo listo? Pulse el botón de inicio</sp>
-        <ca>Tot preparat? Prem el botó d'inici</ca>
+        <ca>Tot preparat? Premeu el botó d'inici</ca>
     </translation>
     <translation id="section4_title">
         <en>Collections</en>
@@ -246,7 +246,7 @@
         <it>Raccolte</it>
         <tr>Koleksiyonlar</tr>
         <sp>Colecciones</sp>
-        <ca>Reculls/recopilacions</ca>
+        <ca>Reculls</ca>
     </translation>
     <translation id="section4_description">
         <en>Browse all created collections, Inform on latest trending topics</en>
@@ -254,7 +254,7 @@
         <it>Esplora tutte le raccolte create, informati sui piu' recenti e popolari argomenti</it>
         <tr>Oluşturulan tüm koleksiyonlara gözat, son çıkan trend konular bildir</tr>
         <sp>Navegar por todas las colecciones creadas , Informar sobre los últimos temas de tendencias</sp>
-        <ca>Navega per tots els reculls creats, Informa sobre els trending topics més recents</ca>
+        <ca>Navega per tots els reculls creats, informa sobre els trending topics més recents </ca>
     </translation>
     <translation id="section4_filter_all">
         <en>ALL</en>
@@ -320,14 +320,6 @@
         <sp>stopped</sp>
         <ca>stopped</ca>
     </translation>
-    <translation id="section4_no_running_2">
-        <en>running</en>
-        <el>ενεργή</el>
-        <it>running</it>
-        <tr>running</tr>
-        <sp>running</sp>
-        <ca>running</ca>
-    </translation>
     <translation id="section4_no_stopped_3">
         <en>collections!</en>
         <el>συλλογή</el>
@@ -335,6 +327,14 @@
         <tr>collections!</tr>
         <sp>collections!</sp>
         <ca>collections!</ca>
+    </translation>
+    <translation id="section4_no_running_2">
+        <en>running</en>
+        <el>ενεργή</el>
+        <it>running</it>
+        <tr>running</tr>
+        <sp>running</sp>
+        <ca>running</ca>
     </translation>
     <translation id="footer_text">
         <en>All rights reserved</en>

@@ -34,7 +34,7 @@ function show_active_users() {
                     break;
                 case "ca":
                     noData = "No hi ha dades disponibles";
-                    posts_name = "comentaris";
+                    posts_name = "publicacions";
                     break;
                 default:
                     noData = "No Data Available";

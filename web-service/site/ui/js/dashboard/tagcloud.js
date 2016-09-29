@@ -31,7 +31,7 @@ function draw_hashtags(source) {
             $flatTable.html('<thead><tr><td>ENTIDAD</td><td>TIPO</td><td>FRECUENCIA</td></tr></thead>');
             break;
         case "ca":
-            $flatTable.html('<thead><tr><td>ENTITAT</td><td>TIPUS</td><td>FREQUENCIA</td></tr></thead>');
+            $flatTable.html('<thead><tr><td>ENTITAT</td><td>TIPUS</td><td>FREQÜÈNCIA</td></tr></thead>');
             break;
         default:
             $flatTable.html('<thead><tr><td>ΕΝΤΙΤΥ</td><td>TYPE</td><td>FREQUENCY</td></tr></thead>');
@@ -604,7 +604,7 @@ function draw_hashtags(source) {
                     years_x = [150, (this.width / 2), this.width - 150];
                     break;
                 case "ca":
-                    years_data = ["PERSONA", "ETIQUETA", "ORGANITZACIO"];
+                    years_data = ["PERSONA", "ETIQUETA", "ORGANITZACIÓ"];
                     years_x = [150, (this.width / 2), this.width - 150];
                     break;
                 default:
@@ -834,8 +834,8 @@ $('#animate').click(function () {
                 loadimage(99, query_param, 12);
                 break;
             case "ca":
-                $('#myModal h1').html("No hi ha suficients dades!");
-                $('#myModal p').html("El termini ha de ser superior a 3 dies.");
+                $('#myModal h1').html("No hi ha dades suficients!");
+                $('#myModal p').html("La finestra de temps ha de ser superior a 3 dies.");
                 $('#myModal').reveal();
                 loadimage(99, query_param, 12);
                 break;

@@ -1,4 +1,4 @@
-var api_folder="/api/";
+var api_folder="http://160.40.50.207:85/api/";
 /*Don't change it unless you really know what you are doing*/
 
 var project_logo = "";

@@ -11317,8 +11317,8 @@
                                         title = "Mensajes";
                                         break;
                                     case "ca":
-                                        to_return = "Comentaris";
-                                        title = "Comentaris";
+                                        to_return = "Publicacions";
+                                        title = "Publicacions";
                                         break;
                                     default:
                                         to_return = "Posts";

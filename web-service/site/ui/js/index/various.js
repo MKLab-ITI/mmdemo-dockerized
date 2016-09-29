@@ -1048,8 +1048,8 @@ $('.stage').click(function (e) {
                 $('#myModal').reveal();
                 break;
             case "ca":
-                $('#myModal h1').html("T'has descuidat d'omplir algun camp!");
-                $('#myModal p').html("Has d'especificar el nom d'un recull.");
+                $('#myModal h1').html("Falten camps!");
+                $('#myModal p').html("Heu d'especificar un nom de recull.");
                 $('#myModal').reveal();
                 break;
             default:
@@ -1089,8 +1089,8 @@ $('.stage').click(function (e) {
                 $('#myModal').reveal();
                 break;
             case "ca":
-                $('#myModal h1').html("T'has descuidat d'omplir algun camp!");
-                $('#myModal p').html("Cal que com a mínim especifiquis un usuari o una paraula clau.");
+                $('#myModal h1').html("Falten camps!");
+                $('#myModal p').html("Heu d'especificar com mínim un usuari o una paraula clau.");
                 $('#myModal').reveal();
                 break;
             default:
@@ -1185,8 +1185,8 @@ $('.stage').click(function (e) {
                         $('#myModal').reveal();
                         break;
                     case "ca":
-                        $('#myModal h1').html("S'ha produït un error!");
-                        $('#myModal p').html("El teu recull no s'ha registrat correctament. Si us plau prova-ho una altra vegada.");
+                        $('#myModal h1').html("Ups! S'ha produït un error!");
+                        $('#myModal p').html("El recull no s'ha tramès correctament. Torneu-ho a provar.");
                         $('#myModal').reveal();
                         break;
                     default:
@@ -1243,8 +1243,8 @@ $("#Container").on("click", ".restart_icon", function () {
                     $('#myModal').reveal();
                     break;
                 case "ca":
-                    $('#myModal h1').html("S'ha produït un error!");
-                    $('#myModal p').html("Aquest recull no s'ha pogut esborrar. Si us plau prova-ho una altra vegada.");
+                    $('#myModal h1').html("Ups! S'ha produït un error!");
+                    $('#myModal p').html("Aquest recull no s'ha pogut esborrar. Torneu-ho a provar.");
                     $('#myModal').reveal();
                     break;
                 default:
@@ -1296,8 +1296,8 @@ $("#Container").on("click", ".delete_icon", function () {
                     $('#myModal').reveal();
                     break;
                 case "ca":
-                    $('#myModal h1').html("S'ha produït un error!");
-                    $('#myModal p').html("Aquest recull no s'ha pogut esborrar. Si us plau prova-ho una altra vegada.");
+                    $('#myModal h1').html("Ups! S'ha produït un error!");
+                    $('#myModal p').html("Aquest recull no s'ha pogut esborrar. Torneu-ho a provar.");
                     $('#myModal').reveal();
                     break;
                 default:
@@ -1353,8 +1353,8 @@ $("#Container").on("click", ".stop_icon", function () {
                     $('#myModal').reveal();
                     break;
                 case "ca":
-                    $('#myModal h1').html("S'ha produït un error!");
-                    $('#myModal p').html("El teu recull no s'ha aturat correctament. Si us plau prova-ho una altra vegada.");
+                    $('#myModal h1').html("Ups! S'ha produït un error!");
+                    $('#myModal p').html("El recull no s'ha aturat. Torneu-ho a provar.");
                     $('#myModal').reveal();
                     break;
                 default:
@@ -1441,7 +1441,7 @@ else {
             $('#myModal').reveal();
             break;
         case "ca":
-            $('#myModal h1').html("S'ha produït un error!");
+            $('#myModal h1').html("Ups! S'ha produït un error!");
             $('#myModal p').html("You have to define a user id.");
             $('#myModal').reveal();
             break;
@@ -1646,8 +1646,8 @@ function get_collections(flag) {
                     $('#myModal').reveal();
                     break;
                 case "ca":
-                    $('#myModal h1').html("S'ha produït un error!");
-                    $('#myModal p').html("Els teus reculls  no s'han pogut carregar.");
+                    $('#myModal h1').html("Ups! S'ha produït un error!");
+                    $('#myModal p').html("Els reculls no s'han pogut carregar.");
                     $('#myModal').reveal();
                     break;
                 default:

@@ -314,7 +314,7 @@ function parse_latest(pagenum) {
                                 break;
                             case "ca":
                                 $('#myModal h1').html("No s'ha trobat cap resultat!");
-                                $('#myModal p').html("A internet no hi ha cap referència rellevant sobre aquesta paraula clau.");
+                                $('#myModal p').html("A Internet no hi ha cap referència rellevant sobre aquesta paraula clau.");
                                 $('#myModal').reveal();
                                 loadimage(99, query_param, 12);
                                 break;
@@ -359,7 +359,7 @@ function parse_latest(pagenum) {
                                 break;
                             case "ca":
                                 $('#myModal h1').html("No s'ha trobat cap resultat!");
-                                $('#myModal p').html("A internet no hi ha cap referència rellevant sobre aquest recull.");
+                                $('#myModal p').html("A Internet no hi ha cap referència rellevant sobre aquest recull.");
                                 $('#myModal').reveal();
                                 loadimage(99, query_param, 12);
                                 break;

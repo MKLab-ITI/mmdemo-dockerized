@@ -2105,12 +2105,8 @@ $('#add_expr').click(function () {
                 string_expr = string_expr + $(this).attr('id');
             }
         });
-        while ((string_expr.slice(-1) === ")") && (string_expr.charAt(0) === "(")) {
-            string_expr = string_expr.slice(1, -1);
-        }
         addtag_advanced(string_expr);
     }
-
 });
 
 $('#clear_expr').click(function () {

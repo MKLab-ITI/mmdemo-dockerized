@@ -2294,7 +2294,8 @@ img.responsive-img {
 .parenthesis_operator {
     background-color: #A69CAC !important;
 }
-.info{
+
+.info {
     padding: 4px 10px;
     border: 1px solid #bce8f1;
     border-radius: 4px;
@@ -2303,9 +2304,8 @@ img.responsive-img {
     font-size: 12px;
     display: none;
     color: #31708f;
-    background-color: rgba(71,184,229,0.2);
+    background-color: rgba(71, 184, 229, 0.2);
 }
-
 
 @keyframes shake {
     0% {

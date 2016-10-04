@@ -16,6 +16,7 @@ class MongoDAO {
     private static $COLLECTIONS = 'Collection';
 
     private static $RELEVANCE_JUDGMENTS = 'RelevanceJudgments';
+    private static $ITEMS_UNDER_MONITORING = 'ItemsUnderMonitoring';
 
     private static $ITEM_FIELDS = array('_id'=>1, 'shares'=>1, 'likes'=>1, 'title'=>1, 'tags'=>1, 'user'=>1, 'uid'=>1 ,'source'=>1,
         'language'=>1, 'pageUrl'=>1, 'publicationTime'=>1, 'original'=>1, 'reference'=>1, 'referencedUserId'=>1, 'type'=>1, 'inReply'=>1, 'mentions'=>1,
@@ -301,17 +302,55 @@ class MongoDAO {
         $mongoCollection->update($q, $doc, array("upsert" => true));
     }
 
-    public function getRelevanceJudgements($cid) {
+
+    public function getRelevanceJudgements($cid, $n=20) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
 
         $q = array("cid" => $cid);
         $sort = array('relevance' => -1);
 
-        $cursor = $mongoCollection->find($q)->sort($sort);
+        $cursor = $mongoCollection
+            ->find($q)
+            ->sort($sort)
+            ->limit($n);
 
         $rj = iterator_to_array($cursor, false);
         return $rj;
     }
 
+    public function insertItemUnderMonitoring($iid, $cid) {
+
+        $id =  $iid . "_" . $cid;
+        $q = array('_id'   =>  $id);
+        $doc = array(
+            '_id'   =>  $id,
+            'cid'   =>  $cid,
+            'iid'   =>  $iid,
+            'timestamp' => 1000 * time()
+        );
+
+        $mongoCollection = $this->db->selectCollection(MongoDAO::$ITEMS_UNDER_MONITORING);
+        $mongoCollection->update($q, $doc, array("upsert" => true));
+    }
+
+    public function getItemsUnderMonitoring($cid) {
+
+        $q = array('cid' => $cid);
+
+        $mongoCollection = $this->db->selectCollection(MongoDAO::$ITEMS_UNDER_MONITORING);
+        $cursor = $mongoCollection->find($q);
+
+        $items = iterator_to_array($cursor, false);
+        return $items;
+    }
+
+    public function removeItemUnderMonitoring($iid, $cid) {
+
+        $id =  $iid . "_" . $cid;
+        $q = array('_id'   =>  $id);
+
+        $mongoCollection = $this->db->selectCollection(MongoDAO::$ITEMS_UNDER_MONITORING);
+        $mongoCollection->remove($q);
+    }
 
 }

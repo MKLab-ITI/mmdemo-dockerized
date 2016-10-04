@@ -8,18 +8,28 @@
 
 class Utils {
 
+    public function isLogicalExpression($q) {
+        return preg_match('/AND/',$q) || preg_match('/OR/',$q) || preg_match('/NOT/',$q);
+    }
+
     public function formulateLogicalQuery($keywords) {
+
         $queryParts = array();
         foreach($keywords as $keyword) {
-            trim($keyword);
-            $keyword = preg_split("/\s+/", $keyword);
-            if(count($keyword) > 1) {
-                $queryParts[] = '(' . implode(' AND ', $keyword) . ')';
+            if($this->isLogicalExpression($keyword)) {
+                $queryParts[] =  "($keyword )";
             }
             else {
-                $queryParts[] = implode(' AND ', $keyword);
+                trim($keyword);
+                $keyword = preg_split("/\s+/", $keyword);
+                if (count($keyword) > 1) {
+                    $queryParts[] = '(' . implode(' AND ', $keyword) . ')';
+                } else {
+                    $queryParts[] = implode(' AND ', $keyword);
+                }
             }
         }
+
         $query = implode(' OR ', $queryParts);
         return $query;
     }
@@ -79,18 +89,10 @@ class Utils {
             $query[] = "uid:($usersQuery)";
         }
 
-        if(isset($collection['itemsToExclude'])) {
-            $itemsToExclude = $collection('itemsToExclude');
-            if ($itemsToExclude != null && count($itemsToExclude) > 0) {
-                $idsToExclude = implode(' OR ', $itemsToExclude);
-                $query[] = "-id:($idsToExclude)";
-            }
-        }
-
         return implode(' OR ', $query);
     }
 
-    public function getFilters($since, $until, $source, $original, $type, $language, $query) {
+    public function getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude) {
         // Add filters if available
         $filters = array();
 
@@ -148,6 +150,13 @@ class Utils {
         if($since !== '*' && $until !== '*') {
             $filters['publicationTime'] = "[$since TO $until]";
         }
+
+
+        if ($itemsToExclude != null && count($itemsToExclude) > 0) {
+            $idsToExclude = implode(' OR ', $itemsToExclude);
+            $filters["-id"] = "($idsToExclude)";
+        }
+
 
         return $filters;
     }
@@ -231,4 +240,5 @@ class Utils {
 
         return $z;
     }
+
 }

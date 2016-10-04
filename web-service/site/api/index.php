@@ -60,7 +60,8 @@ $app->get('/users/:uid',
         }
 
         echo json_encode($user);
-})->name("user");
+    }
+)->name("user");
 
 /**
  *  GET /items/:id
@@ -79,15 +80,18 @@ $app->get('/items/:id',
 /**
  *  POST /items/:id
  */
-$app->post('/items/:id',
-    function($id) use ($mongoDAO, $redisClient) {
+$app->post('/items/:iid',
+    function($iid) use ($mongoDAO, $redisClient, $app) {
 
-        $item = $mongoDAO->getItem($id);
+        $request = $app->request();
+        $cid = $request->get('cid');
+
+        $item = $mongoDAO->getItem($iid);
         if($item === null) {
             $item = array();
         }
         else {
-            $pieces = explode("#", $id);
+            $pieces = explode("#", $iid);
             if(count($pieces) == 2) {
                 $message = array(
                     "id" => $pieces[1],
@@ -95,7 +99,7 @@ $app->post('/items/:id',
                 );
 
                 $redisClient->publish("items:new", $message);
-                $redisClient->set($id, time());
+                $mongoDAO->insertItemUnderMonitoring($iid, $cid);
             }
 
         }
@@ -106,15 +110,18 @@ $app->post('/items/:id',
 /**
  *  DELETE /items/:id
  */
-$app->delete('/items/:id',
-    function($id) use ($mongoDAO, $redisClient) {
+$app->delete('/items/:iid',
+    function($iid) use ($mongoDAO, $redisClient, $app) {
 
-        $item = $mongoDAO->getItem($id);
+        $request = $app->request();
+        $cid = $request->get('cid');
+
+        $item = $mongoDAO->getItem($iid);
         if($item === null) {
             $item = array();
         }
         else {
-            $pieces = explode("#", $id);
+            $pieces = explode("#", $iid);
             if(count($pieces) == 2) {
                 $message = array(
                     "id" => $pieces[1],
@@ -122,7 +129,7 @@ $app->delete('/items/:id',
                 );
 
                 $redisClient->publish("items:delete", $message);
-                $redisClient->del($id);
+                $mongoDAO->removeItemUnderMonitoring($iid, $cid);
             }
         }
 
@@ -207,7 +214,7 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             $q = $utils->formulateCollectionQuery($collection);
 
             // Add filters if available
-            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query);
+            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $collection->itemsToExclude);
             $results = $textIndex->searchItems($q, $pageNumber, $nPerPage,  $filters, $sort, $judgements, $unique);
         }
     }
@@ -222,7 +229,7 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             $query = $this->formulateLogicalQuery($keywords);
             $query = "title:($query) OR description:($query)";
 
-            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null);
+            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null, null);
             $results = $textIndex->searchItems($query, $pageNumber, $nPerPage,  $filters, $sort, null, $unique);
         }
     }
@@ -283,7 +290,7 @@ $app->get('/summary', function() use($mongoDAO, $textIndex, $utils, $app) {
             $q = $utils->formulateCollectionQuery($collection);
 
             // Add filters if available
-            $filters = $utils->getFilters($since, $until, $source, 'original', $type, $language, $query);
+            $filters = $utils->getFilters($since, $until, $source, 'original', $type, $language, $query, $collection->itemsToExclude);
 
             $results = $textIndex->getSummary($q, $length,  $filters);
             foreach($results as $result) {
@@ -338,7 +345,7 @@ $app->get(
                     try {
                         $collectionQuery = $utils->formulateCollectionQuery($collection);
 
-                        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query);
+                        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $collection->itemsToExclude);
 
                         $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, null, $unique);
                         echo json_encode(array('facet'=>$field, 'values' => $facet, 'query'=>$collectionQuery, 'filters' => $filters));
@@ -392,7 +399,7 @@ $app->get(
                 try {
                     $collectionQuery = $utils->formulateCollectionQuery($collection);
 
-                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query);
+                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $collection->itemsToExclude);
 
                     $facet = $textIndex->getFacet('uid', $collectionQuery, $filters, $n, false, null, $unique);
 
@@ -449,7 +456,7 @@ $app->get(
                 try {
                     $collectionQuery = $utils->formulateCollectionQuery($collection);
 
-                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query);
+                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $collection->itemsToExclude);
 
                     $tagsFacet = $textIndex->getFacet('tags', $collectionQuery, $filters, ceil($n/3), false, null, $unique);
                     $personsFacet = $textIndex->getFacet('persons', $collectionQuery, $filters, ceil($n/3), false, null, $unique);
@@ -524,12 +531,14 @@ $app->get(
         $maxLong = $request->get('maxLong')==null ?  180 : $request->get('maxLong');
 
         // Add filters if available
-        $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query);
+
 
         $q = null;
+        $points = array();
         if($collectionId != null) {
             $collection = $mongoDAO->getCollection($collectionId);
             if($collection != null) {
+                $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query, $collection->keywordsToExclude);
                 $q = $utils->formulateCollectionQuery($collection);
 
                 if ($query != null && $query != '') {
@@ -538,21 +547,13 @@ $app->get(
                     $filterTextQuery = $utils->formulateLogicalQuery($keywords);
                     $filters['text1'] = $filterTextQuery;
                 }
+
+                $points = $textIndex->get2DFacet('latlonRPT', $q, $filters, $minLat, $maxLat, $minLong, $maxLong);
+
             }
         }
-        else if($query != null && $query != '') {
-            // collection is not specified. Perform text based search.
-            $query = urldecode($query);
-            $keywords = explode(',', $query);
-
-            $textualQuery = $utils->formulateLogicalQuery($keywords);
-            $q = "title:($textualQuery) OR tags:($textualQuery) OR description:($textualQuery)";
-        }
-
-        $points = $textIndex->get2DFacet('latlonRPT', $q, $filters, $minLat, $maxLat, $minLong, $maxLong);
 
         echo json_encode($points);
-
     }
 )->name('heatmap');
 
@@ -598,9 +599,13 @@ $app->get(
 
         $tm = array();
 
-        $filters = $utils->getFilters(($since==null?"*":$since), ($until==null?"*":$until), $source, $original, $type, $language, $query);
         $collection = $mongoDAO->getCollection($collectionId);
+
+
         if($collection != null) {
+
+            $filters = $utils->getFilters(($since==null?"*":$since), ($until==null?"*":$until), $source, $original, $type, $language, $query, $collection->keywordsToExclude);
+
             $q = $utils->formulateCollectionQuery($collection);
             if($since == null) {
                 $since = 1000*time() - 856800000;
@@ -678,7 +683,7 @@ $app->get(
                 $q = $utils->formulateCollectionQuery($collection);
 
                 // Add filters if available
-                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query);
+                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $collection->keywordsToExclude);
 
                 $statistics = $textIndex->statistics("likes,shares,followers,friends", $q, $filters, $unique);
                 $counts = $textIndex->fieldsCount("uid", $q, $filters, $unique);
@@ -687,12 +692,12 @@ $app->get(
                 $statistics['reach'] = $statistics['followers']['sum'];
                 $statistics['users'] = $counts['uid']['cardinality'];
 
-                $sources = $textIndex->getFacet('source', $q, $filters, -1, false);
+                $sources = $textIndex->getFacet('source', $q, $filters, -1, false, null, $unique);
 
                 foreach($sources as &$source) {
-                    $filters = $utils->getFilters($since, $until, $source['field'], $original, $type, $language, $query);
-                    $sourceStatistics = $textIndex->statistics("likes,shares,followers,friends", $q, $filters);
-                    $sourceCounts = $textIndex->fieldsCount("uid", $q, $filters);
+                    $filters = $utils->getFilters($since, $until, $source['field'], $original, $type, $language, $query, $collection->keywordsToExclude);
+                    $sourceStatistics = $textIndex->statistics("likes,shares,followers,friends", $q, $filters, $unique);
+                    $sourceCounts = $textIndex->fieldsCount("uid", $q, $filters, $unique);
 
                     $source['endorsement'] = $sourceStatistics['likes']['sum'];
                     $source['reach'] = $sourceStatistics['followers']['sum'];
@@ -736,14 +741,13 @@ $app->get(
             $collection = $mongoDAO->getCollection($collectionId);
             if ($collection != null) {
                 $collectionQuery = $utils->formulateCollectionQuery($collection);
-                $filters = $utils->getFilters($since, $until, $source, 'original', null, $language, $query);
+                $filters = $utils->getFilters($since, $until, $source, 'original', null, $language, $query, $collection->itemsToExclude);
 
                 $count = $textIndex->countItems($collectionQuery, $filters);
 
                 $topics[] = array('label' => 'All', 'query' => '*', 'score' => 1, 'items' => $count);
 
                 $clusters = $textIndex->getClusters($collectionQuery, $filters, 1000);
-                //$clusters = $textIndex->getMultilingualClusters($collectionQuery, $filters, 1000);
                 foreach($clusters as $cluster) {
                     if($cluster['score'] > 0 && count($cluster['docs']) >= 15) {
                         $topic = array(
@@ -858,14 +862,14 @@ $app->get(
 
             $since = $collection['since'];
             $until = $collection['stopDate'];
-            $filters = $utils->getFilters($since, $until, "*", null, null, null, null);
+            $filters = $utils->getFilters($since, $until, "*", null, null, null, null, $collection->itemsToExclude);
 
             $collection['filters'] = $filters;
 
             $count = $textIndex->countItems($q, $filters);
             $collection['items'] = $count;
 
-            $filters = $utils->getFilters($since, $until, "*", null, "media", null, null);
+            $filters = $utils->getFilters($since, $until, "*", null, "media", null, null, $collection->itemsToExclude);
             $facet = $textIndex->getFacet('mediaIds', $q, $filters, 3, false);
             $collection['facet'] = $facet;
 
@@ -937,6 +941,8 @@ $app->post(
             $fieldsToUpdate = array(
                 'title' => $collection->title,
                 'keywords' => $collection->keywords,
+                'keywordsToExclude' => $collection->keywordsToExclude,
+                'privacy' => $collection->privacy,
                 'accounts' => $collection->accounts,
                 'status'=>'running',
                 'updateDate' => 1000 * time()
@@ -969,6 +975,39 @@ $app->post(
         echo json_encode($collection);
     }
 )->name("edit_collection");
+
+$app->post(
+    '/collection/excludeKeywords/:cid',
+    function ($cid) use($app, $mongoDAO) {
+
+        $request = $app->request();
+
+        $keywordsToExclude =  $request->get("keywordsToExclude");
+        $collection = $mongoDAO->getCollection($cid);
+
+        if($collection != null && count($keywordsToExclude) > 0) {
+            $msg = array(
+                'newKeywordsToExclude' => $keywordsToExclude,
+                'oldKeywordsToExclude' => $collection->keywordsToExclude
+            );
+
+            $fieldsToUpdate = array(
+                'keywordsToExclude' => $keywordsToExclude,
+                'updateDate' => 1000 * time()
+            );
+
+            $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
+
+            echo json_encode($msg);
+        }
+        else {
+            echo json_encode(array(
+                'error' => "Collection $cid does not exist."
+            ));
+        }
+
+    }
+);
 
 $app->get(
     '/collection/start/:cid',
@@ -1277,7 +1316,7 @@ $app->get('/rss/validate',
             $title = (string) $channel->title;
 
             $source = array(
-                'id' => "RSS#".hash('sha256', $rssLink),
+                'id' => hash('sha256', $rssLink),
                 'username' => $rssLink,
                 'name' => ($title==null || $title=="") ? $host : "$title ($host)",
                 'description' => ((string) $channel->description),

@@ -35,17 +35,19 @@ services:
     image: redis:3.2
     ports:
       - "6379:6379"
+    restart: always
     networks:
       common_network:
         aliases:
           - redis
 
   mongodb:
-    image: mongo
+    image: mongo:3.2.9
     ports:
       - "27017:27017"
     volumes:
       - ./mongo_data_dir:/data/db
+    restart: always
     networks:
       common_network:
         aliases:
@@ -60,6 +62,7 @@ services:
     command: bin/solr -m 4g -f
     environment:
       LOG4J_PROPS: /opt/solr/server/solr/log4j.properties
+    restart: always
     networks:
       common_network:
         aliases:
@@ -73,6 +76,7 @@ services:
       - ./web-service/site:/var/www/site
     ports:
       - "80:80"
+    restart: always
     networks:
       common_network:
         aliases:
@@ -88,6 +92,7 @@ services:
     image: streammanager
     volumes:
       - ./stream-manager-service/conf:/stream_manager/conf
+    restart: always
     networks:
       common_network:
         aliases:

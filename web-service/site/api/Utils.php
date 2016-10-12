@@ -12,11 +12,15 @@ class Utils {
         return preg_match('/AND/',$q) || preg_match('/OR/',$q) || preg_match('/NOT/',$q);
     }
 
+    public function isNegativeLogicalExpression($q) {
+        return preg_match('/^NOT/',$q);
+    }
+
     public function formulateLogicalQuery($keywords) {
 
         $queryParts = array();
         foreach($keywords as $keyword) {
-            if($this->isLogicalExpression($keyword)) {
+            if($this->isLogicalExpression($keyword) && !$this->isNegativeLogicalExpression($keyword)) {
                 $queryParts[] =  "($keyword )";
             }
             else {
@@ -69,6 +73,16 @@ class Utils {
             }
         }
 
+        $notParts = array();
+        foreach($keywords as $keyword) {
+            if ($this->isNegativeLogicalExpression($keyword)) {
+                $notParts[] = "($keyword )";
+            }
+        }
+        if(count($notParts) > 0) {
+            $textQuery = $textQuery . implode(" ", $excludedTermsQuery);
+        }
+
         // user accounts to follow
         $accounts = $collection['accounts'];
         $users = array_map(function ($account) {
@@ -92,7 +106,8 @@ class Utils {
         return implode(' OR ', $query);
     }
 
-    public function getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude) {
+    public function getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude) {
+
         // Add filters if available
         $filters = array();
 
@@ -155,8 +170,14 @@ class Utils {
         if ($itemsToExclude != null && count($itemsToExclude) > 0) {
             $idsToExclude = implode(' OR ', $itemsToExclude);
             $filters["-id"] = "($idsToExclude)";
+            $filters["-reference"] = "($idsToExclude)";
         }
 
+
+        if ($usersToExclude != null && count($usersToExclude) > 0) {
+            $uIdsToExclude = implode(' OR ', $usersToExclude);
+            $filters["-uid"] = "($uIdsToExclude)";
+        }
 
         return $filters;
     }

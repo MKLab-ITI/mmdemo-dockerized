@@ -38,6 +38,9 @@ try {
     $redisClient = new Predis\Client($redisParams);
 
     $smWrapper = new SocialMediaWrapper();
+
+    $memcached = new Memcached();
+    $memcached->addServer('localhost', 11211);
 }
 catch(Exception $e) {
     echo json_encode(
@@ -214,7 +217,9 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             $q = $utils->formulateCollectionQuery($collection);
 
             // Add filters if available
-            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $collection->itemsToExclude);
+            $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+            $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
             $results = $textIndex->searchItems($q, $pageNumber, $nPerPage,  $filters, $sort, $judgements, $unique);
         }
     }
@@ -229,7 +234,7 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             $query = $this->formulateLogicalQuery($keywords);
             $query = "title:($query) OR description:($query)";
 
-            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null, null);
+            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null, null, null);
             $results = $textIndex->searchItems($query, $pageNumber, $nPerPage,  $filters, $sort, null, $unique);
         }
     }
@@ -290,7 +295,9 @@ $app->get('/summary', function() use($mongoDAO, $textIndex, $utils, $app) {
             $q = $utils->formulateCollectionQuery($collection);
 
             // Add filters if available
-            $filters = $utils->getFilters($since, $until, $source, 'original', $type, $language, $query, $collection->itemsToExclude);
+            $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+            $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+            $filters = $utils->getFilters($since, $until, $source, 'original', $type, $language, $query, $itemsToExclude, $usersToExclude);
 
             $results = $textIndex->getSummary($q, $length,  $filters);
             foreach($results as $result) {
@@ -345,7 +352,9 @@ $app->get(
                     try {
                         $collectionQuery = $utils->formulateCollectionQuery($collection);
 
-                        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $collection->itemsToExclude);
+                        $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+                        $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+                        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
 
                         $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, null, $unique);
                         echo json_encode(array('facet'=>$field, 'values' => $facet, 'query'=>$collectionQuery, 'filters' => $filters));
@@ -399,7 +408,9 @@ $app->get(
                 try {
                     $collectionQuery = $utils->formulateCollectionQuery($collection);
 
-                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $collection->itemsToExclude);
+                    $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+                    $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
 
                     $facet = $textIndex->getFacet('uid', $collectionQuery, $filters, $n, false, null, $unique);
 
@@ -456,7 +467,9 @@ $app->get(
                 try {
                     $collectionQuery = $utils->formulateCollectionQuery($collection);
 
-                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $collection->itemsToExclude);
+                    $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+                    $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
 
                     $tagsFacet = $textIndex->getFacet('tags', $collectionQuery, $filters, ceil($n/3), false, null, $unique);
                     $personsFacet = $textIndex->getFacet('persons', $collectionQuery, $filters, ceil($n/3), false, null, $unique);
@@ -538,7 +551,9 @@ $app->get(
         if($collectionId != null) {
             $collection = $mongoDAO->getCollection($collectionId);
             if($collection != null) {
-                $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query, $collection->keywordsToExclude);
+                $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+                $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+                $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query, $itemsToExclude, $usersToExclude);
                 $q = $utils->formulateCollectionQuery($collection);
 
                 if ($query != null && $query != '') {
@@ -604,7 +619,9 @@ $app->get(
 
         if($collection != null) {
 
-            $filters = $utils->getFilters(($since==null?"*":$since), ($until==null?"*":$until), $source, $original, $type, $language, $query, $collection->keywordsToExclude);
+            $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+            $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+            $filters = $utils->getFilters(($since==null?"*":$since), ($until==null?"*":$until), $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
 
             $q = $utils->formulateCollectionQuery($collection);
             if($since == null) {
@@ -683,7 +700,9 @@ $app->get(
                 $q = $utils->formulateCollectionQuery($collection);
 
                 // Add filters if available
-                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $collection->keywordsToExclude);
+                $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+                $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
 
                 $statistics = $textIndex->statistics("likes,shares,followers,friends", $q, $filters, $unique);
                 $counts = $textIndex->fieldsCount("uid", $q, $filters, $unique);
@@ -695,7 +714,7 @@ $app->get(
                 $sources = $textIndex->getFacet('source', $q, $filters, -1, false, null, $unique);
 
                 foreach($sources as &$source) {
-                    $filters = $utils->getFilters($since, $until, $source['field'], $original, $type, $language, $query, $collection->keywordsToExclude);
+                    $filters = $utils->getFilters($since, $until, $source['field'], $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
                     $sourceStatistics = $textIndex->statistics("likes,shares,followers,friends", $q, $filters, $unique);
                     $sourceCounts = $textIndex->fieldsCount("uid", $q, $filters, $unique);
 
@@ -741,7 +760,10 @@ $app->get(
             $collection = $mongoDAO->getCollection($collectionId);
             if ($collection != null) {
                 $collectionQuery = $utils->formulateCollectionQuery($collection);
-                $filters = $utils->getFilters($since, $until, $source, 'original', null, $language, $query, $collection->itemsToExclude);
+
+                $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+                $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+                $filters = $utils->getFilters($since, $until, $source, 'original', null, $language, $query, $itemsToExclude, $usersToExclude);
 
                 $count = $textIndex->countItems($collectionQuery, $filters);
 
@@ -791,7 +813,9 @@ $app->get(
         }
 
         $facet = array();
-        $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query);
+        $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+        $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+        $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query, $itemsToExclude, $usersToExclude);
         if($collectionId != null) {
             $collection = $mongoDAO->getCollection($collectionId);
             if ($collection != null) {
@@ -834,9 +858,9 @@ $app->get(
 
 $app->get(
     '/collection/:uid',
-    function ($uid) use($mongoDAO, $textIndex, $utils, $app, $redisClient) {
+    function ($uid) use($mongoDAO, $textIndex, $utils, $app, $redisClient, $memcached) {
 
-		$request = $app->request();
+        $request = $app->request();
 
 		$pageNumber = $request->get("pageNumber")==null ? 1 : $request->get("pageNumber");
         $nPerPage = $request->get("nPerPage")==null ? 6 : $request->get("nPerPage");
@@ -845,9 +869,18 @@ $app->get(
 
 		$all = $mongoDAO->getUserCollections($uid, $status);
 		$userCollections = $mongoDAO->getUserCollections($uid, $status, $pageNumber, $nPerPage);
+        $collections = array();
         foreach($userCollections as &$collection) {
 
-            $lastExecution = $redisClient->get($collection['_id']);
+            $cid = $collection['_id'];
+
+            $cachedCollection = $memcached->get($cid);
+            if($cachedCollection != false) {
+                $collections[] = $cachedCollection;
+                continue;
+            }
+
+            $lastExecution = $redisClient->get($cid);
             if($lastExecution != null) {
                 $collection['lastExecution'] = $lastExecution;
             }
@@ -862,14 +895,17 @@ $app->get(
 
             $since = $collection['since'];
             $until = $collection['stopDate'];
-            $filters = $utils->getFilters($since, $until, "*", null, null, null, null, $collection->itemsToExclude);
+
+            $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+            $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+            $filters = $utils->getFilters($since, $until, "*", null, null, null, null, $itemsToExclude, $usersToExclude);
 
             $collection['filters'] = $filters;
 
             $count = $textIndex->countItems($q, $filters);
             $collection['items'] = $count;
 
-            $filters = $utils->getFilters($since, $until, "*", null, "media", null, null, $collection->itemsToExclude);
+            $filters = $utils->getFilters($since, $until, "*", null, "media", null, null, $itemsToExclude, $usersToExclude);
             $facet = $textIndex->getFacet('mediaIds', $q, $filters, 3, false);
             $collection['facet'] = $facet;
 
@@ -884,14 +920,17 @@ $app->get(
                 }
             }
 
+            $memcached->set($cid, $collection, time()+180);
+            $collections[] = $collection;
         }
-        echo json_encode(array('ownerId' => $uid, 'collections'=>$userCollections, 'count'=>count($all)));
+
+        echo json_encode(array('ownerId' => $uid, 'collections'=>$collections, 'count'=>count($all)));
     }
 )->name("get_user_collections");
 
 $app->post(
     '/collection',
-    function () use($app, $mongoDAO, $redisClient) {
+    function () use($app, $mongoDAO, $redisClient, $memcached) {
 
         $request = $app->request();
         $content = $request->getBody();
@@ -915,6 +954,8 @@ $app->post(
 
             $newMessage = json_encode($collection);
             $redisClient->publish("collections:new", $newMessage);
+
+            $memcached->delete($collection->_id);
         }
 
         echo json_encode($collection);

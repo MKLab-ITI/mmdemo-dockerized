@@ -316,7 +316,7 @@ $app->get('/summary', function() use($mongoDAO, $textIndex, $utils, $app) {
 
 $app->get(
     '/top/:field',
-    function ($field) use ($mongoDAO, $textIndex, $utils, $app) {
+    function ($field) use ($mongoDAO, $textIndex, $utils, $app, $memcached) {
         $request = $app->request();
 
         $since = $request->get('since') == null ? '*' : $request->get('since');
@@ -356,7 +356,13 @@ $app->get(
                         $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                         $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
 
-                        $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, null, $unique);
+                        $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
+                        $facet = $memcached->get($requestHash);
+                        if($facet == false) {
+                            $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, null, $unique);
+                            $memcached->set($requestHash, $facet, time()+61);
+                        }
+
                         echo json_encode(array('facet'=>$field, 'values' => $facet, 'query'=>$collectionQuery, 'filters' => $filters));
                     }
                     catch(Exception $e) {
@@ -650,7 +656,7 @@ $app->get(
 
 $app->get(
     '/statistics',
-    function () use($mongoDAO, $textIndex, $utils, $app) {
+    function () use($mongoDAO, $textIndex, $utils, $app, $memcached) {
         $request = $app->request();
 
         $since = $request->get('since')==null ? '*' : $request->get('since');
@@ -690,7 +696,6 @@ $app->get(
             }
         }
 
-
         $statistics = array();
 
         $q = null;
@@ -703,6 +708,13 @@ $app->get(
                 $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                 $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                 $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
+
+                $requestHash = "stats_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
+                $cachedStatistics = $memcached->get($requestHash);
+                if($cachedStatistics != false) {
+                    echo json_encode($cachedStatistics);
+                    return;
+                }
 
                 $statistics = $textIndex->statistics("likes,shares,followers,friends", $q, $filters, $unique);
                 $counts = $textIndex->fieldsCount("uid", $q, $filters, $unique);
@@ -725,6 +737,8 @@ $app->get(
 
                 $statistics['sources'] = $sources;
                 $statistics['query'] = $query;
+
+                $memcached->set($requestHash, $statistics, time()+61);
             }
         }
 
@@ -964,7 +978,7 @@ $app->post(
 
 $app->post(
     '/collection/edit',
-    function () use($app, $mongoDAO, $redisClient) {
+    function () use($app, $mongoDAO, $redisClient, $memcached) {
         $request = $app->request();
 
         $content = $request->getBody();
@@ -993,6 +1007,8 @@ $app->post(
 
             $editMessage = json_encode($collection);
             $redisClient->publish("collections:edit", $editMessage);
+
+            $memcached->delete($collection->_id);
         }
         else {
             $t = 1000 * time();
@@ -1011,6 +1027,8 @@ $app->post(
 
             $newMessage = json_encode($collection);
             $redisClient->publish("collections:new", $newMessage);
+
+            $memcached->delete($collection->_id);
         }
 
         echo json_encode($collection);

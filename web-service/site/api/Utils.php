@@ -182,6 +182,13 @@ class Utils {
         return $filters;
     }
 
+    public function getParametersHash($cid, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude) {
+        $data = $this->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
+        $input_str = json_encode($data);
+
+        return $cid . "_" . sha1($input_str);
+    }
+
     public static function expandQuery($judgements, $query, $index) {
         $positive = array_filter($judgements, function($rj) { return ($rj['relevence'] > 3); });
         $negative = array_filter($judgements, function($rj) { return ($rj['relevence'] < 3); });

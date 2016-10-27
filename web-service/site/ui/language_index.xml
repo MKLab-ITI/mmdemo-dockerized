@@ -249,12 +249,20 @@
         <ca>No results for this keyword</ca>
     </translation>
     <translation id="section2_done_button">
-        <en>DONE</en>
-        <el>ΤΕΛΟΣ</el>
-        <it>DONE</it>
-        <tr>DONE</tr>
-        <sp>DONE</sp>
-        <ca>DONE</ca>
+        <en>I'M DONE, SAVE CHANGES</en>
+        <el>ΤΕΛΕΙΩΣΑ, ΑΠΟΘΗΚΕΥΣΗ ΑΛΛΑΓΩΝ</el>
+        <it>I'M DONE, SAVE CHANGES</it>
+        <tr>I'M DONE, SAVE CHANGES</tr>
+        <sp>I'M DONE, SAVE CHANGES</sp>
+        <ca>I'M DONE, SAVE CHANGES</ca>
+    </translation>
+    <translation id="section2_cancel_button">
+        <en>CANCEL AND BACK</en>
+        <el>ΑΚΥΡΩΣΗ ΚΑΙ ΠΙΣΩ</el>
+        <it>CANCEL AND BACK</it>
+        <tr>CANCEL AND BACK</tr>
+        <sp>CANCEL AND BACK</sp>
+        <ca>CANCEL AND BACK</ca>
     </translation>
     <translation id="section3_title">
         <en>All set? Hit the Launch Button</en>

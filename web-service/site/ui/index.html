@@ -102,7 +102,7 @@
                         data-lang="section2_title_edit">Improve your collection: </span>
                     <span class="text_blue" id="edit_col_name"></span></h3>
             </div>
-            <div data-hide="true" class="small-12 medium-12 large-12 columns" style="text-align:center;z-index: 1">
+            <div id="name_section" class="small-12 medium-12 large-12 columns ontop">
                 <img id="interest_icon" src="imgs/interest-gray.png" alt="hash" style="top: 5px;position: relative;">
 
                 <div class="input-field" style="padding-bottom: 10px">
@@ -112,7 +112,7 @@
                 </div>
                 <div id="col_name"></div>
             </div>
-            <div data-hide="true" class="small-12 medium-6 large-6 columns" style="text-align:center;z-index:1">
+            <div id="tags_section" class="small-12 medium-6 large-6 columns ontop">
                 <img id="hash_icon" src="imgs/hash-gray.png" alt="hash">
 
                 <div class="input-field">
@@ -138,7 +138,7 @@
                     <ul id="tags" class="tags"></ul>
                 </div>
             </div>
-            <div data-hide="true" class="small-12 medium-6 large-6 columns" style="text-align:center;z-index:2">
+            <div id="users_section" class="small-12 medium-6 large-6 columns ontop">
                 <img id="user_icon" src="imgs/email-gray.png" alt="email">
 
                 <div class="input-field" id="Twitter_input">
@@ -217,7 +217,14 @@
                     <ul id="users" class="tags"></ul>
                 </div>
             </div>
-            <div id="advanced_user" class="small-12 medium-12 large-12 columns">
+            <div id="edit_buttons" class="small-12 medium-12 large-12 columns ontop">
+                <div class="btn_material action_button done" id="done_edit"><img src="imgs/save-white_16.png"><span
+                        data-lang="section2_done_button">I'M DONE, SAVE CHANGES</span></div>
+                <div class="btn_material action_button cancel" id="cancel_edit"><img
+                        src="imgs/cancel-white_16.png"><span data-lang="section2_cancel_button">CANCEL AND BACK</span>
+                </div>
+            </div>
+            <div id="advanced_user" class="small-12 medium-12 large-12 columns ontop">
                 <p class="advanced_p" data-lang="section2_adv_search">Users suggestion</p>
 
                 <div class="ff-filter-holder_adv">
@@ -259,11 +266,14 @@
                     <p id="no_results" data-lang="section2_no_results">No results for this keyword</p>
                 </div>
                 <div id="users_images"></div>
-                <div class="btn_material" id="done_users" data-lang="section2_done_button">DONE</div>
+                <div class="btn_material action_button done" id="done_users"><img src="imgs/save-white_16.png"><span
+                        data-lang="section2_done_button">I'M DONE, SAVE CHANGES</span></div>
+                <div class="btn_material action_button cancel" id="cancel_users"><img
+                        src="imgs/cancel-white_16.png"><span data-lang="section2_cancel_button">CANCEL AND BACK</span>
+                </div>
             </div>
-
-            <div id="advanced_tag" class="small-12 medium-12 large-12 columns">
-                <p class="advanced_p" data-lang="section2_adv_tags" >Advanced Tags</p>
+            <div id="advanced_tag" class="small-12 medium-12 large-12 columns ontop">
+                <p class="advanced_p" data-lang="section2_adv_tags">Advanced Tags</p>
                 <img id="logic_icon" src="imgs/logic_32_gray.png" alt="text_user">
 
                 <div class="input-field" style="margin-top:0">
@@ -285,7 +295,8 @@
                 <div id="user_tags_adv">
                     <ul id="tags_adv" class="tags"></ul>
                 </div>
-                <p class="drag_area_title" data-lang="section2_dragzone_title">Enter tags, drag and format logical expressions:</p>
+                <p class="drag_area_title" data-lang="section2_dragzone_title">Enter tags, drag and format logical
+                    expressions:</p>
 
                 <div id="actions_expression">
                     <div class="round_button" id="add_expr" data-lang="section2_add_expr">Add</div>
@@ -306,7 +317,11 @@
                 <div id="error_expr">
                     <strong data-lang="section2_error">Error: </strong><span></span>
                 </div>
-                <div class="btn_material" id="done_tags" data-lang="section2_done_button">DONE</div>
+                <div class="btn_material action_button done" id="done_tags"><img src="imgs/save-white_16.png"><span
+                        data-lang="section2_done_button">I'M DONE, SAVE CHANGES</span></div>
+                <div class="btn_material action_button cancel" id="cancel_tags"><img
+                        src="imgs/cancel-white_16.png"><span data-lang="section2_cancel_button">CANCEL AND BACK</span>
+                </div>
             </div>
         </div>
     </div>

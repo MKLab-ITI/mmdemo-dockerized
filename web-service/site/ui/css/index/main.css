@@ -1113,12 +1113,14 @@ img.responsive-img {
     -o-transition: .2s ease-out;
     transition: .2s ease-out;
     cursor: pointer;
-    width: 160px;
+    min-width: 160px;
     display: inline-block;
     height: 36px;
     line-height: 36px;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-    margin: 10px 10px 0px 10px;
+    margin: 10px 10px 0 10px;
+    padding: 0 10px;
+    text-align: center
 }
 
 .btn_material:hover {
@@ -1130,9 +1132,21 @@ img.responsive-img {
     background-color: #26a69a
 }
 
-#done_users, #done_tags {
+.action_button img {
+    position: relative;
+    top: -3px;
+    margin-right: 10px;
+}
+
+.done {
     background-color: #47b8e5 !important;
-    width: 300px;
+    min-width: 300px;
+    margin-top: 40px;
+}
+
+.cancel {
+    min-width: 300px;
+    background-color: #D63230 !important;
     margin-bottom: 20px;
 }
 
@@ -2077,12 +2091,6 @@ img.responsive-img {
     position: relative;
 }
 
-#advanced_user, #advanced_tag {
-    text-align: center;
-    z-index: 1;
-    display: none
-}
-
 .no_collections {
     background: 0 0;
     border: 2px solid #DCDCDC;
@@ -2305,6 +2313,18 @@ img.responsive-img {
     display: none;
     color: #31708f;
     background-color: rgba(71, 184, 229, 0.2);
+}
+
+#edit_buttons, #advanced_user, #advanced_tag {
+    display: none;
+}
+
+.ontop {
+    text-align: center;
+    z-index: 1;
+}
+#users_section{
+    z-index: 2;
 }
 
 @keyframes shake {

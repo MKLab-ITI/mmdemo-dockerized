@@ -1,6 +1,6 @@
 function parse_search() {
     query_param = document.getElementById("query").value;
-    window.history.pushState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
+    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
 
     $('.icon-clear').show();
     abort();

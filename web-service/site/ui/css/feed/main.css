@@ -635,9 +635,8 @@ html, body {
 }
 
 .ff-userpic {
-    margin: -42px auto 0px;
+    margin: -42px auto 0;
     background-size: cover !important;
-    z-index: 2;
     height: 50px;
     width: 50px;
     border-radius: 60px;
@@ -1895,6 +1894,13 @@ html, body {
 .stroke {
     stroke-dasharray: 145;
     stroke-dashoffset: 145;
+}
+
+#back_icon {
+    position: absolute;
+    top: 7px;
+    right: 5px;
+    cursor: pointer;
 }
 
 @keyframes dash {

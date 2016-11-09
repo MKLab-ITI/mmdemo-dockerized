@@ -264,13 +264,21 @@
         <sp>CANCEL AND BACK</sp>
         <ca>CANCEL AND BACK</ca>
     </translation>
-    <translation id="section3_title">
-        <en>All set? Hit the Launch Button</en>
-        <el>Όλα έτοιμα? Πάτα την εκκίνηση</el>
-        <it>Tutto pronto? Premi il pulsante di avvio</it>
-        <tr>Hazır mısın? Başlatma butonuna tıkla</tr>
-        <sp>¿Todo listo? Pulse el botón de inicio</sp>
-        <ca>Tot preparat? Premeu el botó d'inici</ca>
+    <translation id="section2_start_button">
+        <en>START COLLECTION</en>
+        <el>ΞΕΚΙΝΗΣΕ ΤΗ ΣΥΛΛΟΓΗ</el>
+        <it>START COLLECTION</it>
+        <tr>START COLLECTION</tr>
+        <sp>START COLLECTION</sp>
+        <ca>START COLLECTION</ca>
+    </translation>
+    <translation id="section2_clear_button">
+        <en>CLEAR ALL</en>
+        <el>ΚΑΘΑΡΙΣΜΟΣ ΟΛΩΝ</el>
+        <it>CLEAR ALL</it>
+        <tr>CLEAR ALL</tr>
+        <sp>CLEAR ALL</sp>
+        <ca>CLEAR ALL</ca>
     </translation>
     <translation id="section4_title">
         <en>Collections</en>

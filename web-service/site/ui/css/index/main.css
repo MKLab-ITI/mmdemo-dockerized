@@ -914,9 +914,9 @@ img.responsive-img {
 
 .stage {
     width: 500px;
-    height: 275px;
+    height: 250px;
     margin: auto;
-    cursor: pointer;
+    padding-top: 5px;
 }
 
 .factory {
@@ -1107,7 +1107,7 @@ img.responsive-img {
 .btn_material {
     color: #fff;
     background-color: #aaa;
-    letter-spacing: .5px;
+    letter-spacing: 1px;
     -webkit-transition: .2s ease-out;
     -moz-transition: .2s ease-out;
     -o-transition: .2s ease-out;
@@ -1121,6 +1121,11 @@ img.responsive-img {
     margin: 10px 10px 0 10px;
     padding: 0 10px;
     text-align: center
+}
+
+.deactivated {
+    opacity: 0.4;
+    cursor: default;
 }
 
 .btn_material:hover {
@@ -1364,20 +1369,6 @@ img.responsive-img {
 
 .restart_icon:hover {
     background: url("../../imgs/restart_icon_blue.png") no-repeat center;
-}
-
-.start_icon {
-    background: url("../../imgs/start.png") no-repeat center;
-    width: 50px;
-    height: 50px;
-    top: 95px;
-    left: 25px;
-    animation: pound .5s infinite alternate;
-    position: relative;
-}
-
-.start_icon:hover {
-    background: url("../../imgs/start_red.png") no-repeat center;
 }
 
 .user_source {
@@ -2279,7 +2270,7 @@ img.responsive-img {
     -o-animation: shake 150ms 3.5 linear;
 }
 
-#error_expr {
+.error_expr {
     color: #a94442;
     background-color: #f2dede;
     padding: 5px 15px;
@@ -2288,6 +2279,11 @@ img.responsive-img {
     display: none;
     margin: 10px 0;
     text-align: left
+}
+
+.error_expr_collection {
+    max-width: 855px;
+    margin: 10px auto;
 }
 
 .error_operator {
@@ -2323,7 +2319,8 @@ img.responsive-img {
     text-align: center;
     z-index: 1;
 }
-#users_section{
+
+#users_section {
     z-index: 2;
 }
 

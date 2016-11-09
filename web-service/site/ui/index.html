@@ -217,13 +217,6 @@
                     <ul id="users" class="tags"></ul>
                 </div>
             </div>
-            <div id="edit_buttons" class="small-12 medium-12 large-12 columns ontop">
-                <div class="btn_material action_button done" id="done_edit"><img src="imgs/save-white_16.png"><span
-                        data-lang="section2_done_button">I'M DONE, SAVE CHANGES</span></div>
-                <div class="btn_material action_button cancel" id="cancel_edit"><img
-                        src="imgs/cancel-white_16.png"><span data-lang="section2_cancel_button">CANCEL AND BACK</span>
-                </div>
-            </div>
             <div id="advanced_user" class="small-12 medium-12 large-12 columns ontop">
                 <p class="advanced_p" data-lang="section2_adv_search">Users suggestion</p>
 
@@ -314,7 +307,7 @@
 
                     <p id="not_add">+ NOT</p>
                 </div>
-                <div id="error_expr">
+                <div id="error_expr" class="error_expr">
                     <strong data-lang="section2_error">Error: </strong><span></span>
                 </div>
                 <div class="btn_material action_button done" id="done_tags"><img src="imgs/save-white_16.png"><span
@@ -323,18 +316,32 @@
                         src="imgs/cancel-white_16.png"><span data-lang="section2_cancel_button">CANCEL AND BACK</span>
                 </div>
             </div>
+            <div id="edit_buttons" class="small-12 medium-12 large-12 columns ontop">
+                <div class="btn_material action_button done" id="done_edit"><img src="imgs/save-white_16.png"><span
+                        data-lang="section2_done_button">I'M DONE, SAVE CHANGES</span></div>
+                <div class="btn_material action_button cancel" id="cancel_edit"><img
+                        src="imgs/cancel-white_16.png"><span data-lang="section2_cancel_button">CANCEL AND BACK</span>
+                </div>
+                <div class="error_expr error_expr_collection">
+                    <strong data-lang="section2_error">Error: </strong><span></span>
+                </div>
+            </div>
+            <div id="start_buttons" class="small-12 medium-12 large-12 columns ontop">
+                <div class="btn_material action_button done deactivated" id="done_start"><img src="imgs/save-white_16.png"><span
+                        data-lang="section2_start_button">START COLLECTION</span></div>
+                <div class="btn_material action_button cancel" id="cancel_start"><img
+                        src="imgs/cancel-white_16.png"><span data-lang="section2_clear_button">CLEAR ALL</span>
+                </div>
+                <div class="error_expr error_expr_collection">
+                    <strong data-lang="section2_error">Error: </strong><span></span>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <section class="fourth-section">
     <div class="row">
-        <div class="small-12 medium-12 large-12 columns">
-            <h3 class="text_title" style="color: rgba(255, 255, 255, 0.75);padding: 0;margin-bottom: 0;"
-                data-lang="section3_title">All set? Hit
-                the Launch Button</h3>
-
-        </div>
         <div class="small-12 medium-12 large-12 columns">
             <div class='stage'>
                 <ul>
@@ -350,8 +357,6 @@
                 <div class='factory'>
                     <div class='screen'></div>
                     <img src="imgs/logo.png" alt="logo">
-
-                    <div class="start_icon"></div>
                 </div>
             </div>
         </div>

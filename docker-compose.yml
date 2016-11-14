@@ -2,37 +2,37 @@ version: '2'
 
 services:
 
-  graylog-mongo:
-    image: "mongo:3.0"
-    volumes:
-      - ./graylog/data/mongo:/data/db
+#  graylog-mongo:
+#    image: "mongo:3.0"
+#    volumes:
+#      - ./graylog/data/mongo:/data/db
 
-  graylog-elasticsearch:
-    image: "elasticsearch:2"
-    command: "elasticsearch -Des.cluster.name='graylog'"
-    environment:
-      ES_HEAP_SIZE: 1g
-    volumes:
-      - ./graylog/data/elasticsearch:/usr/share/elasticsearch/data
+#  graylog-elasticsearch:
+#    image: "elasticsearch:2"
+#    command: "elasticsearch -Des.cluster.name='graylog'"
+#    environment:
+#      ES_HEAP_SIZE: 1g
+#    volumes:
+#      - ./graylog/data/elasticsearch:/usr/share/elasticsearch/data
 
-  graylog:
-    image: graylog2/server:2.0.1-1
-    volumes:
-      - ./graylog/data/journal:/usr/share/graylog/data/journal
-      - ./graylog/config:/usr/share/graylog/data/config
-    environment:
-      GRAYLOG_REST_TRANSPORT_URI: http://127.0.0.1:12900
-    links:
-      - graylog-mongo:mongo
-      - graylog-elasticsearch:elasticsearch
-    ports:
-      - "9000:9000"
-      - "12900:12900"
-      - "12201:12201"
-      - "12201/udp:12201/udp"
+#  graylog:
+#    image: graylog2/server:2.0.1-1
+#    volumes:
+#      - ./graylog/data/journal:/usr/share/graylog/data/journal
+#      - ./graylog/config:/usr/share/graylog/data/config
+#    environment:
+#      GRAYLOG_REST_TRANSPORT_URI: http://127.0.0.1:12900
+#    links:
+#      - graylog-mongo:mongo
+#      - graylog-elasticsearch:elasticsearch
+#    ports:
+#      - "9000:9000"
+#      - "12900:12900"
+#      - "12201:12201"
+#      - "12201/udp:12201/udp"
 
   redis:
-    image: redis:3.2
+    image: redis:3.0
     ports:
       - "6379:6379"
     restart: always
@@ -59,15 +59,14 @@ services:
       - "8983:8983"
     volumes:
       - ./solr-cores:/opt/solr/server/solr
-    command: bin/solr -m 4g -f
+    command: bin/solr -m 8g -f
     environment:
       LOG4J_PROPS: /opt/solr/server/solr/log4j.properties
     restart: always
     networks:
       common_network:
         aliases:
-          - solr
-
+         - solr
   web:
     build:
       context: web-service
@@ -97,14 +96,14 @@ services:
       common_network:
         aliases:
           - streammanager
-    logging:
-      driver: gelf
-      options:
-        gelf-address: "udp://localhost:12201"
     depends_on:
       - redis
       - mongodb
       - solr
+#    logging:
+#      driver: gelf
+#      options:
+#        gelf-address: "udp://localhost:12201"
 
 networks:
   common_network:

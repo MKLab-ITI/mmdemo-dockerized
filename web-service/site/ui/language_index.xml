@@ -249,20 +249,36 @@
         <ca>No results for this keyword</ca>
     </translation>
     <translation id="section2_done_button">
-        <en>DONE</en>
-        <el>ΤΕΛΟΣ</el>
-        <it>DONE</it>
-        <tr>DONE</tr>
-        <sp>DONE</sp>
-        <ca>DONE</ca>
+        <en>I'M DONE, SAVE CHANGES</en>
+        <el>ΤΕΛΕΙΩΣΑ, ΑΠΟΘΗΚΕΥΣΗ ΑΛΛΑΓΩΝ</el>
+        <it>I'M DONE, SAVE CHANGES</it>
+        <tr>I'M DONE, SAVE CHANGES</tr>
+        <sp>I'M DONE, SAVE CHANGES</sp>
+        <ca>I'M DONE, SAVE CHANGES</ca>
     </translation>
-    <translation id="section3_title">
-        <en>All set? Hit the Launch Button</en>
-        <el>Όλα έτοιμα? Πάτα την εκκίνηση</el>
-        <it>Tutto pronto? Premi il pulsante di avvio</it>
-        <tr>Hazır mısın? Başlatma butonuna tıkla</tr>
-        <sp>¿Todo listo? Pulse el botón de inicio</sp>
-        <ca>Tot preparat? Premeu el botó d'inici</ca>
+    <translation id="section2_cancel_button">
+        <en>CANCEL AND BACK</en>
+        <el>ΑΚΥΡΩΣΗ ΚΑΙ ΠΙΣΩ</el>
+        <it>CANCEL AND BACK</it>
+        <tr>CANCEL AND BACK</tr>
+        <sp>CANCEL AND BACK</sp>
+        <ca>CANCEL AND BACK</ca>
+    </translation>
+    <translation id="section2_start_button">
+        <en>START COLLECTION</en>
+        <el>ΞΕΚΙΝΗΣΕ ΤΗ ΣΥΛΛΟΓΗ</el>
+        <it>START COLLECTION</it>
+        <tr>START COLLECTION</tr>
+        <sp>START COLLECTION</sp>
+        <ca>START COLLECTION</ca>
+    </translation>
+    <translation id="section2_clear_button">
+        <en>CLEAR ALL</en>
+        <el>ΚΑΘΑΡΙΣΜΟΣ ΟΛΩΝ</el>
+        <it>CLEAR ALL</it>
+        <tr>CLEAR ALL</tr>
+        <sp>CLEAR ALL</sp>
+        <ca>CLEAR ALL</ca>
     </translation>
     <translation id="section4_title">
         <en>Collections</en>

@@ -914,9 +914,9 @@ img.responsive-img {
 
 .stage {
     width: 500px;
-    height: 275px;
+    height: 250px;
     margin: auto;
-    cursor: pointer;
+    padding-top: 5px;
 }
 
 .factory {
@@ -1107,18 +1107,25 @@ img.responsive-img {
 .btn_material {
     color: #fff;
     background-color: #aaa;
-    letter-spacing: .5px;
+    letter-spacing: 1px;
     -webkit-transition: .2s ease-out;
     -moz-transition: .2s ease-out;
     -o-transition: .2s ease-out;
     transition: .2s ease-out;
     cursor: pointer;
-    width: 160px;
+    min-width: 160px;
     display: inline-block;
     height: 36px;
     line-height: 36px;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-    margin: 10px 10px 0px 10px;
+    margin: 10px 10px 0 10px;
+    padding: 0 10px;
+    text-align: center
+}
+
+.deactivated {
+    opacity: 0.4;
+    cursor: default;
 }
 
 .btn_material:hover {
@@ -1130,9 +1137,21 @@ img.responsive-img {
     background-color: #26a69a
 }
 
-#done_users, #done_tags {
+.action_button img {
+    position: relative;
+    top: -3px;
+    margin-right: 10px;
+}
+
+.done {
     background-color: #47b8e5 !important;
-    width: 300px;
+    min-width: 300px;
+    margin-top: 40px;
+}
+
+.cancel {
+    min-width: 300px;
+    background-color: #D63230 !important;
     margin-bottom: 20px;
 }
 
@@ -1350,20 +1369,6 @@ img.responsive-img {
 
 .restart_icon:hover {
     background: url("../../imgs/restart_icon_blue.png") no-repeat center;
-}
-
-.start_icon {
-    background: url("../../imgs/start.png") no-repeat center;
-    width: 50px;
-    height: 50px;
-    top: 95px;
-    left: 25px;
-    animation: pound .5s infinite alternate;
-    position: relative;
-}
-
-.start_icon:hover {
-    background: url("../../imgs/start_red.png") no-repeat center;
 }
 
 .user_source {
@@ -2077,12 +2082,6 @@ img.responsive-img {
     position: relative;
 }
 
-#advanced_user, #advanced_tag {
-    text-align: center;
-    z-index: 1;
-    display: none
-}
-
 .no_collections {
     background: 0 0;
     border: 2px solid #DCDCDC;
@@ -2271,7 +2270,7 @@ img.responsive-img {
     -o-animation: shake 150ms 3.5 linear;
 }
 
-#error_expr {
+.error_expr {
     color: #a94442;
     background-color: #f2dede;
     padding: 5px 15px;
@@ -2280,6 +2279,11 @@ img.responsive-img {
     display: none;
     margin: 10px 0;
     text-align: left
+}
+
+.error_expr_collection {
+    max-width: 855px;
+    margin: 10px auto;
 }
 
 .error_operator {
@@ -2305,6 +2309,19 @@ img.responsive-img {
     display: none;
     color: #31708f;
     background-color: rgba(71, 184, 229, 0.2);
+}
+
+#edit_buttons, #advanced_user, #advanced_tag {
+    display: none;
+}
+
+.ontop {
+    text-align: center;
+    z-index: 1;
+}
+
+#users_section {
+    z-index: 2;
 }
 
 @keyframes shake {

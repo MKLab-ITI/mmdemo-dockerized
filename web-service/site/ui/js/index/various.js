@@ -202,6 +202,7 @@ function addtag(tag) {
     var flag = 1;
     var count = 20 - $("#tags li").length;
     if (count > 0) {
+        $('.error_expr_collection').slideUp();
         var tag_arr = tag.split(',');
         $("#hashtag").val("");
         var length = Math.min(count, tag_arr.length);
@@ -239,6 +240,12 @@ function addtag(tag) {
                     }
                 }
             }
+        }
+        if (($('#interest').val() != "") || ($('#col_name').html() != "")) {
+            $('#done_start,#done_edit').removeClass('deactivated');
+        }
+        else {
+            $('#done_start,#done_edit').addClass('deactivated');
         }
     }
 }
@@ -343,6 +350,7 @@ function adduser($id, $name, $user, $social) {
     var flag = 1;
     var count = 100 - $("#users li").length;
     if (count > 0) {
+        $('.error_expr_collection').slideUp();
         var tag_name = $user;
         if ($user == null) {
             tag_name = document.getElementById("user_" + $('.open').attr('id')).value;
@@ -412,13 +420,18 @@ function adduser($id, $name, $user, $social) {
             a.appendChild(img);
 
             if (flag) {
+                if (($('#interest').val() != "") || ($('#col_name').html() != "")) {
+                    $('#done_start,#done_edit').removeClass('deactivated');
+                }
+                else {
+                    $('#done_start,#done_edit').addClass('deactivated');
+                }
                 if ($("#users li").length === 100) {
                     $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
                     $('#max_users,#max_users_advanced').slideDown();
                 }
             }
         }
-
     }
 }
 
@@ -474,7 +487,6 @@ function adduser_adv($username, $social, $id, $name) {
     }
 }
 function deluser_adv($social, $id) {
-
     $('#users_adv li').children().each(function () {
         if ($(this).attr('id').indexOf($social + "------" + $id) > -1) {
             var height = $(this).parent().height();
@@ -488,6 +500,13 @@ function deluser_adv($social, $id) {
 }
 
 $("#interest").keyup(function (e) {
+    $('.error_expr_collection').slideUp();
+    if ((($("#tags li").length > 0) || ($("#users li").length > 0)) && (($('#interest').val() != "") || ($('#col_name').html() != ""))) {
+        $('#done_start,#done_edit').removeClass('deactivated');
+    }
+    else {
+        $('#done_start,#done_edit').addClass('deactivated');
+    }
     if (e.keyCode === 13) {
         addname();
     }
@@ -505,6 +524,12 @@ $("#user_tags,#user_tags_adv").on("click", ".delete", function () {
     var height = $(this).closest('li').height();
     $(this).closest('li').css('height', height).hide('slow', function () {
         $(this).remove();
+        if ((($("#tags li").length > 0) || ($("#users li").length > 0)) && (($('#interest').val() != "") || ($('#col_name').html() != ""))) {
+            $('#done_start,#done_edit').removeClass('deactivated');
+        }
+        else {
+            $('#done_start,#done_edit').addClass('deactivated');
+        }
     });
     $("#hashtag,#tag_advanced").prop('disabled', false);
     $('#max_tags,#max_tags_advanced').slideUp();
@@ -514,6 +539,12 @@ $("#user_users").on("click", ".delete", function () {
     var height = $(this).closest('li').height();
     $(this).closest('li').css('height', height).hide('slow', function () {
         $(this).remove();
+        if ((($("#tags li").length > 0) || ($("#users li").length > 0)) && (($('#interest').val() != "") || ($('#col_name').html() != ""))) {
+            $('#done_start,#done_edit').removeClass('deactivated');
+        }
+        else {
+            $('#done_start,#done_edit').addClass('deactivated');
+        }
     });
     $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', false);
     $('#max_users,#max_users_advanced').slideUp();
@@ -588,6 +619,7 @@ $("#examples_2").find("li").click(function () {
 });
 $("#example_1").click(function () {
     if ($("#users li").length < 100) {
+        $('.error_expr_collection').slideUp();
         var flag = 1;
         $('#users li').children().each(function () {
             if ($(this).attr('id') === "Greenpeace------Twitter------3459051------Greenpeace") {
@@ -619,6 +651,12 @@ $("#example_1").click(function () {
         a.appendChild(img);
 
         if (flag) {
+            if (($('#interest').val() != "") || ($('#col_name').html() != "")) {
+                $('#done_start,#done_edit').removeClass('deactivated');
+            }
+            else {
+                $('#done_start,#done_edit').addClass('deactivated');
+            }
             if ($("#users li").length === 100) {
                 $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
                 $('#max_users,#max_users_advanced').slideDown();
@@ -676,6 +714,7 @@ $(".example_1").hover(
 
 $("#example_2").click(function () {
     if ($("#users li").length < 100) {
+        $('.error_expr_collection').slideUp();
         var flag = 1;
         $('#users li').children().each(function () {
             if ($(this).attr('id') === "WWF------GooglePlus------114176126428866920097------WWF") {
@@ -707,6 +746,12 @@ $("#example_2").click(function () {
         a.appendChild(img);
 
         if (flag) {
+            if (($('#interest').val() != "") || ($('#col_name').html() != "")) {
+                $('#done_start,#done_edit').removeClass('deactivated');
+            }
+            else {
+                $('#done_start,#done_edit').addClass('deactivated');
+            }
             if ($("#users li").length === 100) {
                 $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
                 $('#max_users,#max_users_advanced').slideDown();
@@ -764,6 +809,7 @@ $(".example_2").hover(
 
 $("#example_3").click(function () {
     if ($("#users li").length < 100) {
+        $('.error_expr_collection').slideUp();
         var flag = 1;
         $('#users li').children().each(function () {
             if ($(this).attr('id') === "CapeNature1------Facebook------137406639638143------CapeNature") {
@@ -795,6 +841,12 @@ $("#example_3").click(function () {
         a.appendChild(img);
 
         if (flag) {
+            if (($('#interest').val() != "") || ($('#col_name').html() != "")) {
+                $('#done_start,#done_edit').removeClass('deactivated');
+            }
+            else {
+                $('#done_start,#done_edit').addClass('deactivated');
+            }
             if ($("#users li").length === 100) {
                 $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
                 $('#max_users,#max_users_advanced').slideDown();
@@ -1030,190 +1082,6 @@ $('.ff-filter-users_adv').click(function (e) {
         }
     }
 });
-
-$('.stage').click(function (e) {
-    if (($('#col_name').text() === "") && ($('#interest').val() === "")) {
-        $('html,body').animate({
-            scrollTop: $(".third-section").offset().top - 100
-        }, 800);
-        switch (translation_param) {
-            case "en":
-                $('#myModal h1').html("Missing Fields!");
-                $('#myModal p').html("You have to specify a collection name.")
-                $('#myModal').reveal();
-                break;
-            case "el":
-                $('#myModal h1').html("Λείπουν κάποια πεδία!");
-                $('#myModal p').html("Πρέπει να ορίσεις ένα όνομα συλλογής.");
-                $('#myModal').reveal();
-                break;
-            case "it":
-                $('#myModal h1').html("Campi incompleti!");
-                $('#myModal p').html("Devi specificare il nome di una raccolta.");
-                $('#myModal').reveal();
-                break;
-            case "tr":
-                $('#myModal h1').html("Eksik alanlar!");
-                $('#myModal p').html("Bir koleksiyon adı belirlemelisiniz.");
-                $('#myModal').reveal();
-                break;
-            case "sp":
-                $('#myModal h1').html("Faltan campos!");
-                $('#myModal p').html("Se tiene que especificar un nombre de colección.");
-                $('#myModal').reveal();
-                break;
-            case "ca":
-                $('#myModal h1').html("Falten camps!");
-                $('#myModal p').html("Heu d'especificar un nom de recull.");
-                $('#myModal').reveal();
-                break;
-            default:
-                $('#myModal h1').html("Missing Fields!");
-                $('#myModal p').html("You have to specify a collection name.")
-                $('#myModal').reveal();
-        }
-    }
-    else if (($('#tags li').length === 0 ) && ($('#users').find('li').length === 0)) {
-        $('html,body').animate({
-            scrollTop: $(".third-section").offset().top - 100
-        }, 800);
-        switch (translation_param) {
-            case "en":
-                $('#myModal').find('h1').html("Missing Fields!");
-                $('#myModal').find('p').html("You have to specify at least one keyword or a user.");
-                $('#myModal').reveal();
-                break;
-            case "el":
-                $('#myModal h1').html("Λείπουν κάποια πεδία!");
-                $('#myModal p').html("Πρέπει να ορίσεις τουλάχιστον μια ετικέτα ή ένα χρήστη.");
-                $('#myModal').reveal();
-                break;
-            case "it":
-                $('#myModal h1').html("Campi incompleti!");
-                $('#myModal p').html("Devi specificare almeno una parola chiave o un utente.");
-                $('#myModal').reveal();
-                break;
-            case "tr":
-                $('#myModal h1').html("Eksik alanlar!");
-                $('#myModal p').html("En az bir anahtar kelime veya kullanıcı belirlemelisiniz.");
-                $('#myModal').reveal();
-                break;
-            case "sp":
-                $('#myModal h1').html("Faltan campos!");
-                $('#myModal p').html("Se tiene que especificar al menos una palabra clave o un usuario.");
-                $('#myModal').reveal();
-                break;
-            case "ca":
-                $('#myModal h1').html("Falten camps!");
-                $('#myModal p').html("Heu d'especificar com mínim un usuari o una paraula clau.");
-                $('#myModal').reveal();
-                break;
-            default:
-                $('#myModal').find('h1').html("Missing Fields!");
-                $('#myModal').find('p').html("You have to specify at least one keyword or a user.");
-                $('#myModal').reveal();
-        }
-    }
-    else {
-        $('#max_tags,#max_tags_advanced,#max_users,#max_users_advanced').slideUp();
-        var id = (Math.floor(Math.random() * 90000) + 10000) + user_id + new Date().getTime();
-        if (edit_mode) {
-            id = edit_id;
-        }
-        var title;
-        if ($('#col_name').text() !== "") {
-            title = $('#col_name').text();
-        }
-        else {
-            title = $('#interest').val();
-        }
-        var viewData = {
-            "_id": id,
-            "title": title,
-            "ownerId": user_id,
-            "keywords": [],
-            "accounts": []
-        };
-        var $tagsli = $('#tags').find('li');
-        for (var i = 0; i < $tagsli.length; i++) {
-            viewData.keywords.push({"keyword": $tagsli.eq(i).find('a').attr('id')});
-        }
-        var $usersli = $('#users').find('li');
-        for (var i = 0; i < $usersli.length; i++) {
-            var text = $usersli.eq(i).find('a').attr('id');
-            var text_arr = text.split('------');
-            viewData.accounts.push({
-                "username": text_arr[0],
-                "source": text_arr[1],
-                "id": text_arr[2],
-                "name": text_arr[3]
-            });
-        }
-        var temp = JSON.stringify(viewData);
-        var url = api_folder + 'collection';
-        if (edit_mode) {
-            edit_mode = false;
-            url = api_folder + 'collection/edit';
-            $('#edit_col_heading').hide();
-            $('#start_col_heading').show();
-        }
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: temp,
-            success: function () {
-                $('html,body').animate({
-                    scrollTop: $(".fifth-section").offset().top - 50
-                }, 800);
-                pagination = 1;
-                $('.controls').find('.btn_material').removeClass('active');
-                $('#all').addClass('active');
-                get_collections(true);
-                $('#col_name,#tags,#users').empty();
-                $('#interest,.user_input').prop('disabled', false);
-                $('.user_input').val("").blur();
-            },
-            error: function (e) {
-                switch (translation_param) {
-                    case "en":
-                        $('#myModal h1').html("Oops. Something went wrong!");
-                        $('#myModal p').html("Your collection has not be submitted. Please try again.");
-                        $('#myModal').reveal();
-                        break;
-                    case "el":
-                        $('#myModal h1').html("Κάτι πήγε στραβά!");
-                        $('#myModal p').html("Η συλλογή δεν υποβλήθηκε. Προσπάθησε ξανά.");
-                        $('#myModal').reveal();
-                        break;
-                    case "it":
-                        $('#myModal h1').html("Si e' verificato un problema!");
-                        $('#myModal p').html("La tua raccolta non è stata visualizzata. Prova ancora.");
-                        $('#myModal').reveal();
-                        break;
-                    case "tr":
-                        $('#myModal h1').html("Birşeyler yanlış gitti!");
-                        $('#myModal p').html("Koleksiyonunuz gönderilemedi. Lütfen tekrar deneyiniz.");
-                        $('#myModal').reveal();
-                        break;
-                    case "sp":
-                        $('#myModal h1').html("Algo salió mal!");
-                        $('#myModal p').html("Su colección no ha sido presentada . Por favor, inténtelo de nuevo.");
-                        $('#myModal').reveal();
-                        break;
-                    case "ca":
-                        $('#myModal h1').html("Ups! S'ha produït un error!");
-                        $('#myModal p').html("El recull no s'ha tramès correctament. Torneu-ho a provar.");
-                        $('#myModal').reveal();
-                        break;
-                    default:
-                        $('#myModal h1').html("Oops. Something went wrong.");
-                        $('#myModal p').html("Your collection has not be submitted. Please try again.");
-                        $('#myModal').reveal();
-                }
-            }
-        });
-    }
-});
 $("#Container").on("click", ".restart_icon", function () {
     var $this = $(this);
     $.ajax({
@@ -1382,23 +1250,29 @@ $("#Container").on("click", ".stop_icon", function () {
     });
 });
 $("#Container").on("click", ".edit_icon", function () {
-
+    if (($('#advanced_tag').is(":visible")) || ($('#advanced_user').is(":visible"))) {
+        $('#advanced_user,#advanced_tag').slideUp(0);
+        $('#tags_section,#users_section,#name_section').slideDown(0);
+    }
     edit_mode = true;
     var $this = $(this);
     var id = $this.prev('.delete_icon').attr('id');
     edit_id = id;
     var col_name = $this.siblings('.overlay').find('h3').text();
 
-
+    $('#done_edit').removeClass('deactivated');
     $('#tags,#users').empty();
-    $('#edit_col_heading').show();
-    $('#start_col_heading').hide();
+    $('#edit_col_heading,#edit_buttons').show();
+    $('#start_col_heading,#start_buttons').hide();
     $('#edit_col_name').html(col_name);
     $('#col_name').hide().fadeIn(600).html(col_name + '<img src="imgs/edit-white.png" alt="edit" class="edit"/>');
     $('html,body').animate({
         scrollTop: $(".third-section").offset().top - 100
     }, 800);
-
+    $('#interest,#hashtag,#tag_advanced,#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube').prop('disabled', false);
+    $('#interest,#hashtag,#user_RSS').val("").blur();
+    $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
+    $('#max_tags,#max_tags_advanced,#max_users,#max_users_advanced,.error_expr_collection').slideUp(0);
     $.ajax({
         type: 'GET',
         url: api_folder + 'collection/' + user_id + '/' + id,
@@ -1412,6 +1286,9 @@ $("#Container").on("click", ".edit_icon", function () {
             $.each(e.accounts, function (index, user) {
                 adduser(user['id'], user['name'], user['username'], user['source']);
             });
+            setTimeout(function () {
+                particlesJS("particles-js", particles_settings);
+            }, 650);
         }
     });
 
@@ -1745,21 +1622,21 @@ $("#text_user").click(function () {
     $(this).toggleClass('text_user_on');
 });
 
-$("#advanced_user_search").click(function (e) {
-    $('[data-hide="true"]').slideUp(500);
+$("#advanced_user_search").click(function () {
+    $('#tags_section,#users_section,#name_section,.error_expr_collection').slideUp(500);
     $('#advanced_user').slideDown(500);
     $('#users_adv').html($('#users').html());
-    $('#users').empty();
     $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
     $('#user_RSS').val("").blur();
+    $('#edit_buttons,#start_buttons').hide();
 });
 
-$("#advanced_tag_search").click(function (e) {
+$("#advanced_tag_search").click(function () {
+    $('#edit_buttons,#start_buttons').hide();
     var $tags = $('#tags');
-    $('[data-hide="true"]').slideUp(500);
+    $('#tags_section,#users_section,#name_section,.error_expr_collection').slideUp(500);
     $('#advanced_tag').slideDown(500);
     $('#tags_adv').html($tags.html());
-    $tags.empty();
     $('#hashtag').val("").blur();
     var el = document.getElementById('expression');
     Sortable.create(el, {
@@ -1771,6 +1648,10 @@ $("#advanced_tag_search").click(function (e) {
     });
 });
 $('#add_expr').click(function () {
+    validate_expression();
+});
+
+function validate_expression() {
 
     var valid_expr = true;
     var string_expr = "";
@@ -1802,7 +1683,6 @@ $('#add_expr').click(function () {
             default:
                 $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
         }
-        valid_expr = false;
         return;
     }
 
@@ -1831,7 +1711,6 @@ $('#add_expr').click(function () {
             default:
                 $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
         }
-        valid_expr = false;
         return;
     }
 
@@ -2081,33 +1960,34 @@ $('#add_expr').click(function () {
         return;
     }
 
-    if (valid_expr) {
-        $('.error_operator').removeClass('error_operator');
-        $error_exp.slideUp();
-        $('#clear_expr').click();
-        $('.operator').each(function () {
-            if ($(this).hasClass("open_parenthesis")) {
-                string_expr = string_expr + "(";
-            }
-            else if ($(this).hasClass("close_parenthesis")) {
-                string_expr = string_expr + ")";
-            }
-            else if ($(this).hasClass("and_operator")) {
-                string_expr = string_expr + " AND ";
-            }
-            else if ($(this).hasClass("or_operator")) {
-                string_expr = string_expr + " OR ";
-            }
-            else if ($(this).hasClass("not_operator")) {
-                string_expr = string_expr + " NOT ";
-            }
-            else if ($(this).hasClass("tag_operator")) {
-                string_expr = string_expr + $(this).attr('id');
-            }
-        });
-        addtag_advanced(string_expr);
-    }
-});
+    //if valid expression
+    $('.error_operator').removeClass('error_operator');
+    $error_exp.slideUp();
+    $('#clear_expr').click();
+    $('.operator').each(function () {
+        if ($(this).hasClass("open_parenthesis")) {
+            string_expr = string_expr + "(";
+        }
+        else if ($(this).hasClass("close_parenthesis")) {
+            string_expr = string_expr + ")";
+        }
+        else if ($(this).hasClass("and_operator")) {
+            string_expr = string_expr + " AND ";
+        }
+        else if ($(this).hasClass("or_operator")) {
+            string_expr = string_expr + " OR ";
+        }
+        else if ($(this).hasClass("not_operator")) {
+            string_expr = string_expr + " NOT ";
+        }
+        else if ($(this).hasClass("tag_operator")) {
+            string_expr = string_expr + $(this).attr('id');
+        }
+    });
+    addtag_advanced(string_expr);
+    return "added";
+
+}
 
 $('#clear_expr').click(function () {
     parenthesis_count = 0;
@@ -2143,26 +2023,201 @@ $('#not_add').click(function () {
 
 $("#done_users").click(function () {
     abort();
-    $('[data-hide="true"]').slideDown(500);
+    $('#tags_section,#users_section,#name_section').slideDown(500);
     $('#advanced_user').slideUp(500);
     $('#users').html($('#users_adv').html());
+    if ((($("#tags li").length > 0) || ($("#users li").length > 0)) && (($('#interest').val() != "") || ($('#col_name').html() != ""))) {
+        $('#done_start,#done_edit').removeClass('deactivated');
+    }
+    else {
+        $('#done_start,#done_edit').addClass('deactivated');
+    }
     $('#users_adv').empty();
     $('#users_images').empty().hide();
     $('#no_results,.Typeahead-spinner,#adv_loading').hide();
     $('#user_advanced').val("").blur();
-    if ($("#users li").length === 100) {
+    if ($("#users").find("li").length === 100) {
         $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
         $('#max_users,#max_users_advanced').slideDown();
     }
+    if (edit_mode) {
+        $('#edit_buttons').show();
+    }
+    else {
+        $('#start_buttons').show();
+    }
 });
-$("#done_tags").click(function (e) {
-    $('[data-hide="true"]').slideDown(500);
-    $('#advanced_tag').slideUp(500);
-    $('#tags').html($('#tags_adv').html());
+$("#cancel_users").click(function () {
+    $('#tags_section,#users_section,#name_section').slideDown(500);
+    $('#users_adv').empty();
+    $('#advanced_user').slideUp(500);
+    $('#users_images').empty().hide();
+    $('#no_results,.Typeahead-spinner,#adv_loading').hide();
+    $('#user_advanced').val("").blur();
+    if ($("#users").find("li").length === 100) {
+        $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
+        $('#max_users,#max_users_advanced').slideDown();
+    }
+    if (edit_mode) {
+        $('#edit_buttons').show();
+    }
+    else {
+        $('#start_buttons').show();
+    }
+});
+
+$("#cancel_edit").click(function () {
+    $('#edit_buttons,#edit_col_heading').hide();
+    edit_mode = false;
+    $('#tags,#users,#col_name').empty();
+    $('#interest,#hashtag,#tag_advanced,#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube').prop('disabled', false);
+    $('#interest,#hashtag,#user_RSS').val("").blur();
+    $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
+    $('#max_tags,#max_tags_advanced,#max_users,#max_users_advanced,#valid_rss,.error_expr_collection').slideUp(0);
+    $('#start_col_heading,#start_buttons').show();
+    $('html,body').animate({
+        scrollTop: $(".fifth-section").offset().top - 50
+    }, 800);
+    $('#done_start').addClass('deactivated');
+});
+
+$("#done_tags").click(function () {
+    if ($('#expression').find('li').length > 0) {
+        if (validate_expression() === "added") {
+            $('#name_section,#users_section,#tags_section').slideDown(500);
+            $('#tags').html($('#tags_adv').html());
+            if ((($("#tags li").length > 0) || ($("#users li").length > 0)) && (($('#interest').val() != "") || ($('#col_name').html() != ""))) {
+                $('#done_start,#done_edit').removeClass('deactivated');
+            }
+            else {
+                $('#done_start,#done_edit').addClass('deactivated');
+            }
+            $('#tags_adv,#expression').empty();
+            if ($("#tags").find("li").length === 20) {
+                $("#hashtag,#tag_advanced").prop('disabled', true);
+                $('#max_tags,#max_tags_advanced').slideDown();
+            }
+            $('#advanced_tag').slideUp(500);
+            $('#tag_advanced').val("").blur();
+            parenthesis_count = 0;
+            $('#error_expr').slideUp();
+            if (edit_mode) {
+                $('#edit_buttons').show();
+            }
+            else {
+                $('#start_buttons').show();
+            }
+        }
+    }
+    else {
+        $('#name_section,#users_section,#tags_section').slideDown(500);
+        $('#tags').html($('#tags_adv').html());
+        if ((($("#tags li").length > 0) || ($("#users li").length > 0)) && (($('#interest').val() != "") || ($('#col_name').html() != ""))) {
+            $('#done_start,#done_edit').removeClass('deactivated');
+        }
+        else {
+            $('#done_start,#done_edit').addClass('deactivated');
+        }
+        $('#tags_adv,#expression').empty();
+        if ($("#tags").find("li").length === 20) {
+            $("#hashtag,#tag_advanced").prop('disabled', true);
+            $('#max_tags,#max_tags_advanced').slideDown();
+        }
+        $('#advanced_tag').slideUp(500);
+        $('#tag_advanced').val("").blur();
+        parenthesis_count = 0;
+        $('#error_expr').slideUp();
+        if (edit_mode) {
+            $('#edit_buttons').show();
+        }
+        else {
+            $('#start_buttons').show();
+        }
+    }
+});
+
+$("#cancel_tags").click(function () {
+    $('#name_section,#users_section,#tags_section').slideDown(500);
     $('#tags_adv,#expression').empty();
+    $('#advanced_tag').slideUp(500);
     $('#tag_advanced').val("").blur();
     parenthesis_count = 0;
     $('#error_expr').slideUp();
+    if ($("#tags").find("li").length === 20) {
+        $("#hashtag,#tag_advanced").prop('disabled', true);
+        $('#max_tags,#max_tags_advanced').slideDown();
+    }
+    if (edit_mode) {
+        $('#edit_buttons').show();
+    }
+    else {
+        $('#start_buttons').show();
+    }
+});
+
+$("#done_start,#done_edit").click(function () {
+    if ($(this).hasClass('deactivated')) {
+        $('.error_expr_collection').slideDown();
+        if (($('#col_name').text() === "") && ($('#interest').val() === "")) {
+            switch (translation_param) {
+                case "en":
+                    $('.error_expr_collection').find('span').html("You have to specify a collection name.")
+                    break;
+                case "el":
+                    $('.error_expr_collection').find('span').html("Πρέπει να ορίσεις ένα όνομα συλλογής.");
+                    break;
+                case "it":
+                    $('.error_expr_collection').find('span').html("Devi specificare il nome di una raccolta.");
+                    break;
+                case "tr":
+                    $('.error_expr_collection').find('span').html("Bir koleksiyon adı belirlemelisiniz.");
+                    break;
+                case "sp":
+                    $('.error_expr_collection').find('span').html("Se tiene que especificar un nombre de colección.");
+                    break;
+                case "ca":
+                    $('.error_expr_collection').find('span').html("Heu d'especificar un nom de recull.");
+                    break;
+                default:
+                    $('.error_expr_collection').find('span').html("You have to specify a collection name.");
+            }
+        }
+        else if (($('#tags li').length === 0 ) && ($('#users').find('li').length === 0)) {
+            switch (translation_param) {
+                case "en":
+                    $('.error_expr_collection').find('span').html("You have to specify at least one keyword or a user.");
+                    break;
+                case "el":
+                    $('.error_expr_collection').find('span').html("Πρέπει να ορίσεις τουλάχιστον μια ετικέτα ή ένα χρήστη.");
+                    break;
+                case "it":
+                    $('.error_expr_collection').find('span').html("Devi specificare almeno una parola chiave o un utente.");
+                    break;
+                case "tr":
+                    $('.error_expr_collection').find('span').html("En az bir anahtar kelime veya kullanıcı belirlemelisiniz.");
+                    break;
+                case "sp":
+                    $('.error_expr_collection').find('span').html("Se tiene que especificar al menos una palabra clave o un usuario.");
+                    break;
+                case "ca":
+                    $('.error_expr_collection').find('span').html("Heu d'especificar com mínim un usuari o una paraula clau.");
+                    break;
+                default:
+                    $('.error_expr_collection').find('span').html("You have to specify at least one keyword or a user.");
+            }
+        }
+    }
+    else {
+        collection_begin();
+    }
+});
+
+$("#cancel_start").click(function () {
+    $('#col_name,#tags,#users').empty();
+    $('.user_input').prop('disabled', false).val("").blur();
+    $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
+    $('#max_tags,#max_tags_advanced,#max_users,#max_users_advanced,.error_expr_collection').slideUp();
+    $('#done_start').addClass('deactivated');
 });
 
 function imgError2(image, source, username) {
@@ -2201,3 +2256,104 @@ $("#users_images").on("click", ".add_user", function (e) {
 $("#users_images").on("click", ".user", function () {
     $(this).find('.add_user').click();
 });
+
+function collection_begin() {
+    $('#start_buttons').show();
+    $('#done_start').addClass('deactivated');
+    $('#max_tags,#max_tags_advanced,#max_users,#max_users_advanced').slideUp();
+    var id = (Math.floor(Math.random() * 90000) + 10000) + user_id + new Date().getTime();
+    var title;
+    if ($('#col_name').text() !== "") {
+        title = $('#col_name').text();
+    }
+    else {
+        title = $('#interest').val();
+    }
+    var viewData = {
+        "_id": id,
+        "title": title,
+        "ownerId": user_id,
+        "keywords": [],
+        "accounts": []
+    };
+    var $tagsli = $('#tags').find('li');
+    for (var i = 0; i < $tagsli.length; i++) {
+        viewData.keywords.push({"keyword": $tagsli.eq(i).find('a').attr('id')});
+    }
+    var $usersli = $('#users').find('li');
+    for (var i = 0; i < $usersli.length; i++) {
+        var text = $usersli.eq(i).find('a').attr('id');
+        var text_arr = text.split('------');
+        viewData.accounts.push({
+            "username": text_arr[0],
+            "source": text_arr[1],
+            "id": text_arr[2],
+            "name": text_arr[3]
+        });
+    }
+    var temp = JSON.stringify(viewData);
+    var url = api_folder + 'collection';
+    if (edit_mode) {
+        id = edit_id;
+        $('#edit_buttons').hide();
+        edit_mode = false;
+        url = api_folder + 'collection/edit';
+        $('#edit_col_heading').hide();
+        $('#start_col_heading').show();
+    }
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: temp,
+        success: function () {
+            $('html,body').animate({
+                scrollTop: $(".fifth-section").offset().top - 50
+            }, 800);
+            pagination = 1;
+            $('.controls').find('.btn_material').removeClass('active');
+            $('#all').addClass('active');
+            get_collections(true);
+            $('#col_name,#tags,#users').empty();
+            $('.user_input').prop('disabled', false).val("").blur();
+            $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
+        },
+        error: function (e) {
+            switch (translation_param) {
+                case "en":
+                    $('#myModal h1').html("Oops. Something went wrong!");
+                    $('#myModal p').html("Your collection has not be submitted. Please try again.");
+                    $('#myModal').reveal();
+                    break;
+                case "el":
+                    $('#myModal h1').html("Κάτι πήγε στραβά!");
+                    $('#myModal p').html("Η συλλογή δεν υποβλήθηκε. Προσπάθησε ξανά.");
+                    $('#myModal').reveal();
+                    break;
+                case "it":
+                    $('#myModal h1').html("Si e' verificato un problema!");
+                    $('#myModal p').html("La tua raccolta non è stata visualizzata. Prova ancora.");
+                    $('#myModal').reveal();
+                    break;
+                case "tr":
+                    $('#myModal h1').html("Birşeyler yanlış gitti!");
+                    $('#myModal p').html("Koleksiyonunuz gönderilemedi. Lütfen tekrar deneyiniz.");
+                    $('#myModal').reveal();
+                    break;
+                case "sp":
+                    $('#myModal h1').html("Algo salió mal!");
+                    $('#myModal p').html("Su colección no ha sido presentada . Por favor, inténtelo de nuevo.");
+                    $('#myModal').reveal();
+                    break;
+                case "ca":
+                    $('#myModal h1').html("Ups! S'ha produït un error!");
+                    $('#myModal p').html("El recull no s'ha tramès correctament. Torneu-ho a provar.");
+                    $('#myModal').reveal();
+                    break;
+                default:
+                    $('#myModal h1').html("Oops. Something went wrong.");
+                    $('#myModal p').html("Your collection has not be submitted. Please try again.");
+                    $('#myModal').reveal();
+            }
+        }
+    });
+}

@@ -132,7 +132,7 @@ $.ajax({
                 onFinish: function (e) {
                     since_param = e.from * 1000;
                     until_param = e.to * 1000;
-                    window.history.pushState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
+                    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
 
                     if ($('.page').data('id') === "Feed") {
                         $("#tiles").empty();
@@ -209,7 +209,7 @@ $.ajax({
                     interval();
                 }
             }
-            window.history.pushState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
         }
     },
     error: function () {
@@ -280,7 +280,7 @@ $(function () {
                     }
                     view_param = "feed";
                     pagelocation = "latest";
-                    window.history.pushState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
+                    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
                     $("#tiles").empty();
                     $("#main").show(0);
                     $("#loading").show();
@@ -312,7 +312,7 @@ $(function () {
                 $('#loadingbar').hide().css('width', '0%');
                 view_param = "dashboard";
                 pagelocation = "dashboard";
-                window.history.pushState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
+                window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
                 $("#tiles").empty();
                 $("#main").hide(0);
                 $("#end,#loadmore").hide();
@@ -357,7 +357,7 @@ $(function () {
             }
         }
         source_param = typearr.join(",");
-        window.history.pushState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
+        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
         if ($('.page').data('id') === "Feed") {
             $("#tiles").empty();
             $("#main").height(0);
@@ -386,7 +386,7 @@ $(function () {
             $(this).find('a').addClass('activelan');
             language_param = $(".sub1 .activelan").text().toLowerCase();
             language_param = language_param.substr(0, language_param.indexOf(' '));
-            window.history.pushState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
             if ($('.page').data('id') === "Feed") {
                 $("#tiles").empty();
                 $("#main").height(0);
@@ -416,7 +416,7 @@ $(function () {
             $('.sub2 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             sort_param = $(".sub2 .activelan").data('id');
-            window.history.pushState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
             $("#tiles").empty();
             $("#main").height(0);
             $("#loading").show();
@@ -433,7 +433,7 @@ $(function () {
             $('.sub3 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             original_param = $(".sub3 .activelan").data('id').toLowerCase();
-            window.history.pushState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
             if ($('.page').data('id') === "Feed") {
                 $("#tiles").empty();
                 $("#main").height(0);
@@ -462,7 +462,7 @@ $(function () {
             $('.sub4 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             type_param = $(".sub4 .activelan").data('id');
-            window.history.pushState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
             if ($('.page').data('id') === "Feed") {
                 $("#tiles").empty();
                 $("#main").height(0);
@@ -492,7 +492,7 @@ $(function () {
             $('.sub6 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             unique_param = $(".sub6 .activelan").data('id');
-            window.history.pushState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
             if ($('.page').data('id') === "Feed") {
                 $("#tiles").empty();
                 $("#main").height(0);
@@ -522,7 +522,7 @@ $(function () {
             $('.sub5 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             topic_param = $(".sub5 .activelan").find('p').data('query');
-            window.history.pushState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
             if ($('.page').data('id') === "Feed") {
                 $("#tiles").empty();
                 $("#main").height(0);
@@ -1014,7 +1014,7 @@ function interval() {
             titlelast = titletop;
         }
         until_param = +moment().format("X") * 1000;
-        window.history.pushState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
+        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
         $.ajax({
             type: "GET",
             url: api_folder + "items?collection=" + collection_param + "&q=" + query_param + "&nPerPage=12&pageNumber=1&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
@@ -1103,7 +1103,7 @@ function open_slider() {
     $('#main').css({'padding-left': 0, 'padding-right': 0});
 }
 
-$('#logo').find('h1').click(function () {
+$('#logo h1,#back_icon').click(function () {
     if (translation_param !== "en") {
         window.location.href = "index.html?user_id=" + user_id + "&translation=" + translation_param;
     }
@@ -1123,7 +1123,7 @@ function gup(name) {
 
 $('.icon-clear').click(function () {
     query_param = "";
-    window.history.pushState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
+    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&view=" + view_param + "&translation=" + translation_param);
     document.getElementById("query").value = "";
     $("#ff-search").find("input[type='text']").removeClass("searchon");
     $(this).hide();

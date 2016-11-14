@@ -6,7 +6,7 @@ RUN apt-get update
 RUN apt-get -y upgrade
 
 # Install apache, PHP, and supplimentary programs. curl and lynx-cur are for debugging the container.
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 php5-dev libapache2-mod-php5 php5-mysql php5-mcrypt php5-gd php-pear php-apc php5-curl curl lynx-cur
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 php5-dev libapache2-mod-php5 php5-mysql php5-mcrypt php5-gd php-pear php-apc php5-curl curl lynx-cur memcached php5-memcached
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
@@ -44,4 +44,4 @@ ADD apache-config.conf /etc/apache2/sites-enabled/000-default.conf
 EXPOSE 80
 
 # By default, simply start apache.
-CMD /usr/sbin/apache2ctl -D FOREGROUND
+CMD service memcached start & /usr/sbin/apache2ctl -D FOREGROUND

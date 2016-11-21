@@ -1070,7 +1070,7 @@ $app->post(
 
 $app->get(
     '/collection/start/:cid',
-    function ($cid) use($app, $mongoDAO, $redisClient) {
+    function ($cid) use($app, $mongoDAO, $redisClient, $memcached) {
 
         $collection = $mongoDAO->getCollection($cid);
         if($collection != null) {
@@ -1079,6 +1079,8 @@ $app->get(
 
             $startMessage = json_encode($collection);
             $redisClient->publish("collections:new", $startMessage);
+
+            $memcached->delete($cid);
         }
 
         echo json_encode($collection);
@@ -1087,7 +1089,7 @@ $app->get(
 
 $app->get(
     '/collection/stop/:cid',
-    function ($cid) use($app, $mongoDAO, $redisClient) {
+    function ($cid) use($app, $mongoDAO, $redisClient, $memcached) {
 
         $collection = $mongoDAO->getCollection($cid);
         if($collection != null) {
@@ -1095,6 +1097,8 @@ $app->get(
             $mongoDAO->updateCollectionFields($cid, $ops);
             $stopMessage = json_encode($collection);
             $redisClient->publish("collections:stop", $stopMessage);
+
+            $memcached->delete($cid);
         }
         echo json_encode($collection);
     }
@@ -1102,12 +1106,14 @@ $app->get(
 
 $app->get(
     '/collection/delete/:cid',
-    function ($cid) use($app, $mongoDAO, $redisClient) {
+    function ($cid) use($app, $mongoDAO, $redisClient, $memcached) {
         $collection = $mongoDAO->getCollection($cid);
         if($collection != null) {
             $mongoDAO->deleteCollection($cid);
             $deleteMessage = json_encode($collection);
             $redisClient->publish("collections:delete", $deleteMessage);
+
+            $memcached->delete($cid);
         }
         echo json_encode($collection);
     }

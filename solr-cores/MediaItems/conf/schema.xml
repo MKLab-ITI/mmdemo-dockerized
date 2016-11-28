@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<schema name="mediaitems" version="1.5">
+<schema name="mediaitems" version="1.6">
 
    	<fields>
     	<field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
    	  	<field name="url" type="string" indexed="true" stored="true" required="true" multiValued="false" />
-      
+
 		<field name="source" type="string" indexed="true" stored="false" multiValued="false" />
-      	
+
 		<field name="title" type="text_en" indexed="true" stored="false" multiValued="false" />
       	<field name="description" type="text_en" indexed="true" stored="false" multiValued="false" />
       	<field name="tags" type="string" indexed="true" stored="false" multiValued="true" />
@@ -19,8 +19,8 @@
       	<field name="longitude" type="double" indexed="true" stored="false" multiValued="false" />
       	<field name="location" type="string" indexed="true" stored="false" multiValued="false" />
       	<field name="concepts" type="string" indexed="true" stored="false" multiValued="true" />
-      	<field name="type" type="string" indexed="true" stored="false" multiValued="false" /> 
-	  	<field name="labels" type="string" indexed="true" stored="false" multiValued="true" />      	
+      	<field name="type" type="string" indexed="true" stored="false" multiValued="false" />
+	  	<field name="labels" type="string" indexed="true" stored="false" multiValued="true" />
 
       	<field name="_version_" type="long" indexed="true" stored="true" />
    	</fields>
@@ -108,7 +108,7 @@
             <filter class="solr.PorterStemFilterFactory" />
          </analyzer>
       </fieldType>
-     
+
 	 <!-- Arabic -->
       <fieldType name="text_ar" class="solr.TextField" positionIncrementGap="100">
          <analyzer>
@@ -429,4 +429,3 @@
       </fieldType>
    </types>
 </schema>
-

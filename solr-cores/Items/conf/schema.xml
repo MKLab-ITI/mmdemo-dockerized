@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<schema name="items" version="1.5">
+<schema name="items" version="1.6">
    <fields>
       <!-- Item fields -->
       <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />

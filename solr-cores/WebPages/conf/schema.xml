@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<schema name="webpages" version="1.5">
+<schema name="webpages" version="1.6">
 
     <fields>
 		<field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
-        
+
         <field name="hash" type="string" indexed="true" stored="true" required="false" multiValued="false" />
-        
+
 		<field name="url" type="string" indexed="true" stored="true" required="true" multiValued="false" />
         <field name="expandedUrl" type="string" indexed="true" stored="true" multiValued="false" />
 		<field name="domain" type="string" indexed="true" stored="true" multiValued="false" />
@@ -14,10 +14,10 @@
         <field name="text" type="text_en" indexed="true" stored="true" multiValued="false" />
 		<field name="keywords" type="text_en" indexed="true" stored="true" multiValued="true" />
 
-        
+
         <field name="date" type="date" indexed="true" stored="true" multiValued="false" />
  		<field name="publicationTime" type="long" indexed="true" stored="true" multiValued="false" />
- 
+
 		<field name="text1" type="text_ws" indexed="true" stored="true" multiValued="false" />
 		<field name="text2" type="text_general" indexed="true" stored="true" multiValued="false" />
 
@@ -113,7 +113,7 @@
             <filter class="solr.PorterStemFilterFactory" />
          </analyzer>
       </fieldType>
-     
+
 	 <!-- Arabic -->
       <fieldType name="text_ar" class="solr.TextField" positionIncrementGap="100">
          <analyzer>
@@ -431,4 +431,3 @@
       </fieldType>
    </types>
 </schema>
-

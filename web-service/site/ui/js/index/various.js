@@ -2291,16 +2291,16 @@ function collection_begin() {
             "name": text_arr[3]
         });
     }
-    var temp = JSON.stringify(viewData);
     var url = api_folder + 'collection';
     if (edit_mode) {
-        id = edit_id;
+        viewData._id = edit_id;
         $('#edit_buttons').hide();
         edit_mode = false;
         url = api_folder + 'collection/edit';
         $('#edit_col_heading').hide();
         $('#start_col_heading').show();
     }
+    var temp = JSON.stringify(viewData);
     $.ajax({
         type: 'POST',
         url: url,

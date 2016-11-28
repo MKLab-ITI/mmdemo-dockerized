@@ -934,7 +934,7 @@ $app->get(
                 }
             }
 
-            $memcached->set($cid, $collection, time()+180);
+            $memcached->set($cid, $collection, time() + 180);
             $collections[] = $collection;
         }
 
@@ -997,6 +997,8 @@ $app->post(
                 'title' => $collection->title,
                 'keywords' => $collection->keywords,
                 'keywordsToExclude' => $collection->keywordsToExclude,
+                'itemsToExclude' => $collection->itemsToExclude,
+                'usersToExclude' => $collection->usersToExclude,
                 'privacy' => $collection->privacy,
                 'accounts' => $collection->accounts,
                 'status'=>'running',

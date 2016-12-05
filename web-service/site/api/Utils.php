@@ -21,10 +21,10 @@ class Utils {
         $queryParts = array();
         foreach($keywords as $keyword) {
             if($this->isLogicalExpression($keyword) && !$this->isNegativeLogicalExpression($keyword)) {
-                $queryParts[] =  "($keyword )";
+                $queryParts[] =  "($keyword)";
             }
             else {
-                trim($keyword);
+                $keyword = trim($keyword);
                 $keyword = preg_split("/\s+/", $keyword);
                 if (count($keyword) > 1) {
                     $queryParts[] = '(' . implode(' AND ', $keyword) . ')';
@@ -117,18 +117,19 @@ class Utils {
             $keywords = explode(',', $query);
 
             $filterTextQuery = $this->formulateLogicalQuery($keywords);
-            $filters['allText'] = $filterTextQuery;
+            // Do not cache it
+            $filters['{!cache=false}allText'] = $filterTextQuery;
         }
 
         //filter by source
         if($source != null) {
-            if($source == 'all') {
-                $filters['source'] = "*";
-            }
-            else {
+            if($source !== 'all') {
                 $sources = explode(',', $source);
-                $sources = implode(' OR ', $sources);
-                $filters['source'] = "$sources";
+                if(count($sources) > 0 && count($sources) < 6) {
+                    $sources = implode(' OR ', $sources);
+                    $filters['source'] = "$sources";
+                }
+
             }
         }
         else {
@@ -163,7 +164,8 @@ class Utils {
 
         // filter by publication time
         if($since !== '*' && $until !== '*') {
-            $filters['publicationTime'] = "[$since TO $until]";
+            // publication time filter query is rare as changes over time. Do not cache it
+            $filters['{!cache=false}publicationTime'] = "[$since TO $until]";
         }
 
 
@@ -175,8 +177,10 @@ class Utils {
 
 
         if ($usersToExclude != null && count($usersToExclude) > 0) {
-            $uIdsToExclude = implode(' OR ', $usersToExclude);
-            $filters["-uid"] = "($uIdsToExclude)";
+            $uIdsToExclude = array_map(function($user){ return $user['source']."#".$user['id']; }, $usersToExclude);
+
+            $q = implode(' OR ', $uIdsToExclude);
+            $filters["-uid"] = "($q)";
         }
 
         return $filters;

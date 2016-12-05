@@ -278,11 +278,12 @@ class TextIndex {
         return $statistics;
     }
 
-    public function getFacet($facetField, $q, $filters = array(), $n = 10, $includeAll=true, $prefix=null, $unique=false) {
+    public function getFacet($facetField, $q, $filters = array(), $n = 10, $includeAll=true, $prefix=null, $unique=false, $exclude=null, $method=null) {
 
         // get a select query instance
         $query = $this->client->createSelect();
         $query->setQuery($q);
+        $query->setRows(0);
 
         // set filter queries
         if($filters != null) {
@@ -304,8 +305,19 @@ class TextIndex {
         // create a facet field instance and set options
         $ff = $facetSet->createFacetField($facetField);
         $ff->setField($facetField)->setMissing(false);
+
         if($prefix != null) {
             $ff->setPrefix($prefix);
+        }
+
+        if($method != null) {
+            $ff->setMethod($method);
+        }
+
+        if($exclude != null) {
+            foreach($exclude as $excludedValue) {
+                $ff->setContainsIgnoreCase($excludedValue);
+            }
         }
 
         $facets = array();
@@ -318,6 +330,7 @@ class TextIndex {
             if ($includeAll) {
                 $facets[] = array('field' => 'all', 'count' => $resultSet->getNumFound());
             }
+
             foreach ($facet as $value => $count) {
                 $facets[] = array('field' => $value, 'count' => $count);
             }

@@ -418,7 +418,7 @@ $app->get(
                     $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                     $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
 
-                    $facet = $textIndex->getFacet('uid', $collectionQuery, $filters, $n, false, null, $unique);
+                    $facet = $textIndex->getFacet('uid', $collectionQuery, $filters, $n, false, null, $unique, null, 'fc');
 
                     $users = array();
                     foreach($facet as $result) {
@@ -477,9 +477,14 @@ $app->get(
                     $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                     $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
 
-                    $tagsFacet = $textIndex->getFacet('tags', $collectionQuery, $filters, ceil($n/3), false, null, $unique);
-                    $personsFacet = $textIndex->getFacet('persons', $collectionQuery, $filters, ceil($n/3), false, null, $unique);
-                    $organizationsFacet = $textIndex->getFacet('organizations', $collectionQuery, $filters, ceil($n/3), false, null, $unique);
+                    $termsToExclude = preg_split("/[\s,]+/", $query);
+                    $termsToExclude = array_map(function($k) {
+                        return strtolower($k);
+                    }, $termsToExclude);
+
+                    $tagsFacet = $textIndex->getFacet('tags', $collectionQuery, $filters, ceil($n/3), false, null, $unique, $termsToExclude, 'fc');
+                    $personsFacet = $textIndex->getFacet('persons', $collectionQuery, $filters, ceil($n/3), false, null, $unique, $termsToExclude, 'fc');
+                    $organizationsFacet = $textIndex->getFacet('organizations', $collectionQuery, $filters, ceil($n/3), false, null, $unique, $termsToExclude, 'fc');
 
                     $terms = array();
                     foreach($tagsFacet as $result) {
@@ -723,7 +728,7 @@ $app->get(
                 $statistics['reach'] = $statistics['followers']['sum'];
                 $statistics['users'] = $counts['uid']['cardinality'];
 
-                $sources = $textIndex->getFacet('source', $q, $filters, -1, false, null, $unique);
+                $sources = $textIndex->getFacet('source', $q, $filters, -1, false, null, $unique, null, 'enum');
 
                 foreach($sources as &$source) {
                     $filters = $utils->getFilters($since, $until, $source['field'], $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
@@ -912,7 +917,7 @@ $app->get(
 
             $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
             $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-            $filters = $utils->getFilters($since, $until, "*", null, null, null, null, $itemsToExclude, $usersToExclude);
+            $filters = $utils->getFilters($since, $until, "all", null, null, null, null, $itemsToExclude, $usersToExclude);
 
             $collection['filters'] = $filters;
 
@@ -920,7 +925,8 @@ $app->get(
             $collection['items'] = $count;
 
             $filters = $utils->getFilters($since, $until, "*", null, "media", null, null, $itemsToExclude, $usersToExclude);
-            $facet = $textIndex->getFacet('mediaIds', $q, $filters, 3, false);
+
+            $facet = $textIndex->getFacet('mediaIds', $q, $filters, 3, false, null, false, null, 'fc');
             $collection['facet'] = $facet;
 
             if(count($collection['facet']) > 0) {

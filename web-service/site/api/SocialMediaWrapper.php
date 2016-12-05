@@ -110,6 +110,9 @@ class SocialMediaWrapper {
                 "statuses_count" => $userFound->statuses_count,
                 "profileImage" => $userFound->profile_image_url_https,
                 "coverImage" => $userFound->profile_background_image_url_https,
+                "timezone" => $userFound->time_zone,
+                "location" => $userFound->location,
+                "lang" => $userFound->lang,
                 "source" => "Twitter"
             );
         }
@@ -176,7 +179,7 @@ class SocialMediaWrapper {
                 return array();
             }
 
-            $fields = 'id,name,username,description,link,cover,picture,engagement,is_verified';
+            $fields = 'id,name,username,description,link,cover,picture,engagement,is_verified,location';
             $response = $this->fb->get("/search?q=$q&fields=$fields&type=page&limit=20");
 
             $body = $response->getDecodedBody();
@@ -330,7 +333,7 @@ class SocialMediaWrapper {
             return array();
         }
 
-        $optParams = array('fields' => "displayName,id,image,isPlusUser,language,name,nickname,plusOneCount,tagline,url,urls,verified,circledByCount,aboutMe,image/url");
+        $optParams = array('fields' => "displayName,id,image,isPlusUser,language,currentLocation,name,nickname,plusOneCount,tagline,url,urls,verified,circledByCount,aboutMe,image/url");
         $result = $this->plus->people->get($user_id, $optParams);
 
         $user = array(
@@ -343,7 +346,9 @@ class SocialMediaWrapper {
             'profileImage' => $result['image']['url'],
             'plusOneCount' => isset($result['plusOneCount'])?$result['plusOneCount']:0,
             'circledByCount' => isset($result['circledByCount'])?$result['circledByCount']:0,
-            'verified' => $result['verified']
+            'verified' => $result['verified'],
+            'language' => isset($result['language'])?$result['language']:null,
+            'location' => isset($result['currentLocation'])?$result['currentLocation']:null
         );
 
         return $user;

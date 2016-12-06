@@ -42,7 +42,7 @@ services:
           - redis
 
   mongodb:
-    image: mongo:3.2.9
+    image: mongo:3.2.11
     ports:
       - "27017:27017"
     volumes:
@@ -54,7 +54,7 @@ services:
           - mongodb
 
   solr:
-    image: solr:5.5.2
+    image: solr:6.3.0
     ports:
       - "8983:8983"
     volumes:

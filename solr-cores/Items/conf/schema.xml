@@ -13,9 +13,11 @@
       <field name="minhash" type="string" indexed="true" stored="true" multiValued="false" />
       <field name="signature" type="string" indexed="true" stored="true" multiValued="false" />
       <field name="uid" type="string" indexed="true" stored="false" multiValued="false" />
+      <field name="uidFacet" type="string" indexed="false" stored="false" multiValued="false" docValues="true"/>
       <field name="username" type="tags" indexed="true" stored="false" multiValued="false" />
       <field name="reference" type="string" indexed="true" stored="false" multiValued="false" />
       <field name="publicationTime" type="long" indexed="true" stored="false" multiValued="false" />
+      <field name="publicationTimeFacet" type="long" indexed="false" stored="false" multiValued="false" docValues="true"/>
       <field name="language" type="string" indexed="true" stored="false" multiValued="false" />
       <field name="latitude" type="double" indexed="true" stored="false" multiValued="false" />
       <field name="longitude" type="double" indexed="true" stored="false" multiValued="false" />
@@ -82,6 +84,8 @@
    <copyField source="tags" dest="allText" />
    <copyField source="persons" dest="allText" />
    <copyField source="organizations" dest="allText" />
+   <copyField source="uid" dest="uidFacet" />
+   <copyField source="publicationTime" dest="publicationTimeFacet" />
 
    <types>
       <fieldType name="string" class="solr.StrField" sortMissingLast="true" />

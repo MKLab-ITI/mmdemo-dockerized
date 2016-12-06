@@ -359,7 +359,7 @@ $app->get(
                         $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
                         $facet = $memcached->get($requestHash);
                         if($facet == false) {
-                            $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, null, $unique);
+                            $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, null, $unique, null, 'enum');
                             $memcached->set($requestHash, $facet, time()+61);
                         }
 
@@ -418,7 +418,7 @@ $app->get(
                     $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                     $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
 
-                    $facet = $textIndex->getFacet('uid', $collectionQuery, $filters, $n, false, null, $unique, null, 'fc');
+                    $facet = $textIndex->getFacet('uidFacet', $collectionQuery, $filters, $n, false, null, $unique, null, 'fc');
 
                     $users = array();
                     foreach($facet as $result) {
@@ -644,7 +644,7 @@ $app->get(
 
             $start = $gap * ($since / $gap);
             $end = $gap * ($until / $gap);
-            $rangeFacet = $textIndex->getRangeFacet('publicationTime', $q, $filters, $gap, $start, $end, $unique);
+            $rangeFacet = $textIndex->getRangeFacet('publicationTimeFacet', $q, $filters, $gap, $start, $end, $unique);
             foreach($rangeFacet as $bin) {
                 if($bin['count'] > 0) {
                     $entry = array('timestamp'=>$bin['field'], 'date'=>date($dateFormat, $bin['field']/1000), 'count'=>$bin['count']);
@@ -840,7 +840,7 @@ $app->get(
             if ($collection != null) {
                 $collectionQuery = $utils->formulateCollectionQuery($collection);
 
-                $facet = $textIndex->getFacet('tags', $collectionQuery, $filters, 5, false, $query);
+                $facet = $textIndex->getFacet('tags', $collectionQuery, $filters, 5, false, $query, 'fc');
             }
         }
 
@@ -924,7 +924,7 @@ $app->get(
             $count = $textIndex->countItems($q, $filters);
             $collection['items'] = $count;
 
-            $filters = $utils->getFilters($since, $until, "*", null, "media", null, null, $itemsToExclude, $usersToExclude);
+            $filters = $utils->getFilters($since, $until, "all", null, "media", null, null, $itemsToExclude, $usersToExclude);
 
             $facet = $textIndex->getFacet('mediaIds', $q, $filters, 3, false, null, false, null, 'fc');
             $collection['facet'] = $facet;

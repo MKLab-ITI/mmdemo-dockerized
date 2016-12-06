@@ -129,7 +129,6 @@ class Utils {
                     $sources = implode(' OR ', $sources);
                     $filters['source'] = "$sources";
                 }
-
             }
         }
         else {

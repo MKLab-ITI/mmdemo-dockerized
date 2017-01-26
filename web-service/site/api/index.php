@@ -359,7 +359,7 @@ $app->get(
                         $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
                         $facet = $memcached->get($requestHash);
                         if($facet == false) {
-                            $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, null, $unique, null, 'enum');
+                            $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, null, $unique, null, 'fcs');
                             $memcached->set($requestHash, $facet, time()+61);
                         }
 
@@ -418,7 +418,7 @@ $app->get(
                     $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                     $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
 
-                    $facet = $textIndex->getFacet('uidFacet', $collectionQuery, $filters, $n, false, null, $unique, null, 'fc');
+                    $facet = $textIndex->getFacet('uidFacet', $collectionQuery, $filters, $n, false, null, $unique, null, 'fcs');
 
                     $users = array();
                     foreach($facet as $result) {
@@ -482,9 +482,9 @@ $app->get(
                         return strtolower($k);
                     }, $termsToExclude);
 
-                    $tagsFacet = $textIndex->getFacet('tags', $collectionQuery, $filters, ceil($n/3), false, null, $unique, $termsToExclude, 'fc');
-                    $personsFacet = $textIndex->getFacet('persons', $collectionQuery, $filters, ceil($n/3), false, null, $unique, $termsToExclude, 'fc');
-                    $organizationsFacet = $textIndex->getFacet('organizations', $collectionQuery, $filters, ceil($n/3), false, null, $unique, $termsToExclude, 'fc');
+                    $tagsFacet = $textIndex->getFacet('tags', $collectionQuery, $filters, ceil($n/3), false, null, $unique, $termsToExclude, 'fcs');
+                    $personsFacet = $textIndex->getFacet('persons', $collectionQuery, $filters, ceil($n/3), false, null, $unique, $termsToExclude, 'fcs');
+                    $organizationsFacet = $textIndex->getFacet('organizations', $collectionQuery, $filters, ceil($n/3), false, null, $unique, $termsToExclude, 'fcs');
 
                     $terms = array();
                     foreach($tagsFacet as $result) {
@@ -567,13 +567,6 @@ $app->get(
                 $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query, $itemsToExclude, $usersToExclude);
                 $q = $utils->formulateCollectionQuery($collection);
 
-                if ($query != null && $query != '') {
-                    $query = urldecode($query);
-                    $keywords = explode(',', $query);
-                    $filterTextQuery = $utils->formulateLogicalQuery($keywords);
-                    $filters['text1'] = $filterTextQuery;
-                }
-
                 $points = $textIndex->get2DFacet('latlonRPT', $q, $filters, $minLat, $maxLat, $minLong, $maxLong);
 
             }
@@ -586,7 +579,7 @@ $app->get(
 // GET route
 $app->get(
     '/timeline',
-    function () use ($mongoDAO, $textIndex, $utils, $app) {
+    function () use ($mongoDAO, $textIndex, $utils, $app, $memcached) {
 
         $request = $app->request();
 
@@ -622,6 +615,9 @@ $app->get(
             $dateFormat = "F j, Y";
             $gap = 7 * 24 * $gap;
         }
+        if ($resolution === 'MINUTE' || $resolution === 'minute' || $resolution === 'minutes') {
+            $gap = $gap / 60;
+        }
 
         $tm = array();
 
@@ -642,19 +638,27 @@ $app->get(
                 $until = 1000*time();
             }
 
+            $requestHash = "timeline_$gap\_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
+            $cachedTimeline = $memcached->get($requestHash);
+            if($cachedTimeline != false) {
+                echo json_encode(array('timeline' => $cachedTimeline));
+                return;
+            }
+
             $start = $gap * ($since / $gap);
             $end = $gap * ($until / $gap);
-            $rangeFacet = $textIndex->getRangeFacet('publicationTimeFacet', $q, $filters, $gap, $start, $end, $unique);
+            $rangeFacet = $textIndex->getRangeFacet('publicationTime', $q, $filters, $gap, $start, $end, $unique);
             foreach($rangeFacet as $bin) {
                 if($bin['count'] > 0) {
-                    $entry = array('timestamp'=>$bin['field'], 'date'=>date($dateFormat, $bin['field']/1000), 'count'=>$bin['count']);
+                    $entry = array('timestamp'=>$bin['field'], 'date'=>date($dateFormat, $bin['field']/1000), 'count' => $bin['count']);
                     $tm[] = $entry;
                 }
             }
         }
 
-        $response = array('timeline' => $tm);
+        $memcached->set($requestHash, $tm, time()+61);
 
+        $response = array('timeline' => $tm);
         echo json_encode($response);
     }
 )->name("timeline");
@@ -721,27 +725,27 @@ $app->get(
                     return;
                 }
 
-                $statistics = $textIndex->statistics("likes,shares,followers,friends", $q, $filters, $unique);
-                $counts = $textIndex->fieldsCount("uid", $q, $filters, $unique);
+                $statistics = $textIndex->facetedStatistics("likesFacet,sharesFacet,followersFacet,friendsFacet", $q, $filters, $unique, "source");
 
-                $statistics['endorsement'] = $statistics['likes']['sum'];
-                $statistics['reach'] = $statistics['followers']['sum'];
-                $statistics['users'] = $counts['uid']['cardinality'];
+                $counts = $textIndex->fieldsCount("uidFacet", $q, $filters, $unique, "source");
+
+                $statistics['endorsement'] = $statistics['likesFacet']['sum'];
+                $statistics['reach'] = $statistics['followersFacet']['sum'];
+                $statistics['users'] = $counts['uidFacet']['cardinality'];
 
                 $sources = $textIndex->getFacet('source', $q, $filters, -1, false, null, $unique, null, 'enum');
-
                 foreach($sources as &$source) {
-                    $filters = $utils->getFilters($since, $until, $source['field'], $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
-                    $sourceStatistics = $textIndex->statistics("likes,shares,followers,friends", $q, $filters, $unique);
-                    $sourceCounts = $textIndex->fieldsCount("uid", $q, $filters, $unique);
+                    $field = $source['field'];
 
-                    $source['endorsement'] = $sourceStatistics['likes']['sum'];
-                    $source['reach'] = $sourceStatistics['followers']['sum'];
-                    $source['users'] = $sourceCounts['uid']['cardinality'];
+                    $source['endorsement'] = $statistics['likesFacet']['facets']['source'][$field]['sum'];
+                    $source['reach'] = $statistics['followersFacet']['facets']['source'][$field]['sum'];
+                    $source['users'] = $counts['uidFacet']['facets']['source'][$field]['cardinality'];
                 }
 
                 $statistics['sources'] = $sources;
+
                 $statistics['query'] = $query;
+                $statistics['filters'] = $filters;
 
                 $memcached->set($requestHash, $statistics, time()+61);
             }
@@ -754,7 +758,7 @@ $app->get(
 
 $app->get(
     '/topics/',
-    function () use($mongoDAO, $textIndex, $utils, $app) {
+    function () use($mongoDAO, $textIndex, $utils, $app, $memcached) {
 
         $request = $app->request();
 
@@ -778,6 +782,7 @@ $app->get(
         if($collectionId != null) {
             $collection = $mongoDAO->getCollection($collectionId);
             if ($collection != null) {
+
                 $collectionQuery = $utils->formulateCollectionQuery($collection);
 
                 $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
@@ -788,19 +793,28 @@ $app->get(
 
                 $topics[] = array('label' => 'All', 'query' => '*', 'score' => 1, 'items' => $count);
 
-                $clusters = $textIndex->getClusters($collectionQuery, $filters, 1000);
+                $requestHash = "topics_".$utils->getParametersHash($collectionId, "*", "*", $source, true, null, $language, $query, $itemsToExclude, $usersToExclude);
+                $cachedTopics = $memcached->get($requestHash);
+                if($cachedTopics != false) {
+                    echo json_encode(array("topics"=>$cachedTopics));
+                    return;
+                }
+
+                $clusters = $textIndex->getClusters($collectionQuery, $filters, 3000);
                 foreach($clusters as $cluster) {
                     if($cluster['score'] > 0 && count($cluster['docs']) >= 15) {
                         $topic = array(
                             'label' => $cluster['labels'][0],
                             'query' => implode(',',$cluster['labels']),
                             'score' => $cluster['score'],
-                            'items' => round((count($cluster['docs'])/1000) * $count)
+                            'items' => round((count($cluster['docs']) / 1000) * $count)
                         );
 
                         $topics[] = $topic;
                     }
                 }
+
+                $memcached->set($requestHash, $topics, time()+301);
             }
         }
 

@@ -8,8 +8,7 @@
       <field name="title" type="text_en" indexed="true" stored="true" multiValued="false" />
       <field name="description" type="text_en" indexed="true" stored="false" multiValued="false" />
       <field name="tags" type="tags" indexed="true" stored="true" multiValued="true" />
-      <field name="cleanTitle" type="text_en" indexed="true" stored="true" multiValued="false" termVectors="true" termPositions="true"
-      termOffsets="true" />
+      <field name="cleanTitle" type="text_en" indexed="true" stored="true" multiValued="false" termVectors="true" termPositions="true" termOffsets="true" />
       <field name="minhash" type="string" indexed="true" stored="true" multiValued="false" />
       <field name="signature" type="string" indexed="true" stored="true" multiValued="false" />
       <field name="uid" type="string" indexed="true" stored="false" multiValued="false" />
@@ -34,15 +33,19 @@
       <field name="mentions" type="string" indexed="true" stored="false" multiValued="true" />
       <field name="text" type="text_ws" indexed="true" stored="false" multiValued="false" />
       <field name="allText" type="text_general" indexed="true" stored="false" multiValued="true" />
-      <field name="text1" type="text_general" indexed="true" stored="false" multiValued="false" />
-      <field name="text2" type="text_en_splitting" indexed="true" stored="false" multiValued="false" />
-      <field name="text3" type="text_en_splitting_tight" indexed="true" stored="false" multiValued="false" />
       <field name="referenceUserId" type="string" indexed="true" stored="false" multiValued="true" />
       <field name="likes" type="long" indexed="true" stored="false" multiValued="false" />
       <field name="comments" type="long" indexed="true" stored="false" multiValued="false" />
       <field name="shares" type="long" indexed="true" stored="false" multiValued="false" />
       <field name="followers" type="long" indexed="true" stored="false" multiValued="false" />
       <field name="friends" type="long" indexed="true" stored="false" multiValued="false" />
+
+      <field name="likesFacet" type="long" indexed="false" stored="false" multiValued="false" docValues="true"/>
+      <field name="commentsFacet" type="long" indexed="false" stored="false" multiValued="false" docValues="true"/>
+      <field name="sharesFacet" type="long" indexed="false" stored="false" multiValued="false" docValues="true"/>
+      <field name="followersFacet" type="long" indexed="false" stored="false" multiValued="false" docValues="true"/>
+      <field name="friendsFacet" type="long" indexed="false" stored="false" multiValued="false" docValues="true"/>
+
       <field name="_version_" type="long" indexed="true" stored="true" />
 
       <!-- Type used to index the lat and lon components for the "location" FieldType -->
@@ -76,16 +79,19 @@
 
    <uniqueKey>id</uniqueKey>
 
-   <copyField source="title" dest="text1" />
-   <copyField source="title" dest="text2" />
-   <copyField source="title" dest="text3" />
    <copyField source="title" dest="allText" />
    <copyField source="description" dest="allText" />
    <copyField source="tags" dest="allText" />
    <copyField source="persons" dest="allText" />
    <copyField source="organizations" dest="allText" />
+
    <copyField source="uid" dest="uidFacet" />
    <copyField source="publicationTime" dest="publicationTimeFacet" />
+   <copyField source="likes" dest="likesFacet" />
+   <copyField source="comments" dest="commentsFacet" />
+   <copyField source="shares" dest="sharesFacet" />
+   <copyField source="followers" dest="followersFacet" />
+   <copyField source="friends" dest="friendsFacet" />
 
    <types>
       <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
@@ -104,8 +110,7 @@
       <!-- A specialized field for geo-spatial search. If indexed, this fieldType must not be multi-valued. -->
       <fieldType name="location_latlon" class="solr.LatLonType" subFieldSuffix="_coordinate" />
       <!-- A specialized field for geo-spatial search. -->
-      <fieldType name="location_rpt" class="solr.SpatialRecursivePrefixTreeFieldType" geo="true" distErrPct="0.025" maxDistErr="0.001"
-      distanceUnits="kilometers" />
+      <fieldType name="location_rpt" class="solr.SpatialRecursivePrefixTreeFieldType" geo="true" distErrPct="0.025" maxDistErr="0.001" distanceUnits="kilometers" />
 
       <!-- A text field that only splits on whitespace for exact matching of words -->
       <fieldType name="text_ws" class="solr.TextField" positionIncrementGap="100">

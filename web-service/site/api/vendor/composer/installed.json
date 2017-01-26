@@ -220,12 +220,12 @@
         "version_normalized": "5.1.2.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/facebook/facebook-php-sdk-v4.git",
+            "url": "https://github.com/facebook/php-graph-sdk.git",
             "reference": "2c42fb3002953355f12d3c6e8003a9fd5af563d9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/facebook/facebook-php-sdk-v4/zipball/2c42fb3002953355f12d3c6e8003a9fd5af563d9",
+            "url": "https://api.github.com/repos/facebook/php-graph-sdk/zipball/2c42fb3002953355f12d3c6e8003a9fd5af563d9",
             "reference": "2c42fb3002953355f12d3c6e8003a9fd5af563d9",
             "shasum": ""
         },
@@ -418,6 +418,91 @@
             "microframework",
             "rest",
             "router"
+        ]
+    },
+    {
+        "name": "3nr1c/php-shunting-yard",
+        "version": "0.1.1",
+        "version_normalized": "0.1.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/3nr1c/shunt.git",
+            "reference": "b9f37406331a8239caaa8216cf6c3342ea9031bd"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/3nr1c/shunt/zipball/b9f37406331a8239caaa8216cf6c3342ea9031bd",
+            "reference": "b9f37406331a8239caaa8216cf6c3342ea9031bd",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "3.7.*"
+        },
+        "time": "2015-09-13 08:35:30",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Shunt\\": "src/Shunt/",
+                "Shunt\\Tests\\": "tests/",
+                "Shunt\\Tests\\Parser\\": "tests/Parser/",
+                "Shunt\\Tests\\Context\\": "tests/Context/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "php-shunting-yard",
+        "homepage": "https://github.com/3nr1c/php-shunting-yard",
+        "keywords": [
+            "equation",
+            "math",
+            "shunting yard"
+        ]
+    },
+    {
+        "name": "andig/php-shunting-yard",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/andig/php-shunting-yard.git",
+            "reference": "5f59f0cb18a3de6943b71bb712b11d9a535f5eb1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/andig/php-shunting-yard/zipball/5f59f0cb18a3de6943b71bb712b11d9a535f5eb1",
+            "reference": "5f59f0cb18a3de6943b71bb712b11d9a535f5eb1",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "3.7.*"
+        },
+        "time": "2014-12-08 15:25:02",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "RR\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "Refactored repack of https://github.com/andig/php-shunting-yard",
+        "homepage": "https://github.com/andig/php-shunting-yard",
+        "keywords": [
+            "equation",
+            "math",
+            "shunting yard"
         ]
     }
 ]

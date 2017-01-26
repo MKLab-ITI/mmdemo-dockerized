@@ -63,18 +63,18 @@ class TextIndex {
 
             if($sort === 'relevance') {
                 $query->addSort('score', Solarium\QueryType\Select\Query\Query::SORT_DESC);
-                $query->addSort('sum(product(0.7,likes),product(0.3,shares))', Solarium\QueryType\Select\Query\Query::SORT_DESC);
+                $query->addSort('sum(product(0.7,likesFacet),product(0.3,sharesFacet))', Solarium\QueryType\Select\Query\Query::SORT_DESC);
             }
             else if($sort === 'popularity') {
-                $query->addSort('sum(product(0.7,likes),product(0.3,shares))', Solarium\QueryType\Select\Query\Query::SORT_DESC);
-                $query->addSort('publicationTime', Solarium\QueryType\Select\Query\Query::SORT_DESC);
+                $query->addSort('sum(product(0.7,likesFacet),product(0.3,sharesFacet))', Solarium\QueryType\Select\Query\Query::SORT_DESC);
+                $query->addSort('publicationTimeFacet', Solarium\QueryType\Select\Query\Query::SORT_DESC);
             }
             else {
-                $query->addSort('publicationTime', Solarium\QueryType\Select\Query\Query::SORT_DESC);
+                $query->addSort('publicationTimeFacet', Solarium\QueryType\Select\Query\Query::SORT_DESC);
             }
         }
         else {
-            $query->addSort('publicationTime', Solarium\QueryType\Select\Query\Query::SORT_DESC);
+            $query->addSort('publicationTimeFacet', Solarium\QueryType\Select\Query\Query::SORT_DESC);
         }
 
         // filters
@@ -237,12 +237,13 @@ class TextIndex {
         return $statistics;
     }
 
-    public function fieldsCount($fields, $q, $filters=null, $unique=false) {
+    public function fieldsCount($fields, $q, $filters=null, $unique=false, $facets = null) {
 
         $query = $this->client->createSelect();
         if($query != null) {
             $query->setQuery($q);
         }
+        $query->setRows(0);
 
         if($filters != null) {
             foreach($filters as $filterKey => $filterValue) {
@@ -257,25 +258,27 @@ class TextIndex {
         $stats = $query->getStats();
         $fields = explode(',', $fields);
         foreach($fields as $fieldName) {
-            $stats->createField("{!countDistinct=false cardinality=0.5 min=true}$fieldName");
+            $stats->createField("{!cardinality=true}$fieldName");
         }
 
-        $statistics = array();
+        if($facets != null) {
+            $facets = explode(",", $facets);
+            $stats->setFacets($facets);
+        }
+
         try {
             $resultSet = $this->client->execute($query);
 
 			$data = $resultSet->getData();
+
             $stats = $data['stats']['stats_fields'];
-            foreach ($stats as $field=>$fieldStats) {
-                $statistics[$field] = array(
-                    'cardinality' => $fieldStats['cardinality'],
-                );
-            }
+            return $stats;
 
         }
-        catch(Exception $e) { return $e; }
+        catch(Exception $e) {
+            return $e;
+        }
 
-        return $statistics;
     }
 
     public function getFacet($facetField, $q, $filters = array(), $n = 10, $includeAll=true, $prefix=null, $unique=false, $exclude=null, $method=null) {
@@ -284,6 +287,7 @@ class TextIndex {
         $query = $this->client->createSelect();
         $query->setQuery($q);
         $query->setRows(0);
+        $query->addParam("facet.threads", 4);
 
         // set filter queries
         if($filters != null) {
@@ -606,4 +610,50 @@ class TextIndex {
 
     }
 
+    public function facetedStatistics($fields, $q, $filters=null, $unique=false, $facets = null)
+    {
+        $query = $this->client->createSelect();
+        if ($query != null) {
+            $query->setQuery($q);
+        }
+
+        $query->setRows(0);
+
+        if ($filters != null) {
+            foreach ($filters as $filterKey => $filterValue) {
+                $query->createFilterQuery($filterKey)->setQuery("$filterKey:($filterValue)");
+            }
+        }
+
+        if ($unique === 'true' OR $unique === true) {
+            $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash min=publicationTime}");
+        }
+
+        $stats = $query->getStats();
+        if ($facets != null) {
+            $facets = explode(",", $facets);
+            $stats->setFacets($facets);
+        }
+
+        $fields = explode(',', $fields);
+        foreach($fields as $field) {
+            $stats->createField("{!max=true min=true sum=true mean=true}$field");
+            //$stats->createField($field);
+        }
+
+        try {
+            $resultSet = $this->client->execute($query);
+            $data = $resultSet->getData();
+
+            $count = $data['response']['numFound'];
+            $statistics = $data['stats']['stats_fields'];
+
+            $statistics['total'] = $count;
+            return $statistics;
+        }
+        catch(Exception $e) {
+            return array("error" => $e->getMessage());
+        }
+
+    }
 }

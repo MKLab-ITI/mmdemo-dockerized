@@ -77,6 +77,9 @@ services:
     ports:
       - "80:80"
     restart: always
+    environment:
+      MONGO_USER: admin
+      MONGO_PASSWORD: place_your_password_here
     networks:
       common_network:
         aliases:
@@ -93,6 +96,9 @@ services:
     volumes:
       - ./stream-manager-service/conf:/stream_manager/conf
     restart: always
+    environment:
+      MONGO_USER: admin
+      MONGO_PASSWORD: place_your_password_here
     networks:
       common_network:
         aliases:

@@ -15,23 +15,70 @@ The services that multimedia demo is built upon are the following:
 
 ![mmdemo architecture](https://raw.githubusercontent.com/MKLab-ITI/mmdemo-dockerized/master/mmdemo_arch.png)
 
-### mongodb,  solr & redis
+### mongodb,  
 
-For these services the official Docker images hosted in Docker hub are used. To ensure data persistence in mongodb and solr, data volumes of Docker are used, as specified in docker-compose.yml. There is no need for data persistence in redis, as at this version of the demo, redis used only as a publish/subscribe service.
+
+
+For mongodb service the official Docker images hosted in Docker hub is used. First off all, you have to specify volumes in docker-compose.yaml to ensure data persistence. The directory */data/db* inside the container that runs mongodb is mounted to the directory *./mongo_data_dir* on the host machine's local filesystem. You can change this directory to any other local directory.
 
 ```sh
 mongodb:
-    image: mongo
+    image: mongo:3.2.11
     volumes:
         - ./mongo_data_dir:/data/db
+```
+
+
+**Important: ** Running mongodb without enabled authentication makes mongodb instance extremely vulnerable to hack attacks. It's highly recommended to run mongodb with the --auth flag and access it by using authorized users. In this tool *--auth* flag is included by default in docker-compose.yaml file.
+
+ ```sh
+ mongodb:
+   image: mongo:3.2.11
+   command: mongod --auth
+
+ ```
+
+To access mongodb properly, you have to create a user with the appropriate permissions. More specifically, to run the tool you have to create a user with the role *dbOwner* for the database *Demo*, which is the default database that social media monitoring tool inserts the collected data.
+
+To create this user run the [create_user.sh](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/create_user.sh) script before the deployment of the tool. This script starts a temporary container with a mongodb image and then creates the user. Make sure that the /path/to/mongodb/data/dir is the same as that used for data persistence in docker-compose.yaml. Also ensure that the same mongodb version is used both in the script and docker-compose.yaml (e.g. 3.2.11).
+
+```sh
+docker run -d -p 27018:27017 -v /path/to/mongodb/data/dir:/data/db --name tmpMongoDB mongo:3.2.11
+```
+
+You must specify you own password in the line of the script depicted below:
+```sh
+docker run -it --link tmpMongoDB --rm mongo:3.2.11 sh -c \
+    'mongo admin --host tmpMongoDB --eval "db.createUser({ user: \"admin\", pwd: \"place-your-own-password\", roles: [ { role: \"dbOwner\", db: \"Demo\" } ] });"'
+
+```
+The above command will create a user named *admin*, with the specified password, having full permissions in database *Demo*. This used will be used for authentication/authorization in [web service](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/web-service) and [stream-manager-service](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/stream-manager-service).
+
+```sh
+web:
+  environment:
+    MONGO_USER: admin
+    MONGO_PASSWORD: you-own-password
+
+streammanager:
+  environment:
+    MONGO_USER: admin
+    MONGO_PASSWORD: you-own-password
+```
+
+### solr & redis
+
+For these services the official Docker images hosted in Docker hub are used. To ensure data persistence in  solr, data volumes of Docker are used, as specified in docker-compose.yml. There is no need for data persistence in redis, as at this version of the demo, redis used only as a publish/subscribe service.
+
+```sh
 
 solr:
-    image: solr
+    image: solr:6.3.0
     volumes:
         - ./solr-cores:/opt/solr/server/solr
 ```
 
-More specifically, the directory */data/db* inside the container that runs mongodb is mounted to the directory *./mongo_data_dir* on the host machine's local filesystem. You can change this directory to any other local directory. Regarding solr, the directory */opt/solr/server/solr* is mounted in *./solr-cores* or any other directory that contains [solr-cores](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/solr-cores). There are three cores, corresponding to three collections: Items, MediaItems and WebPages. Make sure that user that execute tha docker images has r/w rights to these directories. The easiest way is to give full access:
+More specifically, the directory */opt/solr/server/solr* is mounted in *./solr-cores* or any other directory that contains [solr-cores](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/solr-cores). There are three cores, corresponding to three collections: Items, MediaItems and WebPages. Make sure that user that execute tha docker images has r/w rights to these directories. The easiest way is to give full access:
 
 ```sh
   $chmod 777 -R ./solr-cores

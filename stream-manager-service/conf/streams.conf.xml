@@ -8,6 +8,12 @@
       <Parameter name="mongo.database">
         <![CDATA[Demo]]>
       </Parameter>
+      <Parameter name="mongodb.username">
+        <![CDATA[${MONGO_USER}]]>
+      </Parameter>
+      <Parameter name="mongodb.password">
+        <![CDATA[${MONGO_PASSWORD}]]>
+      </Parameter>
       <Parameter name="redis.host">
         <![CDATA[redis]]>
       </Parameter>
@@ -25,6 +31,12 @@
       </Parameter>
       <Parameter name="mongodb.database">
         <![CDATA[Demo]]>
+      </Parameter>
+      <Parameter name="mongodb.username">
+        <![CDATA[${MONGO_USER}]]>
+      </Parameter>
+      <Parameter name="mongodb.password">
+        <![CDATA[${MONGO_PASSWORD}]]>
       </Parameter>
     </Storage>
 
@@ -52,7 +64,7 @@
         <![CDATA[false]]>
       </Parameter>
       <Parameter name="solr.commitWithin">
-        <![CDATA[15]]>
+        <![CDATA[30000]]>
       </Parameter>
     </Storage>
   </Storages>
@@ -64,7 +76,7 @@
         <![CDATA[gr.iti.mklab.sfc.filters.LengthItemFilter]]>
       </Parameter>
       <Parameter name="length">
-        <![CDATA[15]]>
+        <![CDATA[30]]>
       </Parameter>
     </Filter>
     <Filter id="TagsFilter">
@@ -131,7 +143,33 @@
     </Processor>
   </Processors>
 
-  <Subscribers></Subscribers>
+  <Subscribers>
+    <!-- Twitter Subscriber
+    <Subscriber id="Twitter">
+      <Parameter name="Classpath">
+        <![CDATA[gr.iti.mklab.sfc.subscribers.impl.TwitterSubscriber]]>
+      </Parameter>
+      <Parameter name="Key">
+        <![CDATA[]]>
+      </Parameter>
+      <Parameter name="Secret">
+        <![CDATA[]]>
+      </Parameter>
+      <Parameter name="AccessToken">
+        <![CDATA[]]>
+      </Parameter>
+      <Parameter name="AccessTokenSecret">
+        <![CDATA[]]>
+      </Parameter>
+      <Parameter name="maxRequests">
+        <![CDATA[180]]>
+      </Parameter>
+      <Parameter name="timeWindow">
+        <![CDATA[15]]>
+      </Parameter>
+    </Subscriber>
+    -->
+  </Subscribers>
 
   <Streams>
 
@@ -169,8 +207,7 @@
            	<Parameter name="maxRequests"><![CDATA[25]]></Parameter>
          	<Parameter name="timeWindow"><![CDATA[15]]></Parameter>
         </Stream>
-				-->
-
+    -->
     <!-- YouTube Handler
      	<Stream id="Youtube">
       		<Parameter name="Classpath">
@@ -181,8 +218,7 @@
             <Parameter name="maxRequests"><![CDATA[500]]></Parameter>
          	<Parameter name="timeWindow"><![CDATA[15]]></Parameter>
   	</Stream>
-		-->
-
+    -->
     <!-- Flickr Stream Handler
     	<Stream id="Flickr">
          	<Parameter name="Classpath">
@@ -204,7 +240,7 @@
            	<Parameter name="maxRequests"><![CDATA[100]]></Parameter>
          	<Parameter name="timeWindow"><![CDATA[15]]></Parameter>
     	</Stream>
-			-->
+      -->
     <!-- Instagram Stream Handler
       	<Stream id="Instagram">
           	<Parameter name="Classpath">
@@ -224,7 +260,6 @@
             	</Parameter>
         	<Parameter name="timeWindow"><![CDATA[30]]></Parameter>
   	</Stream>
-      	-->
-
+    -->
   </Streams>
 </Configuration>

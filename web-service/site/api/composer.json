@@ -4,8 +4,9 @@
         "solarium/solarium": "3.7.0",
         "predis/predis": "v1.1.1",
         "google/apiclient": "1.1.6",
-        "facebook/php-sdk-v4": "5.1.2",
+        "facebook/graph-sdk": "5.4.4",
         "cosenary/instagram": "v2.3",
-        "abraham/twitteroauth": "0.6.2"
+        "abraham/twitteroauth": "0.6.2",
+        "mongodb/mongodb": "1.0.4"
     }
 }

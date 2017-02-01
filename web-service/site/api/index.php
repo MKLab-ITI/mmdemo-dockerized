@@ -31,10 +31,12 @@ $textIndexItemsCollection = "Items";
 
 try {
     $textIndex = new TextIndex($textIndexService, $textIndexItemsCollection);
-    $mongoDAO = new MongoDAO($mongoHost, $mongoDatabase);
+
+    $mongoDAO = new MongoDAO($mongoHost, $mongoDatabase, 27017, $_ENV["MONGO_USER"],  $_ENV["MONGO_PASSWORD"]);
+
     $utils = new Utils();
 
-    $redisParams = array('scheme' => 'tcp', 'host'   => 'redis', 'port' => 6379);
+    $redisParams = array('scheme' => 'tcp', 'host' => 'redis', 'port' => 6379);
     $redisClient = new Predis\Client($redisParams);
 
     $smWrapper = new SocialMediaWrapper();
@@ -45,7 +47,7 @@ try {
 catch(Exception $e) {
     echo json_encode(
         array(
-            'trace' => $e->getTrace()
+            'trace' => $e->getMessage()
         )
     );
     return;
@@ -654,9 +656,9 @@ $app->get(
                     $tm[] = $entry;
                 }
             }
-        }
 
-        $memcached->set($requestHash, $tm, time()+61);
+            $memcached->set($requestHash, $tm, time()+61);
+        }
 
         $response = array('timeline' => $tm);
         echo json_encode($response);
@@ -895,13 +897,14 @@ $app->get(
 
         $request = $app->request();
 
-		$pageNumber = $request->get("pageNumber")==null ? 1 : $request->get("pageNumber");
-        $nPerPage = $request->get("nPerPage")==null ? 6 : $request->get("nPerPage");
+		$pageNumber = $request->get("pageNumber")==null ? 1 : (int) $request->get("pageNumber");
+        $nPerPage = $request->get("nPerPage")==null ? 6 : (int) $request->get("nPerPage");
 
         $status = $request->get("status"); // stopped / running
 
 		$all = $mongoDAO->getUserCollections($uid, $status);
 		$userCollections = $mongoDAO->getUserCollections($uid, $status, $pageNumber, $nPerPage);
+
         $collections = array();
         foreach($userCollections as &$collection) {
 

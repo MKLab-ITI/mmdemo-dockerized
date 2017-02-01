@@ -28,23 +28,39 @@ class MongoDAO {
     private static $USER_FIELDS = array( '_id'=>1,'username'=>1,'name'=>1, 'items'=>1,'friends'=>1,'followers'=>1,'pageUrl'=>1,'profileImage'=>1, 'mentions'=>1, 'shares'=>1);
 
     function __construct($host, $db, $port=27017, $username=null, $password=null) {
+
+        $params = array();
         if($username != null && $password != null) {
-            $auth = array('username' => $username, 'password' => $password, 'db'=>$db);
-            $this->mongo = new MongoClient("$host:$port", $auth);
+            $params = array(
+                'username' => $username,
+                'password' => $password,
+                'authSource'=>'admin',
+                'authMechanism'=>'SCRAM-SHA-1');
         }
-        else {
-            $this->mongo = new MongoClient("$host:$port");
-        }
-        $this->db = $this->mongo->selectDB($db);
 
-        $rjCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
-        $rjCollection->ensureIndex(array('cid' => 1, 'relevance' => 1));
+        $this->mongo = new MongoDB\Client("mongodb://$host:$port", $params,
+            [
+                'typeMap' => [
+                    'array' => 'array',
+                    'document' => 'array',
+                    'root' => 'array',
+                ],
+            ]);
 
+            $this->db = $this->mongo->selectDatabase($db);
+
+            $rjCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
+            $rjCollection->createIndex(array('cid' => 1, 'relevance' => 1));
     }
 
     public function getItem($id) {
         $collection = $this->db->selectCollection( MongoDAO::$ITEMS );
-        $item = $collection->findOne(array('_id'=>$id), MongoDAO::$ITEM_FIELDS);
+
+        $params = [
+            'projection' => MongoDAO::$ITEM_FIELDS
+        ];
+
+        $item = $collection->findOne(array('_id'=>$id), $params);
         if($item != null) {
             $item['id'] = $item['_id'];
             unset($item['_id']);
@@ -90,7 +106,12 @@ class MongoDAO {
 
     public function getItemComments($id) {
         $collection = $this->db->selectCollection( MongoDAO::$ITEMS );
-        $items = $collection->find(array('reference'=>$id), MongoDAO::$ITEM_FIELDS);
+
+        $params = [
+            'projection' => MongoDAO::$ITEM_FIELDS
+        ];
+
+        $items = $collection->find(array('reference'=>$id), $params);
 
         return $items;
     }
@@ -106,7 +127,12 @@ class MongoDAO {
             );
         }
 
-        $items_states = $collection->find($q, array('_id' => -1))->sort(array('timestamp' => 1));
+        $params = [
+            'sort' => ['timestamp' => 1],
+            'projection' => ['_ιδ' => -1]
+        ];
+
+        $items_states = $collection->find($q, $params);
 
         return $items_states;
     }
@@ -115,14 +141,24 @@ class MongoDAO {
 
     public function getMediaItem($id) {
         $collection = $this->db->selectCollection( MongoDAO::$MEDIA_ITEMS );
-        $mItem = $collection->findOne(array('_id'=>$id), MongoDAO::$MEDIA_FIELDS);
+
+        $params = [
+            'projection' => MongoDAO::$MEDIA_FIELDS
+        ];
+
+        $mItem = $collection->findOne(array('_id'=>$id), $params);
 
         return $mItem;
     }
 
     public function getUser($id) {
         $collection = $this->db->selectCollection(MongoDAO::$STREAM_USERS);
-        $user = $collection->findOne(array('_id' => $id), MongoDAO::$USER_FIELDS);
+
+        $params = [
+            'projection' => MongoDAO::$USER_FIELDS
+        ];
+
+        $user = $collection->findOne(array('_id' => $id), $params);
         if ($user != null) {
             $user['id'] = $user['_id'];
             unset($user['_id']);
@@ -132,7 +168,11 @@ class MongoDAO {
 
     public function getUserByUsername($username) {
         $collection = $this->db->selectCollection(MongoDAO::$STREAM_USERS);
-        $user = $collection->findOne(array('username' => $username), MongoDAO::$USER_FIELDS);
+
+        $params = [
+            'projection' => MongoDAO::$USER_FIELDS
+        ];
+        $user = $collection->findOne(array('username' => $username), $params);
         if ($user != null) {
             $user['id'] = $user['_id'];
             unset($user['_id']);
@@ -178,10 +218,14 @@ class MongoDAO {
             $sortBy = array('likes'=>-1);
         }
 
-        $cursor = $collection->find($query, MongoDAO::$ITEM_FIELDS)
-            ->sort($sortBy)
-            ->skip(($pageNumber-1)*$nPerPage)
-            ->limit($nPerPage);
+        $params = [
+            'sort' => $sortBy,
+            'skip' => ($pageNumber-1)*$nPerPage,
+            'limit' => $nPerPage,
+            'projection' => MongoDAO::$ITEM_FIELDS
+        ];
+
+        $cursor = $collection->find($query, $params);
 
 
         $items = iterator_to_array($cursor, false);
@@ -220,19 +264,21 @@ class MongoDAO {
 
 
     public function getUserCollections($uid, $status=null, $pageNumber=null, $nPerPage=null) {
+
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 
-        $query = array("ownerId" => $uid);
-
+        $query = array('ownerId' => $uid);
         if($status != null && ($status==='stopped' || $status==='running')) {
             $query['status'] = $status;
         }
 
-        $cursor = $mongoCollection->find($query)->sort(array("creationDate"=>-1));
-		if($pageNumber != null && $nPerPage != null) {
-            $cursor->skip(($pageNumber-1)*$nPerPage)->limit($nPerPage);
+        $options = array('sort' => ['creationDate' => -1]);
+        if($pageNumber != null && $nPerPage != null) {
+            $options['skip'] = ($pageNumber-1)*$nPerPage;
+            $options['limit'] = $nPerPage;
         }
 
+        $cursor = $mongoCollection->find($query, $options);
         $collections = iterator_to_array($cursor, false);
 
         return $collections;
@@ -257,14 +303,14 @@ class MongoDAO {
 
     public function insertCollection($collection) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
-        $mongoCollection->insert($collection);
+        $mongoCollection->insertOne($collection);
     }
 
     public function updateCollection($cid, $collection) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 
         $criteria = array("_id" => $cid);
-        $mongoCollection->update($criteria, $collection);
+        $mongoCollection->updateOne($criteria, $collection);
     }
 
     public function updateCollectionFields($cid, $fieldsToUpdate) {
@@ -272,14 +318,14 @@ class MongoDAO {
 
         $criteria = array("_id" => $cid);
         $ops = array('$set' => $fieldsToUpdate);
-        $mongoCollection->update($criteria, $ops);
+        $mongoCollection->updateOne($criteria, $ops);
     }
 
     public function deleteCollection($cid) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 
         $criteria = array("_id" => $cid);
-        $status = $mongoCollection->remove($criteria);
+        $status = $mongoCollection->deleteMany($criteria);
 
         return $status;
     }
@@ -299,7 +345,8 @@ class MongoDAO {
 
         $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
 
-        $mongoCollection->update($q, $doc, array("upsert" => true));
+        $params = ["upsert" => true];
+        $mongoCollection->updateOne($q, $doc, $params);
     }
 
 
@@ -307,12 +354,13 @@ class MongoDAO {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
 
         $q = array("cid" => $cid);
-        $sort = array('relevance' => -1);
 
-        $cursor = $mongoCollection
-            ->find($q)
-            ->sort($sort)
-            ->limit($n);
+        $params = [
+            'sort' => ['relevance' => -1],
+            'limit' => $n
+        ];
+
+        $cursor = $mongoCollection->find($q, $params);
 
         $rj = iterator_to_array($cursor, false);
         return $rj;
@@ -330,7 +378,7 @@ class MongoDAO {
         );
 
         $mongoCollection = $this->db->selectCollection(MongoDAO::$ITEMS_UNDER_MONITORING);
-        $mongoCollection->update($q, $doc, array("upsert" => true));
+        $mongoCollection->updateOne($q, $doc, array("upsert" => true));
     }
 
     public function getItemsUnderMonitoring($cid) {
@@ -350,7 +398,7 @@ class MongoDAO {
         $q = array('_id'   =>  $id);
 
         $mongoCollection = $this->db->selectCollection(MongoDAO::$ITEMS_UNDER_MONITORING);
-        $mongoCollection->remove($q);
+        $mongoCollection->deleteMany($q);
     }
 
 }

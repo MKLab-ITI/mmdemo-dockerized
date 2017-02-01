@@ -6,7 +6,7 @@ RUN apt-get update && \
 
 RUN git clone https://github.com/MKLab-ITI/mklab-stream-manager.git && \
     cd mklab-stream-manager	&& \
-    git checkout tags/mklab-stream-manager-0.4 && \
+    git checkout tags/mklab-stream-manager-0.5 && \
 	  mvn clean package && \
     cd /
 
@@ -20,5 +20,5 @@ RUN cp -r mklab-stream-manager/src/main/resources/profiles.sm /stream_manager &&
 
 WORKDIR /stream_manager
 
-ENTRYPOINT ["java", "-jar", "mklab-stream-manager.jar"]
+ENTRYPOINT java -DMONGO_USER=$MONGO_USER -DMONGO_PASSWORD=$MONGO_PASSWORD -jar mklab-stream-manager.jar
 CMD ["conf/streams.conf.xml"]

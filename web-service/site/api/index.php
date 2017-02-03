@@ -233,7 +233,7 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             $query = urldecode($query);
             $keywords = explode(',', $query);
 
-            $query = $this->formulateLogicalQuery($keywords);
+            $query = $utils->formulateLogicalQuery($keywords);
             $query = "title:($query) OR description:($query)";
 
             $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null, null, null);
@@ -360,7 +360,7 @@ $app->get(
 
                         $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
                         $facet = $memcached->get($requestHash);
-                        if($facet == false) {
+                        if($facet == false || count($facet) < 2) {
                             $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, null, $unique, null, 'fcs');
                             $memcached->set($requestHash, $facet, time()+61);
                         }
@@ -722,7 +722,7 @@ $app->get(
 
                 $requestHash = "stats_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
                 $cachedStatistics = $memcached->get($requestHash);
-                if($cachedStatistics != false) {
+                if($cachedStatistics != false && $cachedStatistics['total'] > 0) {
                     echo json_encode($cachedStatistics);
                     return;
                 }
@@ -797,7 +797,7 @@ $app->get(
 
                 $requestHash = "topics_".$utils->getParametersHash($collectionId, "*", "*", $source, true, null, $language, $query, $itemsToExclude, $usersToExclude);
                 $cachedTopics = $memcached->get($requestHash);
-                if($cachedTopics != false) {
+                if($cachedTopics != false && count($cachedTopics) > 1) {
                     echo json_encode(array("topics"=>$cachedTopics));
                     return;
                 }
@@ -911,7 +911,7 @@ $app->get(
             $cid = $collection['_id'];
 
             $cachedCollection = $memcached->get($cid);
-            if($cachedCollection != false) {
+            if($cachedCollection != false && $cachedCollection['items'] > 0 && count($cachedCollection['facet']) > 0) {
                 $collections[] = $cachedCollection;
                 continue;
             }
@@ -1217,13 +1217,23 @@ $app->post(
  *  GET /users/search
  */
 $app->get('/search/users',
-    function() use ($smWrapper, $app) {
+    function() use ($smWrapper, $app, $memcached) {
 
         $request = $app->request();
         $q = $request->get('q');
         $source = $request->get('source');
 
-        echo json_encode($smWrapper->search($q, $source));
+        $searchId = "$source#$q";
+        $cachedUsers = $memcached->get($searchId);
+        if($cachedUsers != false && count($cachedUsers) > 0) {
+            echo json_encode($cachedUsers);
+            return;
+        }
+
+        $users = $smWrapper->search($q, $source);
+        $memcached->set($searchId, $users, time() + 300);
+
+        echo json_encode($users);
     }
 )->name("user_search");
 
@@ -1380,7 +1390,7 @@ $app->get('/detect/users',
 )->name("detect_users");
 
 /**
- *  GET /detect/users
+ *  GET /rss/validate
  */
 $app->get('/rss/validate',
     function() use ($app) {
@@ -1429,22 +1439,21 @@ $app->get('/rss/validate',
 )->name("rss_validation");
 
 try {
-  $app->run();
+    $app->run();
 }
 catch(Exception $e) {
-  $x = array(
-    'trace' => $e->getTrace()
-  );
+    $x = array(
+        'trace' => $e->getTrace()
+    );
 
-  $messages = array();
-  $messages[] = $e->getMessage();
-  while($e->getPrevious() != null) {
-    $e = $e->getPrevious();
+    $messages = array();
     $messages[] = $e->getMessage();
-  }
-  $x['messages'] = $messages;
+    while($e->getPrevious() != null) {
+        $e = $e->getPrevious();
+        $messages[] = $e->getMessage();
+    }
+    $x['messages'] = $messages;
 
-  echo json_encode($x);
-
-  return;
+    echo json_encode($x);
+    return;
 }

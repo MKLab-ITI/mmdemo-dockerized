@@ -76,7 +76,7 @@
         <![CDATA[gr.iti.mklab.sfc.filters.LengthItemFilter]]>
       </Parameter>
       <Parameter name="length">
-        <![CDATA[30]]>
+        <![CDATA[15]]>
       </Parameter>
     </Filter>
     <Filter id="TagsFilter">
@@ -85,6 +85,9 @@
       </Parameter>
       <Parameter name="maxTags">
         <![CDATA[5]]>
+      </Parameter>
+      <Parameter name="sources">
+        <![CDATA[Twitter]]>
       </Parameter>
     </Filter>
 		<Filter id="SwearFilter">

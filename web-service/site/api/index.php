@@ -241,7 +241,7 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
         }
     }
 
-    foreach($results as $result) {
+    foreach($results['docs'] as $result) {
         $item = $mongoDAO->getItem($result['id']);
         $item['score'] = $result['score'];
         $item['minhash'] = $result['minhash'];
@@ -255,7 +255,14 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
         $items[] = $item;
     }
 
-    echo json_encode($items);
+    $response = array(
+        'items' => $items,
+        'pageNumber' => $pageNumber,
+        'nPerPage' => $nPerPage,
+        'total' => $results['numFound']
+    );
+
+    echo json_encode($response);
 
 })->name("items");
 
@@ -358,7 +365,7 @@ $app->get(
                         $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                         $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
 
-                        $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
+                        $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $unique);
                         $facet = $memcached->get($requestHash);
                         if($facet == false || count($facet) < 2) {
                             $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, null, $unique, null, 'fcs');
@@ -640,7 +647,7 @@ $app->get(
                 $until = 1000*time();
             }
 
-            $requestHash = "timeline_$gap\_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
+            $requestHash = "timeline_$gap\_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $unique);
             $cachedTimeline = $memcached->get($requestHash);
             if($cachedTimeline != false) {
                 echo json_encode(array('timeline' => $cachedTimeline));
@@ -720,7 +727,9 @@ $app->get(
                 $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                 $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
 
-                $requestHash = "stats_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
+                $requestHash = "stats_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $unique);
+
+
                 $cachedStatistics = $memcached->get($requestHash);
                 if($cachedStatistics != false && $cachedStatistics['total'] > 0) {
                     echo json_encode($cachedStatistics);
@@ -795,7 +804,7 @@ $app->get(
 
                 $topics[] = array('label' => 'All', 'query' => '*', 'score' => 1, 'items' => $count);
 
-                $requestHash = "topics_".$utils->getParametersHash($collectionId, "*", "*", $source, true, null, $language, $query, $itemsToExclude, $usersToExclude);
+                $requestHash = "topics_".$utils->getParametersHash($collectionId, "*", "*", $source, true, null, $language, $query, $itemsToExclude, $usersToExclude, null);
                 $cachedTopics = $memcached->get($requestHash);
                 if($cachedTopics != false && count($cachedTopics) > 1) {
                     echo json_encode(array("topics"=>$cachedTopics));

@@ -1,7 +1,7 @@
 {
     "require": {
         "slim/slim": "^2.6",
-        "solarium/solarium": "3.7.0",
+        "solarium/solarium": "3.8.1",
         "predis/predis": "v1.1.1",
         "google/apiclient": "1.1.6",
         "facebook/graph-sdk": "5.4.4",

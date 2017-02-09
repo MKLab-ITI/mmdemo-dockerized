@@ -9,7 +9,7 @@
 class TextIndex {
     function __construct($host, $collection, $port=8983) {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_TIMEOUT, 50);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
 
         $config = array(
             'endpoint' => array(
@@ -22,6 +22,7 @@ class TextIndex {
         );
 
         $this->client = new Solarium\Client($config);
+
     }
 
 
@@ -90,11 +91,12 @@ class TextIndex {
 
         $query->setFields(['id', 'score', 'minhash', 'cleanTitle']);
 
-        $ids = array();
+        $numFound = 0;
+        $docsFound = array();
         try {
             $resultSet = $this->client->execute($query);
             $highlighting = $resultSet->getHighlighting();
-
+            $numFound = $resultSet->getNumFound();
             foreach ($resultSet as $document) {
                 $doc = array(
                     'id' => $document['id'],
@@ -113,14 +115,18 @@ class TextIndex {
                     }
                 }
 
-                $ids[] = $doc;
+                $docsFound[] = $doc;
             }
         }
         catch(Exception $e) {
-            return $e->getMessage();
+
         }
 
-        return $ids;
+
+        return array(
+            'docs' => $docsFound,
+            'numFound'=>$numFound
+        );
     }
 
     public function getSummary($q, $length, $filters=null) {
@@ -638,7 +644,6 @@ class TextIndex {
         $fields = explode(',', $fields);
         foreach($fields as $field) {
             $stats->createField("{!max=true min=true sum=true mean=true}$field");
-            //$stats->createField($field);
         }
 
         try {

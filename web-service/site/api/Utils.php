@@ -39,6 +39,7 @@ class Utils {
     }
 
     public function formulateCollectionQuery($collection) {
+
         $keywords = $collection['keywords'];
         $keywords = array_map(function ($keyword) {
             return  trim($keyword['keyword']);
@@ -79,6 +80,7 @@ class Utils {
                 $notParts[] = "($keyword )";
             }
         }
+
         if(count($notParts) > 0) {
             $textQuery = $textQuery . implode(" ", $excludedTermsQuery);
         }
@@ -185,14 +187,16 @@ class Utils {
         return $filters;
     }
 
-    public function getParametersHash($cid, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude) {
+    public function getParametersHash($cid, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $unique) {
         $data = $this->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
+        $data['unique'] = $unique;
+
         $input_str = json_encode($data);
 
         return $cid . "_" . sha1($input_str);
     }
 
-    public static function expandQuery($judgements, $query, $index) {
+    public static function expandQuery($judgements, $query, TextIndex $index) {
         $positive = array_filter($judgements, function($rj) { return ($rj['relevence'] > 3); });
         $negative = array_filter($judgements, function($rj) { return ($rj['relevence'] < 3); });
 

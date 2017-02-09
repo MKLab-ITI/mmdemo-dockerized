@@ -146,7 +146,7 @@
     </translation>
     <translation id="settings_popularity">
         <en>Popularity</en>
-        <el>Διασημότητα</el>
+        <el>Δημοτικότητα</el>
         <it>Popolarità</it>
         <tr>Popülerlik</tr>
         <sp>Popularidad</sp>
@@ -159,6 +159,46 @@
         <tr>Benzerlik</tr>
         <sp>Pertinencia</sp>
         <ca>Rellevància</ca>
+    </translation>
+    <translation id="settings_posts">
+        <en>Posts:</en>
+        <el>Δημοσιεύσεις:</el>
+        <it>Posts:</it>
+        <tr>Posts:</tr>
+        <sp>Posts:</sp>
+        <ca>Posts:</ca>
+    </translation>
+    <translation id="settings_view">
+        <en>View:</en>
+        <el>Όψη:</el>
+        <it>View:</it>
+        <tr>View:</tr>
+        <sp>View:</sp>
+        <ca>View:</ca>
+    </translation>
+    <translation id="list_user">
+        <en>User</en>
+        <el>Χρήστης</el>
+        <it>User</it>
+        <tr>User</tr>
+        <sp>User</sp>
+        <ca>User</ca>
+    </translation>
+    <translation id="list_source">
+        <en>Source</en>
+        <el>Πλατφόρμα</el>
+        <it>Source</it>
+        <tr>Source</tr>
+        <sp>Source</sp>
+        <ca>Source</ca>
+    </translation>
+    <translation id="list_date">
+        <en>Date</en>
+        <el>Ημερομηνία</el>
+        <it>Date</it>
+        <tr>Date</tr>
+        <sp>Date</sp>
+        <ca>Date</ca>
     </translation>
     <translation id="view_feed">
         <en>Feed</en>
@@ -185,12 +225,12 @@
         <ca>AJUDA</ca>
     </translation>
     <translation id="loading">
-        <en>Loading images, please wait.....</en>
-        <el>Φόρτωση εικόνων, παρακαλώ περιμένετε.....</el>
-        <it>Caricamento immagini, attendi per favore.....</it>
-        <tr>Resimler yükleniyor, lütfen bekleyiniz.....</tr>
-        <sp>Carga de imágenes, por favor espere.....</sp>
-        <ca>Carregant imatges, espereu...</ca>
+        <en>Loading posts, please wait.....</en>
+        <el>Φόρτωση δημοσιεύσεων, παρακαλώ περιμένετε.....</el>
+        <it>Loading posts, please wait..........</it>
+        <tr>Loading posts, please wait..........</tr>
+        <sp>Loading posts, please wait..........</sp>
+        <ca>Loading posts, please wait........</ca>
     </translation>
     <!-- DASHBOARD-->
     <translation id="statistics_posts">

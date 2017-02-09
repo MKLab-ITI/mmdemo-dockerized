@@ -1602,14 +1602,14 @@ img.responsive-img {
     width: 100%;
 }
 
-.container_users .avatar {
+.container_users .list_avatar {
     display: inline-block;
     position: relative;
     top: 10px;
     margin-left: 100px;
 }
 
-.container_users .avatar img {
+.container_users .list_avatar img {
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
     border-radius: 50%;

@@ -1,3 +1,4 @@
+var first_loading = true;
 function loadimage(end, page, pagenum) {
     $("#end").hide();
     $('#tiles').imagesLoaded(function () {
@@ -11,8 +12,10 @@ function loadimage(end, page, pagenum) {
 
         var handler = $('#tiles li');
         handler.wookmark(options);
-
-        $("#loading, #loadmore").hide();
+        if (!(first_loading)) {
+            $("#loading, #loadmore").hide();
+        }
+        first_loading = false;
 
         if (end === 1) {
             var noData;
@@ -42,8 +45,7 @@ function loadimage(end, page, pagenum) {
             $('#end p').html(noData);
             $("#end").show();
             setTimeout(function () {
-                $('#loadingbar').hide();
-                $('#loadingbar').css('width', '0%');
+                $('#loadingbar').hide().css('width', '0%');
             }, 500);
         }
         else if (end === 99) {
@@ -65,12 +67,12 @@ function loadimage(end, page, pagenum) {
                     noData2 = "No hay datos para la palabra clave:";
                     break;
                 case "ca":
-                    noData = "No hi ha dades relacionades amb la paraula clau:";
+                    noData2 = "No hi ha dades relacionades amb la paraula clau:";
                     break;
                 default:
                     noData2 = "No items for keyword:";
             }
-            $('#end p').html(noData2+"<span style='color:red'> " + page + "</span>");
+            $('#end p').html(noData2 + "<span style='color:red'> " + page + "</span>");
         }
         else if (end === 2) {
             $("#end").show();
@@ -78,8 +80,7 @@ function loadimage(end, page, pagenum) {
 
         if ((page === "latest") && (pagelocation === "latest")) {
             if ((pagenum === 1) && (end !== 1)) {
-                $('#loadingbar').show();
-                $('#loadingbar').css('width', '11%');
+                $('#loadingbar').show().css('width', '11%');
                 parse_latest(2);
             }
             if ((pagenum === 2) && (end !== 1)) {
@@ -113,8 +114,7 @@ function loadimage(end, page, pagenum) {
             if ((pagenum === 9) && (end !== 1)) {
                 $('#loadingbar').css('width', '105%');
                 setTimeout(function () {
-                    $('#loadingbar').hide();
-                    $('#loadingbar').css('width', '0%');
+                    $('#loadingbar').hide().css('width', '0%');
                 }, 500);
                 more_latest();
                 parse_latest(10);

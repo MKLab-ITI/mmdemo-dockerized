@@ -1295,10 +1295,10 @@ $("#Container").on("click", ".edit_icon", function () {
 });
 $("#Container").on("click", ".overlay", function () {
     if (translation_param) {
-        $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&original=all&type=all&unique=false&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=0&until=1514678400000&view=feed&translation=" + translation_param)
+        $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&original=all&type=all&unique=false&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=0&until=1514678400000&section=feed&view=gallery&translation=" + translation_param)
     }
     else {
-        $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&original=all&type=all&unique=false&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=0&until=1514678400000&view=feed&translation=en")
+        $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&original=all&type=all&unique=false&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=0&until=1514678400000&section=feed&view=gallery&translation=en")
     }
 });
 
@@ -1365,11 +1365,59 @@ function get_collections(flag) {
                     if ($paginationdemo.data("twbs-pagination")) {
                         $paginationdemo.twbsPagination('destroy');
                     }
+                    var first_but, prev_but, next_but, last_but;
+                    switch (translation_param) {
+                        case "en":
+                            first_but = "First";
+                            prev_but = "Previous";
+                            next_but = "Next";
+                            last_but = "Last";
+                            break;
+                        case "el":
+                            first_but = "Πρώτη";
+                            prev_but = "Προηγούμενη";
+                            next_but = "Επόμενη";
+                            last_but = "Τελευταία";
+                            break;
+                        case "it":
+                            first_but = "First";
+                            prev_but = "Previous";
+                            next_but = "Next";
+                            last_but = "Last";
+                            break;
+                        case "tr":
+                            first_but = "First";
+                            prev_but = "Previous";
+                            next_but = "Next";
+                            last_but = "Last";
+                            break;
+                        case "sp":
+                            first_but = "First";
+                            prev_but = "Previous";
+                            next_but = "Next";
+                            last_but = "Last";
+                            break;
+                        case "ca":
+                            first_but = "First";
+                            prev_but = "Previous";
+                            next_but = "Next";
+                            last_but = "Last";
+                            break;
+                        default:
+                            first_but = "First";
+                            prev_but = "Previous";
+                            next_but = "Next";
+                            last_but = "Last";
+                    }
                     $paginationdemo.twbsPagination({
                         totalPages: Math.ceil(json.count / 6),
                         visiblePages: "5",
                         initiateStartPageClick: false,
                         startPage: pagination,
+                        first: first_but,
+                        prev: prev_but,
+                        next: next_but,
+                        last: last_but,
                         onPageClick: function (event, page) {
                             pagination = page;
                             get_collections(false);

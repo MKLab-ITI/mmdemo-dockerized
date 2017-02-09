@@ -180,10 +180,43 @@
     </div>
 </div>
 <div id="main">
-    <div id="loading" class="opened"><span data-lang="loading">Loading images, please wait.....</span>
+    <div id="loading" class="opened"><span data-lang="loading">Loading posts, please wait.....</span>
         <img id="loadimg" src="imgs/loading.gif" alt="loading.."/>
     </div>
+    <div id="toolbar">
+        <div id="posts_info"></div>
+        <div id="items_num"><span data-lang="settings_posts">Posts</span>
+
+            <div class="itemsPerPage">
+                <span>20</span>
+                <span class="active_items">50</span>
+                <span>100</span>
+            </div>
+        </div>
+        <div class="verticalLine"></div>
+        <div id="items_view"><span data-lang="settings_view">View</span>
+            <img id="gallery_icon" src="imgs/gallery-16-gray.png">
+            <img id="list_icon" src="imgs/list-16-gray.png">
+        </div>
+    </div>
     <ul id="tiles"></ul>
+    <table id="list_table" class="list_table">
+        <thead class="thead-default">
+        <tr>
+            <th data-lang="list_user">User</th>
+            <th data-lang="settings_text">Text</th>
+            <th data-lang="settings_media" data-sorter="false">Media</th>
+            <th data-lang="list_date">Date</th>
+            <th data-lang="list_source">Source</th>
+            <th data-lang="settings_popularity">Popularity</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div class="well">
+        <ul id="pagination_list" class="pagination-sm"></ul>
+    </div>
 </div>
 <img id="loadmore" class="opened2" src="imgs/loadmore.gif" alt="loading.."/>
 
@@ -839,6 +872,8 @@
 <script src="js/feed/jquery.imagesloaded.js"></script>
 <script src="js/feed/lightbox-2.6.min.js"></script>
 <script src="js/feed/jquery.wookmark.js"></script>
+<script src="js/feed/jquery.twbsPagination.min.js"></script>
+<script src="js/feed/jquery.tablesorter.min.js"></script>
 <script src="js/feed/images.js"></script>
 <script src="js/feed/moment.js"></script>
 <script src="js/feed/ion.rangeSlider.js"></script>

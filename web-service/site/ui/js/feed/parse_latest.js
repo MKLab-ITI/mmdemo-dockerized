@@ -488,7 +488,7 @@ function parse_latest(pagenum) {
 }
 
 function parse_latest_list(pagenum) {
-
+    $('.close-info').click();
     var items = $('.active_items').text();
     $.ajax({
         type: "GET",
@@ -523,7 +523,7 @@ function parse_latest_list(pagenum) {
                     var $myModal = $('#myModal');
                     var $end = $('#end');
                     var noData;
-                    $('.list_table,#posts_info,.well').hide();
+                    $('.list_table,#posts_info,#download_icon,.well').hide();
                     if (query_param !== "") {
                         switch (translation_param) {
                             case "en":
@@ -1044,7 +1044,7 @@ function parse_latest_list(pagenum) {
                     }
                     var title, source, publicationTime, shared, shared_order, screenname, profileimage, id, page, userpage, thumb, colorclass, iconsource, onerror;
                     var $pagination_list = $('#pagination_list');
-                    $('.list_table,#posts_info,.well').show();
+                    $('.list_table,#posts_info,#download_icon,.well').show();
                     if ($pagination_list.data("twbs-pagination")) {
                         $pagination_list.twbsPagination('destroy');
                     }

@@ -305,7 +305,7 @@ $(function () {
                     if ((collection_status !== "stopped") && (view_param === "gallery")) {
                         interval();
                     }
-                    if(view_param==="gallery"){
+                    if (view_param === "gallery") {
                         minutes();
                     }
                     section_param = "feed";
@@ -1217,11 +1217,12 @@ $('#gallery_icon,#list_icon').click(function () {
     if (!($(this).hasClass('active_view'))) {
         clearInterval(intervalID);
         clearInterval(intervalminutes);
+        $('.close-info').click();
         if ($(this).attr('id') === "gallery_icon") {
             view_param = "gallery";
             $('#gallery_icon').attr('src', 'imgs/gallery-16-black.png').addClass("active_view");
             $('#list_icon').attr('src', 'imgs/list-16-gray.png').removeClass("active_view");
-            $('#items_num,.verticalLine').hide();
+            $('#items_num,.verticalLine,#download_icon').hide();
             if (collection_status !== "stopped") {
                 interval();
             }
@@ -1231,7 +1232,7 @@ $('#gallery_icon,#list_icon').click(function () {
             view_param = "list";
             $('#gallery_icon').attr('src', 'imgs/gallery-16-gray.png').removeClass("active_view");
             $('#list_icon').attr('src', 'imgs/list-16-black.png').addClass('active_view');
-            $('#items_num,.verticalLine').show();
+            $('#items_num,.verticalLine,#download_icon').show();
         }
         abort();
         $('#loadingbar').hide().css('width', '0%');
@@ -1255,6 +1256,7 @@ $('#gallery_icon,#list_icon').click(function () {
 
 $('.itemsPerPage span').click(function () {
     if (!($(this).hasClass('active_items'))) {
+        $('.close-info').click();
         $('.itemsPerPage span').removeClass("active_items");
         $(this).addClass("active_items");
         abort();
@@ -1299,7 +1301,75 @@ $('.icon-clear').click(function () {
         }
     }
 });
+$('#download_icon').click(function () {
+    var page = $('#pagination_list').data('twbsPagination').getCurrentPage();
+    var pagesize = $('.active_items').text();
+    var $page_desc = $('#page_desc');
+    $('#file_name').val($('#collection').text() + '_' + page + '_' + pagesize);
+    switch (translation_param) {
+        case "en":
+            $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
+            break;
+        case "el":
+            $page_desc.text("(σελίδα:" + page + ", μέγεθος:" + pagesize + ")");
+            break;
+        case "it":
+            $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
+            break;
+        case "tr":
+            $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
+            break;
+        case "sp":
+            $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
+            break;
+        case "ca":
+            $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
+            break;
+        default:
+            $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
+            break;
+    }
+    $('#download_modal').reveal();
+});
 
+$(".btn-group").on("click", ".btn-default", function (e) {
+    if ($(this).attr('id') === "xls_but") {
+        $('#info_wrap').slideDown();
+    }
+    else {
+        $('#info_wrap').slideUp();
+    }
+    $('.btn-group').find('button').removeClass('btn-primary').addClass('btn-default');
+    $(this).addClass('btn-primary').removeClass('btn-default');
+});
+
+$("#download_cancel").click(function () {
+    $('#download_modal').find('.close-reveal-modal').trigger('click');
+});
+$("#download_ok").click(function () {
+    var name = $('#file_name').val();
+    if (name === "") {
+        name = $('#collection').text() + '_' + page + '_' + pagesize;
+    }
+    if ($('.btn-primary').attr('id') === "xls_but") {
+        $(".list_table").table2excel({
+            exclude: ".noExl",
+            name: "Excel Document Name",
+            filename: name,
+            fileext: ".xls"
+        });
+    }
+    else {
+        $(".list_table").table_download({
+            format: "csv",
+            separator: ",",
+            filename: name,
+            linkname: "",
+            quotes: ""
+        });
+    }
+    $('#download_modal').find('.close-reveal-modal').trigger('click');
+});
 
 function nFormatter(num) {
     if (num >= 1000000) {
@@ -1325,33 +1395,41 @@ $(function () {
                 var text = $(this).find(translation_param).text();
                 if (text) {
                     $('*[data-lang=' + id + ']').html(text);
-//$("." + id).addClass(id + '_' + language);
                 }
             });
         },
         async: false
     });
+    var $query = $('#query');
+    var $file_name = $('#file_name');
     switch (translation_param) {
         case "en":
-            $('#query').attr("placeholder", "Search...");
+            $query.attr("placeholder", "Search...");
+            $file_name.attr("placeholder", "Name your file...");
             break;
         case "el":
-            $('#query').attr("placeholder", "Αναζήτηση...");
+            $query.attr("placeholder", "Αναζήτηση...");
+            $file_name.attr("placeholder", "Ονόμασε το αρχείο...");
             break;
         case "it":
-            $('#query').attr("placeholder", "Cerca...");
+            $query.attr("placeholder", "Cerca...");
+            $file_name.attr("placeholder", "Name your file...");
             break;
         case "tr":
-            $('#query').attr("placeholder", "Ara...");
+            $query.attr("placeholder", "Ara...");
+            $file_name.attr("placeholder", "Name your file...");
             break;
         case "sp":
-            $('#query').attr("placeholder", "Ara...");
+            $query.attr("placeholder", "Ara...");
+            $file_name.attr("placeholder", "Name your file...");
             break;
         case "ca":
-            $('#query').attr("placeholder", "Cerca...");
+            $query.attr("placeholder", "Cerca...");
+            $file_name.attr("placeholder", "Name your file...");
             break;
         default:
-            $('#query').attr("placeholder", "Search...");
+            $query.attr("placeholder", "Search...");
+            $file_name.attr("placeholder", "Name your file...");
             break;
     }
 });

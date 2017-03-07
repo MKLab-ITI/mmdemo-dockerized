@@ -899,6 +899,21 @@ $app->get(
     }
 )->name("get-no-collection");
 
+$app->get(
+    '/collections/',
+    function() use($mongoDAO, $app) {
+
+            $collections = $mongoDAO->getCollections();
+            if($collections == null || count($collections) < 1) {
+                echo json_encode(array());
+                return;
+            }
+
+
+            echo json_encode($collections);
+
+    }
+)->name("get-all-collection");
 
 $app->get(
     '/collection/:uid',

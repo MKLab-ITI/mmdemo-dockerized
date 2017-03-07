@@ -262,6 +262,22 @@ class MongoDAO {
         return $items;
     }
 
+    public function getCollections($pageNumber=null, $nPerPage=null) {
+
+        $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
+
+        $query = array();
+        $options = array('sort' => ['creationDate' => -1]);
+        if($pageNumber != null && $nPerPage != null) {
+            $options['skip'] = ($pageNumber-1)*$nPerPage;
+            $options['limit'] = $nPerPage;
+        }
+
+        $cursor = $mongoCollection->find($query, $options);
+        $collections = iterator_to_array($cursor, false);
+
+        return $collections;
+    }
 
     public function getUserCollections($uid, $status=null, $pageNumber=null, $nPerPage=null) {
 

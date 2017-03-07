@@ -31,6 +31,60 @@
     <p></p>
     <a class="close-reveal-modal">&#215;</a>
 </div>
+<div id="download_modal" class="reveal-modal">
+    <div class="panel-heading">
+        <h2 class="background">
+            <span data-lang="download_header">Download Options</span>
+        </h2>
+    </div>
+    <div id="download_options">
+        <div id="download_name">
+            <label id="download_name_label" for="file_name" data-lang="download_file_name">Document Name</label>
+            <input class="download_name" id="file_name" type="text" placeholder="Name your file..."
+                   autocomplete="off"/>
+        </div>
+        <div id="download_section">
+            <div class="box_selection">
+                <img src="imgs/table-32.png"/>
+
+                <p style="margin-bottom: 0;"><span data-lang="download_table">Current Table</span><br><span
+                        id="page_desc">(page:1, pagesize:50)</span></p>
+                <input class="radio_but" type="radio" id="current_data" name="data" checked><label
+                    for="current_data"></label>
+            </div>
+            <div class="box_selection deactivated">
+                <p class="diagonal_text">Coming Soon</p>
+                <img src="imgs/data-32.png"/>
+
+                <p style="margin-bottom: 0;" data-lang="download_all">All Data<br><br></p>
+                <input class="radio_but" type="radio" id="all_data" name="data" disabled><label
+                    for="all_data"></label>
+            </div>
+            <br>
+
+            <div class="btn-group">
+                <button type="button" id="csv_but" class="btn btn-primary"><img src="imgs/csv-48.png">.csv</button>
+                <button type="button" id="xls_but" class="btn btn-default"><img src="imgs/xls-48.png">.xls</button>
+            </div>
+            <br>
+
+            <div id="info_wrap">
+                <div class="info_msg">
+                    <div class="header_msg" data-lang="warning_header">File doesn't contain harmful content!</div>
+                    <p data-lang="warning_p">Possible warning from Excel can be ignored.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="download_buttons">
+        <div class="btn_material action_button done" id="download_ok"><img src="imgs/save-white_16.png"><span
+                data-lang="download_button">DOWNLOAD</span></div>
+        <div class="btn_material action_button cancel" id="download_cancel"><img src="imgs/cancel-white_16.png"><span
+                data-lang="download_button_cancel">CANCEL</span>
+        </div>
+    </div>
+    <a class="close-reveal-modal">&#215;</a>
+</div>
 <div id="loadingbar">
     <dt></dt>
     <dd></dd>
@@ -146,7 +200,7 @@
     <div id="footer">
         <ul class="sidebar-actions">
             <li class="action" id="hop6">
-                <div class="btn-group dropup">
+                <div>
                     <img src="imgs/share-24.png" alt="icon" class="bottom-icon"/>
                     <span class="page" data-id="Feed" data-lang="view_feed">Feed</span>
 
@@ -154,7 +208,7 @@
                 </div>
             </li>
             <li class="action" style="border:0" id="hop7">
-                <div class="btn-group dropup">
+                <div>
                     <img src="imgs/chart-24.png" alt="icon" class="bottom-icon"/>
                     <span data-lang="view_dashboard" data-id="Dashboard">Dashboard</span>
                 </div>
@@ -185,6 +239,8 @@
     </div>
     <div id="toolbar">
         <div id="posts_info"></div>
+        <img id="download_icon" src="imgs/download-24.png">
+
         <div id="items_num"><span data-lang="settings_posts">Posts</span>
 
             <div class="itemsPerPage">
@@ -874,6 +930,8 @@
 <script src="js/feed/jquery.wookmark.js"></script>
 <script src="js/feed/jquery.twbsPagination.min.js"></script>
 <script src="js/feed/jquery.tablesorter.min.js"></script>
+<script src="js/feed/jquery.table2excel.min.js"></script>
+<script src="js/feed/table2download.js"></script>
 <script src="js/feed/images.js"></script>
 <script src="js/feed/moment.js"></script>
 <script src="js/feed/ion.rangeSlider.js"></script>

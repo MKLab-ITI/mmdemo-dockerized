@@ -15,13 +15,6 @@ function resizedw(trigger) {
         else {
             open_slider();
         }
-
-        if ($(window).width() < 618) {
-            $("#myModal").addClass("small-modal");
-        }
-        else {
-            $("#myModal").removeClass("small-modal");
-        }
     }
 
     if ($("#hop5").is(":visible")) {

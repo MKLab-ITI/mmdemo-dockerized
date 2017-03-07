@@ -224,6 +224,70 @@
         <sp>AYUDA</sp>
         <ca>AJUDA</ca>
     </translation>
+    <translation id="download_header">
+        <en>Download Options</en>
+        <el>Επιλογές Λήψης</el>
+        <it>Download Options</it>
+        <tr>Download Options</tr>
+        <sp>Download Options</sp>
+        <ca>Download Options</ca>
+    </translation>
+    <translation id="download_file_name">
+        <en>Document Name</en>
+        <el>Όνομα Αρχείου</el>
+        <it>Document Name</it>
+        <tr>Document Name</tr>
+        <sp>Document Name</sp>
+        <ca>Document Name</ca>
+    </translation>
+    <translation id="download_table">
+        <en>Current Table</en>
+        <el>Τρέχοντα Πίνακα</el>
+        <it>Current Table</it>
+        <tr>Current Table</tr>
+        <sp>Current Table</sp>
+        <ca>Current Table</ca>
+    </translation>
+    <translation id="download_all">
+        <en>All Data</en>
+        <el>Συνολικά Δεδομένα</el>
+        <it>All Data</it>
+        <tr>All Data</tr>
+        <sp>All Data</sp>
+        <ca>All Data</ca>
+    </translation>
+    <translation id="warning_header">
+        <en>File doesn't contain harmful content!</en>
+        <el>Το αρχείο δεν περιέχει κακόβουλο περιεχόμενο!</el>
+        <it>File doesn't contain harmful content!</it>
+        <tr>File doesn't contain harmful content!</tr>
+        <sp>File doesn't contain harmful content!</sp>
+        <ca>File doesn't contain harmful content!</ca>
+    </translation>
+    <translation id="warning_p">
+        <en>Possible warning from Excel can be ignored.</en>
+        <el>Πιθανή προειδοποίηση από το Excel μπορεί να αγνοηθεί.</el>
+        <it>Possible warning from Excel can be ignored.</it>
+        <tr>Possible warning from Excel can be ignored.</tr>
+        <sp>Possible warning from Excel can be ignored.</sp>
+        <ca>Possible warning from Excel can be ignored.</ca>
+    </translation>
+    <translation id="download_button">
+        <en>DOWNLOAD</en>
+        <el>ΛΗΨΗ</el>
+        <it>DOWNLOAD</it>
+        <tr>DOWNLOAD</tr>
+        <sp>DOWNLOAD</sp>
+        <ca>DOWNLOAD</ca>
+    </translation>
+    <translation id="download_button_cancel">
+        <en>CANCEL</en>
+        <el>ΑΚΥΡΩΣΗ</el>
+        <it>CANCEL</it>
+        <tr>CANCEL</tr>
+        <sp>CANCEL</sp>
+        <ca>CANCEL</ca>
+    </translation>
     <translation id="loading">
         <en>Loading posts, please wait.....</en>
         <el>Φόρτωση δημοσιεύσεων, παρακαλώ περιμένετε.....</el>

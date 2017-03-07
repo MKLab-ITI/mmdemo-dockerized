@@ -707,7 +707,7 @@ img.responsive-img {
     color: #9e9e9e;
     position: absolute;
     top: 19px;
-    left: 0px;
+    left: 0;
     font-size: 25px;
     cursor: text;
     -webkit-transition: .2s ease-out;

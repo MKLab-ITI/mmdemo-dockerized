@@ -207,6 +207,7 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
     $pageNumber = $request->get('pageNumber')==null ? 1 : $request->get('pageNumber');
     $nPerPage = $request->get('nPerPage')==null ? 20 : $request->get('nPerPage');
 
+    $filters = array();
     $items = array();
     $results = array();
     if($collectionId != null) {
@@ -264,7 +265,8 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
         'items' => $items,
         'pageNumber' => $pageNumber,
         'nPerPage' => $nPerPage,
-        'total' => $results['numFound']
+        'total' => $results['numFound'],
+        'filters' => $filters
     );
 
     echo json_encode($response);

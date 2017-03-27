@@ -172,19 +172,25 @@ class Utils {
 
         if ($itemsToExclude != null && count($itemsToExclude) > 0) {
             $idsToExclude = implode(' OR ', $itemsToExclude);
-            $filters["-id"] = "($idsToExclude)";
-            $filters["-reference"] = "($idsToExclude)";
+            if($idsToExclude != null) {
+                $filters["-id"] = "($idsToExclude)";
+                $filters["-reference"] = "($idsToExclude)";
+            }
         }
 
 
         if ($usersToExclude != null && count($usersToExclude) > 0) {
             $q = implode(' OR ', $usersToExclude);
-            $filters["-uid"] = "($q)";
+            if($q != null) {
+                $filters["-uid"] = "($q)";
+            }
         }
 
         if ($keywordsToExclude != null && count($keywordsToExclude) > 0) {
             $q = implode(' OR ', $keywordsToExclude);
-            $filters["-allText"] = "($q)";
+            if($q != null) {
+                $filters["-allText"] = "($q)";
+            }
         }
 
         return $filters;

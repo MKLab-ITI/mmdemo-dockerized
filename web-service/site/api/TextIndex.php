@@ -26,7 +26,7 @@ class TextIndex {
     }
 
 
-    public function searchItems($q, $pageNumber=1, $nPerPage=20, $filters=null, $sort=null, $judgements=null, $unique=false) {
+    public function searchItems($q, $pageNumber=1, $nPerPage=20, $filters=null, $sort=null, $judgements=null, $unique=false, $hlq=null) {
 
         $query = $this->client->createSelect();
 
@@ -43,13 +43,12 @@ class TextIndex {
         //$helper = $query->getHelper();
 
         $hlUsed = false;
-        if($filters != null && isset($filters['allText'])) {
-            $fq = $filters['allText'];
+        if($hlq != null) {
             $hl = $query->getHighlighting();
             $hl->setFields(array('title'));
             $hl->setSimplePrefix('<span class="highlight">');
             $hl->setSimplePostfix('</span>');
-            $hl->setQuery("title:$fq OR allText:$fq");
+            $hl->setQuery("title:($hlq) OR allText:($hlq)");
             $hl->setFragSize(0);
             $hl->setMaxAnalyzedChars(1500);
             $hlUsed = true;

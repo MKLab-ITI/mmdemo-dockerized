@@ -108,7 +108,7 @@ class Utils {
         return implode(' OR ', $query);
     }
 
-    public function getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude) {
+    public function getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude) {
 
         // Add filters if available
         $filters = array();
@@ -178,17 +178,20 @@ class Utils {
 
 
         if ($usersToExclude != null && count($usersToExclude) > 0) {
-            $uIdsToExclude = array_map(function($user){ return $user['source']."#".$user['id']; }, $usersToExclude);
-
-            $q = implode(' OR ', $uIdsToExclude);
+            $q = implode(' OR ', $usersToExclude);
             $filters["-uid"] = "($q)";
+        }
+
+        if ($keywordsToExclude != null && count($keywordsToExclude) > 0) {
+            $q = implode(' OR ', $keywordsToExclude);
+            $filters["-allText"] = "($q)";
         }
 
         return $filters;
     }
 
-    public function getParametersHash($cid, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $unique) {
-        $data = $this->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
+    public function getParametersHash($cid, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique) {
+        $data = $this->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
         $data['unique'] = $unique;
 
         $input_str = json_encode($data);

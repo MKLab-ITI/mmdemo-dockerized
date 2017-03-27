@@ -334,6 +334,7 @@ class MongoDAO {
 
         $criteria = array("_id" => $cid);
         $ops = array('$set' => $fieldsToUpdate);
+
         $mongoCollection->updateOne($criteria, $ops);
     }
 
@@ -361,15 +362,26 @@ class MongoDAO {
 
         $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
 
-        $params = ["upsert" => true];
-        $mongoCollection->updateOne($q, $doc, $params);
+        $params = array("upsert" => true);
+        try {
+            $response = $mongoCollection->replaceOne($q, $doc, $params);
+            return  ($response->getUpsertedCount() + $response->getModifiedCount()) . ' items judgments inserted / modified';
+        }
+        catch(Exception $e) {
+            return $e->getMessage();
+        }
+
     }
 
 
-    public function getRelevanceJudgements($cid, $n=20) {
+    public function getRelevanceJudgements($cid, $iid=null, $n=20) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
 
         $q = array("cid" => $cid);
+
+        if($iid != null) {
+            $q['iid'] = $iid;
+        }
 
         $params = [
             'sort' => ['relevance' => -1],

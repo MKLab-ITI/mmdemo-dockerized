@@ -221,14 +221,18 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             // Add filters if available
             $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
             $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
-            $results = $textIndex->searchItems($q, $pageNumber, $nPerPage,  $filters, $sort, $judgements, $unique);
+            $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+
+            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+            $results = $textIndex->searchItems($q, $pageNumber, $nPerPage,  $filters, $sort, $judgements, $unique, $query);
+
         }
     }
     else {
         // free text search outside collections
         if($query != null && $query != "") {
             // Add filters if available
+            $hl = $query;
 
             $query = urldecode($query);
             $keywords = explode(',', $query);
@@ -236,8 +240,9 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             $query = $utils->formulateLogicalQuery($keywords);
             $query = "title:($query) OR description:($query)";
 
-            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null, null, null);
-            $results = $textIndex->searchItems($query, $pageNumber, $nPerPage,  $filters, $sort, null, $unique);
+            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null, null, null, null);
+            $results = $textIndex->searchItems($query, $pageNumber, $nPerPage,  $filters, $sort, null, $unique, $hl);
+
         }
     }
 
@@ -306,7 +311,8 @@ $app->get('/summary', function() use($mongoDAO, $textIndex, $utils, $app) {
             // Add filters if available
             $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
             $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-            $filters = $utils->getFilters($since, $until, $source, 'original', $type, $language, $query, $itemsToExclude, $usersToExclude);
+            $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+            $filters = $utils->getFilters($since, $until, $source, 'original', $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
 
             $results = $textIndex->getSummary($q, $length,  $filters);
             foreach($results as $result) {
@@ -363,9 +369,10 @@ $app->get(
 
                         $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                         $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-                        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
+                        $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+                        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
 
-                        $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $unique);
+                        $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique);
                         $facet = $memcached->get($requestHash);
                         if($facet == false || count($facet) < 2) {
                             $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, null, $unique, null, 'fcs');
@@ -425,7 +432,8 @@ $app->get(
 
                     $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                     $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
+                    $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
 
                     $facet = $textIndex->getFacet('uidFacet', $collectionQuery, $filters, $n, false, null, $unique, null, 'fcs');
 
@@ -484,7 +492,8 @@ $app->get(
 
                     $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                     $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
+                    $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
 
                     $termsToExclude = preg_split("/[\s,]+/", $query);
                     $termsToExclude = array_map(function($k) {
@@ -573,7 +582,8 @@ $app->get(
             if($collection != null) {
                 $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                 $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-                $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query, $itemsToExclude, $usersToExclude);
+                $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+                $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
                 $q = $utils->formulateCollectionQuery($collection);
 
                 $points = $textIndex->get2DFacet('latlonRPT', $q, $filters, $minLat, $maxLat, $minLong, $maxLong);
@@ -637,7 +647,8 @@ $app->get(
 
             $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
             $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-            $filters = $utils->getFilters(($since==null?"*":$since), ($until==null?"*":$until), $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
+            $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+            $filters = $utils->getFilters(($since==null?"*":$since), ($until==null?"*":$until), $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
 
             $q = $utils->formulateCollectionQuery($collection);
             if($since == null) {
@@ -647,7 +658,7 @@ $app->get(
                 $until = 1000*time();
             }
 
-            $requestHash = "timeline_$gap\_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $unique);
+            $requestHash = "timeline_$gap\_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique);
             $cachedTimeline = $memcached->get($requestHash);
             if($cachedTimeline != false) {
                 echo json_encode(array('timeline' => $cachedTimeline));
@@ -725,9 +736,10 @@ $app->get(
                 // Add filters if available
                 $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                 $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude);
+                $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
 
-                $requestHash = "stats_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $unique);
+                $requestHash = "stats_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique);
 
 
                 $cachedStatistics = $memcached->get($requestHash);
@@ -798,13 +810,14 @@ $app->get(
 
                 $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                 $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-                $filters = $utils->getFilters($since, $until, $source, 'original', null, $language, $query, $itemsToExclude, $usersToExclude);
+                $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+                $filters = $utils->getFilters($since, $until, $source, 'original', null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
 
                 $count = $textIndex->countItems($collectionQuery, $filters);
 
                 $topics[] = array('label' => 'All', 'query' => '*', 'score' => 1, 'items' => $count);
 
-                $requestHash = "topics_".$utils->getParametersHash($collectionId, "*", "*", $source, true, null, $language, $query, $itemsToExclude, $usersToExclude, null);
+                $requestHash = "topics_".$utils->getParametersHash($collectionId, "*", "*", $source, true, null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, null);
                 $cachedTopics = $memcached->get($requestHash);
                 if($cachedTopics != false && count($cachedTopics) > 1) {
                     echo json_encode(array("topics"=>$cachedTopics));
@@ -859,7 +872,8 @@ $app->get(
         $facet = array();
         $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
         $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-        $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query, $itemsToExclude, $usersToExclude);
+        $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+        $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
         if($collectionId != null) {
             $collection = $mongoDAO->getCollection($collectionId);
             if ($collection != null) {
@@ -958,14 +972,15 @@ $app->get(
 
             $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
             $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-            $filters = $utils->getFilters($since, $until, "all", null, null, null, null, $itemsToExclude, $usersToExclude);
+            $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+            $filters = $utils->getFilters($since, $until, "all", null, null, null, null, $itemsToExclude, $usersToExclude, $keywordsToExclude);
 
             $collection['filters'] = $filters;
 
             $count = $textIndex->countItems($q, $filters);
             $collection['items'] = $count;
 
-            $filters = $utils->getFilters($since, $until, "all", null, "media", null, null, $itemsToExclude, $usersToExclude);
+            $filters = $utils->getFilters($since, $until, "all", null, "media", null, null, $itemsToExclude, $usersToExclude, $keywordsToExclude);
 
             $facet = $textIndex->getFacet('mediaIds', $q, $filters, 3, false, null, false, null, 'fc');
             $collection['facet'] = $facet;
@@ -1085,19 +1100,28 @@ $app->post(
 )->name("edit_collection");
 
 $app->post(
-    '/collection/excludeKeywords/:cid',
+    '/collection/:cid/excludeKeywords',
     function ($cid) use($app, $mongoDAO) {
 
         $request = $app->request();
 
-        $keywordsToExclude =  $request->get("keywordsToExclude");
+        $bodyJson = $request->getBody();
+        $body = json_decode($bodyJson);
+
+        $keywords =  $body->keywords;
+
         $collection = $mongoDAO->getCollection($cid);
 
-        if($collection != null && count($keywordsToExclude) > 0) {
+        if($collection != null && count($keywords) > 0) {
+
+            $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:array();
             $msg = array(
-                'newKeywordsToExclude' => $keywordsToExclude,
-                'oldKeywordsToExclude' => $collection->keywordsToExclude
+                'newKeywordsToExclude' => $keywords,
+                'oldKeywordsToExclude' => $keywordsToExclude
             );
+
+            $keywordsToExclude = array_merge($keywords, $keywordsToExclude);
+            $keywordsToExclude = array_unique($keywordsToExclude);
 
             $fieldsToUpdate = array(
                 'keywordsToExclude' => $keywordsToExclude,
@@ -1110,12 +1134,214 @@ $app->post(
         }
         else {
             echo json_encode(array(
-                'error' => "Collection $cid does not exist."
+                'error' => $collection == null ? "Collection $cid does not exist." : "No keywords specified"
             ));
         }
 
     }
-);
+)->name('exclude_keywords');
+
+$app->post(
+    '/collection/:cid/includeKeywords',
+    function ($cid) use($app, $mongoDAO) {
+
+        $request = $app->request();
+
+        $bodyJson = $request->getBody();
+        $body = json_decode($bodyJson);
+
+        $keywords =  $body->keywords;
+        $collection = $mongoDAO->getCollection($cid);
+
+        if($collection != null && count($keywords) > 0) {
+
+            $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:array();
+            $msg = array(
+                'keywordsToInclude' => $keywords,
+                'keywordsToExclude' => $keywordsToExclude
+            );
+
+            $keywordsToExclude = array_diff($keywordsToExclude, $keywords);
+            $fieldsToUpdate = array(
+                'keywordsToExclude' => $keywordsToExclude,
+                'updateDate' => 1000 * time()
+
+            );
+
+            $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
+
+            echo json_encode($msg);
+        }
+        else {
+            echo json_encode(array(
+                'error' => $collection == null ? "Collection $cid does not exist." : "No keywords specified"
+            ));
+        }
+
+    }
+)->name('include_keywords');
+
+$app->post(
+    '/collection/:cid/excludeItems',
+    function ($cid) use($app, $mongoDAO) {
+
+        $request = $app->request();
+
+        $bodyJson = $request->getBody();
+        $body = json_decode($bodyJson);
+
+        $items =  $body->items;
+
+        $collection = $mongoDAO->getCollection($cid);
+
+        if($collection != null && count($items) > 0) {
+
+            $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:array();
+            $msg = array(
+                'newItemsToExclude' => $items,
+                'oldItemsToExclude' => $itemsToExclude
+            );
+
+            $itemsToExclude = array_merge($items, $itemsToExclude);
+            $itemsToExclude = array_unique($itemsToExclude);
+
+            $fieldsToUpdate = array(
+                'itemsToExclude' => $itemsToExclude,
+                'updateDate' => 1000 * time()
+            );
+
+            $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
+
+            echo json_encode($msg);
+        }
+        else {
+            echo json_encode(array(
+                'error' => $collection == null ? "Collection $cid does not exist." : "No items specified"
+            ));
+        }
+
+    }
+)->name('exclude_items');
+
+$app->post(
+    '/collection/:cid/includeItems',
+    function ($cid) use($app, $mongoDAO) {
+
+        $request = $app->request();
+
+        $bodyJson = $request->getBody();
+        $body = json_decode($bodyJson);
+
+        $items =  $body->items;
+        $collection = $mongoDAO->getCollection($cid);
+
+        if($collection != null && count($items) > 0) {
+
+            $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:array();
+            $msg = array(
+                'itemsToInclude' => $items,
+                'itemsToExclude' => $itemsToExclude
+            );
+
+            $itemsToExclude = array_diff($itemsToExclude, $items);
+
+            $fieldsToUpdate = array(
+                'itemsToExclude' => $itemsToExclude,
+                'updateDate' => 1000 * time()
+
+            );
+
+            $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
+
+            echo json_encode($msg);
+        }
+        else {
+            echo json_encode(array(
+                'error' => $collection == null ? "Collection $cid does not exist." : "No items specified"
+            ));
+        }
+
+    }
+)->name('include_items');
+
+$app->post(
+    '/collection/:cid/excludeUsers',
+    function ($cid) use($app, $mongoDAO) {
+
+        $request = $app->request();
+
+        $bodyJson = $request->getBody();
+        $body = json_decode($bodyJson);
+
+        $users =  $body->users;
+        $collection = $mongoDAO->getCollection($cid);
+
+        if($collection != null && count($users) > 0) {
+
+            $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:array();
+            $msg = array(
+                'newUsersToExclude' => $users,
+                'oldUsersToExclude' => $usersToExclude
+            );
+
+            $usersToExclude = array_merge($users, $usersToExclude);
+            $usersToExclude = array_unique($usersToExclude);
+
+            $fieldsToUpdate = array(
+                'usersToExclude' => $usersToExclude,
+                'updateDate' => 1000 * time()
+            );
+            $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
+
+            echo json_encode($msg);
+        }
+        else {
+            echo json_encode(array(
+                'error' => $collection == null ? "Collection $cid does not exist." : "No users specified!"
+            ));
+        }
+
+    }
+)->name('exclude_users');
+
+$app->post(
+    '/collection/:cid/includeUsers',
+    function ($cid) use($app, $mongoDAO) {
+
+        $request = $app->request();
+
+        $bodyJson = $request->getBody();
+        $body = json_decode($bodyJson);
+
+        $users =  $body->users;
+        $collection = $mongoDAO->getCollection($cid);
+
+        if($collection != null && count($users) >= 0) {
+
+            $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:array();
+            $msg = array(
+                'usersToInclude' => $users,
+                'usersToExclude' => $usersToExclude
+            );
+
+            $usersToExclude = array_diff($usersToExclude, $users);
+
+            $fieldsToUpdate = array(
+                'usersToExclude' => $usersToExclude,
+                'updateDate' => 1000 * time()
+            );
+            $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
+
+            echo json_encode($msg);
+        }
+        else {
+            echo json_encode(array(
+                'error' => $collection == null ? "Collection $cid does not exist." : "No users specified!"
+            ));
+        }
+
+    }
+)->name('include_users');
 
 $app->get(
     '/collection/start/:cid',
@@ -1199,17 +1425,29 @@ $app->get(
 
         echo json_encode($judgements);
     }
-);
+)->name('collection_relevance_judgments');
+
+$app->get(
+    '/relevance/:cid/:iid',
+    function($cid, $iid) use ($mongoDAO, $app) {
+        $judgements = $mongoDAO->getRelevanceJudgements($cid, $iid);
+
+        echo json_encode($judgements);
+    }
+)->name('item_relevance_judgments');
 
 $app->post(
     '/relevance',
     function() use ($mongoDAO, $app) {
         $request = $app->request();
 
-        $uid = $request->get('uid');                // user id
-        $cid = $request->get('cid');                // collection id
-        $iid = $request->get('iid');                // item id
-        $relevance = $request->get('relevance');    // relevance judgment [1(not relevant) - 5(relevant)]
+        $bodyJson = $request->getBody();
+        $body = json_decode($bodyJson);
+
+        $uid = $body->uid;                // user id
+        $cid = $body->cid;                // collection id
+        $iid = $body->iid;                // item id
+        $relevance = $body->relevance;    // relevance judgment [1(not relevant) - 5(relevant)]
 
         if(!$mongoDAO->collectionExists($cid)) {
             echo json_encode(array('msg' => "Collection $cid does not exist."));
@@ -1222,8 +1460,13 @@ $app->post(
         }
 
         if($relevance <= 5 && $relevance >= 1) {
-            $mongoDAO->insertRelevanceJudgement($uid, $cid, $iid, $relevance);
-            echo json_encode(array('msg' => "Relevance judgement $relevance for $iid in collection $cid inserted from user $uid"));
+            $response = $mongoDAO->insertRelevanceJudgement($uid, $cid, $iid, $relevance);
+            echo json_encode(
+                array(
+                    'msg' => "Relevance judgement $relevance for $iid in collection $cid inserted from user $uid",
+                    'response' => $response
+                )
+            );
             return;
         }
         else if($relevance == 0 ) {

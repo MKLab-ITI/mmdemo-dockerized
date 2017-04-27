@@ -95,8 +95,29 @@ function show_active_users() {
                 else {
                     onerror = "imgError2(this,null,null);"
                 }
-                $('#users_images').append('<div class="user"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/></div>')
-
+                var $user_images=$('#users_images');
+                switch (translation_param) {
+                    case "en":
+                        $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>')
+                        break;
+                    case "el":
+                        $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Αφαίρεση</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="refresh_but_user">Ανανέωση</span> ή <span class="undo_but_user">Αναίρεση?</span></p></div></div>')
+                        break;
+                    case "it":
+                        $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>')
+                        break;
+                    case "tr":
+                        $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>')
+                        break;
+                    case "sp":
+                        $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>')
+                        break;
+                    case "ca":
+                        $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>')
+                        break;
+                    default:
+                        $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>')
+                }
             }
             var data_bar = [{
                 key: "Users",

@@ -25,15 +25,18 @@
                     if ($(this).find("td").length > 0) {
                         var sep = "";
                         $(this).find("td").each(function (index) {
-                            if (index === 2) {
+                            if (index === 0) {
+                                //to remove checkbox leading comma
+                            }
+                            else if (index === 3) {
                                 if ($(this).text() != "-") {
                                     csv += sep + settings.quotes + $(this).find('img').attr('src') + settings.quotes;
                                 }
                                 else {
-                                    csv += sep + settings.quotes + $(this).text() + settings.quotes;
+                                    csv += sep + settings.quotes + $(this).text() + settings.quotes;//equal to "-"
                                 }
                             }
-                            else if (index === 4) {
+                            else if (index === 5) {
                                 switch ($(this).attr('data-order')) {
                                     case "GooglePlus":
                                         csv += sep + settings.quotes + "GooglePlus" + settings.quotes;
@@ -42,7 +45,7 @@
                                         csv += sep + settings.quotes + "Twitter" + settings.quotes;
                                         break;
                                     case "Youtube":
-                                        csv += sep + settings.quotes + "Twitter" + settings.quotes;
+                                        csv += sep + settings.quotes + "Youtube" + settings.quotes;
                                         break;
                                     case "Facebook":
                                         csv += sep + settings.quotes + "Facebook" + settings.quotes;
@@ -57,19 +60,27 @@
                                         csv += sep + settings.quotes + "-" + settings.quotes;
                                 }
                             }
-                            else {
-                                csv += sep + settings.quotes + $(this).text() + settings.quotes;
+                            else if (index === 7) {
+                                csv += sep + settings.quotes + $(this).attr('data-order') + settings.quotes;
                             }
-                            sep = settings.separator;
+                            else {
+                                csv += sep + settings.quotes + $(this).text().replace(/(\r\n|\n|\r)/gm,"") + settings.quotes;
+                                sep = settings.separator;
+                            }
                         });
                         csv += settings.newline;
                     }
                     // loop each th cell of the row
                     else if ($(this).find("th").length > 0) {
                         var sep = "";
-                        $(this).find("th").each(function () {
-                            csv += sep + settings.quotes + $(this).text() + settings.quotes;
-                            sep = settings.separator;
+                        $(this).find("th").each(function (index) {
+                            if (index === 0) {
+                                //to remove checkbox leading comma
+                            }
+                            else {
+                                csv += sep + settings.quotes + $(this).text() + settings.quotes;
+                                sep = settings.separator;
+                            }
                         });
                         csv += settings.newline;
                     }

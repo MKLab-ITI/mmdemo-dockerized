@@ -32,17 +32,22 @@ var slider, collection_status;
 var $this_a;
 
 if (view_param === "list") {
+    $('#main').css('margin-bottom', '0');
     $('#gallery_icon').attr('src', 'imgs/gallery-16-gray.png');
     $('#list_icon').attr('src', 'imgs/list-16-black.png').addClass('active_view');
-    $('#items_num,.verticalLine,.well').show();
+    if (section_param !== "dashboard") {
+        $('#items_num,.verticalLine,.well,#main').show();
+    }
 }
 else {
     view_param = "gallery";
     $('#gallery_icon').attr('src', 'imgs/gallery-16-black.png').addClass('active_view');
     $('#list_icon').attr('src', 'imgs/list-16-gray.png');
-    $('#loadingbar').show();
-    var intervalminutes;
-    minutes();
+    if (section_param !== "dashboard") {
+        $('#loadingbar,#main').show();
+        var intervalminutes;
+        minutes();
+    }
 }
 var flag_sort = true;
 $(".sub2").each(function () {
@@ -155,13 +160,13 @@ $.ajax({
                         clearInterval(intervalID);
                         if (view_param === "list") {
                             $(".list_table tbody").empty();
-                            $(".well,#end").hide();
+                            $(".well,#end,#posts_info,#download_icon").hide();
                             parse_latest_list(1);
                         }
                         else {
                             $("#tiles").empty();
                             $("#main").height(0);
-                            $("#end,#loadmore").hide();
+                            $("#end,#loadmore,#posts_info").hide();
                             parse_latest(1);
                         }
                     }
@@ -330,10 +335,11 @@ $(function () {
                     $inlist.eq(4).removeClass("dash2");
                     if (view_param === "list") {
                         $(".list_table tbody").empty();
-                        $(".well,#end").hide();
+                        $(".well,#end,#posts_info,#download_icon").hide();
                         parse_latest_list(1);
                     }
                     else {
+                        $("#posts_info").hide();
                         parse_latest(1);
                     }
                 }
@@ -354,7 +360,7 @@ $(function () {
                 window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
                 $("#tiles").empty();
                 $("#main").hide(0);
-                $("#end,#loadmore").hide();
+                $("#end,#loadmore,#list_actions,#deleted_msg_user,#deleted_msg_post").hide();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
                 $("#hop5").stop(true, true).slideUp(800);
                 $("#update_field").stop(true, true).slideUp(800, function () {
@@ -404,13 +410,13 @@ $(function () {
             $(window).unbind('.more_latest');
             if (view_param === "list") {
                 $(".list_table tbody").empty();
-                $(".well,#end").hide();
+                $(".well,#end,#posts_info,#download_icon").hide();
                 parse_latest_list(1);
             }
             else {
                 $("#tiles").empty();
                 $("#main").height(0);
-                $("#end,#loadmore").hide();
+                $("#end,#loadmore,#posts_info").hide();
                 parse_latest(1);
             }
         }
@@ -442,13 +448,13 @@ $(function () {
                 $(window).unbind('.more_latest');
                 if (view_param === "list") {
                     $(".list_table tbody").empty();
-                    $(".well,#end").hide();
+                    $(".well,#end,#posts_info,#download_icon").hide();
                     parse_latest_list(1);
                 }
                 else {
                     $("#tiles").empty();
                     $("#main").height(0);
-                    $("#end,#loadmore").hide();
+                    $("#end,#loadmore,#posts_info").hide();
                     parse_latest(1);
                 }
             }
@@ -479,13 +485,13 @@ $(function () {
             $(window).unbind('.more_latest');
             if (view_param === "list") {
                 $(".list_table tbody").empty();
-                $(".well,#end").hide();
+                $(".well,#end,#posts_info,#download_icon").hide();
                 parse_latest_list(1);
             }
             else {
                 $("#tiles").empty();
                 $("#main").height(0);
-                $("#end,#loadmore").hide();
+                $("#end,#loadmore,#posts_info").hide();
                 parse_latest(1);
             }
         }
@@ -505,13 +511,13 @@ $(function () {
                 $(window).unbind('.more_latest');
                 if (view_param === "list") {
                     $(".list_table tbody").empty();
-                    $(".well,#end").hide();
+                    $(".well,#end,#posts_info,#download_icon").hide();
                     parse_latest_list(1);
                 }
                 else {
                     $("#tiles").empty();
                     $("#main").height(0);
-                    $("#end,#loadmore").hide();
+                    $("#end,#loadmore,#posts_info").hide();
                     parse_latest(1);
                 }
             }
@@ -543,13 +549,13 @@ $(function () {
                 $(window).unbind('.more_latest');
                 if (view_param === "list") {
                     $(".list_table tbody").empty();
-                    $(".well,#end").hide();
+                    $(".well,#end,#posts_info,#download_icon").hide();
                     parse_latest_list(1);
                 }
                 else {
                     $("#tiles").empty();
                     $("#main").height(0);
-                    $("#end,#loadmore").hide();
+                    $("#end,#loadmore,#posts_info").hide();
                     parse_latest(1);
                 }
             }
@@ -582,13 +588,13 @@ $(function () {
                 $(window).unbind('.more_latest');
                 if (view_param === "list") {
                     $(".list_table tbody").empty();
-                    $(".well,#end").hide();
+                    $(".well,#end,#posts_info,#download_icon").hide();
                     parse_latest_list(1);
                 }
                 else {
                     $("#tiles").empty();
                     $("#main").height(0);
-                    $("#end,#loadmore").hide();
+                    $("#end,#loadmore,#posts_info").hide();
                     parse_latest(1);
                 }
             }
@@ -621,13 +627,13 @@ $(function () {
                 $(window).unbind('.more_latest');
                 if (view_param === "list") {
                     $(".list_table tbody").empty();
-                    $(".well").hide();
+                    $(".well,#end,#posts_info,#download_icon").hide();
                     parse_latest_list(1);
                 }
                 else {
                     $("#tiles").empty();
                     $("#main").height(0);
-                    $("#end,#loadmore").hide();
+                    $("#end,#loadmore,#posts_info").hide();
                     parse_latest(1);
                 }
             }
@@ -772,7 +778,7 @@ $(function () {
             if ($this.attr('id') === "down2") {
                 $('#erase_analysis').show();
                 $('#chart_line').stop(true, true).slideDown(1000);
-                $("#erase_analysis").animate({opacity: 1,}, 1000);
+                $("#erase_analysis").animate({opacity: 1}, 1000);
                 $('#load2').attr("class", "svg__loading");
             }
             if ($this.attr('id') === "down3") {
@@ -984,7 +990,7 @@ function imgError2(image, source, username) {
 function minutes() {
     intervalminutes = setInterval(function () {
         var range = "minutes";
-        var time = $('.seconds').eq(0).html();
+        var time = $('#tiles').find('li').eq(0).attr('data-time');
         if (typeof time === "undefined") {
             switch (translation_param) {
                 case "en":
@@ -1104,7 +1110,7 @@ function interval() {
             to: +moment().format("X")
         });
         if (different === 0) {
-            titlelast = $('.ids').eq(0).html();
+            titlelast = $('#tiles').find('li').eq(0).attr('data-iid');
         } else {
             titlelast = titletop;
         }
@@ -1217,8 +1223,10 @@ $('#gallery_icon,#list_icon').click(function () {
     if (!($(this).hasClass('active_view'))) {
         clearInterval(intervalID);
         clearInterval(intervalminutes);
-        $('.close-info').click();
         if ($(this).attr('id') === "gallery_icon") {
+            $('#list_actions,#deleted_msg_user,#deleted_msg_post').hide();
+            $('#list_table').css({'margin-top': 0});
+            $('#main').css('margin-bottom', '65px');
             view_param = "gallery";
             $('#gallery_icon').attr('src', 'imgs/gallery-16-black.png').addClass("active_view");
             $('#list_icon').attr('src', 'imgs/list-16-gray.png').removeClass("active_view");
@@ -1229,6 +1237,7 @@ $('#gallery_icon,#list_icon').click(function () {
             minutes();
         }
         else {
+            $('#main').css('margin-bottom', '0');
             view_param = "list";
             $('#gallery_icon').attr('src', 'imgs/gallery-16-gray.png').removeClass("active_view");
             $('#list_icon').attr('src', 'imgs/list-16-black.png').addClass('active_view');
@@ -1240,7 +1249,7 @@ $('#gallery_icon,#list_icon').click(function () {
 
         $("#loading").show();
         $('.informer').html("0").stop().animate({"opacity": "0"});
-        $('.list_table,#tiles,#end,#loadmore,.well,#end').hide();
+        $('.list_table,#tiles,#end,#loadmore,.well,#end,#posts_info,#download_icon').hide();
         $(".list_table tbody,#tiles").empty();
         $("#main").height(0);
         $(window).unbind('.more_latest');
@@ -1256,12 +1265,11 @@ $('#gallery_icon,#list_icon').click(function () {
 
 $('.itemsPerPage span').click(function () {
     if (!($(this).hasClass('active_items'))) {
-        $('.close-info').click();
         $('.itemsPerPage span').removeClass("active_items");
         $(this).addClass("active_items");
         abort();
         $(".list_table tbody").empty();
-        $(".well,#end").hide();
+        $(".well,#end,#posts_info,#download_icon").hide();
         $('.informer').html("0").stop().animate({"opacity": "0"});
         $("#loading").show();
         parse_latest_list(1);
@@ -1290,13 +1298,13 @@ $('.icon-clear').click(function () {
         $(window).unbind('.more_latest');
         if (view_param === "list") {
             $(".list_table tbody").empty();
-            $(".well,#end").hide();
+            $(".well,#end,#posts_info,#download_icon").hide();
             parse_latest_list(1);
         }
         else {
             $("#tiles").empty();
             $("#main").height(0);
-            $("#end,#loadmore").hide();
+            $("#end,#loadmore,#posts_info").hide();
             parse_latest(1);
         }
     }
@@ -1342,9 +1350,754 @@ $(".btn-group").on("click", ".btn-default", function (e) {
     $('.btn-group').find('button').removeClass('btn-primary').addClass('btn-default');
     $(this).addClass('btn-primary').removeClass('btn-default');
 });
+$("#tiles").on("click", ".rate_menu", function () {
+    $(this).parent().next('.menu_icons').css('height', $(this).parents('li').height() - 14).slideDown();
+});
+$("#tiles").on("click", ".close_menu", function () {
+    $(this).parent().slideUp();
+});
+$("#tiles").on("click", ".tabs li:not(.current) a", function (e) {
+    $(this).parent().siblings().removeClass('current');
+    $(this).parent().addClass('current');
+    if ($(this).hasClass('rate')) {
+        $(this).parent().siblings().find('img').attr('src', 'imgs/delete-16-gray.png');
+        $(this).find('img').attr('src', 'imgs/star-16-white.png');
+        $(this).parents('.tabs').siblings('.rate_tab').show();
+        $(this).parents('.tabs').siblings('.exclude_tab').hide();
+    }
+    else {
+        $(this).parent().siblings().find('img').attr('src', 'imgs/star-16-gray.png');
+        $(this).find('img').attr('src', 'imgs/delete-16-white.png');
+        $(this).parents('.tabs').siblings('.rate_tab').hide();
+        $(this).parents('.tabs').siblings('.exclude_tab').show();
+    }
+});
+
+$("#tiles").on("click", ".rate_save_but", function () {
+    var $this = $(this);
+    var viewData = {
+        "uid": user_id,
+        "cid": collection_param,
+        "iid": $(this).parents('li').attr('data-iid').replace(/%23/g, "#"),
+        "relevance": $(this).siblings(".relevance_slider").eq(0).slider("value")
+    };
+    var data = JSON.stringify(viewData);
+    $.ajax({
+        type: 'POST',
+        url: api_folder + 'relevance',
+        data: data,
+        success: function () {
+            $this.slideUp(300, function () {
+                $this.next('.refresh').show();
+            });
+        },
+        error: function (e) {
+        }
+    });
+});
+
+$("#tiles").on("click", ".refresh_but", function () {
+    $("#tiles").empty();
+    $("#main").height(0);
+    $("#end,#loadmore,#posts_info").hide();
+    parse_latest(1);
+});
+$("#tiles").on("click", ".undo_but", function () {
+    var $this = $(this);
+    $this.parents('.remove').siblings('.exclude_buttons').find('input').removeAttr('disabled');
+    $this.parents('.remove').slideUp(300, function () {
+        $this.parents('.remove').siblings('.exclude_save_but').show();
+    });
+    if ($("input[name='remove_" + $this.parents('li').attr('data-iid') + "']:checked").val() === "user") {
+        var viewData_user = {
+            "users": []
+        };
+        viewData_user.users.push($this.parents('li').attr('data-uid'));
+        var data_user = JSON.stringify(viewData_user);
+        $.ajax({
+            type: 'POST',
+            url: api_folder + 'collection/' + collection_param + '/includeUsers',
+            data: data_user,
+            success: function () {
+            },
+            error: function () {
+            }
+        });
+    }
+    else {
+        var viewData_item = {
+            "items": []
+        };
+        viewData_item.items.push($this.parents('li').attr('data-iid').replace(/%23/g, "#"));
+        var data_item = JSON.stringify(viewData_item);
+        $.ajax({
+            type: 'POST',
+            url: api_folder + 'collection/' + collection_param + '/includeItems',
+            data: data_item,
+            success: function () {
+            },
+            error: function () {
+            }
+        });
+    }
+});
+
+$("#tiles").on("click", ".remove_but", function () {
+    var $this = $(this);
+    var count_items = 0;
+    if ($("input[name='remove_" + $this.parents('li').attr('data-iid') + "']:checked").val() === "user") {
+        var listItems = $("#tiles li");
+        listItems.each(function (idx, li) {
+            if ($(this).attr('data-uid') === $this.parents('li').attr('data-uid')) {
+                $(this).remove();
+                count_items++;
+            }
+        });
+    }
+    else {
+        $this.parents('li').remove();
+        count_items++;
+    }
+    var $tiles_li = $('#tiles > li');
+    var $posts_info = $('#posts_info');
+    var total_items = $posts_info.text().split(' ')[0] - count_items;
+    switch (translation_param) {
+        case "en":
+            switch (sort_param) {
+                case "recency":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
+                    break;
+                case "popularity":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
+                    break;
+                case "relevance":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
+                    break;
+                default:
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
+            }
+            break;
+        case "el":
+            switch (sort_param) {
+                case "recency":
+                    $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο προσφάτων.');
+                    break;
+                case "popularity":
+                    $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο δημοφιλή.');
+                    break;
+                case "relevance":
+                    $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο σχετικών.');
+                    break;
+                default:
+                    $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο προσφάτων.');
+            }
+            break;
+        case "it":
+            switch (sort_param) {
+                case "recency":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
+                    break;
+                case "popularity":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
+                    break;
+                case "relevance":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
+                    break;
+                default:
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
+            }
+            break;
+        case "tr":
+            switch (sort_param) {
+                case "recency":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
+                    break;
+                case "popularity":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
+                    break;
+                case "relevance":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
+                    break;
+                default:
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
+            }
+            break;
+        case "sp":
+            switch (sort_param) {
+                case "recency":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
+                    break;
+                case "popularity":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
+                    break;
+                case "relevance":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
+                    break;
+                default:
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
+            }
+            break;
+        case "ca":
+            switch (sort_param) {
+                case "recency":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
+                    break;
+                case "popularity":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
+                    break;
+                case "relevance":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
+                    break;
+                default:
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
+            }
+            break;
+        default:
+            switch (sort_param) {
+                case "recency":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
+                    break;
+                case "popularity":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
+                    break;
+                case "relevance":
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
+                    break;
+                default:
+                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
+            }
+    }
+    $(window).trigger('resize');
+});
+
+$("#tiles").on("click", ".exclude_save_but", function () {
+    var $this = $(this);
+    $this.siblings('.exclude_buttons').find('input').attr('disabled', true);
+    $this.slideUp(300, function () {
+        $this.next('.remove').show();
+    });
+    if ($("input[name='remove_" + $this.parents('li').attr('data-iid') + "']:checked").val() === "user") {
+        var viewData_user = {
+            "users": []
+        };
+        viewData_user.users.push($this.parents('li').attr('data-uid'));
+        var data_user = JSON.stringify(viewData_user);
+        $.ajax({
+            type: 'POST',
+            url: api_folder + 'collection/' + collection_param + '/excludeUsers',
+            data: data_user,
+            success: function () {
+                $this.slideUp(300, function () {
+                    $this.next('.remove').show();
+                });
+            },
+            error: function () {
+            }
+        });
+    }
+    else {
+        var viewData_item = {
+            "items": []
+        };
+        viewData_item.items.push($this.parents('li').attr('data-iid').replace(/%23/g, "#"));
+        var data_item = JSON.stringify(viewData_item);
+        $.ajax({
+            type: 'POST',
+            url: api_folder + 'collection/' + collection_param + '/excludeItems',
+            data: data_item,
+            success: function () {
+                $this.slideUp(300, function () {
+                    $this.next('.remove').show();
+                });
+            },
+            error: function () {
+            }
+        });
+    }
+});
+
+$(".flatTable").on("click", ".exclude_tag", function () {
+    var $this = $(this);
+    var viewData_tag = {
+        "keywords": []
+    };
+    viewData_tag.keywords.push($this.attr('data-tag'));
+    var data_tag = JSON.stringify(viewData_tag);
+    $.ajax({
+        type: 'POST',
+        url: api_folder + 'collection/' + collection_param + '/excludeKeywords',
+        data: data_tag,
+        success: function (e) {
+            if (e.notAdded.length === 0) {
+                $this.slideUp(300, function () {
+                    $this.next('.remove_tag').show();
+                });
+            }
+            else {
+                $this.slideUp(300, function () {
+                    $this.siblings('.confirm_remove_tag').show();
+                });
+            }
+        },
+        error: function () {
+        }
+    });
+});
+$(".flatTable").on("click", ".confirm_exclude_tag_but", function () {
+    var $this = $(this);
+    var viewData_tag = {
+        "keywords": [],
+        "forceExclude": true
+    };
+    viewData_tag.keywords.push($this.parents('.confirm_remove_tag').siblings('.exclude_tag').attr('data-tag'));
+    var data_tag = JSON.stringify(viewData_tag);
+    $.ajax({
+        type: 'POST',
+        url: api_folder + 'collection/' + collection_param + '/excludeKeywords',
+        data: data_tag,
+        success: function (e) {
+            $this.parents('.confirm_remove_tag').slideUp(300, function () {
+                $this.parents('.confirm_remove_tag').siblings('.remove_tag').show();
+            });
+        },
+        error: function () {
+        }
+    });
+});
+$("#users_images").on("click", ".exclude_user", function (e) {
+    e.stopPropagation();
+    var $this = $(this);
+    var viewData_user = {
+        "users": []
+    };
+    viewData_user.users.push($this.parents('.user').attr('data-uid'));
+    var data_user = JSON.stringify(viewData_user);
+    $.ajax({
+        type: 'POST',
+        url: api_folder + 'collection/' + collection_param + '/excludeUsers',
+        data: data_user,
+        success: function () {
+            $this.slideUp(300, function () {
+                $this.next('.remove_user').show();
+            });
+        },
+        error: function () {
+        }
+    });
+});
+
+$(".flatTable").on("click", ".refresh_but_tag", function () {
+    $("#load1,#load2,#load3,#load4,#load5,#load6,.load0").show();
+    $('#chart_line, .minitext, #chart_pie, #heatmap, #users_locations, #active_users, #tags').animate({opacity: 0.4}, 400);
+    show_heatmap();
+    show_stats();
+    draw_social_mix(0, $('.activestat').attr('id'));
+    draw_timeline();
+    show_locations();
+    show_active_users();
+    draw_hashtags("classic");
+});
+$(".flatTable").on("click", ".undo_but_tag", function () {
+    var $this = $(this);
+    var viewData_tag = {
+        "keywords": []
+    };
+    viewData_tag.keywords.push($this.parents('.remove_tag').siblings('.exclude_tag').attr('data-tag'));
+    var data_tag = JSON.stringify(viewData_tag);
+    $.ajax({
+        type: 'POST',
+        url: api_folder + 'collection/' + collection_param + '/includeKeywords',
+        data: data_tag,
+        success: function () {
+            $this.parents('.remove_tag').slideUp(300, function () {
+                $this.parents('.remove_tag').siblings('.exclude_tag').show();
+            });
+        },
+        error: function () {
+        }
+    });
+});
+$(".flatTable").on("click", ".confirm_undo_tag_but", function () {
+    var $this = $(this);
+    var viewData_tag = {
+        "keywords": []
+    };
+    viewData_tag.keywords.push($this.parents('.confirm_remove_tag').siblings('.exclude_tag').attr('data-tag'));
+    var data_tag = JSON.stringify(viewData_tag);
+    $.ajax({
+        type: 'POST',
+        url: api_folder + 'collection/' + collection_param + '/includeKeywords',
+        data: data_tag,
+        success: function () {
+            $this.parents('.confirm_remove_tag').slideUp(300, function () {
+                $this.parents('.confirm_remove_tag').siblings('.exclude_tag').show();
+            });
+        },
+        error: function () {
+        }
+    });
+});
+
+$("#users_images").on("click", ".undo_but_user", function (e) {
+    e.stopPropagation();
+    var $this = $(this);
+    var viewData_user = {
+        "users": []
+    };
+    viewData_user.users.push($this.parents('.user').attr('data-uid'));
+    var data_user = JSON.stringify(viewData_user);
+    $.ajax({
+        type: 'POST',
+        url: api_folder + 'collection/' + collection_param + '/includeUsers',
+        data: data_user,
+        success: function () {
+            $this.parents('.remove_user').hide(0, function () {
+                $this.parents('.remove_user').siblings('.exclude_user').show();
+            });
+        },
+        error: function () {
+        }
+    });
+});
+$("#users_images").on("click", ".refresh_but_user", function (e) {
+    e.stopPropagation();
+    $("#load1,#load2,#load3,#load4,#load5,#load6,.load0").show();
+    $('#chart_line, .minitext, #chart_pie, #heatmap, #users_locations, #active_users, #tags').animate({opacity: 0.4}, 400);
+    show_heatmap();
+    show_stats();
+    draw_social_mix(0, $('.activestat').attr('id'));
+    draw_timeline();
+    show_locations();
+    show_active_users();
+    draw_hashtags("classic");
+});
+
 
 $("#download_cancel").click(function () {
     $('#download_modal').find('.close-reveal-modal').trigger('click');
+});
+$('#exclude_user_list').click(function () {
+    var viewData_user = {
+        "users": []
+    };
+    $('.selected_row').each(function () {
+        viewData_user.users.push($(this).attr('data-uid'));
+    });
+    var data_user = JSON.stringify(viewData_user);
+
+    $.ajax({
+        type: 'POST',
+        url: api_folder + 'collection/' + collection_param + '/excludeUsers',
+        data: data_user,
+        success: function () {
+            var count_items = 0;
+            for (var i = 0; i < viewData_user.users.length; i++) {
+                $('tr[data-uid="' + viewData_user.users[i] + '"]').hide();
+                count_items++;
+            }
+            $('#list_actions').slideUp(500);
+            $('#list_table').animate({'margin-top': 0}, 500);
+            $('#deleted_msg_user').slideDown(500);
+
+            var $posts_info = $('#posts_info');
+            var total_items = $posts_info.text().split(' ')[0] - count_items;
+            var page = $('#pagination_list').data('twbsPagination').getCurrentPage();
+            var pagesize = $('.active_items').text();
+            var start_gap = ((page - 1) * pagesize) + 1;
+
+            switch (translation_param) {
+                case "en":
+                    switch (sort_param) {
+                        case "recency":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                            break;
+                        case "popularity":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
+                            break;
+                        case "relevance":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
+                            break;
+                        default:
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                    }
+                    break;
+                case "el":
+                    switch (sort_param) {
+                        case "recency":
+                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο προσφάτων.');
+                            break;
+                        case "popularity":
+                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο δημοφιλή.');
+                            break;
+                        case "relevance":
+                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο σχετικών.');
+                            break;
+                        default:
+                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο προσφάτων.');
+                    }
+                    break;
+                case "it":
+                    switch (sort_param) {
+                        case "recency":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                            break;
+                        case "popularity":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
+                            break;
+                        case "relevance":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
+                            break;
+                        default:
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                    }
+                    break;
+                case "tr":
+                    switch (sort_param) {
+                        case "recency":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                            break;
+                        case "popularity":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
+                            break;
+                        case "relevance":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
+                            break;
+                        default:
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                    }
+                    break;
+                case "sp":
+                    switch (sort_param) {
+                        case "recency":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                            break;
+                        case "popularity":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
+                            break;
+                        case "relevance":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
+                            break;
+                        default:
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                    }
+                    break;
+                case "ca":
+                    switch (sort_param) {
+                        case "recency":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                            break;
+                        case "popularity":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
+                            break;
+                        case "relevance":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
+                            break;
+                        default:
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                    }
+                    break;
+                default:
+                    switch (sort_param) {
+                        case "recency":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                            break;
+                        case "popularity":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
+                            break;
+                        case "relevance":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
+                            break;
+                        default:
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                    }
+            }
+        },
+        error: function () {
+        }
+    });
+});
+$('#undo_but_user_list').click(function () {
+    var viewData_user = {
+        "users": []
+    };
+    $('tbody tr:hidden').each(function () {
+        viewData_user.users.push($(this).attr('data-uid'));
+    });
+    viewData_user.users = unique(viewData_user.users);
+    var data_user = JSON.stringify(viewData_user);
+    $.ajax({
+        type: 'POST',
+        url: api_folder + 'collection/' + collection_param + '/includeUsers',
+        data: data_user,
+        success: function () {
+            $('tbody tr:hidden').show();
+            $('#deleted_msg_user').slideUp(500);
+            $('#list_actions').slideDown(500);
+            $('#list_table').animate({'margin-top': '43px'}, 500);
+        },
+        error: function () {
+        }
+    });
+});
+$('#exclude_item_list').click(function () {
+
+    var viewData_item = {
+        "items": []
+    };
+    $('.selected_row').each(function () {
+        viewData_item.items.push($(this).attr('data-id'));
+    });
+    var data_item = JSON.stringify(viewData_item);
+    $.ajax({
+        type: 'POST',
+        url: api_folder + 'collection/' + collection_param + '/excludeItems',
+        data: data_item,
+        success: function () {
+            $('.selected_row').hide();
+            $('#list_actions').slideUp(500);
+            $('#list_table').animate({'margin-top': 0}, 500);
+            $('#deleted_msg_post').slideDown(500);
+
+            var $posts_info = $('#posts_info');
+            var total_items = $posts_info.text().split(' ')[0] - viewData_item.items.length;
+            var page = $('#pagination_list').data('twbsPagination').getCurrentPage();
+            var pagesize = $('.active_items').text();
+            var start_gap = ((page - 1) * pagesize) + 1;
+
+            switch (translation_param) {
+                case "en":
+                    switch (sort_param) {
+                        case "recency":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                            break;
+                        case "popularity":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
+                            break;
+                        case "relevance":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
+                            break;
+                        default:
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                    }
+                    break;
+                case "el":
+                    switch (sort_param) {
+                        case "recency":
+                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο προσφάτων.');
+                            break;
+                        case "popularity":
+                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο δημοφιλή.');
+                            break;
+                        case "relevance":
+                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο σχετικών.');
+                            break;
+                        default:
+                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο προσφάτων.');
+                    }
+                    break;
+                case "it":
+                    switch (sort_param) {
+                        case "recency":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                            break;
+                        case "popularity":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
+                            break;
+                        case "relevance":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
+                            break;
+                        default:
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                    }
+                    break;
+                case "tr":
+                    switch (sort_param) {
+                        case "recency":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                            break;
+                        case "popularity":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
+                            break;
+                        case "relevance":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
+                            break;
+                        default:
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                    }
+                    break;
+                case "sp":
+                    switch (sort_param) {
+                        case "recency":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                            break;
+                        case "popularity":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
+                            break;
+                        case "relevance":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
+                            break;
+                        default:
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                    }
+                    break;
+                case "ca":
+                    switch (sort_param) {
+                        case "recency":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                            break;
+                        case "popularity":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
+                            break;
+                        case "relevance":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
+                            break;
+                        default:
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                    }
+                    break;
+                default:
+                    switch (sort_param) {
+                        case "recency":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                            break;
+                        case "popularity":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
+                            break;
+                        case "relevance":
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
+                            break;
+                        default:
+                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
+                    }
+            }
+
+
+        },
+        error: function () {
+        }
+    });
+});
+$('#undo_but_user_post').click(function () {
+    var viewData_item = {
+        "items": []
+    };
+    $('tbody tr:hidden').each(function () {
+        viewData_item.items.push($(this).attr('data-id'));
+    });
+    var data_item = JSON.stringify(viewData_item);
+    $.ajax({
+        type: 'POST',
+        url: api_folder + 'collection/' + collection_param + '/includeItems',
+        data: data_item,
+        success: function () {
+            $('tbody tr:hidden').show();
+            $('#deleted_msg_post').slideUp(500);
+            $('#list_actions').slideDown(500);
+            $('#list_table').animate({'margin-top': '43px'}, 500);
+        },
+        error: function () {
+        }
+    });
 });
 $("#download_ok").click(function () {
     var name = $('#file_name').val();
@@ -1370,7 +2123,24 @@ $("#download_ok").click(function () {
     }
     $('#download_modal').find('.close-reveal-modal').trigger('click');
 });
-
+$("#list_table").on("change", "input:checkbox", function () {
+    if ($(this).is(":checked")) {
+        $('#deleted_msg_user,#deleted_msg_post').slideUp(500);
+        $('tbody tr:hidden').remove();
+        $(this).parents('tr').addClass('selected_row');
+        $('#list_actions').slideDown(500);
+        $('#rows_selected').text($('.selected_row').length);
+        $('#list_table').animate({'margin-top': '43px'}, 500);
+    }
+    else {
+        $(this).parents('tr').removeClass('selected_row');
+        $('#rows_selected').text($('.selected_row').length);
+        if ($('.selected_row').length === 0) {
+            $('#list_actions').slideUp(500);
+            $('#list_table').animate({'margin-top': 0}, 500);
+        }
+    }
+});
 function nFormatter(num) {
     if (num >= 1000000) {
         return (num / 1000000).toFixed(0).replace(/\.0$/, '') + 'M';
@@ -1431,5 +2201,21 @@ $(function () {
             $query.attr("placeholder", "Search...");
             $file_name.attr("placeholder", "Name your file...");
             break;
+    }
+});
+function unique(list) {
+    var result = [];
+    $.each(list, function (i, e) {
+        if ($.inArray(e, result) == -1) result.push(e);
+    });
+    return result;
+}
+$(window).scroll(function () {
+    var scroll = $(window).scrollTop();
+    if (scroll > 0) {
+        $("#list_actions").addClass("shadow");
+    }
+    else {
+        $("#list_actions").removeClass("shadow");
     }
 });

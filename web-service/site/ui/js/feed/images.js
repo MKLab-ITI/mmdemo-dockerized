@@ -11,8 +11,101 @@ function loadimage(end, page, pagenum) {
                 outerOffset: 0
             };
 
-            var handler = $('#tiles li');
+            var handler = $('#tiles > li');
             handler.wookmark(options);
+            var doubleLabels = []
+            switch (translation_param) {
+                case "en":
+                    doubleLabels = [
+                        "<i>1</i><span>Irrelevant</span>",
+                        "<i>2</i>",
+                        "<i>3</i>",
+                        "<i>4</i>",
+                        "<i>5</i><span>Relevant</span>"
+
+                    ];
+                    break;
+                case "el":
+                    doubleLabels = [
+                        "<i>1</i><span>Άσχετο</span>",
+                        "<i>2</i>",
+                        "<i>3</i>",
+                        "<i>4</i>",
+                        "<i>5</i><span>Σχετικό</span>"
+                    ];
+                    break;
+                case "it":
+                    doubleLabels = [
+                        "<i>1</i><span>Irrelevant</span>",
+                        "<i>2</i>",
+                        "<i>3</i>",
+                        "<i>4</i>",
+                        "<i>5</i><span>Relevant</span>"
+                    ];
+                    break;
+                case "tr":
+                    doubleLabels = [
+                        "<i>1</i><span>Irrelevant</span>",
+                        "<i>2</i>",
+                        "<i>3</i>",
+                        "<i>4</i>",
+                        "<i>5</i><span>Relevant</span>"
+                    ];
+                    break;
+                case "sp":
+                    doubleLabels = [
+                        "<i>1</i><span>Irrelevant</span>",
+                        "<i>2</i>",
+                        "<i>3</i>",
+                        "<i>4</i>",
+                        "<i>5</i><span>Relevant</span>"
+                    ];
+                    break;
+                case "ca":
+                    doubleLabels = [
+                        "<i>1</i><span>Irrelevant</span>",
+                        "<i>2</i>",
+                        "<i>3</i>",
+                        "<i>4</i>",
+                        "<i>5</i><span>Relevant</span>"
+                    ];
+                    break;
+                default:
+                    doubleLabels = [
+                        "<i>1</i><span>Irrelevant</span>",
+                        "<i>2</i>",
+                        "<i>3</i>",
+                        "<i>4</i>",
+                        "<i>5</i><span>Relevant</span>"
+                    ];
+            }
+
+            $(".relevance_slider")
+                .slider()
+                .slider("pips", "destroy");
+            $(".relevance_slider")
+                .slider({
+                    max: 5,
+                    min: 1,
+                    animate: 400,
+                    change: function (event, ui) {
+                        if (event.originalEvent) {
+                            var $this = $(this);
+                            $this.siblings('.refresh').slideUp(300, function () {
+                                $this.siblings('.rate_save_but').slideDown();
+                            });
+                        }
+                    }
+                })
+                .slider("pips", {
+                    rest: "label",
+                    labels: doubleLabels
+                });
+
+            $('.relevance_slider:not(".initiated")').each(function (i, obj) {
+                $(this).addClass('initiated');
+                $(this).slider("value", $(this).parents('li').attr('data-score'));
+            });
             if (!(first_loading)) {
                 $("#loading, #loadmore").hide();
             }

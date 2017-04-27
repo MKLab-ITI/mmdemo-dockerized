@@ -296,6 +296,46 @@
         <sp>Loading posts, please wait..........</sp>
         <ca>Loading posts, please wait........</ca>
     </translation>
+    <translation id="info_rows">
+        <en> row(s) selected</en>
+        <el> γραμμές επιλέχθηκαν</el>
+        <it> row(s) selected</it>
+        <tr> row(s) selected</tr>
+        <sp> row(s) selected</sp>
+        <ca> row(s) selected</ca>
+    </translation>
+    <translation id="rate_menu_item_plural">
+        <en>Exclude Item(s)</en>
+        <el>Αφαίρεση Δημοσιεύσεων</el>
+        <it>Exclude Item(s)</it>
+        <tr>Exclude Item(s)</tr>
+        <sp>Exclude Item(s)</sp>
+        <ca>Exclude Item(s)</ca>
+    </translation>
+    <translation id="rate_menu_user_plural">
+        <en>Exclude User(s)</en>
+        <el>Αφαίρεση Χρηστών</el>
+        <it>Exclude User(s)</it>
+        <tr>Exclude User(s)</tr>
+        <sp>Exclude User(s)</sp>
+        <ca>Exclude User(s)</ca>
+    </translation>
+    <translation id="rate_menu_changes">
+        <en>Changes Saved!</en>
+        <el>Οι αλλαγές αποθηκεύτηκαν!</el>
+        <it>Changes Saved!</it>
+        <tr>Changes Saved!</tr>
+        <sp>Changes Saved!</sp>
+        <ca>Changes Saved!</ca>
+    </translation>
+    <translation id="rate_menu_undo">
+        <en>Undo?</en>
+        <el>Αναίρεση?</el>
+        <it>Undo?</it>
+        <tr>Undo?</tr>
+        <sp>Undo?</sp>
+        <ca>Undo?</ca>
+    </translation>
     <!-- DASHBOARD-->
     <translation id="statistics_posts">
         <en>Posts made</en>

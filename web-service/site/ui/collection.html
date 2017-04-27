@@ -237,6 +237,9 @@
     <div id="loading" class="opened"><span data-lang="loading">Loading posts, please wait.....</span>
         <img id="loadimg" src="imgs/loading.gif" alt="loading.."/>
     </div>
+    <div id="deleted_msg_user"><p><img src="imgs/check-circle-16-green.png"><span data-lang="rate_menu_changes">Changes Saved!</span> <span data-lang="rate_menu_undo" id="undo_but_user_list">Undo?</span></p></div>
+    <div id="deleted_msg_post"><p><img src="imgs/check-circle-16-green.png"><span data-lang="rate_menu_changes">Changes Saved!</span> <span data-lang="rate_menu_undo" id="undo_but_user_post">Undo?</span></p></div>
+
     <div id="toolbar">
         <div id="posts_info"></div>
         <img id="download_icon" src="imgs/download-24.png">
@@ -256,15 +259,23 @@
         </div>
     </div>
     <ul id="tiles"></ul>
+    <div id="list_actions">
+        <p><span id="rows_selected">-</span><span data-lang="info_rows"> row(s) selected</span></p>
+
+        <div id="exclude_user_list"><img src="imgs/remove_user_gray.png"><span data-lang="rate_menu_user_plural">Exclude User(s)</span></div>
+        <div id="exclude_item_list"><img src="imgs/remove_post_gray.png"><span data-lang="rate_menu_item_plural">Exclude Item(s)</span></div>
+    </div>
     <table id="list_table" class="list_table">
         <thead class="thead-default">
         <tr>
+            <th></th>
             <th data-lang="list_user">User</th>
             <th data-lang="settings_text">Text</th>
-            <th data-lang="settings_media" data-sorter="false">Media</th>
+            <th data-lang="settings_media">Media</th>
             <th data-lang="list_date">Date</th>
             <th data-lang="list_source">Source</th>
             <th data-lang="settings_popularity">Popularity</th>
+            <th data-lang="settings_relevance">Relevance</th>
         </tr>
         </thead>
         <tbody>
@@ -543,7 +554,7 @@
                                 <img src="imgs/settings-16.png" alt="icon" id="set2" class="arrow2"
                                      style="width: 14px"/>
                                 <img src="imgs/arrow-right-16.png" alt="icon" id="down2" class="arrow2"/>		
-                                <img src="imgs/x-mark-16.png" alt="icon" id="close2" class="arrow2"
+                                <img src="imgs/x-mark-16-white.png" alt="icon" id="close2" class="arrow2"
                                      style="width: 12px"/>
 			    </span>
                 </div>
@@ -604,7 +615,7 @@
                 <div class="box-pad-header" id="socialmix_head"><span data-lang="social_mix">Social Mix</span>
                             <span style="float: right;">
                                 <img src="imgs/arrow-right-16.png" alt="icon" id="down1" class="arrow2"/>		
-                                <img src="imgs/x-mark-16.png" alt="icon" id="close1" class="arrow2"
+                                <img src="imgs/x-mark-16-white.png" alt="icon" id="close1" class="arrow2"
                                      style="width: 12px"/>
 			    </span>
                 </div>
@@ -656,7 +667,7 @@
                 <div class="box-pad-header no-border" id="heatmap_head"><span data-lang="heatmap">HeatMap</span>
                             <span style="float: right;">
                                 <img src="imgs/arrow-right-16.png" alt="icon" id="down3" class="arrow2"/>
-                                <img src="imgs/x-mark-16.png" alt="icon" id="close3" class="arrow2"
+                                <img src="imgs/x-mark-16-white.png" alt="icon" id="close3" class="arrow2"
                                      style="width: 12px"/>
 			    </span>
                 </div>
@@ -710,7 +721,7 @@
                 <div class="box-pad-header no-border" id="usersloc_head"><span data-lang="users_location">Users Locations</span>
                             <span style="float: right;">
                                 <img src="imgs/arrow-right-16.png" alt="icon" id="down4" class="arrow2"/>
-                                <img src="imgs/x-mark-16.png" alt="icon" id="close4" class="arrow2"
+                                <img src="imgs/x-mark-16-white.png" alt="icon" id="close4" class="arrow2"
                                      style="width: 12px"/>
                             </span>
                 </div>
@@ -771,7 +782,7 @@
                                 <img src="imgs/settings-16.png" alt="icon" id="set5" class="arrow2"
                                      style="width: 14px"/>
                                 <img src="imgs/arrow-right-16.png" alt="icon" id="down5" class="arrow2"/>		
-                                <img src="imgs/x-mark-16.png" alt="icon" id="close5" class="arrow2"
+                                <img src="imgs/x-mark-16-white.png" alt="icon" id="close5" class="arrow2"
                                      style="width: 12px"/>
                             </span>
                 </div>
@@ -851,7 +862,7 @@
                 <span style="float: right;">
                     <img src="imgs/settings-16.png" alt="icon" id="set6" class="arrow2" style="width: 14px"/>
                     <img src="imgs/arrow-right-16.png" alt="icon" id="down6" class="arrow2"/>
-                    <img src="imgs/x-mark-16.png" alt="icon" id="close6" class="arrow2" style="width: 12px"/>
+                    <img src="imgs/x-mark-16-white.png" alt="icon" id="close6" class="arrow2" style="width: 12px"/>
                 </span>
                 </div>
                 <div id="inner-set6" style="height:88px">
@@ -935,6 +946,8 @@
 <script src="js/feed/images.js"></script>
 <script src="js/feed/moment.js"></script>
 <script src="js/feed/ion.rangeSlider.js"></script>
+<script src="js/feed/jquery-ui-slider.min.js"></script>
+<script src="js/feed/slider_rate.js"></script>
 <script src="js/feed/parse_latest.js"></script>
 
 <script src="js/dashboard/animateNumber.js"></script>

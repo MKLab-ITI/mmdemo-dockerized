@@ -98,7 +98,29 @@ function draw_hashtags(source) {
                         var frequency = json[i].count;
                         var token = json[i].field;
                         var typecolor = json[i].type;
-                        $('.flatTable').append('<tr><td>' + token + '</td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
+                        var $flatTable=$('.flatTable');
+                        switch (translation_param) {
+                            case "en":
+                                $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_tag">Refresh</span> or <span class="undo_but_tag">Undo?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Entity is included in input! <span class="confirm_exclude_tag_but">Exclude</span> or <span class="confirm_undo_tag_but">Undo?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
+                                break;
+                            case "el":
+                                $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Αφαίρεση</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="refresh_but_tag">Ανανέωση</span> ή <span class="undo_but_tag">Αναίρεση?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Η οντότητα είναι μέρος της εισόδου! <span class="confirm_exclude_tag_but">Αφαίρεση</span> ή <span class="confirm_undo_tag_but">Αναίρεση?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
+                                break;
+                            case "it":
+                                $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_tag">Refresh</span> or <span class="undo_but_tag">Undo?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Entity is included in input! <span class="confirm_exclude_tag_but">Exclude</span> or <span class="confirm_undo_tag_but">Undo?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
+                                break;
+                            case "tr":
+                                $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_tag">Refresh</span> or <span class="undo_but_tag">Undo?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Entity is included in input! <span class="confirm_exclude_tag_but">Exclude</span> or <span class="confirm_undo_tag_but">Undo?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
+                                break;
+                            case "sp":
+                                $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_tag">Refresh</span> or <span class="undo_but_tag">Undo?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Entity is included in input! <span class="confirm_exclude_tag_but">Exclude</span> or <span class="confirm_undo_tag_but">Undo?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
+                                break;
+                            case "ca":
+                                $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_tag">Refresh</span> or <span class="undo_but_tag">Undo?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Entity is included in input! <span class="confirm_exclude_tag_but">Exclude</span> or <span class="confirm_undo_tag_but">Undo?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
+                                break;
+                            default:
+                                $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_tag">Refresh</span> or <span class="undo_but_tag">Undo?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Entity is included in input! <span class="confirm_exclude_tag_but">Exclude</span> or <span class="confirm_undo_tag_but">Undo?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
+                        }
                         var appearance;
                         var id = i + 1;
                         if (between(i, 0, Math.round(len / 10))) {

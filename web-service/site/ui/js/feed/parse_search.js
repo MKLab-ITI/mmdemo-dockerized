@@ -13,10 +13,11 @@ function parse_search() {
     if (pagelocation === "latest") {
         if (view_param === "list") {
             $(".list_table tbody").empty();
-            $(".well,#end").hide();
+            $(".well,#end,#posts_info,#download_icon").hide();
             parse_latest_list(1);
         }
         else {
+            $("#posts_info").hide();
             parse_latest(1);
         }
     }

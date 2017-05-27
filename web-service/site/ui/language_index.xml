@@ -89,20 +89,28 @@
         <ca>Nom del recull</ca>
     </translation>
     <translation id="section2_input_users_keyword">
-        <en>Place a keyword</en>
+        <en>Type a keyword</en>
         <el>Δώσε μια λέξη-κλειδί</el>
-        <it>Place a keyword</it>
-        <tr>Place a keyword</tr>
-        <sp>Place a keyword</sp>
-        <ca>Place a keyword</ca>
+        <it>Type a keyword</it>
+        <tr>Type a keyword</tr>
+        <sp>Type a keyword</sp>
+        <ca>Type a keyword</ca>
     </translation>
     <translation id="section2_input_tags">
-        <en>Place your Tags</en>
+        <en>Type your Tags</en>
         <el>Δώσε τις ετικέτες</el>
         <it>Inserisci I tuoi tag</it>
         <tr>Etiket ekle</tr>
         <sp>Coloque las etiquetas</sp>
         <ca>Col·loqueu les vostres etiquetes</ca>
+    </translation>
+    <translation id="section2_input_locations">
+        <en>Type your Locations</en>
+        <el>Δώσε τις τοποθεσίες</el>
+        <it>Type your Locations</it>
+        <tr>Type your Locations</tr>
+        <sp>Type your Locations</sp>
+        <ca>Type your Locations</ca>
     </translation>
     <translation id="section2_examples">
         <en>Examples:</en>
@@ -111,6 +119,14 @@
         <tr>Örnekler:</tr>
         <sp>Ejemplos:</sp>
         <ca>Exemples:</ca>
+    </translation>
+    <translation id="section2_polygons">
+        <en>Polygon(s) created</en>
+        <el>Πολύγωνα δημιουργήθηκαν</el>
+        <it>Polygon(s) created</it>
+        <tr>Polygon(s) created</tr>
+        <sp>Polygon(s) created</sp>
+        <ca>Polygon(s) created</ca>
     </translation>
     <translation id="section2_info">
         <en>Info: </en>
@@ -136,8 +152,88 @@
         <sp>Max number (100) of users reached.</sp>
         <ca>Max number (100) of users reached.</ca>
     </translation>
+    <translation id="section2_max_locations">
+        <en>Max number (5) of locations reached.</en>
+        <el>Ο μέγιστος αριθμός (5) τοποθεσιών επιτεύχθει.</el>
+        <it>Max number of locations (5) reached.</it>
+        <tr>Max number of locations (5) reached.</tr>
+        <sp>Max number of locations (5) reached.</sp>
+        <ca>Max number of locations (5) reached.</ca>
+    </translation>
+    <translation id="section2_error_geocode">
+        <en>We couldn't geocode this location.</en>
+        <el>Δεν ήταν δυνατή η γεωκωδικοποίηση αυτής της τοποθεσίας.</el>
+        <it>We couldn't geocode this location.</it>
+        <tr>We couldn't geocode this location.</tr>
+        <sp>We couldn't geocode this location.</sp>
+        <ca>We couldn't geocode this location.</ca>
+    </translation>
+    <translation id="section2_map">
+        <en>Open Map</en>
+        <el>Άνοιγμα χάρτη</el>
+        <it>Open Map</it>
+        <tr>Open Map</tr>
+        <sp>Open Map</sp>
+        <ca>Open Map</ca>
+    </translation>
+    <translation id="section2_map_desc_1">
+        <en>Create polygons by clicking</en>
+        <el>Δημιουργήστε πολύγωνα κλικάροντας το</el>
+        <it>Create polygons by clicking</it>
+        <tr>Create polygons by clicking</tr>
+        <sp>Create polygons by clicking</sp>
+        <ca>Create polygons by clicking</ca>
+    </translation>
+    <translation id="section2_map_desc_2">
+        <en>, and selecting points on the map. Note that the first and last point must define the same location, which completes the loop. Erase polygons by clicking</en>
+        <el>, και επιλέγοντας σημεία στο χάρτη. Σημειώστε οτι το πρώτο και το τελευταίο σημείο πρέπει να είναι η ίδια τοποθεσία, ολοκληρώνοντας τον κύκλο. Διαγράψτε πολύγωνα κλικάροντας το</el>
+        <it>, and selecting points on the map. Note that the first and last point must define the same location, which completes the loop. Erase polygons by clicking</it>
+        <tr>, and selecting points on the map. Note that the first and last point must define the same location, which completes the loop. Erase polygons by clicking</tr>
+        <sp>, and selecting points on the map. Note that the first and last point must define the same location, which completes the loop. Erase polygons by clicking</sp>
+        <ca>, and selecting points on the map. Note that the first and last point must define the same location, which completes the loop. Erase polygons by clicking</ca>
+    </translation>
+    <translation id="section2_map_desc_3">
+        <en>. Editable polygons are shown with</en>
+        <el>. Τα επεξεργάσιμα πολύγωνα εμφανίζονται με</el>
+        <it>. Editable polygons are shown with</it>
+        <tr>. Editable polygons are shown with</tr>
+        <sp>. Editable polygons are shown with</sp>
+        <ca>. Editable polygons are shown with</ca>
+    </translation>
+    <translation id="section2_map_desc_4">
+        <en>red</en>
+        <el>κόκκινο</el>
+        <it>red</it>
+        <tr>red</tr>
+        <sp>red</sp>
+        <ca>red</ca>
+    </translation>
+    <translation id="section2_map_desc_5">
+        <en> color. Defined polygons are shown with </en>
+        <el> χρώμα. Τα καθορισμένα πολύγωνα εμφανίζονται με </el>
+        <it> color. Defined polygons are shown with </it>
+        <tr> color. Defined polygons are shown with </tr>
+        <sp> color. Defined polygons are shown with </sp>
+        <ca> color. Defined polygons are shown with </ca>
+    </translation>
+    <translation id="section2_map_desc_6">
+        <en>blue</en>
+        <el>μπλε</el>
+        <it>blue</it>
+        <tr>blue</tr>
+        <sp>blue</sp>
+        <ca>blue</ca>
+    </translation>
+    <translation id="section2_map_desc_7">
+        <en>color. Select them to change state.</en>
+        <el>χρώμα. Επιλέξτε τα για να αλλάξετε την κατάσταση.</el>
+        <it>color. Select them to change state.</it>
+        <tr>color. Select them to change state.</tr>
+        <sp>color. Select them to change state.</sp>
+        <ca>color. Select them to change state.</ca>
+    </translation>
     <translation id="section2_input_Twitter">
-        <en>Place your Users from Twitter</en>
+        <en>Type your Users from Twitter</en>
         <el>Δώσε τους χρήστες από Twitter</el>
         <it>Inserisci I tuoi utenti da Twitter</it>
         <tr>Twitter'dan kullanıcı ekle</tr>
@@ -145,7 +241,7 @@
         <ca>Afegiu  els vostres usuaris de Twitter</ca>
     </translation>
     <translation id="section2_input_GooglePlus">
-        <en>Place your Users from GooglePlus</en>
+        <en>Type your Users from GooglePlus</en>
         <el>Δώσε τους χρήστες από GooglePlus</el>
         <it>Inserisci I tuoi utenti da GooglePlus</it>
         <tr>GooglePlus'tan kullanıcı ekle</tr>
@@ -153,7 +249,7 @@
         <ca>Afegiu  els vostres usuaris de GooglePlus</ca>
     </translation>
     <translation id="section2_input_Facebook">
-        <en>Place your Users from Facebook</en>
+        <en>Type your Users from Facebook</en>
         <el>Δώσε τους χρήστες από Facebook</el>
         <it>Inserisci I tuoi utenti da Facebook</it>
         <tr>Facebook'tan kullanıcı ekle</tr>
@@ -161,7 +257,7 @@
         <ca>Afegiu  els vostres usuaris de Facebook</ca>
     </translation>
     <translation id="section2_input_Instagram">
-        <en>Place your Users from Instagram</en>
+        <en>Type your Users from Instagram</en>
         <el>Δώσε τους χρήστες από Instagram</el>
         <it>Inserisci I tuoi utenti da Instagram</it>
         <tr>Instagram'dan kullanıcı ekle</tr>
@@ -169,7 +265,7 @@
         <ca>Afegiu  els vostres usuaris d'Instagram</ca>
     </translation>
     <translation id="section2_input_Youtube">
-        <en>Place your Users from Youtube</en>
+        <en>Type your Users from Youtube</en>
         <el>Δώσε τους χρήστες από Youtube</el>
         <it>Inserisci I tuoi utenti da Youtube</it>
         <tr>Youtube'dan kullanıcı ekle</tr>
@@ -177,7 +273,7 @@
         <ca>Afegiu  els vostres usuaris de Youtube</ca>
     </translation>
     <translation id="section2_input_RSS">
-        <en>Place your RSS</en>
+        <en>Type your RSS</en>
         <el>Δώσε τα RSS</el>
         <it>Inserisci I tuoi RSS</it>
         <tr>RSS'i ekle</tr>

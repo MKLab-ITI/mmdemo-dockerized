@@ -18,6 +18,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="css/feed/foundation.css">
     <link rel="stylesheet" href="css/index/main.css">
+    <link rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.css'/>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.17.4/mapbox-gl-draw.css'/>
     <!--END CSS -->
 
 </head>
@@ -106,7 +108,7 @@
                 <img id="interest_icon" src="imgs/interest-gray.png" alt="hash" style="top: 5px;position: relative;">
 
                 <div class="input-field" style="padding-bottom: 10px">
-                    <input id="interest" class="user_input" type="text" autocomplete="off">
+                    <input id="interest" class="user_input" type="text" autocomplete="off" placeholder="">
                     <label for="interest" data-lang="section2_input_collection">Collection Name</label>
                     <img class="search_icon" src="imgs/enter-gray.png" id="enter_icon" alt="search">
                 </div>
@@ -116,8 +118,8 @@
                 <img id="hash_icon" src="imgs/hash-gray.png" alt="hash">
 
                 <div class="input-field">
-                    <input id="hashtag" class="user_input" type="text" autocomplete="off">
-                    <label for="hashtag" data-lang="section2_input_tags">Place your Tags</label>
+                    <input id="hashtag" class="user_input" type="text" autocomplete="off" placeholder="">
+                    <label for="hashtag" data-lang="section2_input_tags">Type your Tags</label>
                     <img class="search_icon" src="imgs/search-gray.png" id="search_icon_1" alt="search">
                 </div>
                 <p class="advanced" id="advanced_tag_search" data-lang="section2_adv_tags">Advanced Tags</p>
@@ -142,41 +144,41 @@
                 <img id="user_icon" src="imgs/email-gray.png" alt="email">
 
                 <div class="input-field" id="Twitter_input">
-                    <input id="user_Twitter" class="user_input" type="text" autocomplete="off">
-                    <label for="user_Twitter" data-lang="section2_input_Twitter">Place your Users from Twitter</label>
+                    <input id="user_Twitter" class="user_input" type="text" autocomplete="off" placeholder="">
+                    <label for="user_Twitter" data-lang="section2_input_Twitter">Type your Users from Twitter</label>
                     <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
                 </div>
                 <div class="input-field" id="GooglePlus_input">
-                    <input id="user_GooglePlus" class="user_input" type="text" autocomplete="off">
-                    <label for="user_GooglePlus" data-lang="section2_input_GooglePlus">Place your Users from
+                    <input id="user_GooglePlus" class="user_input" type="text" autocomplete="off" placeholder="">
+                    <label for="user_GooglePlus" data-lang="section2_input_GooglePlus">Type your Users from
                         GooglePlus</label>
                     <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
                 </div>
                 <div class="input-field" id="Facebook_input">
-                    <input id="user_Facebook" class="user_input" type="text" autocomplete="off">
-                    <label for="user_Facebook" data-lang="section2_input_Facebook">Place your Users from
+                    <input id="user_Facebook" class="user_input" type="text" autocomplete="off" placeholder="">
+                    <label for="user_Facebook" data-lang="section2_input_Facebook">Type your Users from
                         Facebook</label>
                     <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
                 </div>
                 <!--<div class="input-field" id="Instagram_input">
-                    <input id="user_Instagram" class="user_input" type="text" autocomplete="off">
-                    <label for="user_Instagram" data-lang="section2_input_Instagram">Place your Users from
+                    <input id="user_Instagram" class="user_input" type="text" autocomplete="off" placeholder="">
+                    <label for="user_Instagram" data-lang="section2_input_Instagram">Type your Users from
                         Instagram</label>
                     <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
                 </div>-->
                 <div class="input-field" id="Youtube_input">
-                    <input id="user_Youtube" class="user_input" type="text" autocomplete="off">
-                    <label for="user_Youtube" data-lang="section2_input_Youtube">Place your Users from Youtube</label>
+                    <input id="user_Youtube" class="user_input" type="text" autocomplete="off" placeholder="">
+                    <label for="user_Youtube" data-lang="section2_input_Youtube">Type your Users from Youtube</label>
                     <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
                 </div>
                 <div class="input-field" id="RSS_input">
-                    <input id="user_RSS" class="user_input" type="text" autocomplete="off">
-                    <label for="user_RSS" data-lang="section2_input_RSS">Place your RSS</label>
+                    <input id="user_RSS" class="user_input" type="text" autocomplete="off" placeholder="">
+                    <label for="user_RSS" data-lang="section2_input_RSS">Type your RSS</label>
                     <img class="search_icon users_icon" src="imgs/search-gray.png" id="search_icon_3" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
 
@@ -230,8 +232,8 @@
                 <img id="text_user_icon" src="imgs/text_user.png" alt="text_user">
 
                 <div class="input-field" style="margin-top:0">
-                    <input id="user_advanced" class="user_input" type="text" autocomplete="off">
-                    <label for="user_advanced" data-lang="section2_input_users_keyword">Place a keyword</label>
+                    <input id="user_advanced" class="user_input" type="text" autocomplete="off" placeholder="">
+                    <label for="user_advanced" data-lang="section2_input_users_keyword">Type a keyword</label>
                     <img class="search_icon" src="imgs/search-gray.png" id="search_icon_2" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
                 </div>
@@ -270,8 +272,8 @@
                 <img id="logic_icon" src="imgs/logic_32_gray.png" alt="text_user">
 
                 <div class="input-field" style="margin-top:0">
-                    <input id="tag_advanced" class="user_input" type="text" autocomplete="off">
-                    <label for="tag_advanced" data-lang="section2_input_tags">Place your Tags</label>
+                    <input id="tag_advanced" class="user_input" type="text" autocomplete="off" placeholder="">
+                    <label for="tag_advanced" data-lang="section2_input_tags">Type your Tags</label>
                     <img class="search_icon" src="imgs/search-gray.png" id="search_icon_4" alt="search">
                 </div>
                 <div id="examples_2" class="examples">
@@ -316,21 +318,55 @@
                         src="imgs/cancel-white_16.png"><span data-lang="section2_cancel_button">CANCEL AND BACK</span>
                 </div>
             </div>
-            <div id="edit_buttons" class="small-12 medium-12 large-12 columns ontop">
-                <div class="btn_material action_button done" id="done_edit"><img src="imgs/save-white_16.png"><span
-                        data-lang="section2_done_button">I'M DONE, SAVE CHANGES</span></div>
-                <div class="btn_material action_button cancel" id="cancel_edit"><img
-                        src="imgs/cancel-white_16.png"><span data-lang="section2_cancel_button">CANCEL AND BACK</span>
+            <div id="map_input" class="small-12 medium-6 large-6 medium-offset-2 columns ontop">
+                <img id="location_icon" src="imgs/location-gray.png" alt="location">
+                <div class="input-field">
+                    <input id="location_input" class="user_input" type="text" autocomplete="off" placeholder="">
+                    <label for="location_input" data-lang="section2_input_locations">Type your Locations</label>
+                    <img class="search_icon" src="imgs/search-gray.png" id="search_icon_5" alt="search">
+                </div>
+                <div id="examples_3" class="examples">
+                    <p data-lang="section2_examples">Examples:</p>
+                    <ul>
+                        <li>Stockholm</li>
+                        <li>Crete</li>
+                        <li>Prague</li>
+                        <li>Barcelona</li>
+                    </ul>
+                </div>
+                <div id="polygons_num"><span id="polygon_count">0</span> <span data-lang="section2_polygons">Polygon(s) created</span></div>
+                <div class="info" id="max_locations">
+                    <strong data-lang="section2_info">Info: </strong><span data-lang="section2_max_locations">Max number (5) of locations reached.</span>
+                </div>
+                <div class="error_expr error_expr_location">
+                    <strong data-lang="section2_error">Error: </strong><span data-lang="section2_error_geocode">We couldn't geocode this location.</span>
+                </div>
+            </div>
+            <div id="map_toggle" class="small-12 medium-2 large-2 columns ontop">
+                <h4 data-lang="section2_map">Open Map</h4>
+                <input class="map_input map_input_skewed" id="map_button" type="checkbox"/>
+                <label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="map_button"></label>
+            </div>
+            <div id="map_desc" class="small-12 medium-12 large-12 columns ontop">
+                <p><span data-lang="section2_map_desc_1">Create polygons by clicking</span><button class=" example_but mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_polygon"></button><span data-lang="section2_map_desc_2">, and selecting points on the map. Note that the first and last point must define the same location, which completes the loop. Erase polygons by clicking</span><button class="example_but mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_trash"></button><span data-lang="section2_map_desc_3">. Editable polygons are shown with</span> <span style="color:#F26430" data-lang="section2_map_desc_4">red</span><span data-lang="section2_map_desc_5"> color. Defined polygons are shown with </span><span style="color:#088" data-lang="section2_map_desc_6">blue</span> <span data-lang="section2_map_desc_7">color. Select them to change state.</span></p>
+            </div>
+            <div id='map' class=""></div>
+            <div id="start_buttons" class="small-12 medium-12 large-12 columns ontop">
+                <div class="btn_material action_button done deactivated" id="done_start"><img
+                        src="imgs/save-white_16.png"><span
+                        data-lang="section2_start_button">START COLLECTION</span></div>
+                <div class="btn_material action_button cancel" id="cancel_start"><img
+                        src="imgs/cancel-white_16.png"><span data-lang="section2_clear_button">CLEAR ALL</span>
                 </div>
                 <div class="error_expr error_expr_collection">
                     <strong data-lang="section2_error">Error: </strong><span></span>
                 </div>
             </div>
-            <div id="start_buttons" class="small-12 medium-12 large-12 columns ontop">
-                <div class="btn_material action_button done deactivated" id="done_start"><img src="imgs/save-white_16.png"><span
-                        data-lang="section2_start_button">START COLLECTION</span></div>
-                <div class="btn_material action_button cancel" id="cancel_start"><img
-                        src="imgs/cancel-white_16.png"><span data-lang="section2_clear_button">CLEAR ALL</span>
+            <div id="edit_buttons" class="small-12 medium-12 large-12 columns ontop">
+                <div class="btn_material action_button done" id="done_edit"><img src="imgs/save-white_16.png"><span
+                        data-lang="section2_done_button">I'M DONE, SAVE CHANGES</span></div>
+                <div class="btn_material action_button cancel" id="cancel_edit"><img
+                        src="imgs/cancel-white_16.png"><span data-lang="section2_cancel_button">CANCEL AND BACK</span>
                 </div>
                 <div class="error_expr error_expr_collection">
                     <strong data-lang="section2_error">Error: </strong><span></span>
@@ -586,6 +622,8 @@
 
 <!-- JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.js'></script>
+<script src='js/index/mapbox_draw_core.js'></script>
 <script src="js/index/jquery_drag.js"></script>
 <script src="js/config.js"></script>
 <script src="js/index/ajax_abort.js"></script>
@@ -600,6 +638,8 @@
 <script src="js/index/handlebar_min.js"></script>
 <script src="js/index/typeahed.js"></script>
 <script src="js/index/autocomplete.js"></script>
+<script src='js/index/polylabel.js'></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOOPffhARnRWiCM2TyhJbHkmbDbpxrWec&libraries=places&callback=initMap" async defer></script>
 <!-- END JS -->
 </body>
 </html>

@@ -36,7 +36,7 @@ if (!(translation_param==="")) {
             case "tr":
                 $('#lang').html("Türkçe");
                 break;
-            case "sp":
+            case "es":
                 $('#lang').html("Español");
                 break;
             case "ca":

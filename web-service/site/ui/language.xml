@@ -5,7 +5,7 @@
         <el>Ανακάλυψε πως διαμοιράζονται τα μέσα στα Κοινωνικά Δίκτυα...</el>
         <it>Scopri come il media è condiviso sui social network...</it>
         <tr>Medyanın sosyal ağlarda nasıl paylaşıldığını keşfet...</tr>
-        <sp>Descubre cómo los medios se comparte en las redes sociales...</sp>
+        <es>Descubre cómo los medios se comparte en las redes sociales...</es>
         <ca>Descobriu com comparteixen les xarxes socials els mitjans de comunicació…</ca>
     </translation>
     <translation id="slider_search">
@@ -13,7 +13,7 @@
         <el>ΑΝΑΖΗΤΗΣΗ</el>
         <it>CERCA</it>
         <tr>ARA</tr>
-        <sp>BUSCAR</sp>
+        <es>BUSCAR</es>
         <ca>CERCA</ca>
     </translation>
     <translation id="slider_settings">
@@ -21,7 +21,7 @@
         <el>ΡΥΘΜΙΣΕΙΣ</el>
         <it>IMPOSTAZIONI</it>
         <tr>AYARLAR</tr>
-        <sp>AJUSTES</sp>
+        <es>AJUSTES</es>
         <ca>CONFIGURACIÓ</ca>
     </translation>
     <translation id="slider_settings_language">
@@ -29,7 +29,7 @@
         <el>ΓΛΩΣΣΑ</el>
         <it>LINGUA</it>
         <tr>DİL</tr>
-        <sp>IDIOMA</sp>
+        <es>IDIOMA</es>
         <ca>IDIOMA</ca>
     </translation>
     <translation id="slider_settings_topics">
@@ -37,7 +37,7 @@
         <el>ΘΕΜΑΤΑ</el>
         <it>TEMI</it>
         <tr>KONULAR</tr>
-        <sp>TEMAS</sp>
+        <es>TEMAS</es>
         <ca>TEMES</ca>
     </translation>
     <translation id="slider_settings_original">
@@ -45,7 +45,7 @@
         <el>ΠΗΓΗ</el>
         <it>ORIGINALE</it>
         <tr>ORİJİNAL</tr>
-        <sp>ORIGINAL</sp>
+        <es>ORIGINAL</es>
         <ca>ORIGINAL</ca>
     </translation>
     <translation id="slider_settings_type">
@@ -53,7 +53,7 @@
         <el>ΤΥΠΟΣ</el>
         <it>TIPO</it>
         <tr>TÜR</tr>
-        <sp>TIPO</sp>
+        <es>TIPO</es>
         <ca>TIPUS</ca>
     </translation>
     <translation id="slider_settings_date">
@@ -61,7 +61,7 @@
         <el>ΗΜΕΡΟΜΗΝΙΑ</el>
         <it>DATA</it>
         <tr>TARİH</tr>
-        <sp>FECHA</sp>
+        <es>FECHA</es>
         <ca>DATA</ca>
     </translation>
     <translation id="slider_settings_unique">
@@ -69,7 +69,7 @@
         <el>ΜΟΝΑΔΙΚΑ</el>
         <it>UNIQUE</it>
         <tr>UNIQUE</tr>
-        <sp>UNIQUE</sp>
+        <es>UNIQUE</es>
         <ca>UNIQUE</ca>
     </translation>
     <translation id="slider_settings_sort">
@@ -77,7 +77,7 @@
         <el>ΤΑΞΙΝΟΜΗΣΗ</el>
         <it>ORDINA</it>
         <tr>SIRALA</tr>
-        <sp>ORDENAR</sp>
+        <es>ORDENAR</es>
         <ca>ORDENA</ca>
     </translation>
     <translation id="settings_all">
@@ -85,7 +85,7 @@
         <el>Όλα</el>
         <it>Tutto</it>
         <tr>TÜMÜ</tr>
-        <sp>Todas</sp>
+        <es>Todas</es>
         <ca>Tot</ca>
     </translation>
     <translation id="settings_false">
@@ -93,7 +93,7 @@
         <el>Ψευδή</el>
         <it>False</it>
         <tr>False</tr>
-        <sp>False</sp>
+        <es>False</es>
         <ca>False</ca>
     </translation>
     <translation id="settings_true">
@@ -101,7 +101,7 @@
         <el>Αληθή</el>
         <it>True</it>
         <tr>True</tr>
-        <sp>True</sp>
+        <es>True</es>
         <ca>True</ca>
     </translation>
     <translation id="settings_original">
@@ -109,7 +109,7 @@
         <el>Δημοσίευση</el>
         <it>Originale</it>
         <tr>Orijinal</tr>
-        <sp>Original</sp>
+        <es>Original</es>
         <ca>Original</ca>
     </translation>
     <translation id="settings_share">
@@ -117,7 +117,7 @@
         <el>Μεταδημοσίευση</el>
         <it>Condividi</it>
         <tr>Paylaş</tr>
-        <sp>Compartir</sp>
+        <es>Compartir</es>
         <ca>Comparteix</ca>
     </translation>
     <translation id="settings_media">
@@ -125,7 +125,7 @@
         <el>Πολυμέσα</el>
         <it>Media</it>
         <tr>Medya</tr>
-        <sp>Medios de comunicación</sp>
+        <es>Medios de comunicación</es>
         <ca>Mitjans de comunicació</ca>
     </translation>
     <translation id="settings_text">
@@ -133,7 +133,7 @@
         <el>Κείμενο</el>
         <it>Testo</it>
         <tr>Metin</tr>
-        <sp>Texto</sp>
+        <es>Texto</es>
         <ca>Text</ca>
     </translation>
     <translation id="settings_recency">
@@ -141,7 +141,7 @@
         <el>Χρονικά</el>
         <it>Recente</it>
         <tr>Yenilik</tr>
-        <sp>Frescura</sp>
+        <es>Frescura</es>
         <ca>Recent</ca>
     </translation>
     <translation id="settings_popularity">
@@ -149,7 +149,7 @@
         <el>Δημοτικότητα</el>
         <it>Popolarità</it>
         <tr>Popülerlik</tr>
-        <sp>Popularidad</sp>
+        <es>Popularidad</es>
         <ca>Popularitat</ca>
     </translation>
     <translation id="settings_relevance">
@@ -157,7 +157,7 @@
         <el>Σχετικότητα</el>
         <it>Rilevanza</it>
         <tr>Benzerlik</tr>
-        <sp>Pertinencia</sp>
+        <es>Pertinencia</es>
         <ca>Rellevància</ca>
     </translation>
     <translation id="settings_posts">
@@ -165,7 +165,7 @@
         <el>Δημοσιεύσεις:</el>
         <it>Posts:</it>
         <tr>Posts:</tr>
-        <sp>Posts:</sp>
+        <es>Posts:</es>
         <ca>Posts:</ca>
     </translation>
     <translation id="settings_view">
@@ -173,7 +173,7 @@
         <el>Όψη:</el>
         <it>View:</it>
         <tr>View:</tr>
-        <sp>View:</sp>
+        <es>View:</es>
         <ca>View:</ca>
     </translation>
     <translation id="list_user">
@@ -181,7 +181,7 @@
         <el>Χρήστης</el>
         <it>User</it>
         <tr>User</tr>
-        <sp>User</sp>
+        <es>User</es>
         <ca>User</ca>
     </translation>
     <translation id="list_source">
@@ -189,7 +189,7 @@
         <el>Πλατφόρμα</el>
         <it>Source</it>
         <tr>Source</tr>
-        <sp>Source</sp>
+        <es>Source</es>
         <ca>Source</ca>
     </translation>
     <translation id="list_date">
@@ -197,7 +197,7 @@
         <el>Ημερομηνία</el>
         <it>Date</it>
         <tr>Date</tr>
-        <sp>Date</sp>
+        <es>Date</es>
         <ca>Date</ca>
     </translation>
     <translation id="view_feed">
@@ -205,7 +205,7 @@
         <el>Ροή</el>
         <it>Feed</it>
         <tr>Feed</tr>
-        <sp>Alimentar</sp>
+        <es>Alimentar</es>
         <ca>Feed</ca>
     </translation>
     <translation id="view_dashboard">
@@ -213,7 +213,7 @@
         <el>Πίνακας</el>
         <it>Bacheca</it>
         <tr>Panel</tr>
-        <sp>Tablero</sp>
+        <es>Tablero</es>
         <ca>Escriptori</ca>
     </translation>
     <translation id="help">
@@ -221,7 +221,7 @@
         <el>ΒΟΗΘΕΙΑ</el>
         <it>AIUTO</it>
         <tr>YARDIM</tr>
-        <sp>AYUDA</sp>
+        <es>AYUDA</es>
         <ca>AJUDA</ca>
     </translation>
     <translation id="download_header">
@@ -229,7 +229,7 @@
         <el>Επιλογές Λήψης</el>
         <it>Download Options</it>
         <tr>Download Options</tr>
-        <sp>Download Options</sp>
+        <es>Download Options</es>
         <ca>Download Options</ca>
     </translation>
     <translation id="download_file_name">
@@ -237,7 +237,7 @@
         <el>Όνομα Αρχείου</el>
         <it>Document Name</it>
         <tr>Document Name</tr>
-        <sp>Document Name</sp>
+        <es>Document Name</es>
         <ca>Document Name</ca>
     </translation>
     <translation id="download_table">
@@ -245,7 +245,7 @@
         <el>Τρέχοντα Πίνακα</el>
         <it>Current Table</it>
         <tr>Current Table</tr>
-        <sp>Current Table</sp>
+        <es>Current Table</es>
         <ca>Current Table</ca>
     </translation>
     <translation id="download_all">
@@ -253,7 +253,7 @@
         <el>Συνολικά Δεδομένα</el>
         <it>All Data</it>
         <tr>All Data</tr>
-        <sp>All Data</sp>
+        <es>All Data</es>
         <ca>All Data</ca>
     </translation>
     <translation id="warning_header">
@@ -261,7 +261,7 @@
         <el>Το αρχείο δεν περιέχει κακόβουλο περιεχόμενο!</el>
         <it>File doesn't contain harmful content!</it>
         <tr>File doesn't contain harmful content!</tr>
-        <sp>File doesn't contain harmful content!</sp>
+        <es>File doesn't contain harmful content!</es>
         <ca>File doesn't contain harmful content!</ca>
     </translation>
     <translation id="warning_p">
@@ -269,7 +269,7 @@
         <el>Πιθανή προειδοποίηση από το Excel μπορεί να αγνοηθεί.</el>
         <it>Possible warning from Excel can be ignored.</it>
         <tr>Possible warning from Excel can be ignored.</tr>
-        <sp>Possible warning from Excel can be ignored.</sp>
+        <es>Possible warning from Excel can be ignored.</es>
         <ca>Possible warning from Excel can be ignored.</ca>
     </translation>
     <translation id="download_button">
@@ -277,7 +277,7 @@
         <el>ΛΗΨΗ</el>
         <it>DOWNLOAD</it>
         <tr>DOWNLOAD</tr>
-        <sp>DOWNLOAD</sp>
+        <es>DOWNLOAD</es>
         <ca>DOWNLOAD</ca>
     </translation>
     <translation id="download_button_cancel">
@@ -285,7 +285,7 @@
         <el>ΑΚΥΡΩΣΗ</el>
         <it>CANCEL</it>
         <tr>CANCEL</tr>
-        <sp>CANCEL</sp>
+        <es>CANCEL</es>
         <ca>CANCEL</ca>
     </translation>
     <translation id="loading">
@@ -293,7 +293,7 @@
         <el>Φόρτωση δημοσιεύσεων, παρακαλώ περιμένετε.....</el>
         <it>Loading posts, please wait..........</it>
         <tr>Loading posts, please wait..........</tr>
-        <sp>Loading posts, please wait..........</sp>
+        <es>Loading posts, please wait..........</es>
         <ca>Loading posts, please wait........</ca>
     </translation>
     <translation id="info_rows">
@@ -301,7 +301,7 @@
         <el> γραμμές επιλέχθηκαν</el>
         <it> row(s) selected</it>
         <tr> row(s) selected</tr>
-        <sp> row(s) selected</sp>
+        <es> row(s) selected</es>
         <ca> row(s) selected</ca>
     </translation>
     <translation id="rate_menu_item_plural">
@@ -309,7 +309,7 @@
         <el>Αφαίρεση Δημοσιεύσεων</el>
         <it>Exclude Item(s)</it>
         <tr>Exclude Item(s)</tr>
-        <sp>Exclude Item(s)</sp>
+        <es>Exclude Item(s)</es>
         <ca>Exclude Item(s)</ca>
     </translation>
     <translation id="rate_menu_user_plural">
@@ -317,7 +317,7 @@
         <el>Αφαίρεση Χρηστών</el>
         <it>Exclude User(s)</it>
         <tr>Exclude User(s)</tr>
-        <sp>Exclude User(s)</sp>
+        <es>Exclude User(s)</es>
         <ca>Exclude User(s)</ca>
     </translation>
     <translation id="rate_menu_changes">
@@ -325,7 +325,7 @@
         <el>Οι αλλαγές αποθηκεύτηκαν!</el>
         <it>Changes Saved!</it>
         <tr>Changes Saved!</tr>
-        <sp>Changes Saved!</sp>
+        <es>Changes Saved!</es>
         <ca>Changes Saved!</ca>
     </translation>
     <translation id="rate_menu_undo">
@@ -333,7 +333,7 @@
         <el>Αναίρεση?</el>
         <it>Undo?</it>
         <tr>Undo?</tr>
-        <sp>Undo?</sp>
+        <es>Undo?</es>
         <ca>Undo?</ca>
     </translation>
     <!-- DASHBOARD-->
@@ -342,7 +342,7 @@
         <el>Δημοσιεύσεις</el>
         <it>Post</it>
         <tr>Yapılan gönderiler</tr>
-        <sp>Mensajes</sp>
+        <es>Mensajes</es>
         <ca>Publicacions realitzades</ca>
     </translation>
     <translation id="statistics_users">
@@ -350,7 +350,7 @@
         <el>Χρήστες</el>
         <it>Utenti</it>
         <tr>Kullanıcılar konuşuyor</tr>
-        <sp>Los usuarios que hablan</sp>
+        <es>Los usuarios que hablan</es>
         <ca>Usuaris connectats</ca>
     </translation>
     <translation id="statistics_reached">
@@ -358,7 +358,7 @@
         <el>Θέαση</el>
         <it>Consultati</it>
         <tr>Ulaşılan kullanıcılar</tr>
-        <sp>Usuarios ha sobrepasado</sp>
+        <es>Usuarios ha sobrepasado</es>
         <ca>Usuaris involucrats</ca>
     </translation>
     <translation id="statistics_endorsements">
@@ -366,7 +366,7 @@
         <el>Φιλοφρονήσεις</el>
         <it>Approvati</it>
         <tr>Onaylananlar</tr>
-        <sp>Atenciones</sp>
+        <es>Atenciones</es>
         <ca>Adhesions</ca>
     </translation>
     <translation id="social_mix">
@@ -374,7 +374,7 @@
         <el>Κοινωνικά Δίκτυα</el>
         <it>Reti sociali</it>
         <tr>Sosyal Karışım</tr>
-        <sp>Mezcla Social</sp>
+        <es>Mezcla Social</es>
         <ca>Relacions socials</ca>
     </translation>
     <translation id="timeline">
@@ -382,7 +382,7 @@
         <el>Χρονοδιάγραμμα</el>
         <it>Orario</it>
         <tr>Zaman tüneli</tr>
-        <sp>Calendario</sp>
+        <es>Calendario</es>
         <ca>Cronologia</ca>
     </translation>
     <translation id="timeline_per">
@@ -390,7 +390,7 @@
         <el>Ανά</el>
         <it>Per</it>
         <tr>Her</tr>
-        <sp>Por</sp>
+        <es>Por</es>
         <ca>Per</ca>
     </translation>
     <translation id="timeline_hour">
@@ -398,7 +398,7 @@
         <el>ΩΡΑ</el>
         <it>ORA</it>
         <tr>SAAT</tr>
-        <sp>HORA</sp>
+        <es>HORA</es>
         <ca>HORA</ca>
     </translation>
     <translation id="timeline_day">
@@ -406,7 +406,7 @@
         <el>ΗΜΕΡΑ</el>
         <it>GIORNO</it>
         <tr>GÜN</tr>
-        <sp>DÍA</sp>
+        <es>DÍA</es>
         <ca>DÍA</ca>
     </translation>
     <translation id="timeline_week">
@@ -414,7 +414,7 @@
         <el>ΕΒΔΟΜΑΔΑ</el>
         <it>SETTIMANA</it>
         <tr>HAFTA</tr>
-        <sp>SEMANA</sp>
+        <es>SEMANA</es>
         <ca>SETMANA</ca>
     </translation>
     <translation id="heatmap">
@@ -422,7 +422,7 @@
         <el>Χάρτης Σημείων</el>
         <it>Mappa di calore web</it>
         <tr>Isı haritası</tr>
-        <sp>Mapa de puntos</sp>
+        <es>Mapa de puntos</es>
         <ca>Mapa de calor</ca>
     </translation>
     <translation id="users_location">
@@ -430,7 +430,7 @@
         <el>Τοποθεσία Xρηστών</el>
         <it>Posizione dell'utente</it>
         <tr>Konum</tr>
-        <sp>Ubicación del usuario</sp>
+        <es>Ubicación del usuario</es>
         <ca>Localització dels usuaris</ca>
     </translation>
     <translation id="active_users">
@@ -438,7 +438,7 @@
         <el>Ενεργοί Χρήστες</el>
         <it>Utenti attivi</it>
         <tr>Aktif kullanıcılar</tr>
-        <sp>Los usuarios activos</sp>
+        <es>Los usuarios activos</es>
         <ca>Usuaris actius</ca>
     </translation>
     <translation id="entities">
@@ -446,7 +446,7 @@
         <el>Οντότητες</el>
         <it>Entità</it>
         <tr>Girişler</tr>
-        <sp>Entidades</sp>
+        <es>Entidades</es>
         <ca>Entitats</ca>
     </translation>
     <translation id="top_number">
@@ -454,7 +454,7 @@
         <el>Πρώτοι</el>
         <it>Top</it>
         <tr>Yukarı</tr>
-        <sp>Parte superior</sp>
+        <es>Parte superior</es>
         <ca>Els més…</ca>
     </translation>
     <translation id="entities_sort">
@@ -462,7 +462,7 @@
         <el>Ανά</el>
         <it>Ordina per</it>
         <tr>Sırala</tr>
-        <sp>Ordenar por</sp>
+        <es>Ordenar por</es>
         <ca>Ordenat per</ca>
     </translation>
     <translation id="entities_sort_type">
@@ -470,7 +470,7 @@
         <el>ΤΥΠΟ</el>
         <it>TIPO</it>
         <tr>TÜR</tr>
-        <sp>TIPO</sp>
+        <es>TIPO</es>
         <ca>TIPUS</ca>
     </translation>
     <translation id="entities_sort_frequency">
@@ -478,7 +478,7 @@
         <el>ΣΥΧΝΟΤΗΤΑ</el>
         <it>FREQUENZA</it>
         <tr>SIKLIK</tr>
-        <sp>FRECUENCIA</sp>
+        <es>FRECUENCIA</es>
         <ca>FREQÜÈNCIA</ca>
     </translation>
     <translation id="entity_person">
@@ -486,7 +486,7 @@
         <el>ATOMO</el>
         <it>PERSONA</it>
         <tr>KİŞİ</tr>
-        <sp>PERSONA</sp>
+        <es>PERSONA</es>
         <ca>PERSONA</ca>
     </translation>
     <translation id="entity_tag">
@@ -494,7 +494,7 @@
         <el>ETIKETA</el>
         <it>TAG</it>
         <tr>ETİKET</tr>
-        <sp>ETIQUETA</sp>
+        <es>ETIQUETA</es>
         <ca>ETIQUETA</ca>
     </translation>
     <translation id="entity_organization">
@@ -502,7 +502,7 @@
         <el>ΟΡΓΑΝΙΣΜΟΣ</el>
         <it>ORGANIZZAZIONE</it>
         <tr>ORGANİZASYON</tr>
-        <sp>ORGANIZACIÓN</sp>
+        <es>ORGANIZACIÓN</es>
         <ca>ORGANITZACIÓ</ca>
     </translation>
     <translation id="entity_animate">
@@ -510,7 +510,7 @@
         <el>Χρονοδιάγραμμα</el>
         <it>Animazione</it>
         <tr>Animasyon</tr>
-        <sp>Animar</sp>
+        <es>Animar</es>
         <ca>Animació</ca>
     </translation>
 </translations>

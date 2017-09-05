@@ -1203,7 +1203,7 @@ $("#Container").on("click", ".restart_icon", function () {
                     $('#myModal p').html("Bu koleksiyonu silinemiyor. Lütfen tekrar deneyiniz.");
                     $('#myModal').reveal();
                     break;
-                case "sp":
+                case "es":
                     $('#myModal h1').html("Algo salió mal!");
                     $('#myModal p').html("No hemos podido eliminar esta colección . Por favor, inténtelo de nuevo.");
                     $('#myModal').reveal();
@@ -1256,7 +1256,7 @@ $("#Container").on("click", ".delete_icon", function () {
                     $('#myModal p').html("Bu koleksiyonu silinemiyor. Lütfen tekrar deneyiniz.");
                     $('#myModal').reveal();
                     break;
-                case "sp":
+                case "es":
                     $('#myModal h1').html("Algo salió mal!");
                     $('#myModal p').html("No hemos podido eliminar esta colección . Por favor, inténtelo de nuevo.");
                     $('#myModal').reveal();
@@ -1313,7 +1313,7 @@ $("#Container").on("click", ".stop_icon", function () {
                     $('#myModal p').html("Koleksiyon durdurulamıyor. Lütfen tekrar deneyiniz.");
                     $('#myModal').reveal();
                     break;
-                case "sp":
+                case "es":
                     $('#myModal h1').html("Algo salió mal!");
                     $('#myModal p').html("Su colección no se ha detenido . Por favor, inténtelo de nuevo.");
                     $('#myModal').reveal();
@@ -1443,7 +1443,7 @@ else {
             $('#myModal p').html("You have to define a user id.");
             $('#myModal').reveal();
             break;
-        case "sp":
+        case "es":
             $('#myModal h1').html("Algo salió mal!");
             $('#myModal p').html("You have to define a user id.");
             $('#myModal').reveal();
@@ -1506,7 +1506,7 @@ function get_collections(flag) {
                             next_but = "Next";
                             last_but = "Last";
                             break;
-                        case "sp":
+                        case "es":
                             first_but = "First";
                             prev_but = "Previous";
                             next_but = "Next";
@@ -1708,7 +1708,7 @@ function get_collections(flag) {
                     $('#myModal p').html("Koleksiyonlarınız yüklenemiyor.");
                     $('#myModal').reveal();
                     break;
-                case "sp":
+                case "es":
                     $('#myModal h1').html("Algo salió mal!");
                     $('#myModal p').html("No hemos podido cargar sus colecciones.");
                     $('#myModal').reveal();
@@ -1850,7 +1850,7 @@ function validate_expression() {
             case "tr":
                 $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
                 break;
-            case "sp":
+            case "es":
                 $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
                 break;
             case "ca":
@@ -1878,7 +1878,7 @@ function validate_expression() {
             case "tr":
                 $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
                 break;
-            case "sp":
+            case "es":
                 $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
                 break;
             case "ca":
@@ -1907,7 +1907,7 @@ function validate_expression() {
                 case "tr":
                     $error_exp.slideDown().find('span').html("You cannot use two tags next to each other.");
                     break;
-                case "sp":
+                case "es":
                     $error_exp.slideDown().find('span').html("You cannot use two tags next to each other.");
                     break;
                 case "ca":
@@ -1940,7 +1940,7 @@ function validate_expression() {
                 case "tr":
                     $error_exp.slideDown().find('span').html("You cannot use two logical operators next to each other.");
                     break;
-                case "sp":
+                case "es":
                     $error_exp.slideDown().find('span').html("You cannot use two logical operators next to each other.");
                     break;
                 case "ca":
@@ -1974,7 +1974,7 @@ function validate_expression() {
                     case "tr":
                         $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a closing parenthesis \"]\".");
                         break;
-                    case "sp":
+                    case "es":
                         $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a closing parenthesis \"]\".");
                         break;
                     case "ca":
@@ -2003,7 +2003,7 @@ function validate_expression() {
                     case "tr":
                         $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after an opening parenthesis \"[\".");
                         break;
-                    case "sp":
+                    case "es":
                         $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after an opening parenthesis \"[\".");
                         break;
                     case "ca":
@@ -2032,7 +2032,7 @@ function validate_expression() {
                     case "tr":
                         $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after a logical operator.");
                         break;
-                    case "sp":
+                    case "es":
                         $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after a logical operator.");
                         break;
                     case "ca":
@@ -2061,7 +2061,7 @@ function validate_expression() {
                     case "tr":
                         $error_exp.slideDown().find('span').html("You cannot use a logical operator right after an opening parenthesis \"[\".");
                         break;
-                    case "sp":
+                    case "es":
                         $error_exp.slideDown().find('span').html("You cannot use a logical operator right after an opening parenthesis \"[\".");
                         break;
                     case "ca":
@@ -2090,7 +2090,7 @@ function validate_expression() {
                     case "tr":
                         $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a tag.");
                         break;
-                    case "sp":
+                    case "es":
                         $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a tag.");
                         break;
                     case "ca":
@@ -2119,7 +2119,7 @@ function validate_expression() {
                     case "tr":
                         $error_exp.slideDown().find('span').html("You cannot use a tag right after a closing parenthesis \"]\".");
                         break;
-                    case "sp":
+                    case "es":
                         $error_exp.slideDown().find('span').html("You cannot use a tag right after a closing parenthesis \"]\".");
                         break;
                     case "ca":
@@ -2343,7 +2343,7 @@ $("#done_start,#done_edit").click(function () {
                 case "tr":
                     $('.error_expr_collection').find('span').html("Bir koleksiyon adı belirlemelisiniz.");
                     break;
-                case "sp":
+                case "es":
                     $('.error_expr_collection').find('span').html("Se tiene que especificar un nombre de colección.");
                     break;
                 case "ca":
@@ -2367,7 +2367,7 @@ $("#done_start,#done_edit").click(function () {
                 case "tr":
                     $('.error_expr_collection').find('span').html("En az bir anahtar kelime veya kullanıcı belirlemelisiniz.");
                     break;
-                case "sp":
+                case "es":
                     $('.error_expr_collection').find('span').html("Se tiene que especificar al menos una palabra clave o un usuario.");
                     break;
                 case "ca":
@@ -2548,7 +2548,7 @@ function collection_begin() {
                         $('#myModal p').html("Koleksiyonunuz gönderilemedi. Lütfen tekrar deneyiniz.");
                         $('#myModal').reveal();
                         break;
-                    case "sp":
+                    case "es":
                         $('#myModal h1').html("Algo salió mal!");
                         $('#myModal p').html("Su colección no ha sido presentada . Por favor, inténtelo de nuevo.");
                         $('#myModal').reveal();

@@ -69,7 +69,7 @@ function draw_locations() {
                 case "tr":
                     noData="Uygun veri bulunamadı";
                     break;
-                case "sp":
+                case "es":
                     noData = "Datos no disponibles";
                     break;
                 case "ca":

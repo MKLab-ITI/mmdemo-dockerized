@@ -121,7 +121,7 @@ function draw_social_mix(flag, view) {
                 case "tr":
                     noData = "Uygun veri bulunamadı";
                     break;
-                case "sp":
+                case "es":
                     noData = "Datos no disponibles";
                     break;
                 case "ca":

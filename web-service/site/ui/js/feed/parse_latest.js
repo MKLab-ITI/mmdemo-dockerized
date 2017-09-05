@@ -5,7 +5,7 @@ function parse_latest(pagenum) {
         dataType: "json",
         success: function (json) {
             if (pagelocation === "latest") {
-                var title, source, publicationTime, shared, screenname, profileimage, uid, id, relevance_score, page, userpage, thumb, colorclass, iconsource, onerror, style_favicon, style_icon;
+                var title, source, publicationTime, shared, screenname, profileimage, uid, id, relevance_score, page, userpage, thumb, colorclass, iconsource, onerror, style_favicon, style_icon, language;
 
                 $('#tiles,#posts_info').show();
                 for (var i = 0; i < json.items.length; i++) {
@@ -17,7 +17,7 @@ function parse_latest(pagenum) {
                     style_icon = "";
                     source = json.items[i].source;
                     publicationTime = json.items[i].publicationTime;
-
+                    language = json.items[i].language;
                     screenname = json.items[i].user.username;
                     relevance_score = json.items[i].normalizedScore;
                     profileimage = json.items[i].user.profileImage;
@@ -147,34 +147,73 @@ function parse_latest(pagenum) {
                         menu_icons.setAttribute('class', 'menu_icons');
                         divouter.appendChild(menu_icons);
 
+                        var translation_p = document.createElement('p');
+                        translation_p.setAttribute('class', 'translation_p original');
+                        translation_p.setAttribute('data-original', title);
+
                         switch (translation_param) {
                             case "en":
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', language + '-en');
+                                }
                                 break;
                             case "el":
                                 menu_actions.innerHTML = '<p class="rate_menu">Πατήστε για Αξιολόγηση</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Αξιολόγηση</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Αφαίρεση</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="refresh_but">Ανανέωση?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Αφαίρεση Χρήστη</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Αφαίρεση Δημοσίευσης</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="remove_but">Αφαίρεση Δημοσιεύσεων</span> ή <span class="undo_but">Αναίρεση?</span></p></div></div></div>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "Δείτε τη μετάφραση";
+                                    translation_p.setAttribute('data-pair', 'en-el');
+                                }
                                 break;
                             case "it":
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-it');
+                                }
                                 break;
                             case "tr":
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-tr');
+                                }
                                 break;
-                            case "sp":
+                            case "es":
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-es');
+                                }
                                 break;
                             case "ca":
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-ca');
+                                }
                                 break;
                             default:
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', language + '-en');
+                                }
                         }
 
                         var colored = document.createElement('div');
@@ -262,34 +301,73 @@ function parse_latest(pagenum) {
                         menu_icons.setAttribute('class', 'menu_icons');
                         divouter.appendChild(menu_icons);
 
+                        var translation_p = document.createElement('p');
+                        translation_p.setAttribute('class', 'translation_p original');
+                        translation_p.setAttribute('data-original', title);
+
                         switch (translation_param) {
                             case "en":
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', language + '-en');
+                                }
                                 break;
                             case "el":
                                 menu_actions.innerHTML = '<p class="rate_menu">Πατήστε για Αξιολόγηση</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Αξιολόγηση</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Αφαίρεση</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="refresh_but">Ανανέωση?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Αφαίρεση Χρήστη</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Αφαίρεση Δημοσίευσης</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="remove_but">Αφαίρεση Δημοσιεύσεων</span> ή <span class="undo_but">Αναίρεση?</span></p></div></div></div>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "Δείτε τη μετάφραση";
+                                    translation_p.setAttribute('data-pair', 'en-el');
+                                }
                                 break;
                             case "it":
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-it');
+                                }
                                 break;
                             case "tr":
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-tr');
+                                }
                                 break;
-                            case "sp":
+                            case "es":
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-es');
+                                }
                                 break;
                             case "ca":
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-ca');
+                                }
                                 break;
                             default:
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', language + '-en');
+                                }
                         }
 
                         var colored = document.createElement('div');
@@ -388,7 +466,7 @@ function parse_latest(pagenum) {
                                 $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
                         }
                         break;
-                    case "sp":
+                    case "es":
                         switch (sort_param) {
                             case "recency":
                                 $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
@@ -471,7 +549,7 @@ function parse_latest(pagenum) {
                                 $('#myModal').reveal();
                                 loadimage(99, query_param, 12);
                                 break;
-                            case "sp":
+                            case "es":
                                 $('#myModal h1').html("¡No hay resultados!");
                                 $('#myModal p').html("No existen resultados para esta etiqueta.");
                                 $('#myModal').reveal();
@@ -516,7 +594,7 @@ function parse_latest(pagenum) {
                                 $('#myModal').reveal();
                                 loadimage(99, query_param, 12);
                                 break;
-                            case "sp":
+                            case "es":
                                 $('#myModal h1').html("¡No hay resultados!");
                                 $('#myModal p').html("No hay resultados para esta colección.");
                                 $('#myModal').reveal();
@@ -570,7 +648,7 @@ function parse_latest_list(pagenum) {
                         case "tr":
                             $update_field.html("Bu görüntüleme için son öğe: -");
                             break;
-                        case "sp":
+                        case "es":
                             $update_field.html("Último mensaje: -");
                             break;
                         case "ca":
@@ -602,7 +680,7 @@ function parse_latest_list(pagenum) {
                                     case "tr":
                                         noData = "Bu anahtar kelimeye uygun sonuç bulunamadı:";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         noData = "No hay datos para la palabra clave:";
                                         break;
                                     case "ca":
@@ -629,7 +707,7 @@ function parse_latest_list(pagenum) {
                                     case "tr":
                                         noData = "Bu anahtar kelimeye uygun sonuç bulunamadı:";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         noData = "No hay datos para la palabra clave:";
                                         break;
                                     case "ca":
@@ -656,7 +734,7 @@ function parse_latest_list(pagenum) {
                                     case "tr":
                                         noData = "Bu anahtar kelimeye uygun sonuç bulunamadı:";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         noData = "No hay datos para la palabra clave:";
                                         break;
                                     case "ca":
@@ -683,7 +761,7 @@ function parse_latest_list(pagenum) {
                                     case "tr":
                                         noData = "Bu anahtar kelimeye uygun sonuç bulunamadı:";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         noData = "No hay datos para la palabra clave:";
                                         break;
                                     case "ca":
@@ -693,7 +771,7 @@ function parse_latest_list(pagenum) {
                                         noData = "No items for keyword:";
                                 }
                                 break;
-                            case "sp":
+                            case "es":
                                 $myModal.find('h1').html("¡No hay resultados!");
                                 $myModal.find('p').html("No existen resultados para esta etiqueta.");
                                 $myModal.reveal();
@@ -710,7 +788,7 @@ function parse_latest_list(pagenum) {
                                     case "tr":
                                         noData = "Bu anahtar kelimeye uygun sonuç bulunamadı:";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         noData = "No hay datos para la palabra clave:";
                                         break;
                                     case "ca":
@@ -737,7 +815,7 @@ function parse_latest_list(pagenum) {
                                     case "tr":
                                         noData = "Bu anahtar kelimeye uygun sonuç bulunamadı:";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         noData = "No hay datos para la palabra clave:";
                                         break;
                                     case "ca":
@@ -764,7 +842,7 @@ function parse_latest_list(pagenum) {
                                     case "tr":
                                         noData = "Bu anahtar kelimeye uygun sonuç bulunamadı:";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         noData = "No hay datos para la palabra clave:";
                                         break;
                                     case "ca":
@@ -796,7 +874,7 @@ function parse_latest_list(pagenum) {
                                     case "tr":
                                         noData = "Daha fazla sonuç bulunamadı";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         noData = "No hay más resultados";
                                         break;
                                     case "ca":
@@ -823,7 +901,7 @@ function parse_latest_list(pagenum) {
                                     case "tr":
                                         noData = "Daha fazla sonuç bulunamadı";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         noData = "No hay más resultados";
                                         break;
                                     case "ca":
@@ -850,7 +928,7 @@ function parse_latest_list(pagenum) {
                                     case "tr":
                                         noData = "Daha fazla sonuç bulunamadı";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         noData = "No hay más resultados";
                                         break;
                                     case "ca":
@@ -877,7 +955,7 @@ function parse_latest_list(pagenum) {
                                     case "tr":
                                         noData = "Daha fazla sonuç bulunamadı";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         noData = "No hay más resultados";
                                         break;
                                     case "ca":
@@ -887,7 +965,7 @@ function parse_latest_list(pagenum) {
                                         noData = "No more results";
                                 }
                                 break;
-                            case "sp":
+                            case "es":
                                 $myModal.find('h1').html("¡No hay resultados!");
                                 $myModal.find('p').html("No hay resultados para esta colección.");
                                 $myModal.reveal();
@@ -904,7 +982,7 @@ function parse_latest_list(pagenum) {
                                     case "tr":
                                         noData = "Daha fazla sonuç bulunamadı";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         noData = "No hay más resultados";
                                         break;
                                     case "ca":
@@ -931,7 +1009,7 @@ function parse_latest_list(pagenum) {
                                     case "tr":
                                         noData = "Daha fazla sonuç bulunamadı";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         noData = "No hay más resultados";
                                         break;
                                     case "ca":
@@ -958,7 +1036,7 @@ function parse_latest_list(pagenum) {
                                     case "tr":
                                         noData = "Daha fazla sonuç bulunamadı";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         noData = "No hay más resultados";
                                         break;
                                     case "ca":
@@ -996,7 +1074,7 @@ function parse_latest_list(pagenum) {
                                 case "tr":
                                     range = "saatler";
                                     break;
-                                case "sp":
+                                case "es":
                                     range = "horas";
                                     break;
                                 case "ca":
@@ -1020,7 +1098,7 @@ function parse_latest_list(pagenum) {
                                     case "tr":
                                         range = "günler";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         range = "días";
                                         break;
                                     case "ca":
@@ -1047,7 +1125,7 @@ function parse_latest_list(pagenum) {
                             case "tr":
                                 $update_field.html("Bu görüntüleme için son öğe:&nbsp;" + now + "&nbsp;" + range + " önce");
                                 break;
-                            case "sp":
+                            case "es":
                                 $update_field.html("Último mensaje:&nbsp;" + now + "&nbsp;" + range + " hace");
                                 break;
                             case "ca":
@@ -1083,7 +1161,7 @@ function parse_latest_list(pagenum) {
                             next_but = "Next";
                             last_but = "Last";
                             break;
-                        case "sp":
+                        case "es":
                             first_but = "First";
                             prev_but = "Previous";
                             next_but = "Next";
@@ -1101,7 +1179,7 @@ function parse_latest_list(pagenum) {
                             next_but = "Next";
                             last_but = "Last";
                     }
-                    var title, source, publicationTime, shared, shared_order, relevance_order, screenname, profileimage, page, userpage, thumb, colorclass, iconsource, onerror, uid, id;
+                    var title, source, publicationTime, shared, shared_order, relevance_order, screenname, profileimage, page, userpage, thumb, colorclass, iconsource, onerror, uid, id, language;
                     var $pagination_list = $('#pagination_list');
                     $('.list_table,#posts_info,#download_icon,.well').show();
                     if ($pagination_list.data("twbs-pagination")) {
@@ -1136,7 +1214,7 @@ function parse_latest_list(pagenum) {
                         case "tr":
                             saved = "Saved";
                             break;
-                        case "sp":
+                        case "es":
                             saved = "Saved";
                             break;
                         case "ca":
@@ -1155,7 +1233,7 @@ function parse_latest_list(pagenum) {
                         }
                         source = json.items[i].source;
                         publicationTime = json.items[i].publicationTime;
-
+                        language = json.items[i].language;
                         screenname = json.items[i].user.username;
 
                         if (json.items[i].hasOwnProperty('pageUrl')) {
@@ -1236,6 +1314,43 @@ function parse_latest_list(pagenum) {
                             onerror = "imgError2(this,null,null);"
                         }
 
+                        var translation_element = "";
+                        switch (translation_param) {
+                            case "en":
+                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
+                                    translation_element = '<p class="translation_p_list original" data-original="' + title.replace(/([\"\'])/g,'\x27') + '" data-pair="' + language + '-en">See translation</p>';
+                                }
+                                break;
+                            case "el":
+                                if (language === "en") {
+                                    translation_element = "<p class='translation_p_list original' data-original=" + title.replace(/([\"\'])/g,'\x27') + " data-pair='en-el'>Δείτε τη μετάφραση</p>";
+                                }
+                                break;
+                            case "it":
+                                if (language === "en") {
+                                    translation_element = "<p class='translation_p_list original' data-original='" + title.replace(/([\"\'])/g,'\x27') + "' data-pair='en-it'>See translation</p>";
+                                }
+                                break;
+                            case "tr":
+                                if (language === "en") {
+                                    translation_element = "<p class='translation_p_list original' data-original='" + title.replace(/([\"\'])/g,'\x27') + "' data-pair='en-tr'>See translation</p>";
+                                }
+                                break;
+                            case "es":
+                                if (language === "en") {
+                                    translation_element = "<p class='translation_p_list original' data-original='" + title.replace(/([\"\'])/g,'\x27') + "' data-pair='en-es'>See translation</p>";
+                                }
+                                break;
+                            case "ca":
+                                if (language === "en") {
+                                    translation_element = "<p class='translation_p_list original' data-original='" + title.replace(/([\"\'])/g,'\x27') + "' data-pair='en-ca'>See translation</p>";
+                                }
+                                break;
+                            default:
+                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
+                                    translation_element = "<p class='translation_p_list original' data-original='" + title.replace(/([\"\'])/g,'\x27') + "' data-pair='" + language + "-en'>See translation</p>";
+                                }
+                        }
 
                         var display_time = new Date(publicationTime * 1);
                         var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -1248,7 +1363,7 @@ function parse_latest_list(pagenum) {
 
                         var td_selection = '<td><div class="checkbox_table"><input type="checkbox" value="1" id="checkbox_table' + i + '" name=""><label for="checkbox_table' + i + '"></label></div></td>';
                         var td_user = '<td data-order="' + screenname + '"><div class="list_avatar"><div class="avatar_wrapper"><img src="' + profileimage + '" class="img-avatar" onerror="' + onerror + '" onclick="redirect(\'' + userpage + '\')"><span class="' + colorclass + '"></span></div><div class="avatar_name" onclick="redirect(\'' + userpage + '\')">' + screenname + '</div></div></td>';
-                        var td_text = '<td data-order="' + title + '"><div class="list_title" onclick="redirect(\'' + page + '\')">' + title + '</div></td>';
+                        var td_text = '<td data-order="' + title + '"><div class="list_title" data-redirect=' + page + '><p class="text_title">' + title +'</span>'+ translation_element + '</div></td>';
                         var td_date = ' <td data-order="' + display_time.getTime() + '"><div class="list_date">' + time + '</div></td>';
                         var td_source = ' <td data-order="' + source + '"><img class="list_source_icon" src="' + iconsource + '"></td>';
                         var td_popularity = ' <td data-order="' + shared_order + '"><div class="list_shares">' + shared + '</div></td>';
@@ -1332,7 +1447,7 @@ function parse_latest_list(pagenum) {
                                     $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
                             }
                             break;
-                        case "sp":
+                        case "es":
                             switch (sort_param) {
                                 case "recency":
                                     $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
@@ -1477,7 +1592,7 @@ function more_latest() {
                 success: function (json) {
                     if (pagelocation === "latest") {
                         var end = 0;
-                        var title, source, publicationTime, shared, screenname, profileimage, uid, id, relevance_score, page, userpage, thumb, colorclass, iconsource, onerror, style_favicon, style_icon;
+                        var title, source, publicationTime, shared, screenname, profileimage, uid, id, relevance_score, page, userpage, thumb, colorclass, iconsource, onerror, style_favicon, style_icon, language;
                         for (var i = 0; i < json.items.length; i++) {
 
                             title = json.items[i].title;
@@ -1489,6 +1604,7 @@ function more_latest() {
                             style_icon = "";
                             source = json.items[i].source;
                             publicationTime = json.items[i].publicationTime;
+                            language = json.items[i].language;
                             screenname = json.items[i].user.username;
                             relevance_score = json.items[i].normalizedScore;
                             profileimage = json.items[i].user.profileImage;
@@ -1618,34 +1734,73 @@ function more_latest() {
                                 menu_icons.setAttribute('class', 'menu_icons');
                                 divouter.appendChild(menu_icons);
 
+                                var translation_p = document.createElement('p');
+                                translation_p.setAttribute('class', 'translation_p original');
+                                translation_p.setAttribute('data-original', title);
+
                                 switch (translation_param) {
                                     case "en":
                                         menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                         menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                        if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
+                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                            translation_p.innerHTML = "See translation";
+                                            translation_p.setAttribute('data-pair', language + '-en');
+                                        }
                                         break;
                                     case "el":
                                         menu_actions.innerHTML = '<p class="rate_menu">Πατήστε για Αξιολόγηση</p>';
                                         menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Αξιολόγηση</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Αφαίρεση</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="refresh_but">Ανανέωση?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Αφαίρεση Χρήστη</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Αφαίρεση Δημοσίευσης</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="remove_but">Αφαίρεση Δημοσιεύσεων</span> ή <span class="undo_but">Αναίρεση?</span></p></div></div></div>';
+                                        if (language === "en") {
+                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                            translation_p.innerHTML = "Δείτε τη μετάφραση";
+                                            translation_p.setAttribute('data-pair', 'en-el');
+                                        }
                                         break;
                                     case "it":
                                         menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                         menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                        if (language === "en") {
+                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                            translation_p.innerHTML = "See translation";
+                                            translation_p.setAttribute('data-pair', 'en-it');
+                                        }
                                         break;
                                     case "tr":
                                         menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                         menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                        if (language === "en") {
+                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                            translation_p.innerHTML = "See translation";
+                                            translation_p.setAttribute('data-pair', 'en-tr');
+                                        }
                                         break;
-                                    case "sp":
+                                    case "es":
                                         menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                         menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                        if (language === "en") {
+                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                            translation_p.innerHTML = "See translation";
+                                            translation_p.setAttribute('data-pair', 'en-es');
+                                        }
                                         break;
                                     case "ca":
                                         menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                         menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                        if (language === "en") {
+                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                            translation_p.innerHTML = "See translation";
+                                            translation_p.setAttribute('data-pair', 'en-ca');
+                                        }
                                         break;
                                     default:
                                         menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                         menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                        if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
+                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                            translation_p.innerHTML = "See translation";
+                                            translation_p.setAttribute('data-pair', language + '-en');
+                                        }
                                 }
 
                                 var colored = document.createElement('div');
@@ -1736,34 +1891,73 @@ function more_latest() {
                                 menu_icons.setAttribute('class', 'menu_icons');
                                 divouter.appendChild(menu_icons);
 
+                                var translation_p = document.createElement('p');
+                                translation_p.setAttribute('class', 'translation_p original');
+                                translation_p.setAttribute('data-original', title);
+
                                 switch (translation_param) {
                                     case "en":
                                         menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                         menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                        if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
+                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                            translation_p.innerHTML = "See translation";
+                                            translation_p.setAttribute('data-pair', language + '-en');
+                                        }
                                         break;
                                     case "el":
                                         menu_actions.innerHTML = '<p class="rate_menu">Πατήστε για Αξιολόγηση</p>';
                                         menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Αξιολόγηση</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Αφαίρεση</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="refresh_but">Ανανέωση?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Αφαίρεση Χρήστη</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Αφαίρεση Δημοσίευσης</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="remove_but">Αφαίρεση Δημοσιεύσεων</span> ή <span class="undo_but">Αναίρεση?</span></p></div></div></div>';
+                                        if (language === "en") {
+                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                            translation_p.innerHTML = "Δείτε τη μετάφραση";
+                                            translation_p.setAttribute('data-pair', 'en-el');
+                                        }
                                         break;
                                     case "it":
                                         menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                         menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                        if (language === "en") {
+                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                            translation_p.innerHTML = "See translation";
+                                            translation_p.setAttribute('data-pair', 'en-it');
+                                        }
                                         break;
                                     case "tr":
                                         menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                         menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                        if (language === "en") {
+                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                            translation_p.innerHTML = "See translation";
+                                            translation_p.setAttribute('data-pair', 'en-tr');
+                                        }
                                         break;
-                                    case "sp":
+                                    case "es":
                                         menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                         menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                        if (language === "en") {
+                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                            translation_p.innerHTML = "See translation";
+                                            translation_p.setAttribute('data-pair', 'en-es');
+                                        }
                                         break;
                                     case "ca":
                                         menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                         menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                        if (language === "en") {
+                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                            translation_p.innerHTML = "See translation";
+                                            translation_p.setAttribute('data-pair', 'en-ca');
+                                        }
                                         break;
                                     default:
                                         menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                         menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                        if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
+                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                            translation_p.innerHTML = "See translation";
+                                            translation_p.setAttribute('data-pair', language + '-en');
+                                        }
                                 }
 
                                 var colored = document.createElement('div');
@@ -1861,7 +2055,7 @@ function more_latest() {
                                         $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
                                 }
                                 break;
-                            case "sp":
+                            case "es":
                                 switch (sort_param) {
                                     case "recency":
                                         $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
@@ -1929,7 +2123,7 @@ function parse_new(count) {
         dataType: "json",
         success: function (json) {
             if (pagelocation === "latest") {
-                var title, source, publicationTime, shared, screenname, profileimage, uid, id, relevance_score, page, userpage, thumb, colorclass, iconsource, onerror, style_favicon, style_icon;
+                var title, source, publicationTime, shared, screenname, profileimage, uid, id, relevance_score, page, userpage, thumb, colorclass, iconsource, onerror, style_favicon, style_icon, language;
                 for (var i = 0; i < json.items.length; i++) {
                     title = json.items[i].title;
                     if (title === "") {
@@ -1939,7 +2133,7 @@ function parse_new(count) {
                     style_icon = "";
                     source = json.items[i].source;
                     publicationTime = json.items[i].publicationTime;
-
+                    language = json.items[i].language;
                     screenname = json.items[i].user.username;
                     relevance_score = json.items[i].normalizedScore;
                     profileimage = json.items[i].user.profileImage;
@@ -2067,34 +2261,74 @@ function parse_new(count) {
                         var menu_icons = document.createElement('div');
                         menu_icons.setAttribute('class', 'menu_icons');
                         divouter.appendChild(menu_icons);
+
+                        var translation_p = document.createElement('p');
+                        translation_p.setAttribute('class', 'translation_p original');
+                        translation_p.setAttribute('data-original', title);
+
                         switch (translation_param) {
                             case "en":
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', language + '-en');
+                                }
                                 break;
                             case "el":
                                 menu_actions.innerHTML = '<p class="rate_menu">Πατήστε για Αξιολόγηση</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Αξιολόγηση</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Αφαίρεση</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν <span class="refresh_but">Ανανέωση?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Αφαίρεση Χρήστη</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Αφαίρεση Δημοσίευσης</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="remove_but">Αφαίρεση Δημοσιεύσεων</span> ή <span class="undo_but">Αναίρεση?</span></p></div></div></div>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "Δείτε τη μετάφραση";
+                                    translation_p.setAttribute('data-pair', 'en-el');
+                                }
                                 break;
                             case "it":
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-it');
+                                }
                                 break;
                             case "tr":
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-tr');
+                                }
                                 break;
-                            case "sp":
+                            case "es":
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-es');
+                                }
                                 break;
                             case "ca":
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-ca');
+                                }
                                 break;
                             default:
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', language + '-en');
+                                }
                         }
 
                         var colored = document.createElement('div');
@@ -2184,34 +2418,73 @@ function parse_new(count) {
                         menu_icons.setAttribute('class', 'menu_icons');
                         divouter.appendChild(menu_icons);
 
+                        var translation_p = document.createElement('p');
+                        translation_p.setAttribute('class', 'translation_p original');
+                        translation_p.setAttribute('data-original', title);
+
                         switch (translation_param) {
                             case "en":
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', language + '-en');
+                                }
                                 break;
                             case "el":
                                 menu_actions.innerHTML = '<p class="rate_menu">Πατήστε για Αξιολόγηση</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Αξιολόγηση</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Αφαίρεση</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="refresh_but">Ανανέωση?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Αφαίρεση Χρήστη</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Αφαίρεση Δημοσίευσης</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="remove_but">Αφαίρεση Δημοσιεύσεων</span> ή <span class="undo_but">Αναίρεση?</span></p></div></div></div>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "Δείτε τη μετάφραση";
+                                    translation_p.setAttribute('data-pair', 'en-el');
+                                }
                                 break;
                             case "it":
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-it');
+                                }
                                 break;
                             case "tr":
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-tr');
+                                }
                                 break;
-                            case "sp":
+                            case "es":
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-es');
+                                }
                                 break;
                             case "ca":
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                if (language === "en") {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', 'en-ca');
+                                }
                                 break;
                             default:
                                 menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
                                 menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
+                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
+                                    translation_p.innerHTML = "See translation";
+                                    translation_p.setAttribute('data-pair', language + '-en');
+                                }
                         }
 
                         var colored = document.createElement('div');
@@ -2309,7 +2582,7 @@ function parse_new(count) {
                                 $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');
                         }
                         break;
-                    case "sp":
+                    case "es":
                         switch (sort_param) {
                             case "recency":
                                 $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');

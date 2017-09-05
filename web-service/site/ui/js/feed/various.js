@@ -1005,7 +1005,7 @@ function minutes() {
                 case "tr":
                     $("#update_field").html("Bu görüntüleme için son öğe: -");
                     break;
-                case "sp":
+                case "es":
                     $("#update_field").html("Último mensaje: -");
                     break;
                 case "ca":
@@ -1035,7 +1035,7 @@ function minutes() {
                     case "tr":
                         range = "saatler";
                         break;
-                    case "sp":
+                    case "es":
                         range = "horas";
                         break;
                     case "ca":
@@ -1059,7 +1059,7 @@ function minutes() {
                         case "tr":
                             range = "günler";
                             break;
-                        case "sp":
+                        case "es":
                             range = "días";
                             break;
                         case "ca":
@@ -1086,7 +1086,7 @@ function minutes() {
                 case "tr":
                     $("#update_field").html("Bu görüntüleme için son öğe:&nbsp;" + now + "&nbsp;" + range + " önce");
                     break;
-                case "sp":
+                case "es":
                     $("#update_field").html("Último mensaje:&nbsp;" + now + "&nbsp;" + range + " hace");
                     break;
                 case "ca":
@@ -1327,7 +1327,7 @@ $('#download_icon').click(function () {
         case "tr":
             $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
             break;
-        case "sp":
+        case "es":
             $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
             break;
         case "ca":
@@ -1350,13 +1350,155 @@ $(".btn-group").on("click", ".btn-default", function (e) {
     $('.btn-group').find('button').removeClass('btn-primary').addClass('btn-default');
     $(this).addClass('btn-primary').removeClass('btn-default');
 });
+$("#tiles").on("click", ".translation_p", function () {
+    var $this=$(this);
+    if ($this.hasClass('original')) {
+        var pair = $this.attr('data-pair');
+        switch (translation_param) {
+            case "en":
+                $this.text('Show in original');
+                break;
+            case "el":
+                $this.text('Δείτε το πρωτότυπο');
+                break;
+            case "it":
+                $this.text('Show in original');
+                break;
+            case "tr":
+                $this.text('Show in original');
+                break;
+            case "es":
+                $this.text('Show in original');
+                break;
+            case "ca":
+                $this.text('Show in original');
+                break;
+            default:
+                $this.text('Show in original');
+                break;
+        }
+        $this.removeClass('original');
+        $this.siblings('.title').addClass('blur');
+        $.ajax({
+            type: "GET",
+            url: "http://translate.linguatec.org/TranslationService/Translate.asmx/translate?language_pair=" + pair + "&text=" + encodeURIComponent($this.attr('data-original')),
+            dataType: "json",
+            success: function (json) {
+                $this.siblings('.title').text(json.translation);
+                $this.siblings('.title').removeClass('blur');
+                $(window).trigger('resize');
+            },
+            async: true
+        });
+    }
+    else {
+        switch (translation_param) {
+            case "en":
+                $this.text('See translation');
+                break;
+            case "el":
+                $this.text('Δείτε τη μετάφραση');
+                break;
+            case "it":
+                $this.text('See translation');
+                break;
+            case "tr":
+                $this.text('See translation');
+                break;
+            case "es":
+                $this.text('See translation');
+                break;
+            case "ca":
+                $this.text('See translation');
+                break;
+            default:
+                $this.text('See translation');
+                break;
+        }
+        $this.siblings('.title').text($this.attr('data-original'));
+        $this.addClass('original');
+        $(window).trigger('resize');
+    }
+});
+$("#list_table").on("click", ".translation_p_list", function (e) {
+    e.stopPropagation();
+    var $this=$(this);
+    if ($this.hasClass('original')) {
+        var pair = $this.attr('data-pair');
+        switch (translation_param) {
+            case "en":
+                $this.text('Show in original');
+                break;
+            case "el":
+                $this.text('Δείτε το πρωτότυπο');
+                break;
+            case "it":
+                $this.text('Show in original');
+                break;
+            case "tr":
+                $this.text('Show in original');
+                break;
+            case "es":
+                $this.text('Show in original');
+                break;
+            case "ca":
+                $this.text('Show in original');
+                break;
+            default:
+                $this.text('Show in original');
+                break;
+        }
+        $this.removeClass('original');
+        $this.parent('.list_title').addClass('blur');
+        $.ajax({
+            type: "GET",
+            url: "http://translate.linguatec.org/TranslationService/Translate.asmx/translate?language_pair=" + pair + "&text=" + encodeURIComponent($this.attr('data-original')),
+            dataType: "json",
+            success: function (json) {
+                $this.parent('.list_title').removeClass('blur');
+                $this.siblings('.text_title').text(json.translation);
+            },
+            async: true
+        });
+    }
+    else {
+        switch (translation_param) {
+            case "en":
+                $this.text('See translation');
+                break;
+            case "el":
+                $this.text('Δείτε τη μετάφραση');
+                break;
+            case "it":
+                $this.text('See translation');
+                break;
+            case "tr":
+                $this.text('See translation');
+                break;
+            case "es":
+                $this.text('See translation');
+                break;
+            case "ca":
+                $this.text('See translation');
+                break;
+            default:
+                $this.text('See translation');
+                break;
+        }
+        $this.siblings('.text_title').text($this.attr('data-original'));
+        $this.addClass('original');
+    }
+});
+$("#list_table").on("click", ".list_title", function () {
+    window.open($(this).attr('data-redirect'), '_blank');
+});
 $("#tiles").on("click", ".rate_menu", function () {
     $(this).parent().next('.menu_icons').css('height', $(this).parents('li').height() - 14).slideDown();
 });
 $("#tiles").on("click", ".close_menu", function () {
     $(this).parent().slideUp();
 });
-$("#tiles").on("click", ".tabs li:not(.current) a", function (e) {
+$("#tiles").on("click", ".tabs li:not(.current) a", function () {
     $(this).parent().siblings().removeClass('current');
     $(this).parent().addClass('current');
     if ($(this).hasClass('rate')) {
@@ -1522,7 +1664,7 @@ $("#tiles").on("click", ".remove_but", function () {
                     $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
             }
             break;
-        case "sp":
+        case "es":
             switch (sort_param) {
                 case "recency":
                     $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
@@ -1866,7 +2008,7 @@ $('#exclude_user_list').click(function () {
                             $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
                     }
                     break;
-                case "sp":
+                case "es":
                     switch (sort_param) {
                         case "recency":
                             $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
@@ -2025,7 +2167,7 @@ $('#exclude_item_list').click(function () {
                             $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
                     }
                     break;
-                case "sp":
+                case "es":
                     switch (sort_param) {
                         case "recency":
                             $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
@@ -2189,7 +2331,7 @@ $(function () {
             $query.attr("placeholder", "Ara...");
             $file_name.attr("placeholder", "Name your file...");
             break;
-        case "sp":
+        case "es":
             $query.attr("placeholder", "Ara...");
             $file_name.attr("placeholder", "Name your file...");
             break;

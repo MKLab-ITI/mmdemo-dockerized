@@ -52,7 +52,7 @@ function loadimage(end, page, pagenum) {
                         "<i>5</i><span>Relevant</span>"
                     ];
                     break;
-                case "sp":
+                case "es":
                     doubleLabels = [
                         "<i>1</i><span>Irrelevant</span>",
                         "<i>2</i>",
@@ -126,7 +126,7 @@ function loadimage(end, page, pagenum) {
                     case "tr":
                         noData = "Daha fazla sonuç bulunamadı";
                         break;
-                    case "sp":
+                    case "es":
                         noData = "No hay más resultados";
                         break;
                     case "ca":
@@ -157,7 +157,7 @@ function loadimage(end, page, pagenum) {
                     case "tr":
                         noData2 = "Bu anahtar kelimeye uygun sonuç bulunamadı:";
                         break;
-                    case "sp":
+                    case "es":
                         noData2 = "No hay datos para la palabra clave:";
                         break;
                     case "ca":

@@ -56,7 +56,7 @@ function draw_timeline() {
                 $('#erase_analysis').html("Her Hafta");
             }
             break;
-        case "sp":
+        case "es":
             if (resolution === "hours") {
                 $('#erase_analysis').html("Por Hora");
             }
@@ -118,7 +118,7 @@ function draw_timeline() {
                 case "tr":
                     noData="Uygun veri bulunamadı";
                     break;
-                case "sp":
+                case "es":
                     noData = "Datos no disponibles";
                     break;
                 case "ca":

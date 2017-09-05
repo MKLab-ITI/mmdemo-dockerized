@@ -11312,7 +11312,7 @@
                                         to_return = "Gönderiler";
                                         title = "Gönderiler";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         to_return = "Mensajes";
                                         title = "Mensajes";
                                         break;
@@ -11343,7 +11343,7 @@
                                         to_return = "Kullanıcılar";
                                         title = "Kullanıcılar";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         to_return = "Usuarioas";
                                         title = "Usuarioas";
                                         break;
@@ -11374,7 +11374,7 @@
                                         to_return = "Ulaşılan";
                                         title = "Ulaşılan";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         to_return = "Sobrepasado";
                                         title = "Sobrepasado";
                                         break;
@@ -11405,7 +11405,7 @@
                                         to_return = "Onaylananlar";
                                         title = "Onaylananlar";
                                         break;
-                                    case "sp":
+                                    case "es":
                                         to_return = "Atenciones";
                                         title = "Atenciones";
                                         break;

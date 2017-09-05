@@ -28,7 +28,7 @@ function show_active_users() {
                     noData = "Uygun veri bulunamadı";
                     posts_name = "gönderiler";
                     break;
-                case "sp":
+                case "es":
                     noData = "Datos no disponibles";
                     posts_name = "mensajes";
                     break;
@@ -109,7 +109,7 @@ function show_active_users() {
                     case "tr":
                         $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>')
                         break;
-                    case "sp":
+                    case "es":
                         $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>')
                         break;
                     case "ca":

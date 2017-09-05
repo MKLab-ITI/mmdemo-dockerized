@@ -27,7 +27,7 @@ function draw_hashtags(source) {
         case "tr":
             $flatTable.html('<thead><tr><td>GİRİŞ</td><td>TÜR</td><td>FREQUENZA</td></tr></thead>');
             break;
-        case "sp":
+        case "es":
             $flatTable.html('<thead><tr><td>ENTIDAD</td><td>TIPO</td><td>FRECUENCIA</td></tr></thead>');
             break;
         case "ca":
@@ -79,7 +79,7 @@ function draw_hashtags(source) {
                 case "tr":
                     noData="Uygun veri bulunamadı";
                     break;
-                case "sp":
+                case "es":
                     noData="Datos no disponibles";
                     break;
                 case "ca":
@@ -112,7 +112,7 @@ function draw_hashtags(source) {
                             case "tr":
                                 $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_tag">Refresh</span> or <span class="undo_but_tag">Undo?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Entity is included in input! <span class="confirm_exclude_tag_but">Exclude</span> or <span class="confirm_undo_tag_but">Undo?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
                                 break;
-                            case "sp":
+                            case "es":
                                 $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_tag">Refresh</span> or <span class="undo_but_tag">Undo?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Entity is included in input! <span class="confirm_exclude_tag_but">Exclude</span> or <span class="confirm_undo_tag_but">Undo?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
                                 break;
                             case "ca":
@@ -569,7 +569,7 @@ function draw_hashtags(source) {
                     years_data = ["SIK SIK", "ARA SIRA", "NADİREN"];
                     years_x = [150, (this.width / 2), this.width - 150];
                     break;
-                case "sp":
+                case "es":
                     years_data = ["A MENUDO", "DE VEZ EN CUANDO", "RARAMENTE"];
                     years_x = [150, (this.width / 2), this.width - 150];
                     break;
@@ -621,7 +621,7 @@ function draw_hashtags(source) {
                     years_data = ["KİŞİ", "ETİKET", "ORGANİZASYON"];
                     years_x = [150, (this.width / 2), this.width - 150];
                     break;
-                case "sp":
+                case "es":
                     years_data = ["PERSONA", "ETIQUETA", "ORGANIZACIÓN"];
                     years_x = [150, (this.width / 2), this.width - 150];
                     break;
@@ -849,7 +849,7 @@ $('#animate').click(function () {
                 $('#myModal').reveal();
                 loadimage(99, query_param, 12);
                 break;
-            case "sp":
+            case "es":
                 $('#myModal h1').html("¡No hay suficientes datos!");
                 $('#myModal p').html("Ventana de tiempo debe ser superior a 3 días.");
                 $('#myModal').reveal();

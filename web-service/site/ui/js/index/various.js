@@ -2635,7 +2635,7 @@ function codeLatLng(callback, latlng, k) {
                         for (var b = 0; b < results[0].address_components[i].types.length; b++) {
                             if ((results[0].address_components[i].types[b] == "administrative_area_level_1") || (results[0].address_components[i].types[b] == "country")) {
                                 callback(results[0].address_components[i].long_name, k);
-                                break;
+                                return;
                             }
                         }
                     }

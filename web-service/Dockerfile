@@ -1,4 +1,4 @@
-FROM ubuntu:15.10
+FROM ubuntu:16.04
 
 MAINTAINER Manos Schinas <manosetro@iti.gr>
 
@@ -6,25 +6,23 @@ RUN apt-get update
 RUN apt-get -y upgrade
 
 # Install apache, PHP, and supplimentary programs. curl and lynx-cur are for debugging the container.
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 php5-dev libapache2-mod-php5 php5-mysql \
-    php5-mcrypt php5-gd php-pear php-apc php5-curl curl lynx-cur memcached php5-memcached libcurl4-openssl-dev pkg-config libssl-dev
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install apache2 php7.0-dev libapache2-mod-php7.0 php7.0-mcrypt php7.0-gd \
+php-pear php-apcu php7.0-curl curl lynx-cur memcached php-memcached libcurl4-openssl-dev pkg-config libssl-dev apt-utils
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Enable apache mods.
-RUN a2enmod php5
+RUN a2enmod php7.0
 RUN a2enmod rewrite
-RUN php5enmod mcrypt
+RUN phpenmod mcrypt
 RUN a2enmod headers
 
 RUN pecl install mongodb
 
 # Update the PHP.ini file, enable <? ?> tags and quieten logging.
-RUN sed -i "s/short_open_tag = Off/short_open_tag = On/" /etc/php5/apache2/php.ini
-RUN sed -i "s/error_reporting = .*$/error_reporting = E_ERROR | E_WARNING | E_PARSE/" /etc/php5/apache2/php.ini
-RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini
-
-RUN 	echo "extension=mongodb.so" >> /etc/php5/apache2/php.ini && echo "extension=mongodb.so" >> /etc/php5/cli/php.ini
+RUN sed -i "s/error_reporting = .*$/error_reporting = E_ERROR | E_WARNING | E_PARSE/" /etc/php/7.0/apache2/php.ini
+RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php/7.0/apache2/php.ini
+RUN echo "extension=mongodb.so" >> /etc/php/7.0/apache2/php.ini && echo "extension=mongodb.so" >> /etc/php/7.0/cli/php.ini
 
 # Manually set up the apache environment variables
 ENV APACHE_RUN_USER www-data

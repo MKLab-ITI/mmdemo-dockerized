@@ -214,7 +214,7 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
         $collection = $mongoDAO->getCollection($collectionId);
         if($collection != null) {
 
-            $judgements = $mongoDAO->getRelevanceJudgements($collection);
+            $judgements = $mongoDAO->getRelevanceJudgements($collectionId);
 
             // query formulation
             $q = $utils->formulateCollectionQuery($collection);
@@ -247,12 +247,16 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
         }
     }
 
+    $rank = ($pageNumber - 1) * $nPerPage;
     foreach($results['docs'] as $result) {
         $item = $mongoDAO->getItem($result['id']);
         $item['score'] = $result['score'];
+        $item['normalizedScore'] = round((4 * $result['normalizedScore']) + 1);
         $item['minhash'] = $result['minhash'];
         $item['cleanTitle'] = $result['cleanTitle'];
+        $item['rank'] = $rank;
 
+        $rank += 1;
         if(isset($result['title_hl'])) {
             $item['originalTitle'] = $item['title'];
             $item['title'] = $result['title_hl'];
@@ -987,6 +991,26 @@ $app->get(
             $facet = $textIndex->getFacet('mediaIds', $q, $filters, 3, false, null, false, null, 'fc');
             $collection['facet'] = $facet;
 
+            $polygons = array();
+            if(isset($collection['nearLocations'])) {
+                foreach($collection['nearLocations'] as $location) {
+                    $polygon = array(
+                        'centroid' => $location['name']
+                    );
+
+                    if(isset($location['polygon'])) {
+                        $peaks = array();
+                        foreach ($location['polygon'] as $peak) {
+                            $peaks[] = array('lat' => $peak['latitude'], 'long' => $peak['longitude']);
+                        }
+                        $polygon['peaks'] = $peaks;
+                    }
+                    $polygons[] = $polygon;
+                }
+                unset($collection['nearLocations']);
+            }
+            $collection['polygons'] = $polygons;
+
             if(count($collection['facet']) > 0) {
                 foreach($collection['facet'] as $ft) {
                     $mId = $ft['field'];
@@ -1028,6 +1052,23 @@ $app->post(
             }
 
             $collection->status = "running";
+
+            if(isset($collection->polygons)) {
+                $locations = array();
+                foreach($collection->polygons as $plg) {
+                    $location = array('name'=>$plg->centroid);
+                    $polygon = array();
+                    foreach($plg->peaks as $peak) {
+                        $polygon[] = array('latitude'=>$peak->lat, 'longitude'=>$peak->long);
+                    }
+                    $location['polygon'] = $polygon;
+                    $locations[] = $location;
+                }
+                $collection->nearLocations = $locations;
+
+                unset($collection->polygons);
+            }
+
             $mongoDAO->insertCollection($collection);
 
             $newMessage = json_encode($collection);
@@ -1057,6 +1098,20 @@ $app->post(
                 }
             }
 
+            if(isset($collection->polygons)) {
+                $locations = array();
+                foreach($collection->polygons as $plg) {
+                    $location = array('name' => $plg->centroid);
+                    $polygon = array();
+                    foreach($plg->peaks as $peak) {
+                        $polygon[] = array('latitude'=>$peak->lat, 'longitude'=>$peak->long);
+                    }
+                    $location['polygon'] = $polygon;
+                    $locations[] = $location;
+                }
+                $collection->nearLocations = $locations;
+            }
+
             $fieldsToUpdate = array(
                 'title' => $collection->title,
                 'keywords' => $collection->keywords,
@@ -1065,6 +1120,7 @@ $app->post(
                 'usersToExclude' => $collection->usersToExclude,
                 'privacy' => $collection->privacy,
                 'accounts' => $collection->accounts,
+                'nearLocations' => $collection->nearLocations,
                 'status'=>'running',
                 'updateDate' => 1000 * time()
             );
@@ -1109,21 +1165,32 @@ $app->post(
 
         $bodyJson = $request->getBody();
         $body = json_decode($bodyJson);
-
         $keywords =  $body->keywords;
+        $forceExclude = isset($body->forceExclude) ? $body->forceExclude : false;
 
         $collection = $mongoDAO->getCollection($cid);
-
         if($collection != null && count($keywords) > 0) {
 
-            $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:array();
-            $msg = array(
-                'newKeywordsToExclude' => $keywords,
-                'oldKeywordsToExclude' => $keywordsToExclude
-            );
+            if($forceExclude != true && $forceExclude !== 'true') {
+                $inputKeywords = $collection['keywords'];
+                $inputKeywords = array_map(function ($keyword) {
+                    return trim($keyword['keyword']);
+                }, $inputKeywords);
 
+                $notAdded = array_intersect($inputKeywords, $keywords);
+                $keywords = array_diff($keywords, $notAdded);
+            }
+
+            $keywordsToExclude = isset($collection['keywordsToExclude']) ? $collection['keywordsToExclude'] : array();
             $keywordsToExclude = array_merge($keywords, $keywordsToExclude);
             $keywordsToExclude = array_unique($keywordsToExclude);
+
+            $msg = array(
+                'collectionKeywords' => isset($inputKeywords) ? $inputKeywords : [],
+                'newKeywordsToExclude' => $keywords,
+                'oldKeywordsToExclude' => $keywordsToExclude,
+                'notAdded' => isset($notAdded) ? $notAdded : []
+            );
 
             $fieldsToUpdate = array(
                 'keywordsToExclude' => $keywordsToExclude,
@@ -1154,20 +1221,18 @@ $app->post(
 
         $keywords =  $body->keywords;
         $collection = $mongoDAO->getCollection($cid);
-
         if($collection != null && count($keywords) > 0) {
 
-            $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:array();
+            $keywordsToExclude = isset($collection['keywordsToExclude']) ? $collection['keywordsToExclude'] : array();
+            $keywordsToExclude = array_diff($keywordsToExclude, $keywords);
             $msg = array(
                 'keywordsToInclude' => $keywords,
                 'keywordsToExclude' => $keywordsToExclude
             );
 
-            $keywordsToExclude = array_diff($keywordsToExclude, $keywords);
             $fieldsToUpdate = array(
                 'keywordsToExclude' => $keywordsToExclude,
                 'updateDate' => 1000 * time()
-
             );
 
             $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
@@ -1276,14 +1341,26 @@ $app->post(
         $body = json_decode($bodyJson);
 
         $users =  $body->users;
+        $forceExclude = isset($body->forceExclude) ? $body->forceExclude : false;
+
         $collection = $mongoDAO->getCollection($cid);
 
         if($collection != null && count($users) > 0) {
 
+            if($forceExclude != true && $forceExclude !== 'true') {
+                $inputUsers = $collection['accounts'];
+                $inputUsers = array_map(function ($account) { return $account['source'] . "#" . $account['id']; }, $inputUsers);
+
+                $notAdded = array_intersect($inputUsers, $users);
+                $users = array_diff($users, $notAdded);
+            }
+
             $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:array();
             $msg = array(
+                'collectionUsers' => isset($inputUsers) ? $inputUsers : [],
                 'newUsersToExclude' => $users,
-                'oldUsersToExclude' => $usersToExclude
+                'oldUsersToExclude' => $usersToExclude,
+                'notAdded' => isset($notAdded) ? $notAdded : []
             );
 
             $usersToExclude = array_merge($users, $usersToExclude);
@@ -1423,9 +1500,19 @@ $app->get(
 $app->get(
     '/relevance/:cid',
     function($cid) use ($mongoDAO, $app) {
-        $judgements = $mongoDAO->getRelevanceJudgements($cid);
+        $response = array();
 
-        echo json_encode($judgements);
+        $judgements = $mongoDAO->getRelevanceJudgements($cid);
+        foreach ($judgements as $judgement) {
+            $iid = $judgement['iid'];
+            $item = $mongoDAO->getItem($iid);
+            if($item != null) {
+                $item['relevance'] = $judgement['relevance'];
+                $response[] = $item;
+            }
+        }
+
+        echo json_encode(array('judgements' => $response));
     }
 )->name('collection_relevance_judgments');
 
@@ -1507,17 +1594,20 @@ $app->get('/search/users',
 )->name("user_search");
 
 
-$app->get('/termvectors',
+$app->get('/terms/vectors',
     function() use ($app, $textIndex) {
 
         $request = $app->request();
+
         $q = $request->get('q');
+        $pageNumber = $request->get("pageNumber")==null ? 1 : (int) $request->get("pageNumber");
+        $nPerPage = $request->get("nPerPage")==null ? 20 : (int) $request->get("nPerPage");
 
-        $tv = $textIndex->getTermVectors($q, 1, 20);
+        $tv = $textIndex->getTermVectors($q, $pageNumber, $nPerPage);
 
-        echo json_encode(array("query"=>$q, "tv"=>$tv));
+        echo json_encode(array("query"=>$q, "vectors"=>$tv));
     }
-)->name("user_search");
+)->name("term_vectors");
 
 /**
  *  GET /detect/users
@@ -1660,6 +1750,8 @@ $app->get('/detect/users',
 
 /**
  *  GET /rss/validate
+ *
+ *  Fetches an RSS feed and validates it
  */
 $app->get('/rss/validate',
     function() use ($app) {

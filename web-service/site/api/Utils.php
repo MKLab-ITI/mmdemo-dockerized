@@ -171,6 +171,7 @@ class Utils {
 
 
         if ($itemsToExclude != null && count($itemsToExclude) > 0) {
+            $itemsToExclude = array_filter($itemsToExclude, function($item) { return $item != null; });
             $idsToExclude = implode(' OR ', $itemsToExclude);
             if($idsToExclude != null) {
                 $filters["-id"] = "($idsToExclude)";
@@ -180,6 +181,7 @@ class Utils {
 
 
         if ($usersToExclude != null && count($usersToExclude) > 0) {
+            $usersToExclude = array_filter($usersToExclude, function($user) { return $user != null; });
             $q = implode(' OR ', $usersToExclude);
             if($q != null) {
                 $filters["-uid"] = "($q)";
@@ -187,6 +189,7 @@ class Utils {
         }
 
         if ($keywordsToExclude != null && count($keywordsToExclude) > 0) {
+            $keywordsToExclude = array_filter($keywordsToExclude, function($keyword) { return $keyword != null; });
             $q = implode(' OR ', $keywordsToExclude);
             if($q != null) {
                 $filters["-allText"] = "($q)";
@@ -206,57 +209,76 @@ class Utils {
     }
 
     public static function expandQuery($judgements, $query, TextIndex $index) {
-        $positive = array_filter($judgements, function($rj) { return ($rj['relevence'] > 3); });
-        $negative = array_filter($judgements, function($rj) { return ($rj['relevence'] < 3); });
+
+        $positive = array_filter($judgements, function($rj) { return ($rj['relevance'] >= 3); });
+        $negative = array_filter($judgements, function($rj) { return ($rj['relevance'] < 3); });
 
         $positiveIds = array_map(function($entry) { return $entry['iid']; }, $positive);
         $negativeIds = array_map(function($entry) { return $entry['iid']; }, $negative);
 
         // get scores of positive items for the collection and the corresponding term vectors
-        $positiveQuery = "id:(".implode(' OR', $positiveIds).")";
-        $positiveTVs = $index->getTermVectors($positiveQuery, 1, count($positiveIds));
-        $positiveItems = $index->searchItems($query, 1, count($positiveIds), array(0 => $positiveQuery));
+        if(count($positiveIds) > 0) {
+            $positiveQuery = implode(' OR ', $positiveIds);
+            $positiveTVs = $index->getTermVectors("id:($positiveQuery)", 1, count($positiveIds));
+            $positiveItems = $index->searchItems($query, 1, count($positiveIds), array('id' => $positiveQuery));
+        }
 
         // get scores of negative items for the collection and the corresponding term vectors
-        $negativeQuery = "id:(".implode(' OR', $negativeIds).")";
-        $negativeTVs = $index->getTermVectors($negativeQuery, 1, count($negativeIds));
-        $negativeItems = $index->searchItems($query, 1, count($negativeIds), array(0 => $negativeQuery));
+        if(count($negativeIds) > 0) {
+            $negativeQuery = implode(' OR', $negativeIds);
+            $negativeTVs = $index->getTermVectors("id:($negativeQuery)", 1, count($negativeIds));
+            $negativeItems = $index->searchItems($query, 1, count($negativeIds), array('id' => $negativeQuery));
+        }
 
         // estimate positive and negative relevance models aggregated by each of the relevance judgements
-        $positiveFeatureVector = Utils::estimateRelevanceModel($positiveTVs, $positiveItems);
-        $negativeFeatureVector = Utils::estimateRelevanceModel($negativeTVs, $negativeItems);
+        $positiveFeatureVector = array();
+        if($positiveTVs != null && $positiveItems != null) {
+            $positiveFeatureVector = Utils::estimateRelevanceModel($positiveTVs, $positiveItems);
+        }
+
+        $negativeFeatureVector = array();
+        if($negativeTVs != null && $negativeItems != null) {
+            $negativeFeatureVector = Utils::estimateRelevanceModel($negativeTVs, $negativeItems);
+        }
 
         // todo: prune feature vectors
-
         // todo: expanded create query from feature vectors
         $query = urldecode($query);
         $queryTerms = explode(',', $query);
 
         $query = Utils::interpolate($queryTerms, $positiveFeatureVector, 0.8);
 
+        return $query;
+
         // For negative boosting: boost documents that do not contain term zzz with a factor w3
         // q = xxx^w1 yyy^w2 (*:* -zzz)^w3  w3 >> w1, w2
-
     }
 
     public function estimateRelevanceModel($tvs, $items) {
 
         $featureVector = array();
 
-        $items = array_map(function($item) { return array($item['id'] => $item['score']); }, $items);
+        //$scores = array_map(function($item) { return array($item['id'] => $item['score']); }, $items['docs']);
+        $scores = array();
+        foreach($items['docs'] as $item) {
+            $scores[$item['id']] = $item['score'];
+        }
 
         $vocabulary = array();
-        foreach($tvs as $iid => $terms) {
-            $vocabulary = array_merge($vocabulary, array_keys($terms));
+        foreach($tvs as $tv) {
+            $vocabulary = array_merge($vocabulary, array_keys($tv['vector']));
         }
         $vocabulary = array_unique($vocabulary);
 
         foreach($vocabulary as $term) {
             $weight = .0;
-            foreach($tvs as $iid => $terms) {
-                if(isset($terms['vector'][$term]) && isset($items[$iid])) {
+            foreach($tvs as $tv) {
+                $iid = $tv['id'];
+                $vector = $tv['vector'];
+                $norm = $tv['norm'];
+                if(isset($vector[$term]) && isset($scores[$iid])) {
                     // doc_score * (tf_idf) / sum(tf_idf)
-                    $weight = $weight + ($items[$iid]*($terms['vector'][$term] / $terms['norm']));
+                    $weight += ($scores[$iid] * ($vector[$term] / $norm));
                 }
             }
             $featureVector[$term] = $weight;

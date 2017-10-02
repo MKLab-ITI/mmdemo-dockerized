@@ -22,7 +22,6 @@ class TextIndex {
         );
 
         $this->client = new Solarium\Client($config);
-
     }
 
 
@@ -31,7 +30,8 @@ class TextIndex {
         $query = $this->client->createSelect();
 
         //todo: use relevance feedback to improve discrimination power of the query
-        if($judgements != null && count($judgements > 0)) {
+        $expandedQueryTerms = array();
+        if($judgements != null && count($judgements) > 0) {
             //$expandedQueryTerms = Utils::expandQuery($judgements, $q, $this);
         }
 
@@ -96,10 +96,17 @@ class TextIndex {
             $resultSet = $this->client->execute($query);
             $highlighting = $resultSet->getHighlighting();
             $numFound = $resultSet->getNumFound();
+
+            $maxScore = $resultSet->getMaxScore();
+            if($maxScore == null || $maxScore == 0) {
+                $maxScore = 1;
+            }
+
             foreach ($resultSet as $document) {
                 $doc = array(
                     'id' => $document['id'],
                     'score' => $document['score'],
+                    'normalizedScore' => $document['score'] / $maxScore,
                     'minhash' => $document['minhash'],
                     'cleanTitle' => $document['cleanTitle']
                 );
@@ -600,14 +607,15 @@ class TextIndex {
             $values = array_filter($vector, function($k) { return ($k%2==1); }, ARRAY_FILTER_USE_KEY);
             $values = array_map(function($k){return $k[5];}, $values);
 
-            $norm = array_reduce($values, function($carry, $item) {
-                    $carry += $item;
-                    return $carry;
+            $norm = array_reduce($values, function($sum, $item) {
+                    $sum += $item;
+                    return $sum;
                 }
             );
 
-            $tvs[] = array($id =>  array(
-                "vector" => array_combine($terms, $values)),
+            $tvs[] = array(
+                "id" => $id,
+                "vector" => array_combine($terms, $values),
                 "norm" => $norm
             );
         }

@@ -33,8 +33,6 @@ services:
 
   redis:
     image: redis:3.0
-    ports:
-      - "6379:6379"
     restart: always
     networks:
       common_network:
@@ -55,7 +53,7 @@ services:
           - mongodb
 
   solr:
-    image: solr:6.3.0
+    image: solr:6.6.0
     ports:
       - "8983:8983"
     volumes:
@@ -92,7 +90,7 @@ services:
   streammanager:
     build:
       context: stream-manager-service
-    image: streammanager
+    image: streammanager:0.5
     volumes:
       - ./stream-manager-service/conf:/stream_manager/conf
     restart: always

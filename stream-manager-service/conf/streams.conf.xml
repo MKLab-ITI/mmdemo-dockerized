@@ -54,12 +54,6 @@
       <Parameter name="solr.items.collection">
         <![CDATA[Items]]>
       </Parameter>
-      <Parameter name="solr.mediaitems.collection">
-        <![CDATA[MediaItems]]>
-      </Parameter>
-      <Parameter name="solr.webpages.collection">
-        <![CDATA[WebPages]]>
-      </Parameter>
       <Parameter name="solr.onlyOriginal">
         <![CDATA[false]]>
       </Parameter>
@@ -88,6 +82,15 @@
       </Parameter>
       <Parameter name="sources">
         <![CDATA[Twitter]]>
+      </Parameter>
+    </Filter>
+    <!-- EnvironmentalClassifier -->
+    <Filter id="EnvironmentalClassifier">
+      <Parameter name="Classpath">
+        <![CDATA[gr.iti.mklab.sfc.filters.EnvironmentalClassifier]]>
+      </Parameter>
+      <Parameter name="threshold">
+        <![CDATA[0.25]]>
       </Parameter>
     </Filter>
 		<Filter id="SwearFilter">
@@ -133,7 +136,7 @@
       </Parameter>
     </Processor>
     <!-- MinHashExtractor -->
-    <Processor id="MinHashExtractor">
+    <Processor id="Extractor">
       <Parameter name="Classpath">
         <![CDATA[gr.iti.mklab.sfc.processors.MinHashExtractor]]>
       </Parameter>

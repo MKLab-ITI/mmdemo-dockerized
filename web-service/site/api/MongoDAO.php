@@ -18,7 +18,7 @@ class MongoDAO {
     private static $RELEVANCE_JUDGMENTS = 'RelevanceJudgments';
     private static $ITEMS_UNDER_MONITORING = 'ItemsUnderMonitoring';
 
-    private static $ITEM_FIELDS = array('_id'=>1, 'shares'=>1, 'likes'=>1, 'title'=>1, 'tags'=>1, 'user'=>1, 'uid'=>1 ,'source'=>1,
+    private static $ITEM_FIELDS = array('_id'=>1, 'shares'=>1, 'likes'=>1, 'title'=>1, 'tags'=>1, 'user'=>1, 'uid'=>1 ,'source'=>1, 'links'=>1,
         'language'=>1, 'pageUrl'=>1, 'publicationTime'=>1, 'original'=>1, 'reference'=>1, 'referencedUserId'=>1, 'type'=>1, 'inReply'=>1, 'mentions'=>1,
         'location'=>1, 'location.name'=>1, 'location.country'=>1, 'mediaIds'=>1, 'comments'=>1, 'topics'=>1);
 
@@ -262,11 +262,16 @@ class MongoDAO {
         return $items;
     }
 
-    public function getCollections($pageNumber=null, $nPerPage=null) {
+    public function getCollections($pageNumber=null, $nPerPage=null, $status=null) {
 
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 
         $query = array();
+
+        if($status != null && ($status==='stopped' || $status==='running')) {
+            $query['status'] = $status;
+        }
+
         $options = array('sort' => ['creationDate' => -1]);
         if($pageNumber != null && $nPerPage != null) {
             $options['skip'] = ($pageNumber-1)*$nPerPage;

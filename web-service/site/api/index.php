@@ -530,6 +530,90 @@ $app->get(
 )->name("top_users");
 
 $app->get(
+    '/articles',
+    function () use ($mongoDAO, $textIndex, $utils, $memcached, $app) {
+
+        $articles = array();
+        $request = $app->request();
+
+        $query = $request->get('q');
+        $collectionId = $request->get('collection');
+        if($collectionId != null) {
+            $collection = $mongoDAO->getCollection($collectionId);
+            if ($collection != null) {
+                $requestHash = "articles_$collectionId";
+                $articles = $memcached->get($requestHash);
+
+                //if($articles == false) {
+
+                    $q = $utils->formulateCollectionQuery($collection);
+
+                    // Add filters if available
+                    $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+                    $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+                    $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+
+                    $urls = array();
+                    $filters = $utils->getFilters("*", "*", "all", "true", "text", null, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+                    $results = $textIndex->searchItems($q, 1, 500,  $filters, "popularity", array(), true, $query);
+                    foreach($results['docs'] as $result) {
+                        $item = $mongoDAO->getItem($result['id']);
+                        if($item != null && isset($item['links'])) {
+                            $urls = array_merge($urls, $item['links']);
+                        }
+                    }
+                    $urls = array_unique($urls);
+
+                    $articles = array();
+
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
+                    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
+                    foreach($urls as $url) {
+                        if (preg_match('/twitter.com/', $url) || preg_match('/fb.me/', $url)) {
+                            continue;
+                        }
+
+                        try {
+                            curl_setopt($ch, CURLOPT_URL, $url);
+                            $html = curl_exec($ch);
+
+                            //$readability = new \Readability\Readability($html, $url);
+                            //$result = $readability->init();
+                            //if ($result) {
+                                // display the title of the page
+                            //    $articles[] = array(
+                            //        'title' => $readability->getTitle()->textContent,
+                            //        'content' => $readability->getContent()->textContent
+                            //    );
+                            //} else {
+                            //    echo 'Looks like we couldn\'t find the content. :(';
+                            //}
+                        }
+                        catch(Exception $e) {
+
+                        }
+                    }
+                    curl_close($ch);
+
+                    $articles[] = array('title' => 'Ciclista mexicana Ingid Drexel  en 34 en Mundial de Ruta', 'url'=> 'http://hablandodeviajes.com/murcia/ruta-ciclista-de-los-alcazares-a-la-manga',
+                        'image' => 'http://i2.wp.com/www.deviajepormurcia.com/wp-content/uploads/Mar-Menor-Trip-Pic.jpg?resize=500%2C350',
+                        'content' => 'Ciclista mexicana Ingid Drexel  en 34 en Mundial de Ruta\nPlata y bronce para taekwondoines mexicanos en Marruecos\nCiclista mexicana Ingid Drexel  en 34 en Mundial de Ruta\nLa mexicana Ingrid Drexel finalizó en el sitio 34 dentro del gran fondo del Campeonato Mundial de Ciclismo de Ruta, que tuvo lugar en esta ciudad noruega, donde la ganadora fue la holandesa Chantal...\nNotimex. 23.09.2017 - 19:21h\nLa mexicana Ingrid Drexel finalizó en el sitio 34 dentro del gran fondo del Campeonato Mundial de Ciclismo de Ruta, que tuvo lugar en esta ciudad noruega, donde la ganadora fue la holandesa Chantal Blaak.\nDrexel Clouthier, olímpica en Londres 2012 y quien milita en un equipo profesional en Estados Unidos, cruzó la meta a 28 segundos de Blaak, luego que esta detuvo el reloj en 4:06:30 horas, para dejar con la plata a la australiana Katrin Garfoot con 4:06:58.\nCon el bronce se quedó la danesa Amalie Dideriksen, con el mismo tiempo que la australiana al final de los 152.8 kilómetros de recorrido que hicieron las 153 pedalistas.');
+                    $articles[] = array('title' => 'Ruta Ciclista de Los Alcázares a La Manga - blogs de Viajes', 'url'=> 'http://hablandodeviajes.com/murcia/ruta-ciclista-de-los-alcazares-a-la-manga',
+                        'content' => 'Ruta Ciclista de Los Alcázares a La Manga\n-\nFuente: de viaje por murcia - Ver todas las noticias de este sitio\nRuta Ciclista de Los Alcázares a La Manga\nSe acerca el buen tiempo y salir a entrenar con bici es de lo más agradable sobre todo en esta zona del sureste español.\nHoy cogemos nuestro coche y nos vamos hasta la localidad de Los Alcázares en la orilla del mar Menor para hacer un recorrido hasta el final de la Manga y regresar de nuevo a Los Alcázares.\nSi hace un día soleado con un ligero viento de levante vamos a disfrutar de este recorrido enormemente.\nSalimos de los Alcázares con el Mar Menor a nuestra izquierda para dirigirnos a Los Urrutias. Podremos disfrutar de una zona donde se pueden ver aves migratorias como los Flamencos.\nAtravesamos Los Urrutias para ir hacia los Nietos, uno de los lugares de veraneo más típicos de los cartageneros que no salen de la Región en verano.\nAl salir de Los Nietos llegaremos a Los Belones para seguir adelante por carreteras que de servicio paralelas a la autovía Cartagena La Manga.\nNos queda pasar por el Camping Villas Caravaning para pasar de largo la entrada a Playa Honda y llegar a un cruce detrás de un circuito de Karts que tomaremos a la izquierda para pasar por las salinas ya abandonadas que nos sirven de.entrada a la Manga.\nEncuentra ofertas de viajes online con Rumbo y ven a disfrutar de las maravillas de esa ruta ciclista por el Mar Menor.');
+
+
+                    $memcached->set($requestHash, $articles, time() + 61);
+                //}
+            }
+        }
+        echo json_encode(array('articles' => $articles));
+
+    }
+)->name("articles");
+
+$app->get(
     '/terms',
     function () use ($mongoDAO, $textIndex, $utils, $app) {
         $request = $app->request();
@@ -991,11 +1075,14 @@ $app->get(
     '/collections/',
     function() use($mongoDAO, $app) {
 
-            $collections = $mongoDAO->getCollections();
-            if($collections == null || count($collections) < 1) {
-                echo json_encode(array());
-                return;
-            }
+        $request = $app->request();
+        $status = $request->get("status");
+
+        $collections = $mongoDAO->getCollections(null, null, $status);
+        if($collections == null || count($collections) < 1) {
+            echo json_encode(array());
+            return;
+        }
 
 
             echo json_encode($collections);

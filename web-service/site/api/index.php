@@ -649,7 +649,6 @@ $app->get(
 
 
         $q = null;
-        $points = array();
         if($collectionId != null) {
             $collection = $mongoDAO->getCollection($collectionId);
             if($collection != null) {
@@ -661,10 +660,12 @@ $app->get(
 
                 $points = $textIndex->get2DFacet('latlonRPT', $q, $filters, $minLat, $maxLat, $minLong, $maxLong);
 
+                echo json_encode($points);
+                return;
             }
         }
 
-        echo json_encode($points);
+        echo json_encode(array('points' => array()));
     }
 )->name('heatmap');
 

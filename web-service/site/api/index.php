@@ -346,6 +346,8 @@ $app->get(
         $language = $request->get('language');
         $source = $request->get('source');
 
+        $prefix = $request->get('prefix');
+
         $original = $request->get('original');
         $type = $request->get('type');
 
@@ -381,7 +383,7 @@ $app->get(
                         $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique);
                         $facet = $memcached->get($requestHash);
                         if($facet == false || count($facet) < 2) {
-                            $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, null, $unique, null, 'fcs');
+                            $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, $prefix, $unique, null, 'fcs');
                             $memcached->set($requestHash, $facet, time()+61);
                         }
 
@@ -401,6 +403,71 @@ $app->get(
         }
     }
 )->name("top");
+
+
+$app->get(
+    '/concepts',
+    function () use ($mongoDAO, $textIndex, $utils, $app) {
+        $request = $app->request();
+
+        $since = $request->get('since') == null ? '*' : $request->get('since');
+        $until = $request->get('until') == null ? '*' : $request->get('until');
+
+        $n = $request->get('n') == null ? 10 : $request->get('n');
+        $collectionId = $request->get('collection');
+
+        $original = $request->get('original');
+        $type = $request->get('type');
+
+        $language = $request->get('language');
+        $source = $request->get('source');
+
+        $unique = $request->get('unique')==null ? false : $request->get('unique');
+
+        $query = $request->get('q');
+        $topicQuery = $request->get('topicQuery');
+        if($topicQuery != null && $topicQuery != '*') {
+            if($query == null)
+                $query = $topicQuery;
+            else
+                $query = $query . ' ' . $topicQuery;
+        }
+
+
+        if($collectionId != null) {
+            $collection = $mongoDAO->getCollection($collectionId);
+            if($collection != null) {
+                try {
+                    $collectionQuery = $utils->formulateCollectionQuery($collection);
+
+                    $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+                    $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+                    $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+
+                    $facet = $textIndex->getFacet('topics', $collectionQuery, $filters, $n, false, "environment.", $unique, null, 'fcs');
+
+                    $concepts = array();
+                    foreach($facet as $result) {
+                        $field = str_replace("environment.", "", $result['field']);
+                        //$field = str_replace("_", " ", $field);
+                        $concepts[] = array(
+                            'field' => $field,
+                            'count' => $result['count']
+                        );
+                    }
+                    echo json_encode($concepts);
+                    return;
+                }
+                catch(Exception $e) {
+                    echo json_encode(array('facet'=>'topics', 'values' => array(), 'error'=>$e->getMessage()));
+                    return;
+                }
+            }
+        }
+        echo json_encode(array());
+    }
+)->name("concepts");
 
 $app->get(
     '/users',

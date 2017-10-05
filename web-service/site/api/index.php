@@ -1096,6 +1096,8 @@ $app->get(
 
         $request = $app->request();
 
+        $cached = $request->get("cached");
+
 		$pageNumber = $request->get("pageNumber")==null ? 1 : (int) $request->get("pageNumber");
         $nPerPage = $request->get("nPerPage")==null ? 6 : (int) $request->get("nPerPage");
 
@@ -1109,10 +1111,12 @@ $app->get(
 
             $cid = $collection['_id'];
 
-            $cachedCollection = $memcached->get($cid);
-            if($cachedCollection != false && $cachedCollection['items'] > 0 && count($cachedCollection['facet']) > 0) {
-                $collections[] = $cachedCollection;
-                continue;
+            if($cached != "false") {
+                $cachedCollection = $memcached->get($cid);
+                if ($cachedCollection != false && $cachedCollection['items'] > 0 && count($cachedCollection['facet']) > 0) {
+                    $collections[] = $cachedCollection;
+                    continue;
+                }
             }
 
             $lastExecution = $redisClient->get($cid);

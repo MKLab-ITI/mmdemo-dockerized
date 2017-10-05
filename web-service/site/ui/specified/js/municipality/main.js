@@ -266,8 +266,7 @@ var leafletMap;
                     break;
             }
         },
-        disappear: function disappear(el) {
-        },
+        disappear: function disappear(el) {},
         bounds: -80,
         reappear: false
     });
@@ -435,7 +434,7 @@ function draw_pie_statistics() {
                     }).transition().delay(function (d, i) {
                         return arcAnimDur + i * secIndividualdelay;
                     }).duration(secDur).style('opacity', function (d) {
-                        return d.data >= 5 ? 1 : 0;
+                        return Math.round((d.data / json.total)* 100) >= 5 ? 1 : 0;
                     });
 
 
@@ -444,7 +443,7 @@ function draw_pie_statistics() {
                 center_text.enter().append('text').attr('dy', '0.35em').attr('font-size', font_size).style("opacity", 0).style('fill', function (d, i) {
                     return colors[i];
                 }).text(function (d, i) {
-                    return platform_names[i] + '  ' + Math.round(d.data / json.total) * 100 + '%';
+                    return platform_names[i] + '  ' + Math.round((d.data / json.total)* 100) + '%';
                 }).attr('transform', function (d, index) {
                     var left = left_text;
                     var top = (top_text + index * step_text);
@@ -473,7 +472,7 @@ function draw_pie_statistics() {
                 var polyline = svg.select(".lines").selectAll("polyline").data(pie(dataset));
 
                 polyline.enter().append("polyline").style("opacity", function (d) {
-                    return d.data >= 5 ? 0.5 : 0;
+                    return Math.round((d.data / json.total)* 100) >= 5 ? 0.5 : 0;
                 }).attr('points', function (d) {
                     var pos = outerArc.centroid(d);
                     pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);
@@ -538,6 +537,9 @@ function draw_influencers() {
                             break;
                     }
                     var $circle = $('#circle-' + (u + 1));
+                    if (json[u].profileImage === "imgs/noprofile.gif") {
+                        json[u].profileImage = "http://getfavicon.appspot.com/" + json[u].pageUrl;
+                    }
                     $circle.find('.front').attr('style', 'background:url("' + json[u].profileImage + '") no-repeat;');
                     $circle.find('.back').css('background-color', color);
                     $circle.find('.back a').attr('href', json[u].pageUrl).text(json[u].username);

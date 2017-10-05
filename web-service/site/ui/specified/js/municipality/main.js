@@ -266,8 +266,7 @@ var leafletMap;
                     break;
             }
         },
-        disappear: function disappear(el) {
-        },
+        disappear: function disappear(el) {},
         bounds: -80,
         reappear: false
     });
@@ -444,7 +443,7 @@ function draw_pie_statistics() {
                 center_text.enter().append('text').attr('dy', '0.35em').attr('font-size', font_size).style("opacity", 0).style('fill', function (d, i) {
                     return colors[i];
                 }).text(function (d, i) {
-                    return platform_names[i] + '  ' + Math.round(d.data / json.total) * 100 + '%';
+                    return platform_names[i] + '  ' + Math.round((d.data / json.total)* 100) + '%';
                 }).attr('transform', function (d, index) {
                     var left = left_text;
                     var top = (top_text + index * step_text);

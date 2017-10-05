@@ -472,7 +472,7 @@ function draw_pie_statistics() {
                 var polyline = svg.select(".lines").selectAll("polyline").data(pie(dataset));
 
                 polyline.enter().append("polyline").style("opacity", function (d) {
-                    return d.data >= 5 ? 0.5 : 0;
+                    return Math.round((d.data / json.total)* 100) >= 5 ? 0.5 : 0;
                 }).attr('points', function (d) {
                     var pos = outerArc.centroid(d);
                     pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);

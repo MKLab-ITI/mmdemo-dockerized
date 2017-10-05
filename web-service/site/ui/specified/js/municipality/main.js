@@ -434,7 +434,7 @@ function draw_pie_statistics() {
                     }).transition().delay(function (d, i) {
                         return arcAnimDur + i * secIndividualdelay;
                     }).duration(secDur).style('opacity', function (d) {
-                        return d.data >= 5 ? 1 : 0;
+                        return Math.round((d.data / json.total)* 100) >= 5 ? 1 : 0;
                     });
 
 
@@ -537,6 +537,9 @@ function draw_influencers() {
                             break;
                     }
                     var $circle = $('#circle-' + (u + 1));
+                    if (json[u].profileImage === "imgs/noprofile.gif") {
+                        json[u].profileImage = "http://getfavicon.appspot.com/" + json[u].pageUrl;
+                    }
                     $circle.find('.front').attr('style', 'background:url("' + json[u].profileImage + '") no-repeat;');
                     $circle.find('.back').css('background-color', color);
                     $circle.find('.back a').attr('href', json[u].pageUrl).text(json[u].username);

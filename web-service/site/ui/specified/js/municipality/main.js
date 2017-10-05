@@ -8,6 +8,24 @@ var leafletMap;
         case "valdemoro":
             pilot = "Valdemoro";
             break;
+        case "hatay":
+            pilot = "Hatay";
+            break;
+        case "crete":
+            pilot = "Crete";
+            break;
+        case "mollet":
+            pilot = "Mollet";
+            break;
+        case "locride":
+            pilot = "Locride";
+            break;
+        case "thessaloniki":
+            pilot = "Thessaloniki";
+            break;
+        case "europe":
+            pilot = "eu";
+            break;
         default:
             pilot = "-";
             $('#myModal').reveal();
@@ -285,7 +303,7 @@ function draw_dialogues() {
             }
 
         },
-        async: true
+        async: false
     });
 }
 
@@ -524,7 +542,7 @@ function draw_influencers() {
                     $circle.find('.back').css('background-color', color);
                     $circle.find('.back a').attr('href', json[u].pageUrl).text(json[u].username);
                     $circle.find('.circle_source_icon').attr('src', icon);
-                    $circle.find('.circle-posts').text(json[u].count + " post(s)");
+                    $circle.find('.circle-posts').text(nFormatter(json[u].count) + " post(s)");
                 }
                 $('#influencers_wrapper').addClass('prep-activate');
                 setTimeout(function () {

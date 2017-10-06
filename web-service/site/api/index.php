@@ -1113,7 +1113,9 @@ $app->get(
 
             if($cached != "false") {
                 $cachedCollection = $memcached->get($cid);
-                if ($cachedCollection != false && $cachedCollection['items'] > 0 && count($cachedCollection['facet']) > 0) {
+                if ($cachedCollection != false &&
+                    (($cachedCollection['items'] > 0 && count($cachedCollection['facet']) > 0)
+                    || (time()*1000 - $cachedCollection['creationDate']) > (1 * 3600000))) {
                     $collections[] = $cachedCollection;
                     continue;
                 }

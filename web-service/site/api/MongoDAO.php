@@ -64,7 +64,9 @@ class MongoDAO {
         try {
             $item = $collection->findOne(array('_id' => $id), $params);
         }
-        catch(Exception $e) {}
+        catch(Exception $e) {
+            $item = null;
+        }
 
         if($item != null) {
             $item['id'] = $item['_id'];

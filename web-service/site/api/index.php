@@ -250,6 +250,9 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
     $rank = ($pageNumber - 1) * $nPerPage;
     foreach($results['docs'] as $result) {
         $item = $mongoDAO->getItem($result['id']);
+        if($item == null)
+            continue;
+
         $item['score'] = $result['score'];
         $item['normalizedScore'] = round((4 * $result['normalizedScore']) + 1);
         $item['minhash'] = $result['minhash'];
@@ -542,7 +545,7 @@ $app->get(
             $collection = $mongoDAO->getCollection($collectionId);
             if ($collection != null) {
                 $requestHash = "articles_$collectionId";
-                $articles = $memcached->get($requestHash);
+                //$articles = $memcached->get($requestHash);
 
                 //if($articles == false) {
 
@@ -566,6 +569,7 @@ $app->get(
 
                     $articles = array();
 
+                    $i = 0;
                     $ch = curl_init();
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                     curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
@@ -579,7 +583,12 @@ $app->get(
                             curl_setopt($ch, CURLOPT_URL, $url);
                             $html = curl_exec($ch);
 
-                            //$readability = new \Readability\Readability($html, $url);
+                            $i = $i + 1;
+                            if($i > 5) {
+                                break;
+                            }
+
+
                             //$result = $readability->init();
                             //if ($result) {
                                 // display the title of the page
@@ -592,7 +601,7 @@ $app->get(
                             //}
                         }
                         catch(Exception $e) {
-
+                            echo $e->getTraceAsString();
                         }
                     }
                     curl_close($ch);

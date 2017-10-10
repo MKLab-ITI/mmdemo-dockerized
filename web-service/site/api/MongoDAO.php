@@ -60,7 +60,12 @@ class MongoDAO {
             'projection' => MongoDAO::$ITEM_FIELDS
         ];
 
-        $item = $collection->findOne(array('_id'=>$id), $params);
+        $item = null;
+        try {
+            $item = $collection->findOne(array('_id' => $id), $params);
+        }
+        catch(Exception $e) {}
+
         if($item != null) {
             $item['id'] = $item['_id'];
             unset($item['_id']);

@@ -250,9 +250,6 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
     $rank = ($pageNumber - 1) * $nPerPage;
     foreach($results['docs'] as $result) {
         $item = $mongoDAO->getItem($result['id']);
-        if($item == null)
-            continue;
-
         $item['score'] = $result['score'];
         $item['normalizedScore'] = round((4 * $result['normalizedScore']) + 1);
         $item['minhash'] = $result['minhash'];

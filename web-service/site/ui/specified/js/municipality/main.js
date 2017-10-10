@@ -266,7 +266,8 @@ var leafletMap;
                     break;
             }
         },
-        disappear: function disappear(el) {},
+        disappear: function disappear(el) {
+        },
         bounds: -80,
         reappear: false
     });
@@ -295,7 +296,14 @@ function draw_dialogues() {
                 }
             }
             if (json.collections.length > 0) {
-                $tabs.find('li').eq(0).addClass('tab-current');
+                var dialogue = gup('dialogue');
+                if (dialogue === "") {
+                    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?pilot=' + gup("pilot") + '&dialogue=' + $tabs.find('li').eq(0).attr('data-id'));
+                    $tabs.find('li').eq(0).addClass('tab-current');
+                }
+                else {
+                    $('li[data-id="' + dialogue + '"]').addClass('tab-current');
+                }
             }
             else {
                 $('#myModal').reveal();
@@ -434,7 +442,7 @@ function draw_pie_statistics() {
                     }).transition().delay(function (d, i) {
                         return arcAnimDur + i * secIndividualdelay;
                     }).duration(secDur).style('opacity', function (d) {
-                        return Math.round((d.data / json.total)* 100) >= 5 ? 1 : 0;
+                        return Math.round((d.data / json.total) * 100) >= 5 ? 1 : 0;
                     });
 
 
@@ -443,7 +451,7 @@ function draw_pie_statistics() {
                 center_text.enter().append('text').attr('dy', '0.35em').attr('font-size', font_size).style("opacity", 0).style('fill', function (d, i) {
                     return colors[i];
                 }).text(function (d, i) {
-                    return platform_names[i] + '  ' + Math.round((d.data / json.total)* 100) + '%';
+                    return platform_names[i] + '  ' + Math.round((d.data / json.total) * 100) + '%';
                 }).attr('transform', function (d, index) {
                     var left = left_text;
                     var top = (top_text + index * step_text);
@@ -472,7 +480,7 @@ function draw_pie_statistics() {
                 var polyline = svg.select(".lines").selectAll("polyline").data(pie(dataset));
 
                 polyline.enter().append("polyline").style("opacity", function (d) {
-                    return Math.round((d.data / json.total)* 100) >= 5 ? 0.5 : 0;
+                    return Math.round((d.data / json.total) * 100) >= 5 ? 0.5 : 0;
                 }).attr('points', function (d) {
                     var pos = outerArc.centroid(d);
                     pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);
@@ -540,7 +548,7 @@ function draw_influencers() {
                     if (json[u].profileImage === "imgs/noprofile.gif") {
                         json[u].profileImage = "http://getfavicon.appspot.com/" + json[u].pageUrl;
                     }
-                    $circle.find('.front').attr('style', 'background:url("' + json[u].profileImage + '") no-repeat;');
+                    $circle.find('.front').attr('style', 'background:url("' + json[u].profileImage + '"), url("imgs/no-avatar.png") no-repeat;');
                     $circle.find('.back').css('background-color', color);
                     $circle.find('.back a').attr('href', json[u].pageUrl).text(json[u].username);
                     $circle.find('.circle_source_icon').attr('src', icon);
@@ -659,7 +667,7 @@ function draw_posts() {
     current_position = 0;
     $.ajax({
         type: "GET",
-        url: api_folder + "items?collection=" + dialoque_id + "&nPerPage=10&pageNumber=1&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&sort=popularity&unique=true&original=true",
+        url: api_folder + "items?collection=" + dialoque_id + "&nPerPage=10&pageNumber=1&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&sort=popularity&unique=true&original=original",
         dataType: "json",
         success: function (json) {
             if (json.total > 0) {
@@ -698,10 +706,10 @@ function draw_posts() {
                     var time = date + ' ' + month;
 
                     if (json.items[i].type === "item") {
-                        $('.ca-wrapper').append('<div class="ca-item"> <div class="ca-item-main"> <h4 class="no-media"> <span class="ca-quote">&ldquo;</span> <span>' + json.items[i].title + '</span> </h4> <div class="ca-user no-media"><span class="ca-userpic" style="background: url(' + json.items[i].user.profileImage + ');"></span> <a href="' + json.items[i].user.pageUrl + '" class="ca-username" target="_blank">' + json.items[i].user.username + '</a> </div> <div class="ca-footer"> <img src="' + icon + '"> <span class="ca-share">' + shares + '</span> <span class="ca-timestamp">' + time + '</span> </div> <a href="' + json.items[i].pageUrl + '" class="ca-link" target="_blank">Original Post</a> <div class="ca-count">#' + (i + 1) + '</div> </div> </div>');
+                        $('.ca-wrapper').append('<div class="ca-item"> <div class="ca-item-main"> <h4 class="no-media"> <span class="ca-quote">&ldquo;</span> <span>' + json.items[i].title + '</span> </h4> <div class="ca-user no-media"><span class="ca-userpic" style="background: url(' + json.items[i].user.profileImage + '), url(imgs/no-avatar.png);"></span> <a href="' + json.items[i].user.pageUrl + '" class="ca-username" target="_blank">' + json.items[i].user.username + '</a> </div> <div class="ca-footer"> <img src="' + icon + '"> <span class="ca-share">' + shares + '</span> <span class="ca-timestamp">' + time + '</span> </div> <a href="' + json.items[i].pageUrl + '" class="ca-link" target="_blank">Original Post</a> <div class="ca-count">#' + (i + 1) + '</div> </div> </div>');
                     }
                     else {
-                        $('.ca-wrapper').append('<div class="ca-item"> <div class="ca-item-main"> <div class="ca-icon" style=" background: url(' + json.items[i].mediaUrl + ') no-repeat;"></div> <h4> <span class="ca-quote">&ldquo;</span> <span>' + json.items[i].title + '</span> </h4> <div class="ca-user"><span class="ca-userpic" style="background: url(' + json.items[i].user.profileImage + ');"></span> <a href="' + json.items[i].user.pageUrl + '" class="ca-username" target="_blank">' + json.items[i].user.username + '</a> </div> <div class="ca-footer"> <img src="' + icon + '"> <span class="ca-share">' + shares + '</span> <span class="ca-timestamp">' + time + '</span> </div> <a href="' + json.items[i].pageUrl + '" class="ca-link" target="_blank">Original Post</a> <div class="ca-count">#' + (i + 1) + '</div> </div> </div>')
+                        $('.ca-wrapper').append('<div class="ca-item"> <div class="ca-item-main"> <div class="ca-icon" style=" background: url(' + json.items[i].mediaUrl + ') no-repeat;"></div> <h4> <span class="ca-quote">&ldquo;</span> <span>' + json.items[i].title + '</span> </h4> <div class="ca-user"><span class="ca-userpic" style="background: url(' + json.items[i].user.profileImage + '), url(imgs/no-avatar.png);"></span> <a href="' + json.items[i].user.pageUrl + '" class="ca-username" target="_blank">' + json.items[i].user.username + '</a> </div> <div class="ca-footer"> <img src="' + icon + '"> <span class="ca-share">' + shares + '</span> <span class="ca-timestamp">' + time + '</span> </div> <a href="' + json.items[i].pageUrl + '" class="ca-link" target="_blank">Original Post</a> <div class="ca-count">#' + (i + 1) + '</div> </div> </div>')
                     }
                     $('.ca-navigation ul').append('<li></li>');
                 }
@@ -1117,6 +1125,7 @@ function draw_hashtags() {
 }
 
 function draw_topics() {
+    $('#legend_concepts').show().css('visibility', 'visible');
     var $topics_chart_wrapper = $('.topics_chart_wrapper');
     var $tab_current = $('.tab-current');
     var dialoque_id = $tab_current.attr('data-id');
@@ -1133,12 +1142,35 @@ function draw_topics() {
         dataType: "json",
         success: function (json) {
             if (json.length > 0) {
+                var count_percentage = [];
                 $topic_chart.show();
                 $topic_main.text($tab_current.text());
                 $topic_main.css('opacity', 1);
                 $('figure').css('opacity', 1);
                 for (var c = 0; c < json.length; c++) {
-                    $topic_chart.find('ul').append("<li> <input id='" + c + "' type='checkbox'> <label for='" + c + "'>" + json[c].field.replace(/_/g, " ") + "</label> </li>");
+                    $topic_chart.find('ul').append("<li> <input id='" + c + "' type='checkbox'> <label title='" + json[c].field.replace(/_/g, " ") + "' for='" + c + "'>" + json[c].field.replace(/_/g, " ") + "</label> </li>");
+                    count_percentage.push(json[c].count);
+                }
+                var total = count_percentage.reduce(function (a, b) {
+                    return a + b;
+                }, 0);
+                for (var co = 0; co < count_percentage.length; co++) {
+                    count_percentage[co] = count_percentage[co] / total;
+                }
+                for (co = 0; co < count_percentage.length; co++) {
+                    switch (true) {
+                        case (count_percentage[co] < 0.2):
+                            $topic_chart.find('li').eq(co).find('label').addClass('concept_small');
+                            break;
+                        case (count_percentage[co] < 0.5):
+                            $topic_chart.find('li').eq(co).find('label').addClass('concept_medium');
+                            break;
+                        case (count_percentage[co] < 0.8):
+                            $topic_chart.find('li').eq(co).find('label').addClass('concept_large');
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 setTimeout(function () {
                     $topic_chart.toggleClass('open');
@@ -1152,11 +1184,13 @@ function draw_topics() {
             }
             else {
                 $topic_chart.hide();
+                $('#legend_concepts').css('visibility', 'hidden');
                 $('.topics_chart_wrapper').append($('<p class="noData">No Data Available</p>').hide().fadeIn(2000));
             }
         },
         error: function () {
             $topic_chart.hide();
+            $('#legend_concepts').css('visibility', 'hidden');
             $('.topics_chart_wrapper').append($('<p class="noData">No Data Available</p>').hide().fadeIn(2000));
         },
         async: true
@@ -1377,6 +1411,10 @@ $("#tabs").on("click", "li", function () {
     if (!($(this).hasClass('tab-current'))) {
         $('.tab-current').removeClass('tab-current');
         $(this).addClass('tab-current');
+
+        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?pilot=' + gup("pilot") + '&dialogue=' + $(this).attr('data-id'));
+
+
         if ($('.pie_chart_wrapper').children().length > 0) {
             draw_pie_statistics();
         }

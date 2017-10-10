@@ -1596,6 +1596,13 @@ h4.no-media {
     width: 100%;
     text-align: center;
 }
+#legend_concepts{
+    position: absolute;
+    margin-top: 140px;
+    width: 420px;
+    margin-left: -82px;
+    display: none;
+}
 
 .legendcolor {
     width: 12px;
@@ -1683,12 +1690,11 @@ h4.no-media {
 .topics_chart li input + label {
     position: absolute;
     left: 50%;
-    color: #27292C;
     bottom: 100%;
     width: 0;
     height: 0;
     margin-left: 0;
-    background: #ecf0f1;
+    background: #1e537e;
     border-radius: 50%;
     text-align: center;
     font-size: 1px;
@@ -1697,6 +1703,7 @@ h4.no-media {
     transition: all 1s ease-in-out, color 0.1s, background 0.1s;
     cursor: default;
     padding: 45px 5px 0;
+    color:#ecf0f1
 }
 
 .topics_chart.open li input + label {
@@ -1738,6 +1745,30 @@ h4.no-media {
     transition: opacity 1s ease-in-out;
 }
 
+.concept_small{
+    width: 70px !important;
+    height: 70px !important;
+    bottom: 318px !important;
+    padding-top: 22px !important;
+    background: #4c88b8 !important;
+    font-size: 12px !important;
+}
+.concept_medium{
+    width: 80px !important;
+    height: 80px !important;
+    bottom: 314px !important;
+    padding-top: 24px !important;
+    font-size: 13px !important;
+    background: #3a75a5 !important;
+}
+.concept_large{
+    width: 90px !important;
+    height: 90px !important;
+    bottom: 308px !important;
+    padding-top: 33px !important;
+    background: #2f6794 !important;
+}
+
 @media only screen and (max-width: 1360px) {
     .topics_chart {
         left: 150px;
@@ -1749,6 +1780,15 @@ h4.no-media {
     .topics_chart button {
         height: 150px;
         width: 150px;
+    }
+    .concept_small{
+        bottom: 211px !important;
+    }
+    .concept_small{
+        bottom: 217px !important;
+    }
+    .concept_large{
+        bottom: 221px !important;
     }
 
     .topics_circle {

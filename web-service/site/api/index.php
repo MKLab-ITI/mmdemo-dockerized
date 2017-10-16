@@ -1189,7 +1189,7 @@ $app->get(
                 }
             }
 
-            $memcached->set($cid, $collection, time() + 180);
+            $memcached->set($cid, $collection, time() + 300);
             $collections[] = $collection;
         }
 

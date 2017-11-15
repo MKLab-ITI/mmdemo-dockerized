@@ -214,14 +214,15 @@
     </div>
 </div>
 <div class="row bigWidth" style="margin-top: 150px;">
+    <div class="small-12 medium-4 large-4 columns">
+        <div class="description left_side" id="stats">
+            <h3>STATS</h3>
+
+            <p>Measure impact and activity by absolute numbers</p>
+        </div>
+    </div>
     <div class="small-12 medium-8 large-8 columns" style="min-height: 400px">
         <div id="stats_wrapper">
-            <div class="stats_items">
-                <p class="stats_number" id="posts_num">0</p>
-
-                <p class="stats_desc">Posts Made</p>
-                <img class="stats_img" src="imgs/message_64_white.png">
-            </div>
             <div class="stats_items">
                 <p class="stats_number" id="users_num">0</p>
 
@@ -229,10 +230,10 @@
                 <img class="stats_img" src="imgs/users_64_white.png">
             </div>
             <div class="stats_items">
-                <p class="stats_number" id="reach_num">0</p>
+                <p class="stats_number" id="posts_num">0</p>
 
-                <p class="stats_desc">Users Reached</p>
-                <img class="stats_img" src="imgs/eye_64_white.png">
+                <p class="stats_desc">Posts Made</p>
+                <img class="stats_img" src="imgs/message_64_white.png">
             </div>
             <div class="stats_items">
                 <p class="stats_number" id="endo_num">0</p>
@@ -240,26 +241,28 @@
                 <p class="stats_desc">Endorsements</p>
                 <img class="stats_img" src="imgs/star_64_white.png">
             </div>
-        </div>
-    </div>
-    <div class="small-12 medium-4 large-4 columns">
-        <div class="description" id="stats">
-            <h3>STATS</h3>
+            <div class="stats_items">
+                <p class="stats_number" id="reach_num">0</p>
 
-            <p>Measure impact and activity by absolute numbers</p>
+                <p class="stats_desc">Users Reached</p>
+                <img class="stats_img" src="imgs/eye_64_white.png">
+            </div>
         </div>
     </div>
+
 </div>
 
 <div class="row bigWidth margin_vertical">
-    <div class="small-12 medium-4 large-4 columns">
-        <div class="description left_side" id="influencers">
-            <h3>INFLUENCERS</h3>
+    <div class="small-12 medium-8 large-7 columns">
+        <div id="user_tabs">
+            <input id="active_users" type="radio" name="user_tabs" value="active" checked>
+            <label for="active_users">Active</label>
 
-            <p>Get in touch with users publishing the most content</p>
+            <input id="influencers_users" type="radio" name="user_tabs" value="influencers">
+            <label for="influencers_users">Influencers</label>
+
+            <div id="border_div"></div>
         </div>
-    </div>
-    <div class="small-12 medium-8 large-7 large-offset-1 columns">
         <div id="influencers_wrapper" class="animation-flow">
             <div class="influencers_illustration">
                 <div id="circle-1" class="circle-container">
@@ -268,6 +271,7 @@
                         <div class="back"><img class="circle_source_icon" src=""><a href="#" target="_blank"></a></div>
                     </div>
                     <p class="circle-posts"></p>
+
                     <div class="verticalLine"></div>
                 </div>
                 <div id="circle-2" class="circle-container">
@@ -277,6 +281,7 @@
                         </div>
                     </div>
                     <p class="circle-posts"></p>
+
                     <div class="verticalLine"></div>
                 </div>
                 <div id="circle-3" class="circle-container">
@@ -285,6 +290,7 @@
                         <div class="back"><img class="circle_source_icon" src=""><a href="#" target="_blank"></a></div>
                     </div>
                     <p class="circle-posts"></p>
+
                     <div class="verticalLine"></div>
                 </div>
                 <div id="circle-4" class="circle-container">
@@ -293,6 +299,7 @@
                         <div class="back"><img class="circle_source_icon" src=""><a href="#" target="_blank"></a></div>
                     </div>
                     <p class="circle-posts"></p>
+
                     <div class="verticalLine"></div>
                 </div>
                 <div id="circle-5" class="circle-container">
@@ -301,6 +308,7 @@
                         <div class="back"><img class="circle_source_icon" src=""><a href="#" target="_blank"></a></div>
                     </div>
                     <p class="circle-posts"></p>
+
                     <div class="verticalLine"></div>
                 </div>
                 <hr>
@@ -310,6 +318,7 @@
                         <div class="back"><img class="circle_source_icon" src=""><a href="#" target="_blank"></a></div>
                     </div>
                     <p class="circle-posts"></p>
+
                     <div class="verticalLine"></div>
                 </div>
                 <div id="circle-7" class="circle-container">
@@ -318,6 +327,7 @@
                         <div class="back"><img class="circle_source_icon" src=""><a href="#" target="_blank"></a></div>
                     </div>
                     <p class="circle-posts"></p>
+
                     <div class="verticalLine"></div>
                 </div>
                 <div id="circle-8" class="circle-container">
@@ -326,6 +336,7 @@
                         <div class="back"><img class="circle_source_icon" src=""><a href="#" target="_blank"></a></div>
                     </div>
                     <p class="circle-posts"></p>
+
                     <div class="verticalLine"></div>
                 </div>
                 <div id="circle-9" class="circle-container">
@@ -335,6 +346,7 @@
                         </div>
                     </div>
                     <p class="circle-posts"></p>
+
                     <div class="verticalLine"></div>
                 </div>
                 <div id="circle-10" class="circle-container">
@@ -343,6 +355,7 @@
                         <div class="back"><img class="circle_source_icon" src=""><a href="#" target="_blank"></a></div>
                     </div>
                     <p class="circle-posts"></p>
+
                     <div class="verticalLine"></div>
                 </div>
                 <hr>
@@ -352,6 +365,7 @@
                         <div class="back"><img class="circle_source_icon" src=""><a href="#" target="_blank"></a></div>
                     </div>
                     <p class="circle-posts"></p>
+
                     <div class="verticalLine"></div>
                 </div>
                 <div id="circle-12" class="circle-container">
@@ -360,6 +374,7 @@
                         <div class="back"><img class="circle_source_icon" src=""><a href="#" target="_blank"></a></div>
                     </div>
                     <p class="circle-posts"></p>
+
                     <div class="verticalLine"></div>
                 </div>
                 <div id="circle-13" class="circle-container">
@@ -368,6 +383,7 @@
                         <div class="back"><img class="circle_source_icon" src=""><a href="#" target="_blank"></a></div>
                     </div>
                     <p class="circle-posts"></p>
+
                     <div class="verticalLine"></div>
                 </div>
                 <div id="circle-14" class="circle-container">
@@ -377,6 +393,7 @@
                         </div>
                     </div>
                     <p class="circle-posts"></p>
+
                     <div class="verticalLine"></div>
                 </div>
                 <div id="circle-15" class="circle-container">
@@ -386,25 +403,48 @@
                         </div>
                     </div>
                     <p class="circle-posts"></p>
+
                     <div class="verticalLine"></div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="small-12 medium-4 large-4 columns">
+        <div class="description" id="influencers">
+            <h3>USERS</h3>
+
+            <p>Get in touch with users publishing the most content</p>
+        </div>
+    </div>
 </div>
 <div class="row bigWidth">
-    <div class="small-12 medium-8 large-7 columns">
-        <svg id="chart_line" class="with-3d-shadow with-transitions"></svg>
-    </div>
-    <div class="small-12 medium-4 large-4 large-offset-1 columns">
-        <div class="description" id="timeline">
+    <div class="small-12 medium-4 large-4 columns">
+        <div class="description left_side" id="timeline">
             <h3>TIMELINE</h3>
 
             <p>Discover periods with least activity. Foresee bursts.</p>
         </div>
     </div>
+    <div class="small-12 medium-8 large-7 columns">
+        <svg id="chart_line" class="with-3d-shadow with-transitions"></svg>
+    </div>
 </div>
 <div class="row bigWidth margin_vertical">
+    <div class="small-12 medium-8 large-8 columns">
+        <div id="articles_wrapper"></div>
+        <div class="well">
+            <ul id="pagination" class="pagination-sm"></ul>
+        </div>
+    </div>
+    <div class="small-12 medium-4 large-4 columns">
+        <div class="description" id="articles">
+            <h3>ARTICLES</h3>
+
+            <p>Find most relevant articles.</p>
+        </div>
+    </div>
+</div>
+<div class="row bigWidth">
     <div class="small-12 medium-4 large-4 columns">
         <div class="description left_side" id="posts">
             <h3>POSTS</h3>
@@ -422,7 +462,7 @@
     </div>
 </div>
 
-<div class="row bigWidth">
+<div class="row bigWidth margin_vertical">
     <div class="small-12 medium-8 large-8 columns">
         <div style="height: 500px">
             <div class="pie_chart_wrapper"></div>
@@ -437,7 +477,7 @@
     </div>
 </div>
 
-<div class="row bigWidth margin_vertical">
+<div class="row bigWidth">
     <div class="small-12 medium-4 large-4 columns">
         <div class="description left_side" id="tags">
             <h3>TAGS</h3>
@@ -457,7 +497,7 @@
         </div>
     </div>
 </div>
-<div class="row bigWidth">
+<div class="row bigWidth margin_vertical">
     <div class="small-12 medium-8 large-8 columns">
         <div class="topics_chart_wrapper">
             <div class="topics_chart">
@@ -485,7 +525,7 @@
         </div>
     </div>
 </div>
-<div class="row bigWidth margin_vertical">
+<div class="row bigWidth">
     <div class="small-12 medium-4 large-4 columns">
         <div class="description left_side" id="map">
             <h3>Map</h3>
@@ -505,6 +545,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 <script src="../js/config.js"></script>
+<script src="js/municipality/jquery.twbsPagination.min.js"></script>
 <script src="js/municipality/mapbox_v1.6.2.js"></script>
 <script src="js/municipality/hexbin.js"></script>
 <script src="js/municipality/jquery.reveal.js"></script>

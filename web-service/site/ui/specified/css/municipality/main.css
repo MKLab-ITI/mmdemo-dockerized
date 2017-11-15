@@ -1560,11 +1560,12 @@ h4.no-media {
     font-family: 'Open Sans', sans-serif;
     margin: 0 20px 40px;
     opacity: 0;
-    -webkit-transition: opacity 1s ease-in-out;
-    -moz-transition: opacity 1s ease-in-out;
-    -o-transition: opacity 1s ease-in-out;
-    transition: opacity 1s ease-in-out;
+    -webkit-transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    -o-transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
     position: relative;
+    float: right;
 }
 
 .stats_number {
@@ -1596,7 +1597,8 @@ h4.no-media {
     width: 100%;
     text-align: center;
 }
-#legend_concepts{
+
+#legend_concepts {
     position: absolute;
     margin-top: 140px;
     width: 420px;
@@ -1703,7 +1705,7 @@ h4.no-media {
     transition: all 1s ease-in-out, color 0.1s, background 0.1s;
     cursor: default;
     padding: 45px 5px 0;
-    color:#ecf0f1
+    color: #ecf0f1
 }
 
 .topics_chart.open li input + label {
@@ -1745,7 +1747,7 @@ h4.no-media {
     transition: opacity 1s ease-in-out;
 }
 
-.concept_small{
+.concept_small {
     width: 70px !important;
     height: 70px !important;
     bottom: 318px !important;
@@ -1753,7 +1755,8 @@ h4.no-media {
     background: #4c88b8 !important;
     font-size: 12px !important;
 }
-.concept_medium{
+
+.concept_medium {
     width: 80px !important;
     height: 80px !important;
     bottom: 314px !important;
@@ -1761,7 +1764,8 @@ h4.no-media {
     font-size: 13px !important;
     background: #3a75a5 !important;
 }
-.concept_large{
+
+.concept_large {
     width: 90px !important;
     height: 90px !important;
     bottom: 308px !important;
@@ -1781,13 +1785,16 @@ h4.no-media {
         height: 150px;
         width: 150px;
     }
-    .concept_small{
+
+    .concept_small {
         bottom: 211px !important;
     }
-    .concept_small{
+
+    .concept_small {
         bottom: 217px !important;
     }
-    .concept_large{
+
+    .concept_large {
         bottom: 221px !important;
     }
 
@@ -2107,4 +2114,217 @@ h4.no-media {
     position: absolute;
     top: -30px;
     left: 45px;
+}
+
+#user_tabs {
+    text-align: center;
+    padding: 10px 10px 85px;
+    margin-top: -35px;
+    opacity: 0;
+    -webkit-transition: opacity 1.5s ease-in-out;
+    -moz-transition: opacity 1.5s ease-in-out;
+    transition: opacity 1.5s ease-in-out;
+}
+
+#border_div {
+    border-top: 2px solid #5a5c5e;
+}
+
+#user_tabs input {
+    display: none;
+}
+
+#user_tabs label {
+    display: inline-block;
+    margin: 0 0 -1px;
+    padding: 15px 25px;
+    font-weight: 600;
+    text-align: center;
+    color: #555;
+    border: 1px solid transparent;
+    width: 145px;
+}
+
+#user_tabs label:before {
+    font-weight: normal;
+    margin-right: 10px;
+}
+
+#user_tabs label:hover {
+    color: #888;
+    cursor: pointer;
+}
+
+#user_tabs input:checked + label {
+    color: #ecf0f1;
+    border: 2px solid #5a5c5e;
+    border-top: 3px solid #47a3da;
+    border-bottom: 0;
+}
+#articles_wrapper{
+    text-align: center;
+}
+
+.frame {
+    width: 1090px;
+    height: 558px;
+    border: none;
+    -moz-transform: scale(0.33);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.33);
+    -o-transform-origin: 0 0;
+    -webkit-transform: scale(0.33);
+    -webkit-transform-origin: 0 0;
+    pointer-events: none;
+    position: absolute;
+    margin-left: -180px;
+    margin-top: -10px;
+}
+
+.frame_wrapper {
+    display: inline-block;
+    background: #ecf0f1;
+    width: 360px;
+    padding: 10px;
+    margin: 0 40px 10px 0;
+}
+
+.frame_article {
+    margin-top: 185px;
+    text-align: left;
+}
+
+.frame_article h2 {
+    line-height: 1.2;
+    margin-bottom: 1.6rem;
+    color: #444;
+}
+
+.frame_article p {
+    color: #666666;
+    font-size: 14px;
+    margin-top: -10px;
+    height: 96px;
+    overflow: hidden;
+}
+
+.frame_source img {
+    margin-right: 5px;
+}
+
+.frame_source img, .frame_source_name {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.frame_source_name {
+    color: #666666;
+    font-size: 13px;
+}
+
+.frame_source_name a {
+    text-decoration: none;
+    color: #666;
+    font-weight: bold;
+}
+
+.frame_source_name a:hover {
+    text-decoration: underline;
+}
+
+.frame_source, .frame_link {
+    display: inline-block;
+}
+
+.frame_link {
+    font-size: 14px;
+    float: right;
+    font-weight: bold;
+    border: 1px solid #47a3da;
+    padding: 10px;
+    color: #47a3da
+}
+
+.frame_link:hover {
+    background: #47a3da;
+    color: #ecf0f1;
+}
+
+.frame_link a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.frame_source {
+    margin-top: 20px;
+}
+
+.pagination {
+    display: inline-block;
+    margin: 20px 0;
+    border-radius: 4px;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+    list-style: disc inside;
+}
+
+.pagination .first, .pagination .prev, .pagination.last, .pagination .next {
+    font-weight: bold;
+}
+
+.pagination > li {
+    display: inline;
+}
+
+.pagination > li:first-child > a, .pagination > li:first-child > span {
+    margin-left: 0;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+}
+.pagination > li:last-child > a, .pagination > li:last-child > span{
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.pagination > .disabled > span, .pagination > .disabled > span:hover, .pagination > .disabled > span:focus, .pagination > .disabled > a, .pagination > .disabled > a:hover, .pagination > .disabled > a:focus {
+    color: #999;
+    cursor: default;
+    background-color: #ecf0f1;
+    border-color: #ddd;
+}
+
+.pagination > li > a, .pagination > li > span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.428571429;
+    text-decoration: none;
+    background-color: #ecf0f1;
+    border: 1px solid #ddd;
+}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    z-index: 2;
+    color: #ecf0f1;
+    cursor: default;
+    background-color: #47a3da;
+    border-color: #47a3da;
+}
+
+.pagination-sm > li > a, .pagination-sm > li > span {
+    padding: 5px 10px;
+    font-size: 12px;
+    color: #94B0DA;
+}
+
+.pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus, .pagination > li > span:focus {
+    background-color: #ddd;
+}
+
+.well {
+    text-align: center;
+    max-width: 782px;
+    margin-top: 10px;
 }

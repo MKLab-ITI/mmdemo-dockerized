@@ -245,6 +245,9 @@ var leafletMap;
                 case "timeline":
                     draw_timeline();
                     break;
+                case "articles":
+                    draw_articles();
+                    break;
                 case "posts":
                     draw_posts();
                     break;
@@ -509,6 +512,8 @@ function draw_influencers() {
     var dialoque_id = $('.tab-current').attr('data-id');
     $influencers_wrapper.find('.noData').remove();
     $influencers_wrapper.addClass('initial');
+    $('#user_tabs').css('opacity', 1);
+    var tab_user = $('input[name=user_tabs]:checked').val();
     $.ajax({
         type: "GET",
         url: api_folder + "users?n=15&collection=" + dialoque_id + "&source=Twitter,Facebook,Flickr,Youtube,RSS,GooglePlus",
@@ -658,6 +663,81 @@ function draw_timeline() {
     });
 }
 
+function draw_articles() {
+    var dialoque_id = $('.tab-current').attr('data-id');
+    var $paginationdemo = $('#pagination');
+    $('#articles_wrapper').empty();
+    if ($paginationdemo.data("twbs-pagination")) {
+        $paginationdemo.twbsPagination('destroy');
+    }
+    $.ajax({
+        type: "GET",
+        url: api_folder + "articles?collection=" + dialoque_id,
+        dataType: "json",
+        success: function (json) {
+            if (json.articles.length > 0) {
+                $paginationdemo.twbsPagination({
+                    totalPages: Math.ceil(json.articles.length / 2),
+                    visiblePages: "5",
+                    initiateStartPageClick: false,
+                    onPageClick: function (event, page) {
+                        $('#articles_wrapper').empty();
+                        draw_articles_pagination(page);
+                    }
+                });
+                for (var a = 0; (a < json.articles.length && a < 2); a++) {
+                    var url = json.articles[a].url.split('/')[0] + '//' + json.articles[a].url.split('/')[2];
+                    var title = json.articles[a].title;
+                    var desc = json.articles[a].content;
+                    if (desc.length > 225) {
+                        desc = desc.substring(0, 222) + '...';
+                    }
+                    $('#articles_wrapper').append('<div class="frame_wrapper"> <iframe class="frame" src="' + url + '" scrolling="no"></iframe> <article class="frame_article"> <h2>' + title + '</h2> <p>' + desc + '</p> <div class="frame_source"> <img src="https://www.google.com/s2/favicons?domain=' + url + '"> <div class="frame_source_name"> By <a href="' + url + '" target="_blank">' + json.articles[a].url.split('/')[2] + '</a> </div> </div> <div class="frame_link"><a href="' + json.articles[a].url + '" target="_blank">Read more</a></div> </article> </div>')
+                }
+            }
+            else {
+                if ($paginationdemo.data("twbs-pagination")) {
+                    $paginationdemo.twbsPagination('destroy');
+                }
+                $('#articles_wrapper').append($('<p class="noData">No Data Available</p>').hide().fadeIn(2000));
+            }
+        },
+        error: function () {
+            if ($paginationdemo.data("twbs-pagination")) {
+                $paginationdemo.twbsPagination('destroy');
+            }
+            $('#articles_wrapper').append($('<p class="noData">No Data Available</p>').hide().fadeIn(2000));
+        },
+        async: true
+    });
+}
+function draw_articles_pagination(page) {
+    var dialoque_id = $('.tab-current').attr('data-id');
+    $.ajax({
+        type: "GET",
+        url: api_folder + "articles?collection=" + dialoque_id,
+        dataType: "json",
+        success: function (json) {
+            for (var a = (page - 1) * 2; (a < json.articles.length && a < (page * 2)); a++) {
+                var url = json.articles[a].url.split('/')[0] + '//' + json.articles[a].url.split('/')[2];
+                var title = json.articles[a].title;
+                var desc = json.articles[a].content;
+                if (desc.length > 225) {
+                    desc = desc.substring(0, 222) + '...';
+                }
+                $('#articles_wrapper').append('<div class="frame_wrapper"> <iframe class="frame" src="' + url + '" scrolling="no"></iframe> <article class="frame_article"> <h2>' + title + '</h2> <p>' + desc + '</p> <div class="frame_source"> <img src="https://www.google.com/s2/favicons?domain=' + url + '"> <div class="frame_source_name"> By <a href="' + url + '" target="_blank">' + json.articles[a].url.split('/')[2] + '</a> </div> </div> <div class="frame_link"><a href="' + json.articles[a].url + '" target="_blank">Read more</a></div> </article> </div>')
+            }
+        },
+        error: function () {
+            if ($paginationdemo.data("twbs-pagination")) {
+                $paginationdemo.twbsPagination('destroy');
+            }
+            $('#articles_wrapper').append($('<p class="noData">No Data Available</p>').hide().fadeIn(2000));
+        },
+        async: true
+    });
+}
+
 function draw_posts() {
     var $ca_container = $('#ca-container');
     var dialoque_id = $('.tab-current').attr('data-id');
@@ -776,7 +856,7 @@ function draw_stats(first_call) {
 
                 var comma_separator_number_step;
 
-                $('.stats_items').eq(0).css('opacity', 1);
+                $('.stats_items').eq(1).css('opacity', 1);
                 comma_separator_number_step = $.animateNumber.numberStepFactories.append('');
                 if (posts.indexOf('M') > -1) {
                     comma_separator_number_step = $.animateNumber.numberStepFactories.append('M');
@@ -792,7 +872,7 @@ function draw_stats(first_call) {
 
 
                 setTimeout(function () {
-                    $('.stats_items').eq(1).css('opacity', 1);
+                    $('.stats_items').eq(0).css('opacity', 1);
                     comma_separator_number_step = $.animateNumber.numberStepFactories.append('');
                     if (users.indexOf('M') > -1) {
                         comma_separator_number_step = $.animateNumber.numberStepFactories.append('M');
@@ -807,7 +887,7 @@ function draw_stats(first_call) {
                         (first_call * 1000) + 1000);
                 }, first_call * 500);
                 setTimeout(function () {
-                    $('.stats_items').eq(2).css('opacity', 1);
+                    $('.stats_items').eq(3).css('opacity', 1);
                     comma_separator_number_step = $.animateNumber.numberStepFactories.append('');
                     if (endorsement.indexOf('M') > -1) {
                         comma_separator_number_step = $.animateNumber.numberStepFactories.append('M');
@@ -822,7 +902,7 @@ function draw_stats(first_call) {
                         (first_call * 1000) + 1000);
                 }, first_call * 1000);
                 setTimeout(function () {
-                    $('.stats_items').eq(3).css('opacity', 1);
+                    $('.stats_items').eq(2).css('opacity', 1);
                     comma_separator_number_step = $.animateNumber.numberStepFactories.append('');
                     if (reach.indexOf('M') > -1) {
                         comma_separator_number_step = $.animateNumber.numberStepFactories.append('M');
@@ -1427,6 +1507,10 @@ $("#tabs").on("click", "li", function () {
             draw_timeline();
         }
 
+        if ($('#articles_wrapper').children().length > 0) {
+            draw_articles();
+        }
+
         if ($('.ca-wrapper').children().length > 0) {
             draw_posts();
         }
@@ -1540,4 +1624,7 @@ function average(data) {
 }
 $(window).on('beforeunload', function () {
     $(window).scrollTop(0);
+});
+$('input[type=radio][name=user_tabs]').change(function () {
+    draw_influencers();
 });

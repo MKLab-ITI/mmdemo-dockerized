@@ -187,6 +187,11 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
     $original = $request->get('original');
     $type = $request->get('type');
 
+    $concept = $request->get('concept');
+    if($concept != null && $concept != '') {
+        $concept = "environment.$concept";
+    }
+
     $unique = $request->get('unique')==null ? false : $request->get('unique');
 
     $sort = $request->get('sort');
@@ -224,7 +229,7 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
             $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
 
-            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
             $results = $textIndex->searchItems($q, $pageNumber, $nPerPage,  $filters, $sort, $judgements, $unique, $query);
 
         }
@@ -351,6 +356,11 @@ $app->get(
         $original = $request->get('original');
         $type = $request->get('type');
 
+        $concept = $request->get('concept');
+        if($concept != null && $concept != '') {
+            $concept = "environment.$concept";
+        }
+
         $unique = $request->get('unique')==null ? false : $request->get('unique');
 
         $n = $request->get('n') == null ? 20 : $request->get('n');
@@ -378,9 +388,9 @@ $app->get(
                         $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                         $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                         $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-                        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+                        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $concept);
 
-                        $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique);
+                        $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique, $concept);
                         $facet = $memcached->get($requestHash);
                         if($facet == false || count($facet) < 2) {
                             $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, $prefix, $unique, null, 'fcs');
@@ -483,6 +493,11 @@ $app->get(
         $original = $request->get('original');
         $type = $request->get('type');
 
+        $concept = $request->get('concept');
+        if($concept != null && $concept != '') {
+            $concept = "environment.$concept";
+        }
+
         $language = $request->get('language');
         $source = $request->get('source');
 
@@ -506,7 +521,7 @@ $app->get(
                     $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                     $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                     $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
 
                     $facet = $textIndex->getFacet('uidFacet', $collectionQuery, $filters, $n, false, null, $unique, null, 'fcs');
 
@@ -542,9 +557,9 @@ $app->get(
             $collection = $mongoDAO->getCollection($collectionId);
             if ($collection != null) {
                 $requestHash = "articles_$collectionId";
-                //$articles = $memcached->get($requestHash);
+                $articles = $memcached->get($requestHash);
 
-                //if($articles == false) {
+                if($articles == false) {
 
                     $q = $utils->formulateCollectionQuery($collection);
 
@@ -598,7 +613,7 @@ $app->get(
                             //}
                         }
                         catch(Exception $e) {
-                            echo $e->getTraceAsString();
+                            continue;
                         }
                     }
                     curl_close($ch);
@@ -610,8 +625,8 @@ $app->get(
                         'content' => 'Ruta Ciclista de Los Alcázares a La Manga\n-\nFuente: de viaje por murcia - Ver todas las noticias de este sitio\nRuta Ciclista de Los Alcázares a La Manga\nSe acerca el buen tiempo y salir a entrenar con bici es de lo más agradable sobre todo en esta zona del sureste español.\nHoy cogemos nuestro coche y nos vamos hasta la localidad de Los Alcázares en la orilla del mar Menor para hacer un recorrido hasta el final de la Manga y regresar de nuevo a Los Alcázares.\nSi hace un día soleado con un ligero viento de levante vamos a disfrutar de este recorrido enormemente.\nSalimos de los Alcázares con el Mar Menor a nuestra izquierda para dirigirnos a Los Urrutias. Podremos disfrutar de una zona donde se pueden ver aves migratorias como los Flamencos.\nAtravesamos Los Urrutias para ir hacia los Nietos, uno de los lugares de veraneo más típicos de los cartageneros que no salen de la Región en verano.\nAl salir de Los Nietos llegaremos a Los Belones para seguir adelante por carreteras que de servicio paralelas a la autovía Cartagena La Manga.\nNos queda pasar por el Camping Villas Caravaning para pasar de largo la entrada a Playa Honda y llegar a un cruce detrás de un circuito de Karts que tomaremos a la izquierda para pasar por las salinas ya abandonadas que nos sirven de.entrada a la Manga.\nEncuentra ofertas de viajes online con Rumbo y ven a disfrutar de las maravillas de esa ruta ciclista por el Mar Menor.');
 
 
-                    $memcached->set($requestHash, $articles, time() + 61);
-                //}
+                    $memcached->set($requestHash, $articles, time() + 600);
+                }
             }
         }
         echo json_encode(array('articles' => $articles));
@@ -632,6 +647,11 @@ $app->get(
 
         $original = $request->get('original');
         $type = $request->get('type');
+
+        $concept = $request->get('concept');
+        if($concept != null && $concept != '') {
+            $concept = "environment.$concept";
+        }
 
         $language = $request->get('language');
         $source = $request->get('source');
@@ -656,7 +676,7 @@ $app->get(
                     $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                     $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                     $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
 
                     $termsToExclude = preg_split("/[\s,]+/", $query);
                     $termsToExclude = array_map(function($k) {
@@ -774,6 +794,11 @@ $app->get(
         $language = $request->get('language');
         $source = $request->get('source');
 
+        $concept = $request->get('concept');
+        if($concept != null && $concept != '') {
+            $concept = "environment.$concept";
+        }
+
         $unique = $request->get('unique')==null ? false : $request->get('unique');
 
         $collectionId = $request->get('collection');
@@ -812,7 +837,7 @@ $app->get(
             $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
             $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
             $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-            $filters = $utils->getFilters(($since==null?"*":$since), ($until==null?"*":$until), $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+            $filters = $utils->getFilters(($since==null?"*":$since), ($until==null?"*":$until), $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
 
             $q = $utils->formulateCollectionQuery($collection);
             if($since == null) {
@@ -822,7 +847,7 @@ $app->get(
                 $until = 1000*time();
             }
 
-            $requestHash = "timeline_$gap\_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique);
+            $requestHash = "timeline_$gap\_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique, $concept);
             $cachedTimeline = $memcached->get($requestHash);
             if($cachedTimeline != false) {
                 echo json_encode(array('timeline' => $cachedTimeline));
@@ -859,6 +884,11 @@ $app->get(
         $original = $request->get('original');
         $type = $request->get('type');
         $language = $request->get('language');
+
+        $concept = $request->get('concept');
+        if($concept != null && $concept != '') {
+            $concept = "environment.$concept";
+        }
 
         $unique = $request->get('unique')==null ? false : $request->get('unique');
 
@@ -901,9 +931,9 @@ $app->get(
                 $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                 $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                 $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
 
-                $requestHash = "stats_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique);
+                $requestHash = "stats_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique, $concept);
 
 
                 $cachedStatistics = $memcached->get($requestHash);
@@ -956,6 +986,11 @@ $app->get(
         $source = $request->get('source');
         $language = $request->get('language');
 
+        $concept = $request->get('concept');
+        if($concept != null && $concept != '') {
+            $concept = "environment.$concept";
+        }
+
         $query = $request->get('q');
         $topicQuery = $request->get('topicQuery');
         if($topicQuery != null) {
@@ -975,13 +1010,13 @@ $app->get(
                 $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                 $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                 $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-                $filters = $utils->getFilters($since, $until, $source, 'original', null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+                $filters = $utils->getFilters($since, $until, $source, 'original', null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
 
                 $count = $textIndex->countItems($collectionQuery, $filters);
 
                 $topics[] = array('label' => 'All', 'query' => '*', 'score' => 1, 'items' => $count);
 
-                $requestHash = "topics_".$utils->getParametersHash($collectionId, "*", "*", $source, true, null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, null);
+                $requestHash = "topics_".$utils->getParametersHash($collectionId, "*", "*", $source, true, null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $concept);
                 $cachedTopics = $memcached->get($requestHash);
                 if($cachedTopics != false && count($cachedTopics) > 1) {
                     echo json_encode(array("topics"=>$cachedTopics));

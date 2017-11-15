@@ -108,7 +108,7 @@ class Utils {
         return implode(' OR ', $query);
     }
 
-    public function getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude) {
+    public function getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept=null) {
 
         // Add filters if available
         $filters = array();
@@ -121,6 +121,10 @@ class Utils {
             $filterTextQuery = $this->formulateLogicalQuery($keywords);
             // Do not cache it
             $filters['{!cache=false}allText'] = $filterTextQuery;
+        }
+
+        if($concept != null and $concept != '') {
+            $filters['topics'] = "$concept";
         }
 
         //filter by source
@@ -199,8 +203,8 @@ class Utils {
         return $filters;
     }
 
-    public function getParametersHash($cid, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique) {
-        $data = $this->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+    public function getParametersHash($cid, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique, $concept) {
+        $data = $this->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
         $data['unique'] = $unique;
 
         $input_str = json_encode($data);

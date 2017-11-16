@@ -23,7 +23,7 @@ var leafletMap;
         case "thessaloniki":
             pilot = "Thessaloniki";
             break;
-        case "europe":
+        case "eu":
             pilot = "eu";
             break;
         default:
@@ -259,10 +259,13 @@ var leafletMap;
                         draw_hashtags();
                     }, 500);
                     break;
-                case "topics":
+                case "concepts":
                     setTimeout(function () {
-                        draw_topics();
+                        draw_concepts();
                     }, 300);
+                    break;
+                case "topics":
+                    draw_topics();
                     break;
                 case "map":
                     draw_map(true);
@@ -1204,17 +1207,17 @@ function draw_hashtags() {
     return d3.csv("", render_vis);
 }
 
-function draw_topics() {
+function draw_concepts() {
     $('#legend_concepts').show().css('visibility', 'visible');
-    var $topics_chart_wrapper = $('.topics_chart_wrapper');
+    var $concepts_chart_wrapper = $('.concepts_chart_wrapper');
     var $tab_current = $('.tab-current');
     var dialoque_id = $tab_current.attr('data-id');
-    var $topic_chart = $('.topics_chart');
-    var $topic_main = $('#topic_main');
-    $topic_chart.removeClass('open');
-    $topic_chart.find('ul').empty();
-    $topics_chart_wrapper.find('.noData').remove();
-    $topics_chart_wrapper.addClass('initial');
+    var $concepts_chart = $('.concepts_chart');
+    var $concepts_main = $('#concepts_main');
+    $concepts_chart.removeClass('open');
+    $concepts_chart.find('ul').empty();
+    $concepts_chart_wrapper.find('.noData').remove();
+    $concepts_chart_wrapper.addClass('initial');
 
     $.ajax({
         type: "GET",
@@ -1223,12 +1226,12 @@ function draw_topics() {
         success: function (json) {
             if (json.length > 0) {
                 var count_percentage = [];
-                $topic_chart.show();
-                $topic_main.text($tab_current.text());
-                $topic_main.css('opacity', 1);
+                $concepts_chart.show();
+                $concepts_main.text($tab_current.text());
+                $concepts_main.css('opacity', 1);
                 $('figure').css('opacity', 1);
                 for (var c = 0; c < json.length; c++) {
-                    $topic_chart.find('ul').append("<li> <input id='" + c + "' type='checkbox'> <label title='" + json[c].field.replace(/_/g, " ") + "' for='" + c + "'>" + json[c].field.replace(/_/g, " ") + "</label> </li>");
+                    $concepts_chart.find('ul').append("<li> <input id='" + c + "' type='checkbox'> <label title='" + json[c].field.replace(/_/g, " ") + "' for='" + c + "'>" + json[c].field.replace(/_/g, " ") + "</label> </li>");
                     count_percentage.push(json[c].count);
                 }
                 var total = count_percentage.reduce(function (a, b) {
@@ -1240,38 +1243,38 @@ function draw_topics() {
                 for (co = 0; co < count_percentage.length; co++) {
                     switch (true) {
                         case (count_percentage[co] < 0.2):
-                            $topic_chart.find('li').eq(co).find('label').addClass('concept_small');
+                            $concepts_chart.find('li').eq(co).find('label').addClass('concept_small');
                             break;
                         case (count_percentage[co] < 0.5):
-                            $topic_chart.find('li').eq(co).find('label').addClass('concept_medium');
+                            $concepts_chart.find('li').eq(co).find('label').addClass('concept_medium');
                             break;
                         case (count_percentage[co] < 0.8):
-                            $topic_chart.find('li').eq(co).find('label').addClass('concept_large');
+                            $concepts_chart.find('li').eq(co).find('label').addClass('concept_large');
                             break;
                         default:
                             break;
                     }
                 }
                 setTimeout(function () {
-                    $topic_chart.toggleClass('open');
-                    var li = $topic_chart.find('li');
-                    var deg = $topic_chart.hasClass('half') ? 180 / (li.length - 1) : 360 / li.length;
+                    $concepts_chart.toggleClass('open');
+                    var li = $concepts_chart.find('li');
+                    var deg = $concepts_chart.hasClass('half') ? 180 / (li.length - 1) : 360 / li.length;
                     for (var i = 0; i < li.length; i++) {
-                        var d = $topic_chart.hasClass('half') ? (i * deg) - 90 : i * deg;
-                        $topic_chart.hasClass('open') ? rotate(li[i], d) : rotate(li[i], angleStart);
+                        var d = $concepts_chart.hasClass('half') ? (i * deg) - 90 : i * deg;
+                        $concepts_chart.hasClass('open') ? rotate(li[i], d) : rotate(li[i], angleStart);
                     }
                 }, 100);
             }
             else {
-                $topic_chart.hide();
+                $concepts_chart.hide();
                 $('#legend_concepts').css('visibility', 'hidden');
-                $('.topics_chart_wrapper').append($('<p class="noData">No Data Available</p>').hide().fadeIn(2000));
+                $('.concepts_chart_wrapper').append($('<p class="noData">No Data Available</p>').hide().fadeIn(2000));
             }
         },
         error: function () {
-            $topic_chart.hide();
+            $concepts_chart.hide();
             $('#legend_concepts').css('visibility', 'hidden');
-            $('.topics_chart_wrapper').append($('<p class="noData">No Data Available</p>').hide().fadeIn(2000));
+            $('.concepts_chart_wrapper').append($('<p class="noData">No Data Available</p>').hide().fadeIn(2000));
         },
         async: true
     });
@@ -1452,6 +1455,14 @@ function draw_map(first_call) {
     }
 }
 
+function draw_topics() {
+    var $topics_wrapper = $('#topics_wrapper');
+    $topics_wrapper.addClass('initial');
+    $topics_wrapper.animate({"left": "0px"}, "slow");
+    $('#posts_link').attr('href', '../topics?type=posts&dialogue=' + gup('dialogue'));
+    $('#articles_link').attr('href', '../topics?type=articles&dialogue=' + gup('dialogue'));
+}
+
 $(window).resize(function () {
     clearTimeout(window.resizedFinished);
     window.resizedFinished = setTimeout(function () {
@@ -1523,12 +1534,15 @@ $("#tabs").on("click", "li", function () {
             draw_hashtags();
         }
 
-        if ($('.topics_chart_wrapper').hasClass('initial')) {
-            draw_topics();
+        if ($('.concepts_chart_wrapper').hasClass('initial')) {
+            draw_concepts();
         }
 
         if ($('#mapContainer').children().length > 0) {
             draw_map(false);
+        }
+        if ($('#topics_wrapper').hasClass('initial')) {
+            draw_topics();
         }
     }
 });

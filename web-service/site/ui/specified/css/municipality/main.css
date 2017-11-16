@@ -1637,17 +1637,17 @@ h4.no-media {
     }
 }
 
-.topics_chart {
+.concepts_chart {
     position: absolute;
     left: 120px;
     top: 120px;
 }
 
-.topics_chart, .topics_chart button {
+.concepts_chart, .concepts_chart button {
     font-weight: 300;
 }
 
-.topics_chart button {
+.concepts_chart button {
     height: 250px;
     width: 250px;
     position: relative;
@@ -1665,7 +1665,7 @@ h4.no-media {
     word-wrap: break-word;
 }
 
-.topics_chart ul {
+.concepts_chart ul {
     position: absolute;
     list-style: none;
     padding: 0;
@@ -1676,7 +1676,7 @@ h4.no-media {
     left: -20px;
 }
 
-.topics_chart li {
+.concepts_chart li {
     position: absolute;
     width: 0;
     height: 100%;
@@ -1685,11 +1685,11 @@ h4.no-media {
     transition: all 1s ease-in-out;
 }
 
-.topics_chart li input {
+.concepts_chart li input {
     display: none;
 }
 
-.topics_chart li input + label {
+.concepts_chart li input + label {
     position: absolute;
     left: 50%;
     bottom: 100%;
@@ -1708,7 +1708,7 @@ h4.no-media {
     color: #ecf0f1
 }
 
-.topics_chart.open li input + label {
+.concepts_chart.open li input + label {
     width: 120px;
     height: 120px;
     margin-left: -40px;
@@ -1717,12 +1717,12 @@ h4.no-media {
     font-weight: bold;
 }
 
-.topics_chart_wrapper {
+.concepts_chart_wrapper {
     position: relative;
     height: 500px;
 }
 
-#topic_main {
+#concepts_main {
     opacity: 0;
     -webkit-transition: opacity 1s ease-in-out;
     -moz-transition: opacity 1s ease-in-out;
@@ -1730,7 +1730,7 @@ h4.no-media {
     transition: opacity 1s ease-in-out;
 }
 
-.topics_circle {
+.concepts_circle {
     position: absolute;
     margin: 0;
     border: dashed 3px #0B7189;
@@ -1774,14 +1774,14 @@ h4.no-media {
 }
 
 @media only screen and (max-width: 1360px) {
-    .topics_chart {
+    .concepts_chart {
         left: 150px;
     }
 }
 
 @media only screen and (max-width: 750px) {
 
-    .topics_chart button {
+    .concepts_chart button {
         height: 150px;
         width: 150px;
     }
@@ -1798,7 +1798,7 @@ h4.no-media {
         bottom: 221px !important;
     }
 
-    .topics_circle {
+    .concepts_circle {
         width: 320px;
         height: 320px;
     }
@@ -2161,7 +2161,8 @@ h4.no-media {
     border-top: 3px solid #47a3da;
     border-bottom: 0;
 }
-#articles_wrapper{
+
+#articles_wrapper {
     text-align: center;
 }
 
@@ -2282,7 +2283,8 @@ h4.no-media {
     border-bottom-left-radius: 4px;
     border-top-left-radius: 4px;
 }
-.pagination > li:last-child > a, .pagination > li:last-child > span{
+
+.pagination > li:last-child > a, .pagination > li:last-child > span {
     border-bottom-right-radius: 4px;
     border-top-right-radius: 4px;
 }
@@ -2327,4 +2329,70 @@ h4.no-media {
     text-align: center;
     max-width: 782px;
     margin-top: 10px;
+}
+
+#topics_placeholder {
+    width: 100%;
+    max-width: 700px;
+    opacity: 0.4;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.diagonal_text {
+    font-weight: bold;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    font-size: 33px;
+    left: 50%;
+    width: 170px;
+    position: absolute;
+    top: 50%;
+    margin: -60px 0 0 -85px;
+    z-index: 1;
+    color: #ecf0f1;
+}
+
+.hint_text {
+    position: absolute;
+    color: #ecf0f1;
+    bottom: 0;
+    font-size: 11px;
+    font-style: italic;
+    text-indent: 10px;
+    margin-top: 0;
+    width: 100%;
+    max-width: 700px;
+}
+
+#posts_link, #articles_link {
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+    background: #47a3da;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100px;
+    text-align: center;
+    display: inline-block;
+    margin-right: 50px;
+}
+
+#links_wrapper {
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    max-width: 700px;
+    top: 65%;
+    z-index: 2;
+}
+
+#articles_link {
+    margin-right: 0;
+}
+
+#topics_wrapper {
+    position: relative;
+    left: -1200px;
 }

@@ -1,16 +1,20 @@
 var type = gup('type');
 var dialogue_id = gup('dialogue_id');
 $('.graph_title').eq(1).text(type);
-$('#dialogue_link').attr('href','../specified/municipality.html?pilot='+dialogue_id.replace(/[0-9]/g, '').toLowerCase()+'&dialogue='+dialogue_id);
+$('#dialogue_link').attr('href', '../specified/municipality.html?pilot=' + dialogue_id.replace(/[0-9]/g, '').toLowerCase() + '&dialogue=' + dialogue_id);
 $('input[type=radio][name=algorithm]').change(function () {
     $('#loading').show();
     $('#graph1,#graph2,#legend,#legend_actions,#legend_toggle').css('opacity', 0);
     if ($('input[name=algorithm]:checked').val() === "nmf") {
-        getData_topics('nmf');
+        if ($('#graph1').is(":visible")) {
+            getData_topics('nmf');
+        }
         getData_documents('nmf');
     }
     else {
-        getData_topics('lda');
+        if ($('#graph1').is(":visible")) {
+            getData_topics('lda');
+        }
         getData_documents('lda');
     }
 });
@@ -37,7 +41,6 @@ nv.addGraph(function () {
 
     chart_topics.xAxis.tickFormat(d3.format('.02f'));
     chart_topics.yAxis.tickFormat(d3.format('.02f'));
-    getData_topics('lda');
     return chart_topics;
 });
 nv.addGraph(function () {
@@ -190,15 +193,45 @@ $('#legend_toggle').click(function () {
     $(this).find('img').toggleClass('close_arrow');
     $('#legend_wrapper').slideToggle(500);
 });
+$('#chart1_toggle').click(function () {
+    var $graph1 = $('#graph1');
+    var $graph2 = $('#graph2');
+    var $graph_title = $('.graph_title');
+    var $gap = $('#gap');
+    $(this).find('img').toggleClass('close_arrow');
+    $graph2.css('opacity', '0');
+    $graph1.css('opacity', '0');
+    if ($graph1.is(":visible")) {
+        $graph_title.eq(0).hide();
+        $graph_title.eq(1).css('width', '100%');
+        $gap.hide();
+        $graph1.hide();
+        $graph2.removeClass('opened');
+        $graph_title.eq(1).css('margin-left', '0');
+    }
+    else {
+        $graph2.addClass('opened');
+        $graph1.css('display', 'inline-block');
+        $gap.css('display', 'inline-block');
+        $graph_title.eq(0).css('display', 'inline-block');
+        $graph_title.css('width', 'calc(50% - 85px)');
+        $graph_title.eq(1).css('margin-left', '88px');
+    }
+    $(window).trigger('resize');
+});
 function resizedw() {
-    $('#loading').show();
     $('#graph1,#graph2,#legend,#legend_actions,#legend_toggle').css('opacity', 0);
+    $('#loading').show();
     if ($('input[name=algorithm]:checked').val() === "nmf") {
-        getData_topics('nmf');
+        if ($('#graph1').is(":visible")) {
+            getData_topics('nmf');
+        }
         getData_documents('nmf');
     }
     else {
-        getData_topics('lda');
+        if ($('#graph1').is(":visible")) {
+            getData_topics('lda');
+        }
         getData_documents('lda');
     }
 }

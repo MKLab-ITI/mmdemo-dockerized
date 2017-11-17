@@ -10,7 +10,7 @@ function draw_social_mix(flag, view) {
 
     $.ajax({
         type: "GET",
-        url: api_folder + "statistics?collection=" + collection_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&q=" + query_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "statistics?collection=" + collection_param + "&concepts=" + concept_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&q=" + query_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             var stream, count;

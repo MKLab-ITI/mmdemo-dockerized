@@ -40,6 +40,14 @@
         <es>TEMAS</es>
         <ca>TEMES</ca>
     </translation>
+    <translation id="slider_settings_concepts">
+        <en>CONCEPTS</en>
+        <el>ΕΝΟΤΗΤΕΣ</el>
+        <it>CONCEPTS</it>
+        <tr>CONCEPTS</tr>
+        <es>CONCEPTS</es>
+        <ca>CONCEPTS</ca>
+    </translation>
     <translation id="slider_settings_original">
         <en>ORIGINAL</en>
         <el>ΠΗΓΗ</el>

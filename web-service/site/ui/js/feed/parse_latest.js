@@ -1,7 +1,7 @@
 function parse_latest(pagenum) {
     $.ajax({
         type: "GET",
-        url: api_folder + "items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&q=" + query_param + "&source=" + source_param + "&unique=" + unique_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&q=" + query_param + "&concepts=" + concept_param + "&source=" + source_param + "&unique=" + unique_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             if (pagelocation === "latest") {
@@ -628,7 +628,7 @@ function parse_latest_list(pagenum) {
     $('tbody tr:hidden').remove();
     $.ajax({
         type: "GET",
-        url: api_folder + "items?collection=" + collection_param + "&nPerPage=" + items + "&pageNumber=" + pagenum + "&q=" + query_param + "&source=" + source_param + "&unique=" + unique_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "items?collection=" + collection_param + "&nPerPage=" + items + "&pageNumber=" + pagenum + "&concepts=" + concept_param + "&q=" + query_param + "&source=" + source_param + "&unique=" + unique_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             if (pagelocation === "latest") {
@@ -1587,7 +1587,7 @@ function more_latest() {
             pagenum++;
             $.ajax({
                 type: "GET",
-                url: api_folder + "items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&q=" + query_param + "&source=" + source_param + "&sort=" + sort_param + "&unique=" + unique_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+                url: api_folder + "items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&concepts=" + concept_param + "&q=" + query_param + "&source=" + source_param + "&sort=" + sort_param + "&unique=" + unique_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
                 dataType: "json",
                 success: function (json) {
                     if (pagelocation === "latest") {
@@ -2119,7 +2119,7 @@ function more_latest() {
 function parse_new(count) {
     $.ajax({
         type: "GET",
-        url: api_folder + "items?collection=" + collection_param + "&nPerPage=" + count + "&pageNumber=1&q=" + query_param + "&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "items?collection=" + collection_param + "&nPerPage=" + count + "&pageNumber=1&q=" + query_param + "&concepts=" + concept_param + "&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             if (pagelocation === "latest") {

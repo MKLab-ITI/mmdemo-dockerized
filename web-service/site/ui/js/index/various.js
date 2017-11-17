@@ -771,7 +771,7 @@ $("#examples_3").find("li").click(function () {
     $('#location_icon').attr('src', 'imgs/location-gray.png');
     $('#search_icon_5').attr('src', 'imgs/search-gray.png');
     if (parseInt($('#polygon_count').text()) != 5) {
-        var value= $(this).html();
+        var value = $(this).html();
         geocoder.geocode({"address": value}, function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 var lat = results[0].geometry.location.lat(),
@@ -1410,10 +1410,10 @@ $("#Container").on("click", ".edit_icon", function () {
 });
 $("#Container").on("click", ".overlay", function () {
     if (translation_param) {
-        $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&original=all&type=all&unique=false&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=0&until=1514678400000&section=feed&view=gallery&translation=" + translation_param)
+        $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&concepts=all&original=all&type=all&unique=false&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=0&until=1514678400000&section=feed&view=gallery&translation=" + translation_param)
     }
     else {
-        $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&original=all&type=all&unique=false&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=0&until=1514678400000&section=feed&view=gallery&translation=en")
+        $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&concepts=all&original=all&type=all&unique=false&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=0&until=1514678400000&section=feed&view=gallery&translation=en")
     }
 });
 

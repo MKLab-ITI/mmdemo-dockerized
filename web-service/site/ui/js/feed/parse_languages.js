@@ -1,6 +1,6 @@
 $.ajax({
     type: "GET",
-    url: api_folder+"top/language?collection=" + collection_param + "&source=Facebook,Twitter,Flickr,Youtube,Instagram,RSS,GooglePlus&since="+language_since+"&until="+language_until,
+    url: api_folder + "top/language?collection=" + collection_param + "&source=Facebook,Twitter,Flickr,Youtube,Instagram,RSS,GooglePlus&since=" + language_since + "&until=" + language_until,
     dataType: "json",
     success: function (json) {
 
@@ -13,9 +13,9 @@ $.ajax({
         }
 
         var $this_a;
-        $(".sub1").each(function() {
-            $this_a=$(this).find('a');
-            if($this_a.text().split(' ')[0].toLowerCase()===language_param){
+        $(".sub1").each(function () {
+            $this_a = $(this).find('a');
+            if ($this_a.text().split(' ')[0].toLowerCase() === language_param) {
                 $this_a.addClass('activelan');
                 return false;
             }

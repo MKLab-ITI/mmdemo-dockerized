@@ -16,6 +16,7 @@ var sort_param = gup('sort');
 var original_param = gup('original');
 var type_param = gup('type');
 var topic_param = gup('topics').replace(/%20/g, ' ');
+var concept_param = gup('concepts').replace(/%20/g, ' ');
 var query_param = gup('query').replace(/%20/g, ' ');
 var source_param = gup('source');
 var since_param = parseInt(gup('since'));
@@ -151,7 +152,7 @@ $.ajax({
                 onFinish: function (e) {
                     since_param = e.from * 1000;
                     until_param = e.to * 1000;
-                    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+                    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
 
                     if ($('.page').data('id') === "Feed") {
                         $("#loading").show();
@@ -212,11 +213,7 @@ $.ajax({
                 $("#update_field").stop(true, true).slideUp(800, function () {
                     resizedw("manually");
                 });
-                $('.inlist').eq(0).addClass("dash");
-                $('.inlist').eq(1).addClass("dash");
-                $('.inlist').eq(2).addClass("dash2");
-                $('.inlist').eq(3).addClass("dash2");
-                $('.inlist').eq(4).addClass("dash2");
+                $('.inlist').addClass("dash");
                 $("#dashboard,#load1,#load2,#load3,#load4,#load5,#load6,.load0").show();
                 $('#chart_line, .minitext, #chart_pie, #heatmap, #users_locations, #active_users, #tags').animate({opacity: 0.4}, 400);
                 show_heatmap();
@@ -241,7 +238,7 @@ $.ajax({
                     interval();
                 }
             }
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
         }
     },
     error: function () {
@@ -315,7 +312,7 @@ $(function () {
                     }
                     section_param = "feed";
                     pagelocation = "latest";
-                    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+                    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
                     $("#tiles").empty();
                     $("#main").show(0);
                     $("#loading").show();
@@ -327,12 +324,7 @@ $(function () {
                     $("#update_field").stop(true, true).slideDown(800, function () {
                         resizedw("manually");
                     });
-                    var $inlist = $('.inlist');
-                    $inlist.eq(0).removeClass("dash");
-                    $inlist.eq(1).removeClass("dash");
-                    $inlist.eq(2).removeClass("dash2");
-                    $inlist.eq(3).removeClass("dash2");
-                    $inlist.eq(4).removeClass("dash2");
+                    $('.inlist').removeClass("dash");
                     if (view_param === "list") {
                         $(".list_table tbody").empty();
                         $(".well,#end,#posts_info,#download_icon").hide();
@@ -357,7 +349,7 @@ $(function () {
                 $('#loadingbar').hide().css('width', '0%');
                 section_param = "dashboard";
                 pagelocation = "dashboard";
-                window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+                window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
                 $("#tiles").empty();
                 $("#main").hide(0);
                 $("#end,#loadmore,#list_actions,#deleted_msg_user,#deleted_msg_post").hide();
@@ -366,11 +358,7 @@ $(function () {
                 $("#update_field").stop(true, true).slideUp(800, function () {
                     resizedw("manually");
                 });
-                $('.inlist').eq(0).addClass("dash");
-                $('.inlist').eq(1).addClass("dash");
-                $('.inlist').eq(2).addClass("dash2");
-                $('.inlist').eq(3).addClass("dash2");
-                $('.inlist').eq(4).addClass("dash2");
+                $('.inlist').addClass("dash");
                 $("#dashboard,#load1,#load2,#load3,#load4,#load5,#load6,.load0").show();
                 $('#chart_line, .minitext, #chart_pie, #heatmap, #users_locations, #active_users, #tags').animate({opacity: 0.4}, 400);
                 show_heatmap();
@@ -403,7 +391,7 @@ $(function () {
             }
         }
         source_param = typearr.join(",");
-        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
         if ($('.page').data('id') === "Feed") {
             $("#loading").show();
             $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -441,7 +429,7 @@ $(function () {
             $(this).find('a').addClass('activelan');
             language_param = $(".sub1 .activelan").text().toLowerCase();
             language_param = language_param.substr(0, language_param.indexOf(' '));
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
             if ($('.page').data('id') === "Feed") {
                 $("#loading").show();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -479,7 +467,7 @@ $(function () {
             $('.sub2 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             sort_param = $(".sub2 .activelan").data('id');
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
             $("#loading").show();
             $('.informer').html("0").stop().animate({"opacity": "0"});
             $(window).unbind('.more_latest');
@@ -504,7 +492,7 @@ $(function () {
             $('.sub3 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             original_param = $(".sub3 .activelan").data('id').toLowerCase();
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
             if ($('.page').data('id') === "Feed") {
                 $("#loading").show();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -542,7 +530,7 @@ $(function () {
             $('.sub4 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             type_param = $(".sub4 .activelan").data('id');
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
             if ($('.page').data('id') === "Feed") {
                 $("#loading").show();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -581,7 +569,7 @@ $(function () {
             $('.sub6 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             unique_param = $(".sub6 .activelan").data('id');
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
             if ($('.page').data('id') === "Feed") {
                 $("#loading").show();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -620,7 +608,45 @@ $(function () {
             $('.sub5 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             topic_param = $(".sub5 .activelan").find('p').data('query');
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+            if ($('.page').data('id') === "Feed") {
+                $("#loading").show();
+                $('.informer').html("0").stop().animate({"opacity": "0"});
+                $(window).unbind('.more_latest');
+                if (view_param === "list") {
+                    $(".list_table tbody").empty();
+                    $(".well,#end,#posts_info,#download_icon").hide();
+                    parse_latest_list(1);
+                }
+                else {
+                    $("#tiles").empty();
+                    $("#main").height(0);
+                    $("#end,#loadmore,#posts_info").hide();
+                    parse_latest(1);
+                }
+            }
+            else {
+                $("#load1,#load2,#load3,#load4,#load5,#load6,.load0").show();
+                $('#chart_line, .minitext, #chart_pie, #heatmap, #users_locations, #active_users, #tags').animate({opacity: 0.4}, 400);
+                show_heatmap();
+                show_stats();
+                draw_social_mix(0, $('.activestat').attr('id'));
+                draw_timeline();
+                show_locations();
+                show_active_users();
+                draw_hashtags("classic");
+            }
+        }
+    });
+    $("#settings").on("click", ".sub7", function (e) {
+        e.preventDefault();
+        if (!($(this).find('a').hasClass('activelan'))) {
+            abort();
+            $('#loadingbar').hide().css('width', '0%');
+            $('.sub7 a').removeClass('activelan');
+            $(this).find('a').addClass('activelan');
+            concept_param = $(".sub7 .activelan").find('p').text();
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
             if ($('.page').data('id') === "Feed") {
                 $("#loading").show();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -1115,10 +1141,10 @@ function interval() {
             titlelast = titletop;
         }
         until_param = +moment().format("X") * 1000;
-        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
         $.ajax({
             type: "GET",
-            url: api_folder + "items?collection=" + collection_param + "&q=" + query_param + "&nPerPage=12&pageNumber=1&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+            url: api_folder + "items?collection=" + collection_param + "&concepts=" + concept_param + "&q=" + query_param + "&nPerPage=12&pageNumber=1&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
             dataType: "json",
             success: function (json) {
                 if (pagelocation === "latest") {
@@ -1245,7 +1271,7 @@ $('#gallery_icon,#list_icon').click(function () {
         }
         abort();
         $('#loadingbar').hide().css('width', '0%');
-        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
 
         $("#loading").show();
         $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -1277,7 +1303,7 @@ $('.itemsPerPage span').click(function () {
 });
 $('.icon-clear').click(function () {
     query_param = "";
-    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
     document.getElementById("query").value = "";
     $("#ff-search").find("input[type='text']").removeClass("searchon");
     $(this).hide();
@@ -1351,7 +1377,7 @@ $(".btn-group").on("click", ".btn-default", function (e) {
     $(this).addClass('btn-primary').removeClass('btn-default');
 });
 $("#tiles").on("click", ".translation_p", function () {
-    var $this=$(this);
+    var $this = $(this);
     if ($this.hasClass('original')) {
         var pair = $this.attr('data-pair');
         switch (translation_param) {
@@ -1422,7 +1448,7 @@ $("#tiles").on("click", ".translation_p", function () {
 });
 $("#list_table").on("click", ".translation_p_list", function (e) {
     e.stopPropagation();
-    var $this=$(this);
+    var $this = $(this);
     if ($this.hasClass('original')) {
         var pair = $this.attr('data-pair');
         switch (translation_param) {

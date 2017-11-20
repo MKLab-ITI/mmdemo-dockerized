@@ -101,14 +101,15 @@ html, body, #graph1, svg {
 
 #graph1 {
     height: calc(100% - 178px);
-    width: 47%;
-    display: inline-block;
+    width: calc(50% - 85px);
+    margin-left: 81px;
 }
 
 #graph2 {
     height: calc(100% - 178px);
-    width: 47%;
+    width: calc(100% - 81px);
     display: inline-block;
+    margin-left: 81px;
 }
 
 #algorithm_tabs {
@@ -157,7 +158,7 @@ html, body, #graph1, svg {
 
 #gap {
     background: transparent;
-    width: 5%;
+    width: 80px;
     display: inline-block;
     height: calc(100% - 278px);
     vertical-align: top;
@@ -223,7 +224,7 @@ html, body, #graph1, svg {
 }
 
 .graph_title {
-    width: 50%;
+    width: 100%;
     display: inline-block;
     text-align: center;
     font-size: 20px;
@@ -254,7 +255,8 @@ svg.nvd3-svg {
 #graph1, #graph1, #legend, #legend_actions {
     opacity: 0;
 }
-#legend_wrapper{
+
+#legend_wrapper {
     display: none;
 }
 
@@ -267,7 +269,8 @@ svg.nvd3-svg {
     cursor: pointer;
     opacity: 0;
 }
-#legend_toggle img{
+
+#legend_toggle img {
     vertical-align: sub;
     -webkit-transition: all 600ms ease-in-out;
     -moz-transition: all 600ms ease-in-out;
@@ -275,14 +278,15 @@ svg.nvd3-svg {
     transition: all 600ms ease-in-out;
 }
 
-.close_arrow{
+.close_arrow {
     -moz-transform: rotate(-180deg);
     -o-transform: rotate(-180deg);
     -webkit-transform: rotate(-180deg);
     -ms-transform: rotate(-180deg);
     transform: rotate(-180deg);
 }
-#dialogue_link{
+
+#dialogue_link {
     position: absolute;
     right: 15px;
     top: 12px;
@@ -293,4 +297,36 @@ svg.nvd3-svg {
     padding: 10px;
     border-radius: 5px;
     font-size: 14px;
+}
+
+#graph1, #gap {
+    display: none;
+}
+
+#chart1_toggle {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    position: absolute;
+    top: 50%;
+    font-size: 25px;
+    left: -100px;
+    background: #47a3da;
+    color: white;
+    padding: 15px;
+    cursor: pointer;
+    margin: -75px 0 0;
+}
+
+#chart1_toggle img {
+    margin-left: 15px;
+    -webkit-transition: all 600ms ease-in-out;
+    -moz-transition: all 600ms ease-in-out;
+    -o-transition: all 600ms ease-in-out;
+    transition: all 600ms ease-in-out;
+    vertical-align: sub;
+}
+#graph2.opened{
+    margin-left: 0;
+    width:calc(50% - 85px)
 }

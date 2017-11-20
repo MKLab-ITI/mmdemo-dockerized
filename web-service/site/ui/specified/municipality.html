@@ -499,11 +499,11 @@
 </div>
 <div class="row bigWidth margin_vertical">
     <div class="small-12 medium-8 large-8 columns">
-        <div class="topics_chart_wrapper">
-            <div class="topics_chart">
+        <div class="concepts_chart_wrapper">
+            <div class="concepts_chart">
                 <ul></ul>
-                <button id="topic_main"></button>
-                <figure class="topics_circle"></figure>
+                <button id="concepts_main"></button>
+                <figure class="concepts_circle"></figure>
                 <div id="legend_concepts">
                     <div class="legendcolor" style="background-color:#4c88b8"></div>
                     <div class="legendtext">< 20%</div>
@@ -518,7 +518,7 @@
         </div>
     </div>
     <div class="small-12 medium-4 large-4 columns">
-        <div class="description" id="topics">
+        <div class="description" id="concepts">
             <h3>Concepts</h3>
 
             <p>Inspect relevant concepts.</p>
@@ -537,6 +537,29 @@
         <div id="mapContainer"></div>
         <div id="map_tooltip">
             <p>Posts: <span id="map_tooltip_no">123</span></p>
+        </div>
+    </div>
+</div>
+<div class="row bigWidth margin_vertical">
+    <div class="small-12 medium-8 large-7 columns" style="position: relative">
+        <div id="topics_wrapper">
+            <p class="diagonal_text">PREVIEW*</p>
+            <img id="topics_placeholder" src="imgs/topics_placeholder.png"/>
+
+            <p class="hint_text">*Preview graph. Click buttons (posts/articles) to inspect the interactive
+                visualizations in a new page.</p>
+
+            <div id="links_wrapper">
+                <a href="#" target="_blank" id="posts_link">Posts</a>
+                <a href="#" target="_blank" id="articles_link">Articles</a>
+            </div>
+        </div>
+    </div>
+    <div class="small-12 medium-4 large-4 columns">
+        <div class="description" id="topics">
+            <h3>Topics</h3>
+
+            <p>Analyze detected topics from posts or articles collected.</p>
         </div>
     </div>
 </div>

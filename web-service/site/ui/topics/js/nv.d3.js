@@ -11740,14 +11740,19 @@ nv.models.scatterChart = function() {
             });
 
             scatter.dispatch.on('elementMouseover.tooltip', function(evt) {
-                var chart_hover=0;
-                if (evt.point.documents == null){
-                    chart_hover=1;
+                var chart_hover = 85;
+                if ($('#graph1').is(":visible")) {
+                    if (evt.point.documents == null){
+                        chart_hover = $(window).width()/1.85;
+                    }
+                    else{
+                        chart_hover = 75;
+                    }
                 }
                 container.select('.nv-series-' + evt.seriesIndex + ' .nv-distx-' + evt.pointIndex)
                     .attr('y1', evt.pos.top - availableHeight - margin.top-92);
                 container.select('.nv-series-' + evt.seriesIndex + ' .nv-disty-' + evt.pointIndex)
-                    .attr('x2', evt.pos.left + distX.size() - margin.left-(($(window).width()/1.9)*chart_hover));
+                    .attr('x2', evt.pos.left + distX.size() - margin.left - chart_hover);//-(($(window).width()/1.9)*chart_hover
                 tooltip.position(evt.pos).data(evt).hidden(false);
             });
 

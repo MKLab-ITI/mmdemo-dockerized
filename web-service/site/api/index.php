@@ -187,8 +187,8 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
     $original = $request->get('original');
     $type = $request->get('type');
 
-    $concept = $request->get('concept');
-    if($concept != null && $concept != '') {
+    $concept = $request->get('concepts');
+    if($concept != null && $concept !== '' && $concept !== 'all') {
         $concept = "environment.$concept";
     }
 
@@ -356,8 +356,8 @@ $app->get(
         $original = $request->get('original');
         $type = $request->get('type');
 
-        $concept = $request->get('concept');
-        if($concept != null && $concept != '') {
+        $concept = $request->get('concepts');
+        if($concept != null && $concept !== '' && $concept !== 'all') {
             $concept = "environment.$concept";
         }
 
@@ -493,8 +493,8 @@ $app->get(
         $original = $request->get('original');
         $type = $request->get('type');
 
-        $concept = $request->get('concept');
-        if($concept != null && $concept != '') {
+        $concept = $request->get('concepts');
+        if($concept != null && $concept !== '' && $concept !== 'all') {
             $concept = "environment.$concept";
         }
 
@@ -648,8 +648,8 @@ $app->get(
         $original = $request->get('original');
         $type = $request->get('type');
 
-        $concept = $request->get('concept');
-        if($concept != null && $concept != '') {
+        $concept = $request->get('concepts');
+        if($concept != null && $concept !== '' && $concept !== 'all') {
             $concept = "environment.$concept";
         }
 
@@ -794,8 +794,8 @@ $app->get(
         $language = $request->get('language');
         $source = $request->get('source');
 
-        $concept = $request->get('concept');
-        if($concept != null && $concept != '') {
+        $concept = $request->get('concepts');
+        if($concept != null && $concept !== '' && $concept !== 'all') {
             $concept = "environment.$concept";
         }
 
@@ -885,8 +885,8 @@ $app->get(
         $type = $request->get('type');
         $language = $request->get('language');
 
-        $concept = $request->get('concept');
-        if($concept != null && $concept != '') {
+        $concept = $request->get('concepts');
+        if($concept != null && $concept !== '' && $concept !== 'all') {
             $concept = "environment.$concept";
         }
 
@@ -986,8 +986,8 @@ $app->get(
         $source = $request->get('source');
         $language = $request->get('language');
 
-        $concept = $request->get('concept');
-        if($concept != null && $concept != '') {
+        $concept = $request->get('concepts');
+        if($concept != null && $concept !== '' && $concept !== 'all') {
             $concept = "environment.$concept";
         }
 

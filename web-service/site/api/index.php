@@ -563,10 +563,9 @@ $app->get(
 
                 if($articles == false || $cached === 'false') {
 
-                    $c = 0;
                     $signatures = [];
                     $articles = array();
-                    if ($file = fopen("./articles/$collectionId.txt", "r")) {
+                    if ($file = fopen("./articles_directory/$collectionId.txt", "r")) {
                         while(!feof($file)) {
                             $line = fgets($file);
                             $json_data = json_decode($line);

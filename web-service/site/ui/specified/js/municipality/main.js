@@ -695,7 +695,7 @@ function draw_articles() {
                     if (desc.length > 225) {
                         desc = desc.substring(0, 222) + '...';
                     }
-                    $('#articles_wrapper').append('<div class="frame_wrapper"> <iframe class="frame" src="' + url + '" scrolling="no"></iframe> <article class="frame_article"> <h2>' + title + '</h2> <p>' + desc + '</p> <div class="frame_source"> <img src="https://www.google.com/s2/favicons?domain=' + url + '"> <div class="frame_source_name"> By <a href="' + url + '" target="_blank">' + json.articles[a].url.split('/')[2] + '</a> </div> </div> <div class="frame_link"><a href="' + json.articles[a].url + '" target="_blank">Read more</a></div> </article> </div>')
+                    $('#articles_wrapper').append('<div class="frame_wrapper"> <iframe sandbox="allow-forms allow-scripts" class="frame" src="' + url + '" scrolling="no"></iframe> <article class="frame_article"> <h2>' + title + '</h2> <p>' + desc + '</p> <div class="frame_source"> <img src="https://www.google.com/s2/favicons?domain=' + url + '"> <div class="frame_source_name"> By <a href="' + url + '" target="_blank">' + json.articles[a].url.split('/')[2] + '</a> </div> </div> <div class="frame_link"><a href="' + json.articles[a].url + '" target="_blank">Read more</a></div> </article> </div>')
                 }
             }
             else {

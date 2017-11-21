@@ -545,7 +545,7 @@ $app->get(
 )->name("top_users");
 
 $app->get(
-    '/test',
+    '/articles',
     function () use ($mongoDAO, $textIndex, $utils, $memcached, $app) {
 
         $articles = array();

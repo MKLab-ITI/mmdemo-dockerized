@@ -561,9 +561,6 @@ $app->get(
                 $requestHash = "articles_$collectionId";
                 $articles = $memcached->get($requestHash);
 
-                echo json_encode(array('articles'=>$articles, 'collection' => $collection, 'requestHash'=>$requestHash));
-                return;
-
                 if($articles == false || $cached === 'false') {
 
                     $signatures = [];

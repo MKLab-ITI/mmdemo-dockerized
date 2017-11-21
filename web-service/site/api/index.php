@@ -565,7 +565,8 @@ $app->get(
 
                     $signatures = [];
                     $articles = array();
-                    if ($file = fopen("./urls_content/".$collectionId.".txt", "r")) {
+                    $filename = "./urls_content/".$collectionId.".txt";
+                    if ($file = fopen($filename, "r")) {
                         while(!feof($file)) {
                             $line = fgets($file);
                             $json_data = json_decode($line);
@@ -580,6 +581,10 @@ $app->get(
                             }
                         }
                         fclose($file);
+                    }
+                    else {
+                        echo json_encode(array('error'=>"Cannot open $filename"));
+                        return;
                     }
 
                     $q = $utils->formulateCollectionQuery($collection);

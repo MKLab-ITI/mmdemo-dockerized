@@ -561,7 +561,7 @@ $app->get(
                 $requestHash = "articles_$collectionId";
                 $articles = $memcached->get($requestHash);
 
-                if($articles == false || $cached == 'false') {
+                if($articles == false || $cached === 'false') {
 
                     $c = 0;
                     $signatures = [];

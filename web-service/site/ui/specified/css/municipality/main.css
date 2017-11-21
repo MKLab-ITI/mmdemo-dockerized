@@ -2188,6 +2188,7 @@ h4.no-media {
     width: 360px;
     padding: 10px;
     margin: 0 40px 10px 0;
+    vertical-align: top;
 }
 
 .frame_article {

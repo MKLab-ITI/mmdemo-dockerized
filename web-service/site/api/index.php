@@ -570,11 +570,10 @@ $app->get(
                         while(!feof($file)) {
                             $line = fgets($file);
                             $json_data = json_decode($line);
-                            if(in_array($json_data['minhash'], $signatures)) {
+                            if(in_array($json_data->minhash, $signatures)) {
                                 continue;
                             }
-
-                            $signatures[] = $json_data['minhash'];
+                            $signatures[] = $json_data->minhash;
                             $articles[] = $json_data;
                             if(count($articles) >= 5) {
                                 break;

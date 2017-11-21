@@ -570,6 +570,8 @@ $app->get(
                         while(!feof($file)) {
                             $line = fgets($file);
                             $json_data = json_decode($line);
+                            $json_data->content = $json_data->text;
+                            unset($json_data->text);
                             if(in_array($json_data->minhash, $signatures)) {
                                 continue;
                             }

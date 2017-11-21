@@ -123,7 +123,7 @@ class Utils {
             $filters['{!cache=false}allText'] = $filterTextQuery;
         }
 
-        if($concept != null and $concept != '') {
+        if($concept != null and $concept !== '' && $concept !== 'all') {
             $filters['topics'] = "$concept";
         }
 

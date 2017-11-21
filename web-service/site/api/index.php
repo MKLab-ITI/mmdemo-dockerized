@@ -187,8 +187,8 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
     $original = $request->get('original');
     $type = $request->get('type');
 
-    $concept = $request->get('concept');
-    if($concept != null && $concept != '') {
+    $concept = $request->get('concepts');
+    if($concept != null && $concept !== '' && $concept !== 'all') {
         $concept = "environment.$concept";
     }
 
@@ -356,8 +356,8 @@ $app->get(
         $original = $request->get('original');
         $type = $request->get('type');
 
-        $concept = $request->get('concept');
-        if($concept != null && $concept != '') {
+        $concept = $request->get('concepts');
+        if($concept != null && $concept !== '' && $concept !== 'all') {
             $concept = "environment.$concept";
         }
 
@@ -493,8 +493,8 @@ $app->get(
         $original = $request->get('original');
         $type = $request->get('type');
 
-        $concept = $request->get('concept');
-        if($concept != null && $concept != '') {
+        $concept = $request->get('concepts');
+        if($concept != null && $concept !== '' && $concept !== 'all') {
             $concept = "environment.$concept";
         }
 
@@ -551,6 +551,8 @@ $app->get(
         $articles = array();
         $request = $app->request();
 
+        $cached = $request->get('cached');
+
         $query = $request->get('q');
         $collectionId = $request->get('collection');
         if($collectionId != null) {
@@ -559,7 +561,31 @@ $app->get(
                 $requestHash = "articles_$collectionId";
                 $articles = $memcached->get($requestHash);
 
-                if($articles == false) {
+                if($articles == false || $cached === 'false') {
+
+                    $signatures = [];
+                    $articles = array();
+                    $filename = "./urls_content/".$collectionId.".txt";
+                    if ($file = fopen($filename, "r")) {
+                        while(!feof($file)) {
+                            $line = fgets($file);
+                            $json_data = json_decode($line);
+                            if(in_array($json_data['minhash'], $signatures)) {
+                                continue;
+                            }
+
+                            $signatures[] = $json_data['minhash'];
+                            $articles[] = $json_data;
+                            if(count($articles) >= 5) {
+                                break;
+                            }
+                        }
+                        fclose($file);
+                    }
+                    else {
+                        echo json_encode(array('error'=>"Cannot open $filename"));
+                        return;
+                    }
 
                     $q = $utils->formulateCollectionQuery($collection);
 
@@ -568,6 +594,7 @@ $app->get(
                     $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                     $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
 
+                    /*
                     $urls = array();
                     $filters = $utils->getFilters("*", "*", "all", "true", "text", null, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
                     $results = $textIndex->searchItems($q, 1, 500,  $filters, "popularity", array(), true, $query);
@@ -578,52 +605,56 @@ $app->get(
                         }
                     }
                     $urls = array_unique($urls);
-
-                    $articles = array();
-
-                    $i = 0;
-                    $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                    curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
-                    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
-                    foreach($urls as $url) {
-                        if (preg_match('/twitter.com/', $url) || preg_match('/fb.me/', $url)) {
-                            continue;
-                        }
-
-                        try {
-                            curl_setopt($ch, CURLOPT_URL, $url);
-                            $html = curl_exec($ch);
-
-                            $i = $i + 1;
-                            if($i > 5) {
-                                break;
-                            }
+                    */
 
 
-                            //$result = $readability->init();
-                            //if ($result) {
-                                // display the title of the page
-                            //    $articles[] = array(
-                            //        'title' => $readability->getTitle()->textContent,
-                            //        'content' => $readability->getContent()->textContent
-                            //    );
-                            //} else {
-                            //    echo 'Looks like we couldn\'t find the content. :(';
-                            //}
-                        }
-                        catch(Exception $e) {
-                            continue;
-                        }
-                    }
-                    curl_close($ch);
 
-                    $articles[] = array('title' => 'Ciclista mexicana Ingid Drexel  en 34 en Mundial de Ruta', 'url'=> 'http://hablandodeviajes.com/murcia/ruta-ciclista-de-los-alcazares-a-la-manga',
-                        'image' => 'http://i2.wp.com/www.deviajepormurcia.com/wp-content/uploads/Mar-Menor-Trip-Pic.jpg?resize=500%2C350',
-                        'content' => 'Ciclista mexicana Ingid Drexel  en 34 en Mundial de Ruta\nPlata y bronce para taekwondoines mexicanos en Marruecos\nCiclista mexicana Ingid Drexel  en 34 en Mundial de Ruta\nLa mexicana Ingrid Drexel finalizó en el sitio 34 dentro del gran fondo del Campeonato Mundial de Ciclismo de Ruta, que tuvo lugar en esta ciudad noruega, donde la ganadora fue la holandesa Chantal...\nNotimex. 23.09.2017 - 19:21h\nLa mexicana Ingrid Drexel finalizó en el sitio 34 dentro del gran fondo del Campeonato Mundial de Ciclismo de Ruta, que tuvo lugar en esta ciudad noruega, donde la ganadora fue la holandesa Chantal Blaak.\nDrexel Clouthier, olímpica en Londres 2012 y quien milita en un equipo profesional en Estados Unidos, cruzó la meta a 28 segundos de Blaak, luego que esta detuvo el reloj en 4:06:30 horas, para dejar con la plata a la australiana Katrin Garfoot con 4:06:58.\nCon el bronce se quedó la danesa Amalie Dideriksen, con el mismo tiempo que la australiana al final de los 152.8 kilómetros de recorrido que hicieron las 153 pedalistas.');
-                    $articles[] = array('title' => 'Ruta Ciclista de Los Alcázares a La Manga - blogs de Viajes', 'url'=> 'http://hablandodeviajes.com/murcia/ruta-ciclista-de-los-alcazares-a-la-manga',
-                        'content' => 'Ruta Ciclista de Los Alcázares a La Manga\n-\nFuente: de viaje por murcia - Ver todas las noticias de este sitio\nRuta Ciclista de Los Alcázares a La Manga\nSe acerca el buen tiempo y salir a entrenar con bici es de lo más agradable sobre todo en esta zona del sureste español.\nHoy cogemos nuestro coche y nos vamos hasta la localidad de Los Alcázares en la orilla del mar Menor para hacer un recorrido hasta el final de la Manga y regresar de nuevo a Los Alcázares.\nSi hace un día soleado con un ligero viento de levante vamos a disfrutar de este recorrido enormemente.\nSalimos de los Alcázares con el Mar Menor a nuestra izquierda para dirigirnos a Los Urrutias. Podremos disfrutar de una zona donde se pueden ver aves migratorias como los Flamencos.\nAtravesamos Los Urrutias para ir hacia los Nietos, uno de los lugares de veraneo más típicos de los cartageneros que no salen de la Región en verano.\nAl salir de Los Nietos llegaremos a Los Belones para seguir adelante por carreteras que de servicio paralelas a la autovía Cartagena La Manga.\nNos queda pasar por el Camping Villas Caravaning para pasar de largo la entrada a Playa Honda y llegar a un cruce detrás de un circuito de Karts que tomaremos a la izquierda para pasar por las salinas ya abandonadas que nos sirven de.entrada a la Manga.\nEncuentra ofertas de viajes online con Rumbo y ven a disfrutar de las maravillas de esa ruta ciclista por el Mar Menor.');
+                    /*
+                                       $i = 0;
+                                       $ch = curl_init();
+                                       curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                                       curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
+                                       curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
+                                       foreach($urls as $url) {
+                                           if (preg_match('/twitter.com/', $url) || preg_match('/fb.me/', $url)) {
+                                               continue;
+                                           }
 
+                                           try {
+                                               curl_setopt($ch, CURLOPT_URL, $url);
+                                               $html = curl_exec($ch);
+
+                                               $i = $i + 1;
+                                               if($i > 5) {
+                                                   break;
+                                               }
+
+
+                                               //$result = $readability->init();
+                                               //if ($result) {
+                                                   // display the title of the page
+                                               //    $articles[] = array(
+                                               //        'title' => $readability->getTitle()->textContent,
+                                               //        'content' => $readability->getContent()->textContent
+                                               //    );
+                                               //} else {
+                                               //    echo 'Looks like we couldn\'t find the content. :(';
+                                               //}
+                                           }
+                                           catch(Exception $e) {
+                                               continue;
+                                           }
+                                       }
+                                       curl_close($ch);
+
+
+                                       $articles[] = array('title' => 'Ciclista mexicana Ingid Drexel  en 34 en Mundial de Ruta', 'url'=> 'http://hablandodeviajes.com/murcia/ruta-ciclista-de-los-alcazares-a-la-manga',
+                                           'image' => 'http://i2.wp.com/www.deviajepormurcia.com/wp-content/uploads/Mar-Menor-Trip-Pic.jpg?resize=500%2C350',
+                                           'content' => 'Ciclista mexicana Ingid Drexel  en 34 en Mundial de Ruta\nPlata y bronce para taekwondoines mexicanos en Marruecos\nCiclista mexicana Ingid Drexel  en 34 en Mundial de Ruta\nLa mexicana Ingrid Drexel finalizó en el sitio 34 dentro del gran fondo del Campeonato Mundial de Ciclismo de Ruta, que tuvo lugar en esta ciudad noruega, donde la ganadora fue la holandesa Chantal...\nNotimex. 23.09.2017 - 19:21h\nLa mexicana Ingrid Drexel finalizó en el sitio 34 dentro del gran fondo del Campeonato Mundial de Ciclismo de Ruta, que tuvo lugar en esta ciudad noruega, donde la ganadora fue la holandesa Chantal Blaak.\nDrexel Clouthier, olímpica en Londres 2012 y quien milita en un equipo profesional en Estados Unidos, cruzó la meta a 28 segundos de Blaak, luego que esta detuvo el reloj en 4:06:30 horas, para dejar con la plata a la australiana Katrin Garfoot con 4:06:58.\nCon el bronce se quedó la danesa Amalie Dideriksen, con el mismo tiempo que la australiana al final de los 152.8 kilómetros de recorrido que hicieron las 153 pedalistas.');
+                                       $articles[] = array('title' => 'Ruta Ciclista de Los Alcázares a La Manga - blogs de Viajes', 'url'=> 'http://hablandodeviajes.com/murcia/ruta-ciclista-de-los-alcazares-a-la-manga',
+                                           'content' => 'Ruta Ciclista de Los Alcázares a La Manga\n-\nFuente: de viaje por murcia - Ver todas las noticias de este sitio\nRuta Ciclista de Los Alcázares a La Manga\nSe acerca el buen tiempo y salir a entrenar con bici es de lo más agradable sobre todo en esta zona del sureste español.\nHoy cogemos nuestro coche y nos vamos hasta la localidad de Los Alcázares en la orilla del mar Menor para hacer un recorrido hasta el final de la Manga y regresar de nuevo a Los Alcázares.\nSi hace un día soleado con un ligero viento de levante vamos a disfrutar de este recorrido enormemente.\nSalimos de los Alcázares con el Mar Menor a nuestra izquierda para dirigirnos a Los Urrutias. Podremos disfrutar de una zona donde se pueden ver aves migratorias como los Flamencos.\nAtravesamos Los Urrutias para ir hacia los Nietos, uno de los lugares de veraneo más típicos de los cartageneros que no salen de la Región en verano.\nAl salir de Los Nietos llegaremos a Los Belones para seguir adelante por carreteras que de servicio paralelas a la autovía Cartagena La Manga.\nNos queda pasar por el Camping Villas Caravaning para pasar de largo la entrada a Playa Honda y llegar a un cruce detrás de un circuito de Karts que tomaremos a la izquierda para pasar por las salinas ya abandonadas que nos sirven de.entrada a la Manga.\nEncuentra ofertas de viajes online con Rumbo y ven a disfrutar de las maravillas de esa ruta ciclista por el Mar Menor.');
+
+                           `           */
 
                     $memcached->set($requestHash, $articles, time() + 600);
                 }
@@ -648,8 +679,8 @@ $app->get(
         $original = $request->get('original');
         $type = $request->get('type');
 
-        $concept = $request->get('concept');
-        if($concept != null && $concept != '') {
+        $concept = $request->get('concepts');
+        if($concept != null && $concept !== '' && $concept !== 'all') {
             $concept = "environment.$concept";
         }
 
@@ -794,8 +825,8 @@ $app->get(
         $language = $request->get('language');
         $source = $request->get('source');
 
-        $concept = $request->get('concept');
-        if($concept != null && $concept != '') {
+        $concept = $request->get('concepts');
+        if($concept != null && $concept !== '' && $concept !== 'all') {
             $concept = "environment.$concept";
         }
 
@@ -885,8 +916,8 @@ $app->get(
         $type = $request->get('type');
         $language = $request->get('language');
 
-        $concept = $request->get('concept');
-        if($concept != null && $concept != '') {
+        $concept = $request->get('concepts');
+        if($concept != null && $concept !== '' && $concept !== 'all') {
             $concept = "environment.$concept";
         }
 
@@ -986,8 +1017,8 @@ $app->get(
         $source = $request->get('source');
         $language = $request->get('language');
 
-        $concept = $request->get('concept');
-        if($concept != null && $concept != '') {
+        $concept = $request->get('concepts');
+        if($concept != null && $concept !== '' && $concept !== 'all') {
             $concept = "environment.$concept";
         }
 

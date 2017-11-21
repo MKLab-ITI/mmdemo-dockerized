@@ -565,7 +565,7 @@ $app->get(
 
                     $signatures = [];
                     $articles = array();
-                    if ($file = fopen("./articles_directory/$collectionId.txt", "r")) {
+                    if ($file = fopen("./urls_content/".$collectionId.".txt", "r")) {
                         while(!feof($file)) {
                             $line = fgets($file);
                             $json_data = json_decode($line);

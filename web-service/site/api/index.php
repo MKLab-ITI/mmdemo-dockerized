@@ -559,7 +559,10 @@ $app->get(
             $collection = $mongoDAO->getCollection($collectionId);
             if ($collection != null) {
                 $requestHash = "articles_$collectionId";
+
                 $articles = $memcached->get($requestHash);
+                echo json_encode(array('articles'=>'$articles', 'collection' => $collectionId, 'requestHash'=>$requestHash));
+                return;
 
                 if($articles == false || $cached === 'false') {
 

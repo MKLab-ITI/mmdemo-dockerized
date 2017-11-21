@@ -1459,8 +1459,8 @@ function draw_topics() {
     var $topics_wrapper = $('#topics_wrapper');
     $topics_wrapper.addClass('initial');
     $topics_wrapper.animate({"left": "0px"}, "slow");
-    $('#posts_link').attr('href', '../topics?type=posts&dialogue=' + gup('dialogue'));
-    $('#articles_link').attr('href', '../topics?type=articles&dialogue=' + gup('dialogue'));
+    $('#posts_link').attr('href', '../topics?type=posts&dialogue_id=' + gup('dialogue'));
+    $('#articles_link').attr('href', '../topics?type=articles&dialogue_id=' + gup('dialogue'));
 }
 
 $(window).resize(function () {

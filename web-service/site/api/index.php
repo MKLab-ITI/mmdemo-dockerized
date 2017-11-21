@@ -560,10 +560,11 @@ $app->get(
             if ($collection != null) {
                 $requestHash = "articles_$collectionId";
 
-                $articles = $memcached->get($requestHash);
-                echo json_encode(array('articles'=>'$articles', 'collection' => $collectionId, 'requestHash'=>$requestHash));
+
+                echo json_encode(array('articles'=>$collection, 'collection' => $collectionId, 'requestHash'=>$requestHash));
                 return;
 
+                $articles = $memcached->get($requestHash);
                 if($articles == false || $cached === 'false') {
 
                     $signatures = [];

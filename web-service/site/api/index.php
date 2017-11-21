@@ -556,13 +556,13 @@ $app->get(
         $query = $request->get('q');
         $collectionId = $request->get('collection');
         if($collectionId != null) {
+            echo json_encode(array('collection' => $collectionId));
+            return;
+
             $collection = $mongoDAO->getCollection($collectionId);
             if ($collection != null) {
                 $requestHash = "articles_$collectionId";
 
-
-                echo json_encode(array('articles'=>$collection, 'collection' => $collectionId, 'requestHash'=>$requestHash));
-                return;
 
                 $articles = $memcached->get($requestHash);
                 if($articles == false || $cached === 'false') {

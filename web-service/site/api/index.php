@@ -388,7 +388,7 @@ $app->get(
                         $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                         $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                         $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-                        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $concept);
+                        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
 
                         $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique, $concept);
                         $facet = $memcached->get($requestHash);
@@ -979,7 +979,8 @@ $app->get(
                 $counts = $textIndex->fieldsCount("uidFacet", $q, $filters, $unique, "source");
 
                 $statistics['endorsement'] = $statistics['likesFacet']['sum'];
-                $statistics['reach'] = $statistics['followersFacet']['sum'];
+                $statistics['reach'] = $statistics['followersFacet']['sum'] / $statistics['followersFacet']['mean'];
+                //$statistics['reach'] = $statistics['followersFacet']['sum'];
                 $statistics['users'] = $counts['uidFacet']['cardinality'];
 
                 $sources = $textIndex->getFacet('source', $q, $filters, -1, false, null, $unique, null, 'enum');

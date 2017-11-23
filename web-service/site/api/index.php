@@ -564,6 +564,7 @@ $app->get(
                 if($articles == false || $cached === 'false') {
 
                     $signatures = [];
+                    $signature_counts = [];
                     $articles = array();
                     $filename = "./urls_content/".$collectionId.".txt";
                     if ($file = fopen($filename, "r")) {
@@ -573,40 +574,52 @@ $app->get(
                             $json_data->content = $json_data->text;
                             unset($json_data->text);
                             if(in_array($json_data->minhash, $signatures)) {
+                                $signature_counts[$json_data->minhash] += 1;
                                 continue;
                             }
                             $signatures[] = $json_data->minhash;
-                            $articles[] = $json_data;
-                            if(count($articles) >= 5) {
-                                break;
-                            }
+                            $signature_counts[$json_data->minhash] = 1;
+
+                            //$articles[] = $json_data;
+                            //if(count($articles) >= 5) {
+                            //    break;
+                            //}
                         }
                         fclose($file);
+
+                        foreach($articles as $article) {
+                            $article['count'] = $signature_counts[$article->minhash];
+                        }
+
+                        usort($articles, function ($obj1, $obj2) { return $obj1['count'] >= $obj2['count']; });
+                        $articles = array_slice($articles, 10);
+
                     }
                     else {
                         echo json_encode(array('error'=>"Cannot open $filename"));
                         return;
                     }
 
-                    $q = $utils->formulateCollectionQuery($collection);
-
-                    // Add filters if available
-                    $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
-                    $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-                    $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-
                     /*
-                    $urls = array();
-                    $filters = $utils->getFilters("*", "*", "all", "true", "text", null, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
-                    $results = $textIndex->searchItems($q, 1, 500,  $filters, "popularity", array(), true, $query);
-                    foreach($results['docs'] as $result) {
-                        $item = $mongoDAO->getItem($result['id']);
-                        if($item != null && isset($item['links'])) {
-                            $urls = array_merge($urls, $item['links']);
-                        }
-                    }
-                    $urls = array_unique($urls);
-                    */
+                                        $q = $utils->formulateCollectionQuery($collection);
+
+                                        // Add filters if available
+                                        $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+                                        $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+                                        $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+
+
+                                        $urls = array();
+                                        $filters = $utils->getFilters("*", "*", "all", "true", "text", null, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+                                        $results = $textIndex->searchItems($q, 1, 500,  $filters, "popularity", array(), true, $query);
+                                        foreach($results['docs'] as $result) {
+                                            $item = $mongoDAO->getItem($result['id']);
+                                            if($item != null && isset($item['links'])) {
+                                                $urls = array_merge($urls, $item['links']);
+                                            }
+                                        }
+                                        $urls = array_unique($urls);
+                                        */
 
 
 

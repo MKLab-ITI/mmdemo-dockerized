@@ -580,19 +580,21 @@ $app->get(
                             $signatures[] = $json_data->minhash;
                             $signature_counts[$json_data->minhash] = 1;
 
-                            //$articles[] = $json_data;
-                            //if(count($articles) >= 5) {
-                            //    break;
-                            //}
+                            $articles[] = $json_data;
+                            if(count($articles) >= 1000) {
+                                break;
+                            }
                         }
                         fclose($file);
 
                         foreach($articles as $article) {
-                            $article['count'] = $signature_counts[$article->minhash];
+                            $article->count = $signature_counts[$article->minhash];
                         }
 
-                        usort($articles, function ($obj1, $obj2) { return $obj1['count'] >= $obj2['count']; });
-                        $articles = array_slice($articles, 10);
+                        usort($articles, function ($obj1, $obj2) { return $obj1->count <= $obj2->count; });
+                        if(count($articles) > 15) {
+                            $articles = array_slice($articles, 15);
+                        }
 
                     }
                     else {

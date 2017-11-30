@@ -1,19 +1,29 @@
-{ "swagger": 2.0,
+{ "swagger": "2.0",
     "info": {
-        "description": "mmdemo documentation",
-        "version": "1.0.0",
-        "title": "mmdemo",
-        "termsOfService": "https://github.com/MKLab-ITI/mklab-framework-client",
+        "description": "SMMT documentation",
+        "version": "1.0",
+        "title": "Social Media Monitoring Tool (SMMT)",
+        "termsOfService": "https://github.com/MKLab-ITI/mmdemo-dockerized",
         "contact": {
-            "name": "mironidis@iti.gr"
+            "name": "Manos Schinas",
+            "email": "manosetro@iti.gr"
         },
         "license": {
             "name": "Apache 2.0",
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         }
     },
-    "host": "160.40.51.153:8081",
+    "host": "smmt.step.green",
     "basePath": "/api",
+    "schemes": [
+      "http"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
     "paths": {
         "/items": {
             "get": {
@@ -67,22 +77,29 @@
                     },
                     {
                         "in": "query",
+                        "name": "unique",
+                        "description": "Filter and return only unique items in terms of the textual content",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
                         "name": "type",
-                        "description": "",
+                        "description": "Text ot multimedia items",
                         "required": false,
                         "type": "string"
                     },
                     {
                         "in": "query",
                         "name": "sort",
-                        "description": "Sort",
+                        "description": "Sort items by recency, relevance or popularity",
                         "required": false,
                         "type": "string"
                     },
                     {
                         "in": "query",
                         "name": "q",
-                        "description": "Query term",
+                        "description": "Query term for free text search",
                         "required": false,
                         "type": "string"
                     },
@@ -167,7 +184,7 @@
                         "in": "path",
                         "name": "uid",
                         "description": "Qwner Id",
-                        "required": true, 
+                        "required": true,
                         "type": "string",
                         "default": "1234567890"
                     },
@@ -217,7 +234,7 @@
                         "in": "path",
                         "name": "uid",
                         "description": "Qwner Id",
-                        "required": true, 
+                        "required": true,
                         "type": "string",
                         "default": "1234567890"
                     },
@@ -225,7 +242,7 @@
                         "in": "path",
                         "name": "cid",
                         "description": "Collection Id",
-                        "required": true, 
+                        "required": true,
                         "type": "string"
                     },
                     {
@@ -274,7 +291,7 @@
                         "in": "path",
                         "name": "uid",
                         "description": "Qwner Id",
-                        "required": true, 
+                        "required": true,
                         "type": "string",
                         "default": "1234567890"
                     },
@@ -282,7 +299,7 @@
                         "in": "path",
                         "name": "cid",
                         "description": "Collection Id",
-                        "required": true, 
+                        "required": true,
                         "type": "string"
                     },
                     {
@@ -331,7 +348,7 @@
                         "in": "path",
                         "name": "cid",
                         "description": "Collection Id",
-                        "required": true, 
+                        "required": true,
                         "type": "string"
                     }
                 ],
@@ -364,7 +381,7 @@
                         "in": "query",
                         "name": "stop",
                         "description": "????",
-                        "required": true, 
+                        "required": true,
                         "type": "string"
                     }
                 ],
@@ -421,21 +438,21 @@
                         "in": "path",
                         "name": "field",
                         "description": "field",
-                        "required": true, 
+                        "required": true,
                         "type": "string"
                     },
                     {
                         "in": "query",
                         "name": "since",
                         "description": "since",
-                        "required": false, 
+                        "required": false,
                         "type": "string"
                     },
                     {
                         "in": "query",
                         "name": "until",
                         "description": "until",
-                        "required": false, 
+                        "required": false,
                         "type": "string"
                     },
                     {
@@ -495,7 +512,7 @@
                         "required": false,
                         "type": "string"
                     }
-                    
+
                 ],
                 "responses": {
                     "200": {

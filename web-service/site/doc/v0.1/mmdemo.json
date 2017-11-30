@@ -28,10 +28,10 @@
         "/items": {
             "get": {
                 "tags": [
-                    "items"
+                    "content"
                 ],
-                "summary": "",
-                "description": "",
+                "summary": "Returns a set of items",
+                "description": "Returns a set of items based on the filters specified as query parameters",
                 "operationId": "getRelations",
                 "consumes": [
                     "application/json"
@@ -119,10 +119,26 @@
                     },
                     {
                         "in": "query",
-                        "name": "user",
-                        "description": "Filter by user ID",
+                        "name": "concepts",
+                        "description": "Filter by concepts",
                         "required": false,
                         "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "pageNumber",
+                        "description": "Page number used for pagination",
+                        "required": false,
+                        "type": "integer",
+                        "default": 1
+                    },
+                    {
+                        "in": "query",
+                        "name": "nPerPage",
+                        "description": "Number of the results",
+                        "required": false,
+                        "type": "integer",
+                        "default": 6
                     }
                 ],
                 "responses": {
@@ -135,10 +151,10 @@
         "/items/{id}": {
             "get": {
                 "tags": [
-                    "items"
+                    "content"
                 ],
                 "summary": "Returns an item",
-                "description": "",
+                "description": "Returns a specific item",
                 "operationId": "item",
                 "consumes": [
                     "application/json"
@@ -153,6 +169,55 @@
                         "description": "Get an item",
                         "required": true,
                         "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/articles": {
+            "get": {
+                "tags": [
+                    "content"
+                ],
+                "summary": "Returns a set of relevant articles",
+                "description": "",
+                "operationId": "item",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                      "in": "query",
+                      "name": "collection",
+                      "description": "Filter articles by collection ID",
+                      "required": false,
+                      "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "pageNumber",
+                        "description": "Page number used for pagination",
+                        "required": false,
+                        "type": "integer",
+                        "default": 1
+                    },
+                    {
+                        "in": "query",
+                        "name": "nPerPage",
+                        "description": "Number of the results",
+                        "required": false,
+                        "type": "integer",
+                        "default": 6
                     }
                 ],
                 "responses": {
@@ -203,63 +268,13 @@
                         "required": false,
                         "type": "integer",
                         "default": 6
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation"
-                    },
-                    "405": {
-                        "description": "Invalid input"
-                    }
-                }
-            }
-        },
-        "/collection/{uid}/{cid}": {
-            "get": {
-                "tags": [
-                    "collections"
-                ],
-                "summary": "Returns a user's collection",
-                "description": "",
-                "operationId": "collection_uid_cid",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "uid",
-                        "description": "Qwner Id",
-                        "required": true,
-                        "type": "string",
-                        "default": "1234567890"
                     },
                     {
-                        "in": "path",
-                        "name": "cid",
-                        "description": "Collection Id",
-                        "required": true,
+                        "in": "query",
+                        "name": "status",
+                        "description": "The status of the collections to be returned (all/stopped/running)",
+                        "required": false,
                         "type": "string"
-                    },
-                    {
-                        "in": "query",
-                        "name": "pageNumber",
-                        "description": "Page number",
-                        "required": false,
-                        "type": "integer",
-                        "default": 1
-                    },
-                    {
-                        "in": "query",
-                        "name": "nPerPage",
-                        "description": "Number of the results",
-                        "required": false,
-                        "type": "integer",
-                        "default": 6
                     }
                 ],
                 "responses": {
@@ -419,13 +434,13 @@
                 }
             }
         },
-        "/{field}": {
+        "/top/{field}": {
             "get": {
                 "tags": [
                     "statistics"
                 ],
-                "summary": "Top..",
-                "description": "",
+                "summary": "Top counts for field",
+                "description": "get top counts for the specified field",
                 "operationId": "top",
                 "consumes": [
                     "application/json"
@@ -478,6 +493,20 @@
                     },
                     {
                         "in": "query",
+                        "name": "unique",
+                        "description": "Filter and return only non-duplicate items",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "concepts",
+                        "description": "Filter by concepts",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
                         "name": "type",
                         "description": "",
                         "required": false,
@@ -486,7 +515,7 @@
                     {
                         "in": "query",
                         "name": "n",
-                        "description": "Number of results",
+                        "description": "Number of top counts",
                         "required": false,
                         "type": "integer",
                         "default": 20
@@ -501,7 +530,7 @@
                     {
                         "in": "query",
                         "name": "collection",
-                        "description": "collection",
+                        "description": "the collection for the top counts are produced",
                         "required": false,
                         "type": "string"
                     },
@@ -577,6 +606,20 @@
                     },
                     {
                         "in": "query",
+                        "name": "unique",
+                        "description": "Filter and return only non-duplicate items",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "concepts",
+                        "description": "Filter by concepts",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
                         "name": "type",
                         "description": "",
                         "required": false,
@@ -600,6 +643,124 @@
                         "in": "query",
                         "name": "q",
                         "description": "Query term",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "topicQuery",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "statistics"
+                ],
+                "summary": "Top users",
+                "description": "get top users based on number of associated items ",
+                "operationId": "top",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "field",
+                        "description": "field",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "since",
+                        "description": "since",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "until",
+                        "description": "until",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "language",
+                        "description": "Filter by language",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "source",
+                        "description": "Filter by source",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "original",
+                        "description": "Filter and return only orinigal items",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "unique",
+                        "description": "Filter and return only non-duplicate items",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "concepts",
+                        "description": "Filter by concepts",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "type",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "n",
+                        "description": "Number of top counts",
+                        "required": false,
+                        "type": "integer",
+                        "default": 20
+                    },
+                    {
+                        "in": "query",
+                        "name": "q",
+                        "description": "Query term",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "collection",
+                        "description": "the collection id",
                         "required": false,
                         "type": "string"
                     },
@@ -775,6 +936,20 @@
                         "in": "query",
                         "name": "topicQuery",
                         "description": "",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "unique",
+                        "description": "Filter and return only non-duplicate items",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "concepts",
+                        "description": "Filter by concepts",
                         "required": false,
                         "type": "string"
                     }
@@ -1013,6 +1188,82 @@
                     }
                 }
             }
+        },
+        "/concepts": {
+            "get": {
+                "tags": [
+                    "statistics"
+                ],
+                "summary": "Concepts",
+                "description": "Return top concepts",
+                "operationId": "suggestions",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "since",
+                        "description": "Filter results since a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "until",
+                        "description": "Filter results until a date",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "collection",
+                        "description": "Filter by collection ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "source",
+                        "description": "Filter by source",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "q",
+                        "description": "Query term",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "topicQuery",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "time",
+                        "description": "",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
         }
+
     }
 }

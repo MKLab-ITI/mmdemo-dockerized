@@ -1816,6 +1816,26 @@ $app->get(
             $collection['stopDate'] = 1000 * time();
         }
 
+        $polygons = array();
+        if(isset($collection['nearLocations'])) {
+            foreach($collection['nearLocations'] as $location) {
+                $polygon = array(
+                    'centroid' => $location['name']
+                );
+
+                if(isset($location['polygon'])) {
+                    $peaks = array();
+                    foreach ($location['polygon'] as $peak) {
+                        $peaks[] = array('lat' => $peak['latitude'], 'long' => $peak['longitude']);
+                    }
+                    $polygon['peaks'] = $peaks;
+                }
+                $polygons[] = $polygon;
+            }
+            //unset($collection['nearLocations']);
+        }
+        $collection['polygons'] = $polygons;
+
         echo json_encode($collection);
     }
 )->name("get_collection");

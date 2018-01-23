@@ -177,6 +177,7 @@ class Utils {
         if ($itemsToExclude != null && count($itemsToExclude) > 0) {
             $itemsToExclude = array_filter($itemsToExclude, function($item) { return $item != null; });
             $idsToExclude = implode(' OR ', $itemsToExclude);
+            $idsToExclude = urlencode($idsToExclude);
             if($idsToExclude != null) {
                 $filters["-id"] = "($idsToExclude)";
                 $filters["-reference"] = "($idsToExclude)";

@@ -692,6 +692,8 @@ class TextIndex {
         $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash}");
         $query->setRows($rows);
 
+        $this->client->getEndpoint('items')->setTimeout(60000);
+
         $resultSet = $this->client->execute($query);
 
         $data = $resultSet->getData();

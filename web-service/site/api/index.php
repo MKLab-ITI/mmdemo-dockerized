@@ -229,7 +229,9 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
             $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
 
-            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
+            $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+
+            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept, $nearLocations);
             $results = $textIndex->searchItems($q, $pageNumber, $nPerPage,  $filters, $sort, $judgements, $unique, $query);
 
         }
@@ -388,7 +390,9 @@ $app->get(
                         $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                         $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                         $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-                        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
+                        $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+
+                        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept, $nearLocations);
 
                         $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique, $concept);
                         $facet = $memcached->get($requestHash);
@@ -453,7 +457,9 @@ $app->get(
                     $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                     $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                     $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+                    $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+
+                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
 
                     $facet = $textIndex->getFacet('topics', $collectionQuery, $filters, $n, false, "environment.", $unique, null, 'fcs');
 
@@ -521,7 +527,9 @@ $app->get(
                     $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                     $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                     $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
+                    $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+
+                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept, $nearLocations);
 
                     $facet = $textIndex->getFacet('uidFacet', $collectionQuery, $filters, $n, false, null, $unique, null, 'fcs');
 
@@ -723,7 +731,9 @@ $app->get(
                     $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                     $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                     $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
+                    $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+
+                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept, $nearLocations);
 
                     $termsToExclude = preg_split("/[\s,]+/", $query);
                     $termsToExclude = array_map(function($k) {
@@ -812,7 +822,9 @@ $app->get(
                 $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                 $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                 $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-                $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+                $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+
+                $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
                 $q = $utils->formulateCollectionQuery($collection);
 
                 $points = $textIndex->get2DFacet('latlonRPT', $q, $filters, $minLat, $maxLat, $minLong, $maxLong);
@@ -884,7 +896,9 @@ $app->get(
             $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
             $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
             $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-            $filters = $utils->getFilters(($since==null?"*":$since), ($until==null?"*":$until), $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
+            $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+
+            $filters = $utils->getFilters(($since==null?"*":$since), ($until==null?"*":$until), $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept, $nearLocations);
 
             $q = $utils->formulateCollectionQuery($collection);
             if($since == null) {
@@ -978,7 +992,9 @@ $app->get(
                 $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                 $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                 $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
+                $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+
+                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept, $nearLocations);
 
                 $requestHash = "stats_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique, $concept);
 
@@ -992,6 +1008,7 @@ $app->get(
                 $statistics = $textIndex->facetedStatistics("likesFacet,sharesFacet,followersFacet,friendsFacet", $q, $filters, $unique, "source");
 
                 $counts = $textIndex->fieldsCount("uidFacet", $q, $filters, $unique, "source");
+
 
                 $statistics['endorsement'] = $statistics['likesFacet']['sum'];
                 $statistics['reach'] = $statistics['followersFacet']['sum'] / $statistics['followersFacet']['mean'];
@@ -1058,7 +1075,9 @@ $app->get(
                 $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
                 $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
                 $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-                $filters = $utils->getFilters($since, $until, $source, 'original', null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
+                $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+
+                $filters = $utils->getFilters($since, $until, $source, 'original', null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept, $nearLocations);
 
                 $count = $textIndex->countItems($collectionQuery, $filters);
 
@@ -1229,14 +1248,16 @@ $app->get(
             $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
             $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
             $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-            $filters = $utils->getFilters($since, $until, "all", null, null, null, null, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+            $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+
+            $filters = $utils->getFilters($since, $until, "all", null, null, null, null, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
 
             $collection['filters'] = $filters;
 
             $count = $textIndex->countItems($q, $filters);
             $collection['items'] = $count;
 
-            $filters = $utils->getFilters($since, $until, "all", null, "media", null, null, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+            $filters = $utils->getFilters($since, $until, "all", null, "media", null, null, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
 
             $facet = $textIndex->getFacet('mediaIds', $q, $filters, 3, false, null, false, null, 'fc');
             $collection['facet'] = $facet;
@@ -1257,7 +1278,8 @@ $app->get(
                     }
                     $polygons[] = $polygon;
                 }
-                unset($collection['nearLocations']);
+
+                //unset($collection['nearLocations']);
             }
             $collection['polygons'] = $polygons;
 
@@ -1282,7 +1304,7 @@ $app->get(
 
 $app->post(
     '/collection',
-    function () use($app, $mongoDAO, $redisClient, $memcached) {
+    function () use($app, $mongoDAO, $redisClient, $memcached, $utils) {
 
         $request = $app->request();
         $content = $request->getBody();
@@ -1307,10 +1329,35 @@ $app->post(
                 $locations = array();
                 foreach($collection->polygons as $plg) {
                     $location = array('name'=>$plg->centroid);
+                    $lats = array();
+                    $longs = array();
                     $polygon = array();
                     foreach($plg->peaks as $peak) {
                         $polygon[] = array('latitude'=>$peak->lat, 'longitude'=>$peak->long);
+                        $lats[] = $peak->lat;
+                        $longs[] = $peak->long;
                     }
+
+                    $meanLat = array_sum($lats) / count($lats);
+                    $meanLong = array_sum($longs) / count($longs);
+                    $center =  array('latitude'=>$meanLat, 'longitude'=>$meanLong);
+
+                    if(!isset($location['center'])) {
+                      $location['center'] = $center;
+                    }
+
+                    if(!isset($location['radius'])) {
+                          $maxRadius = 0;
+                          foreach($plg->peaks as $peak) {
+                            $radius = $utils->distance($location['center']['latitude'],
+                                    $location['center']['longitude'], $peak->lat, $peak->long);
+                            if($radius > $maxRadius) {
+                              $maxRadius = $radius;
+                            }
+                          }
+                          $location['radius'] = round($maxRadius);
+                    }
+
                     $location['polygon'] = $polygon;
                     $locations[] = $location;
                 }
@@ -1333,7 +1380,7 @@ $app->post(
 
 $app->post(
     '/collection/edit',
-    function () use($app, $mongoDAO, $redisClient, $memcached) {
+    function () use($app, $mongoDAO, $redisClient, $memcached, $utils) {
         $request = $app->request();
 
         $content = $request->getBody();
@@ -1353,9 +1400,36 @@ $app->post(
                 foreach($collection->polygons as $plg) {
                     $location = array('name' => $plg->centroid);
                     $polygon = array();
+                    $lats = array();
+                    $longs = array();
                     foreach($plg->peaks as $peak) {
                         $polygon[] = array('latitude'=>$peak->lat, 'longitude'=>$peak->long);
+
+                        $lats[] = $peak->lat;
+                        $longs[] = $peak->long;
                     }
+
+                    $meanLat = array_sum($lats) / count($lats);
+                    $meanLong = array_sum($longs) / count($longs);
+                    $center =  array('latitude'=>$meanLat, 'longitude'=>$meanLong);
+
+                    if(!isset($location['center'])) {
+                        $location['center'] = $center;
+                    }
+
+                    if(!isset($location['radius'])) {
+                        $maxRadius = 0;
+                        foreach($plg->peaks as $peak) {
+                            $radius = $utils->distance($location['center']['latitude'],
+                                $location['center']['longitude'], $peak->lat, $peak->long);
+                            if($radius > $maxRadius) {
+                                $maxRadius = $radius;
+                            }
+                        }
+                        $location['radius'] = round($maxRadius);
+                    }
+
+
                     $location['polygon'] = $polygon;
                     $locations[] = $location;
                 }
@@ -1927,6 +2001,7 @@ $app->get('/detect/users',
         $googlePlusUsers = array();
         if(in_array("GooglePlus", $sources)) {
             $googlePlusUsers = $smWrapper->searchGooglePlus($q);
+
             if(count($googlePlusUsers) > 0) {
                 $gPlusIds = array_map(function ($u) {
                     return $u['id'];

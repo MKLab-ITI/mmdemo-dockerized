@@ -35,6 +35,22 @@ class TextIndex {
             //$expandedQueryTerms = Utils::expandQuery($judgements, $q, $this);
         }
 
+        if($filters != null && isset($filters['geofilters'])) {
+            $helper = $query->getHelper();
+            $geoParts = array();
+            foreach($filters['geofilters'] as $geo) {
+                $geoFilterPart = $helper->geofilt('latlonRPT', $geo['latitude'], $geo['longitude'], $geo['radius']);
+                $geoParts[] = "latlonRPT:$geoFilterPart";
+            }
+            if($q != null &&  $q !== '') {
+                $q = $q . ' OR (' . implode(' OR ', $geoParts) . ')';
+            }
+            else {
+                $q = implode(' OR ', $geoParts);
+            }
+            unset($filters['geofilters']);
+        }
+
         if($q != null) {
             $query->setQuery($q);
         }
@@ -180,6 +196,23 @@ class TextIndex {
 
     public function countItems($q, $filters=null, $unique=false) {
         $query = $this->client->createSelect();
+
+        if($filters != null && isset($filters['geofilters'])) {
+            $helper = $query->getHelper();
+            $geoParts = array();
+            foreach($filters['geofilters'] as $geo) {
+                $geoFilterPart = $helper->geofilt('latlonRPT', $geo['latitude'], $geo['longitude'], $geo['radius']);
+                $geoParts[] = "latlonRPT:$geoFilterPart";
+            }
+            if($q != null &&  $q !== '') {
+                $q = $q . ' OR (' . implode(' OR ', $geoParts) . ')';
+            }
+            else {
+                $q = implode(' OR ', $geoParts);
+            }
+            unset($filters['geofilters']);
+        }
+
         if($query != null) {
             $query->setQuery($q);
         }
@@ -252,6 +285,24 @@ class TextIndex {
     public function fieldsCount($fields, $q, $filters=null, $unique=false, $facets = null) {
 
         $query = $this->client->createSelect();
+
+        if($filters != null && isset($filters['geofilters'])) {
+            $helper = $query->getHelper();
+            $geoParts = array();
+            foreach($filters['geofilters'] as $geo) {
+                $geoFilterPart = $helper->geofilt('latlonRPT', $geo['latitude'], $geo['longitude'], $geo['radius']);
+                $geoParts[] = "latlonRPT:$geoFilterPart";
+            }
+            if($q != null &&  $q !== '') {
+                $q = $q . ' OR (' . implode(' OR ', $geoParts) . ')';
+            }
+            else {
+                $q = implode(' OR ', $geoParts);
+            }
+            unset($filters['geofilters']);
+        }
+
+
         if($query != null) {
             $query->setQuery($q);
         }
@@ -297,6 +348,23 @@ class TextIndex {
 
         // get a select query instance
         $query = $this->client->createSelect();
+
+        if($filters != null && isset($filters['geofilters'])) {
+            $helper = $query->getHelper();
+            $geoParts = array();
+            foreach($filters['geofilters'] as $geo) {
+                $geoFilterPart = $helper->geofilt('latlonRPT', $geo['latitude'], $geo['longitude'], $geo['radius']);
+                $geoParts[] = "latlonRPT:$geoFilterPart";
+            }
+            if($q != null &&  $q !== '') {
+                $q = $q . ' OR (' . implode(' OR ', $geoParts) . ')';
+            }
+            else {
+                $q = implode(' OR ', $geoParts);
+            }
+            unset($filters['geofilters']);
+        }
+
         $query->setQuery($q);
         $query->setRows(0);
         $query->addParam("facet.threads", 4);
@@ -407,6 +475,23 @@ class TextIndex {
 
         // get a select query instance
         $query = $this->client->createSelect();
+
+        if($filters != null && isset($filters['geofilters'])) {
+            $helper = $query->getHelper();
+            $geoParts = array();
+            foreach($filters['geofilters'] as $geo) {
+                $geoFilterPart = $helper->geofilt('latlonRPT', $geo['latitude'], $geo['longitude'], $geo['radius']);
+                $geoParts[] = "latlonRPT:$geoFilterPart";
+            }
+            if($q != null &&  $q !== '') {
+                $q = $q . ' OR (' . implode(' OR ', $geoParts) . ')';
+            }
+            else {
+                $q = implode(' OR ', $geoParts);
+            }
+            unset($filters['geofilters']);
+        }
+
         $query->setQuery($q);
 
         // set filter queries
@@ -509,6 +594,23 @@ class TextIndex {
 
         // get a select query instance
         $query = $this->client->createSelect();
+
+        if($filters != null && isset($filters['geofilters'])) {
+            $helper = $query->getHelper();
+            $geoParts = array();
+            foreach($filters['geofilters'] as $geo) {
+                $geoFilterPart = $helper->geofilt('latlonRPT', $geo['latitude'], $geo['longitude'], $geo['radius']);
+                $geoParts[] = "latlonRPT:$geoFilterPart";
+            }
+            if($q != null &&  $q !== '') {
+                $q = $q . ' OR (' . implode(' OR ', $geoParts) . ')';
+            }
+            else {
+                $q = implode(' OR ', $geoParts);
+            }
+            unset($filters['geofilters']);
+        }
+
         $query->setQuery($q);
 
         // set filter queries
@@ -553,7 +655,25 @@ class TextIndex {
     public function getClusters($q, $filters = null, $rows=1000) {
         // get a select query instance
         $query = $this->client->createSelect();
+
+        if($filters != null && isset($filters['geofilters'])) {
+            $helper = $query->getHelper();
+            $geoParts = array();
+            foreach($filters['geofilters'] as $geo) {
+                $geoFilterPart = $helper->geofilt('latlonRPT', $geo['latitude'], $geo['longitude'], $geo['radius']);
+                $geoParts[] = "latlonRPT:$geoFilterPart";
+            }
+            if($q != null &&  $q !== '') {
+                $q = $q . ' OR (' . implode(' OR ', $geoParts) . ')';
+            }
+            else {
+                $q = implode(' OR ', $geoParts);
+            }
+            unset($filters['geofilters']);
+        }
+
         $query->setQuery($q);
+
         $query->setHandler('clustering');
         $query->addParam('clustering.engine', 'lingo');
         $query->addParam('carrot.title', 'cleanTitle');
@@ -626,6 +746,23 @@ class TextIndex {
     public function facetedStatistics($fields, $q, $filters=null, $unique=false, $facets = null)
     {
         $query = $this->client->createSelect();
+
+        if($filters != null && isset($filters['geofilters'])) {
+            $helper = $query->getHelper();
+            $geoParts = array();
+            foreach($filters['geofilters'] as $geo) {
+                $geoFilterPart = $helper->geofilt('latlonRPT', $geo['latitude'], $geo['longitude'], $geo['radius']);
+                $geoParts[] = "latlonRPT:$geoFilterPart";
+            }
+            if($q != null &&  $q !== '') {
+                $q = $q . ' OR (' . implode(' OR ', $geoParts) . ')';
+            }
+            else {
+                $q = implode(' OR ', $geoParts);
+            }
+            unset($filters['geofilters']);
+        }
+
         if ($query != null) {
             $query->setQuery($q);
         }

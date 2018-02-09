@@ -1,3 +1,12 @@
+function gup(name) {
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regexS = "[\\?&]" + name + "=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(window.location.href);
+    if (results == null) return "";
+    else return results[1];
+}
+
 var user_id = gup("user_id");
 $(function () {
     mapboxgl.accessToken = 'pk.eyJ1IjoibGFhcG9zdG8iLCJhIjoic21tVGtEQSJ9.tH3Q3MuElddX8xe26KkoHw';
@@ -119,7 +128,6 @@ if (project_favicon !== "") {
 }
 if (is_H2020) {
     $('#social_icons').after('<img class="footer_img" src="imgs/horizon.png" alt="horizon"/>');
-    $('#dropdown').find('ul').css('top', '-70px');
 }
 if (project_url !== "") {
     $('#project_url').attr('href', project_url).text(project_name);
@@ -262,9 +270,6 @@ function search_adv_user() {
                             case "Facebook":
                                 $user_images.append('<div class="user" style="background-color: lightgray"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#3b5998"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].likes) + ' likes</p><img src="imgs/facebook-5-16.png" class="user_social"></div><div class="data_stats"><ul></ul> </div><img src="imgs/add_user_green.png" class="add_user open_user" data-username="' + json[i].username + '" data-social="Facebook" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
                                 break;
-                            case "Instagram":
-                                $user_images.append('<div class="user" style="background-color: lightgray"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#ab7d63"></p><p class="user_name">' + json[i].username + '</p><br><img src="imgs/instagram-16-color.png" class="user_social"></div><div class="data_stats"><ul></ul> </div><img src="imgs/add_user_green.png" class="add_user open_user" data-username="' + json[i].username + '" data-social="Instagram" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
-                                break;
                             case "Youtube":
                                 $user_images.append('<div class="user" style="background-color: lightgray"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#FF0202"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].videoCount) + ' videos</p><img src="imgs/youtube-16-color.png" class="user_social"></div><div class="data_stats"><ul><li class="three">' + nFormatter_easy(json[i].subscriberCount) + '<span>Subscribers</span></li><li class="three">' + nFormatter_easy(json[i].viewCount) + '<span>Views</span></li><li class="three">' + nFormatter_easy(json[i].commentCount) + '<span>Comments</span> </li> </ul> </div><img src="imgs/add_user_green.png" class="add_user open_user" data-username="' + json[i].username + '" data-social="Youtube" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
                                 break;
@@ -280,9 +285,6 @@ function search_adv_user() {
                                 break;
                             case "Facebook":
                                 $user_images.append('<div class="user"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#3b5998"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].likes) + ' likes</p><img src="imgs/facebook-5-16.png" class="user_social"></div><div class="data_stats"><ul></ul> </div><img src="imgs/add_user.png" class="add_user" data-username="' + json[i].username + '" data-social="Facebook" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
-                                break;
-                            case "Instagram":
-                                $user_images.append('<div class="user"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#ab7d63"></p><p class="user_name">' + json[i].username + '</p><br><img src="imgs/instagram-16-color.png" class="user_social"></div><div class="data_stats"><ul></ul> </div><img src="imgs/add_user.png" class="add_user" data-username="' + json[i].username + '" data-social="Instagram" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
                                 break;
                             case "Youtube":
                                 $user_images.append('<div class="user"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#FF0202"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].videoCount) + ' videos</p><img src="imgs/youtube-16-color.png" class="user_social"></div><div class="data_stats"><ul><li class="three">' + nFormatter_easy(json[i].subscriberCount) + '<span>Subscribers</span></li><li class="three">' + nFormatter_easy(json[i].viewCount) + '<span>Views</span></li><li class="three">' + nFormatter_easy(json[i].commentCount) + '<span>Comments</span> </li> </ul> </div><img src="imgs/add_user.png" class="add_user" data-username="' + json[i].username + '" data-social="Youtube" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
@@ -546,9 +548,6 @@ function adduser($id, $name, $user, $social) {
                 case "Facebook":
                     icon.setAttribute('src', 'imgs/facebook-16-black.png');
                     break;
-                case "Instagram":
-                    icon.setAttribute('src', 'imgs/instagram-16-black.png');
-                    break;
                 case "Flickr":
                     icon.setAttribute('src', 'imgs/flickr-16-black.png');
                     break;
@@ -574,7 +573,7 @@ function adduser($id, $name, $user, $social) {
                     $('#done_start,#done_edit').addClass('deactivated');
                 }
                 if ($("#users li").length === 100) {
-                    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
+                    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
                     $('#max_users,#max_users_advanced').slideDown();
                 }
             }
@@ -607,9 +606,6 @@ function adduser_adv($username, $social, $id, $name) {
                 break;
             case "Facebook":
                 icon.setAttribute('src', 'imgs/facebook-16-black.png');
-                break;
-            case "Instagram":
-                icon.setAttribute('src', 'imgs/instagram-16-black.png');
                 break;
             case "Flickr":
                 icon.setAttribute('src', 'imgs/flickr-16-black.png');
@@ -694,7 +690,7 @@ $("#user_users").on("click", ".delete", function () {
             $('#done_start,#done_edit').addClass('deactivated');
         }
     });
-    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', false);
+    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', false);
     $('#max_users,#max_users_advanced').slideUp();
     $('#users_images').removeClass('users_full');
 
@@ -704,7 +700,7 @@ $("#user_users_adv").on("click", ".delete", function () {
     $(this).closest('li').css('height', height).hide('slow', function () {
         $(this).remove();
     });
-    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', false);
+    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', false);
     $('#max_users,#max_users_advanced').slideUp();
     $('#users_images').removeClass('users_full');
     $("[data-id=" + $(this).parent().attr('id').split('------')[2] + "]").removeClass('open_user').attr('src', 'imgs/add_user.png').parent().css('background-color', 'transparent');
@@ -828,7 +824,7 @@ $("#example_1").click(function () {
                 $('#done_start,#done_edit').addClass('deactivated');
             }
             if ($("#users li").length === 100) {
-                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
+                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
                 $('#max_users,#max_users_advanced').slideDown();
             }
         }
@@ -923,7 +919,7 @@ $("#example_2").click(function () {
                 $('#done_start,#done_edit').addClass('deactivated');
             }
             if ($("#users li").length === 100) {
-                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
+                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
                 $('#max_users,#max_users_advanced').slideDown();
             }
         }
@@ -1018,7 +1014,7 @@ $("#example_3").click(function () {
                 $('#done_start,#done_edit').addClass('deactivated');
             }
             if ($("#users li").length === 100) {
-                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
+                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
                 $('#max_users,#max_users_advanced').slideDown();
             }
         }
@@ -1182,48 +1178,26 @@ $("#Container").on("click", ".restart_icon", function () {
             }
         },
         error: function (e) {
-            switch (translation_param) {
-                case "en":
-                    $('#myModal h1').html("Oops. Something went wrong!");
-                    $('#myModal p').html("We couldn't delete this collection. Please try again.");
-                    $('#myModal').reveal();
-                    break;
-                case "el":
-                    $('#myModal h1').html("Κάτι πήγε στραβά!");
-                    $('#myModal p').html("Η συλλογή δεν διαγράφηκε. Προσπάθησε ξανά.");
-                    $('#myModal').reveal();
-                    break;
-                case "it":
-                    $('#myModal h1').html("Si e' verificato un problema!");
-                    $('#myModal p').html("Non e' stato possibile eliminare questa raccolta. Prova ancora.");
-                    $('#myModal').reveal();
-                    break;
-                case "tr":
-                    $('#myModal h1').html("Birşeyler yanlış gitti!");
-                    $('#myModal p').html("Bu koleksiyonu silinemiyor. Lütfen tekrar deneyiniz.");
-                    $('#myModal').reveal();
-                    break;
-                case "es":
-                    $('#myModal h1').html("Algo salió mal!");
-                    $('#myModal p').html("No hemos podido eliminar esta colección . Por favor, inténtelo de nuevo.");
-                    $('#myModal').reveal();
-                    break;
-                case "ca":
-                    $('#myModal h1').html("Ups! S'ha produït un error!");
-                    $('#myModal p').html("Aquest recull no s'ha pogut esborrar. Torneu-ho a provar.");
-                    $('#myModal').reveal();
-                    break;
-                default:
-                    $('#myModal h1').html("Oops. Something went wrong!");
-                    $('#myModal p').html("We couldn't delete this collection. Please try again");
-                    $('#myModal').reveal();
-            }
+            $('#myModal h1').html("Oops. Something went wrong!");
+            $('#myModal p').html("We couldn't delete this collection. Please try again.");
+            $('#myModal').reveal();
         }
     });
 });
 $("#Container").on("click", ".delete_icon", function () {
+    $('.cover_delete,.tooltip_delete').hide();
+    $(this).parents('.collection').find('.cover_delete').fadeIn(300);
+    $(this).siblings('.tooltip_delete').fadeIn(300);
+});
+$(document).mouseup(function (e) {
+    var container = $(".delete_icon");
+    if (!container.is(e.target) && container.has(e.target).length === 0) {
+        $('.cover_delete,.tooltip_delete').hide();
+    }
+});
+$("#Container").on("click", ".confirm_delete", function () {
     $.ajax({
-        url: api_folder + 'collection/delete/' + $(this).attr('id'),
+        url: api_folder + 'collection/delete/' + $(this).parent().next('.delete_icon').attr('id'),
         type: 'GET',
         success: function () {
             if ($('.collection').length === 1) {
@@ -1235,42 +1209,9 @@ $("#Container").on("click", ".delete_icon", function () {
             get_collections(true);
         },
         error: function (e) {
-            switch (translation_param) {
-                case "en":
-                    $('#myModal h1').html("Oops. Something went wrong!");
-                    $('#myModal p').html("We couldn't delete this collection. Please try again.");
-                    $('#myModal').reveal();
-                    break;
-                case "el":
-                    $('#myModal h1').html("Κάτι πήγε στραβά!");
-                    $('#myModal p').html("Η συλλογή δεν διαγράφηκε. Προσπάθησε ξανά.");
-                    $('#myModal').reveal();
-                    break;
-                case "it":
-                    $('#myModal h1').html("Si e' verificato un problema!");
-                    $('#myModal p').html("Non e' stato possibile eliminare questa raccolta. Prova ancora.");
-                    $('#myModal').reveal();
-                    break;
-                case "tr":
-                    $('#myModal h1').html("Birşeyler yanlış gitti!");
-                    $('#myModal p').html("Bu koleksiyonu silinemiyor. Lütfen tekrar deneyiniz.");
-                    $('#myModal').reveal();
-                    break;
-                case "es":
-                    $('#myModal h1').html("Algo salió mal!");
-                    $('#myModal p').html("No hemos podido eliminar esta colección . Por favor, inténtelo de nuevo.");
-                    $('#myModal').reveal();
-                    break;
-                case "ca":
-                    $('#myModal h1').html("Ups! S'ha produït un error!");
-                    $('#myModal p').html("Aquest recull no s'ha pogut esborrar. Torneu-ho a provar.");
-                    $('#myModal').reveal();
-                    break;
-                default:
-                    $('#myModal h1').html("Oops. Something went wrong!");
-                    $('#myModal p').html("We couldn't delete this collection. Please try again");
-                    $('#myModal').reveal();
-            }
+            $('#myModal h1').html("Oops. Something went wrong!");
+            $('#myModal p').html("We couldn't delete this collection. Please try again.");
+            $('#myModal').reveal();
         }
     });
 });
@@ -1292,42 +1233,9 @@ $("#Container").on("click", ".stop_icon", function () {
             }
         },
         error: function (e) {
-            switch (translation_param) {
-                case "en":
-                    $('#myModal h1').html("Oops. Something went wrong!");
-                    $('#myModal p').html("Your collection has not be stopped. Please try again.");
-                    $('#myModal').reveal();
-                    break;
-                case "el":
-                    $('#myModal h1').html("Κάτι πήγε στραβά!");
-                    $('#myModal p').html("Η συλλογή δεν σταμάτησε. Προσπάθησε ξανά.");
-                    $('#myModal').reveal();
-                    break;
-                case "it":
-                    $('#myModal h1').html("Si e' verificato un problema!");
-                    $('#myModal p').html("La tua raccolta non si è fermata. Ti invitiamo a riprovare.");
-                    $('#myModal').reveal();
-                    break;
-                case "tr":
-                    $('#myModal h1').html("Birşeyler yanlış gitti!");
-                    $('#myModal p').html("Koleksiyon durdurulamıyor. Lütfen tekrar deneyiniz.");
-                    $('#myModal').reveal();
-                    break;
-                case "es":
-                    $('#myModal h1').html("Algo salió mal!");
-                    $('#myModal p').html("Su colección no se ha detenido . Por favor, inténtelo de nuevo.");
-                    $('#myModal').reveal();
-                    break;
-                case "ca":
-                    $('#myModal h1').html("Ups! S'ha produït un error!");
-                    $('#myModal p').html("El recull no s'ha aturat. Torneu-ho a provar.");
-                    $('#myModal').reveal();
-                    break;
-                default:
-                    $('#myModal h1').html("Oops. Something went wrong!");
-                    $('#myModal p').html("Your collection has not be stopped. Please try again.");
-                    $('#myModal').reveal();
-            }
+            $('#myModal h1').html("Oops. Something went wrong!");
+            $('#myModal p').html("Your collection has not be stopped. Please try again.");
+            $('#myModal').reveal();
         }
     });
 });
@@ -1351,7 +1259,7 @@ $("#Container").on("click", ".edit_icon", function () {
     $('html,body').animate({
         scrollTop: $(".third-section").offset().top - 100
     }, 800);
-    $('#interest,#hashtag,#location_input,#tag_advanced,#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube').prop('disabled', false);
+    $('#interest,#hashtag,#location_input,#tag_advanced,#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube').prop('disabled', false);
     $('#interest,#hashtag,#user_RSS,#location_input').val("").blur();
     $('.mapbox-gl-draw_polygon').attr('disabled', false);
     $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
@@ -1409,12 +1317,7 @@ $("#Container").on("click", ".edit_icon", function () {
 
 });
 $("#Container").on("click", ".overlay", function () {
-    if (translation_param) {
-        $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&concepts=all&original=all&type=all&unique=false&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=0&until=1514678400000&section=feed&view=gallery&translation=" + translation_param)
-    }
-    else {
-        $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&concepts=all&original=all&type=all&unique=false&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=0&until=1514678400000&section=feed&view=gallery&translation=en")
-    }
+    $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&concepts=all&original=all&type=all&unique=false&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=0&until=1514678400000&section=feed&view=gallery")
 });
 
 var pagination = 1;
@@ -1422,42 +1325,9 @@ if (user_id != "") {
     get_collections(true);
 }
 else {
-    switch (translation_param) {
-        case "en":
-            $('#myModal h1').html("Oops. Something went wrong!");
-            $('#myModal p').html("You have to define a user id.");
-            $('#myModal').reveal();
-            break;
-        case "el":
-            $('#myModal h1').html("Κάτι πήγε στραβά!");
-            $('#myModal p').html("Πρέπει να προσδιορίσετε ένα μοναδικό αναγνωριστικό για τον χρήστη.");
-            $('#myModal').reveal();
-            break;
-        case "it":
-            $('#myModal h1').html("Si e' verificato un problema!");
-            $('#myModal p').html("You have to define a user id.");
-            $('#myModal').reveal();
-            break;
-        case "tr":
-            $('#myModal h1').html("Birşeyler yanlış gitti!");
-            $('#myModal p').html("You have to define a user id.");
-            $('#myModal').reveal();
-            break;
-        case "es":
-            $('#myModal h1').html("Algo salió mal!");
-            $('#myModal p').html("You have to define a user id.");
-            $('#myModal').reveal();
-            break;
-        case "ca":
-            $('#myModal h1').html("Ups! S'ha produït un error!");
-            $('#myModal p').html("You have to define a user id.");
-            $('#myModal').reveal();
-            break;
-        default:
-            $('#myModal h1').html("Oops. Something went wrong!");
-            $('#myModal p').html("You have to define a user id.");
-            $('#myModal').reveal();
-    }
+    $('#myModal h1').html("Oops. Something went wrong!");
+    $('#myModal p').html("You have to define a user id.");
+    $('#myModal').reveal();
     $('.fifth-section,.fourth-section,.third-section,#mainmenu,#discover').remove();
     $('.second-section').css('min-height', $(window).height() - $('.sixth-section').height());
 }
@@ -1480,50 +1350,10 @@ function get_collections(flag) {
                     if ($paginationdemo.data("twbs-pagination")) {
                         $paginationdemo.twbsPagination('destroy');
                     }
-                    var first_but, prev_but, next_but, last_but;
-                    switch (translation_param) {
-                        case "en":
-                            first_but = "First";
-                            prev_but = "Previous";
-                            next_but = "Next";
-                            last_but = "Last";
-                            break;
-                        case "el":
-                            first_but = "Πρώτη";
-                            prev_but = "Προηγούμενη";
-                            next_but = "Επόμενη";
-                            last_but = "Τελευταία";
-                            break;
-                        case "it":
-                            first_but = "First";
-                            prev_but = "Previous";
-                            next_but = "Next";
-                            last_but = "Last";
-                            break;
-                        case "tr":
-                            first_but = "First";
-                            prev_but = "Previous";
-                            next_but = "Next";
-                            last_but = "Last";
-                            break;
-                        case "es":
-                            first_but = "First";
-                            prev_but = "Previous";
-                            next_but = "Next";
-                            last_but = "Last";
-                            break;
-                        case "ca":
-                            first_but = "First";
-                            prev_but = "Previous";
-                            next_but = "Next";
-                            last_but = "Last";
-                            break;
-                        default:
-                            first_but = "First";
-                            prev_but = "Previous";
-                            next_but = "Next";
-                            last_but = "Last";
-                    }
+                    var first_but = "First";
+                    var prev_but = "Previous";
+                    var next_but = "Next";
+                    var last_but = "Last";
                     $paginationdemo.twbsPagination({
                         totalPages: Math.ceil(json.count / 6),
                         visiblePages: "5",
@@ -1621,7 +1451,7 @@ function get_collections(flag) {
                     var day = a.getUTCDate();
                     var date = day + ' ' + month + ' ' + year;
 
-                    var element = '<li class="collection"><div class="tiles_li"><div class="outer"><div class="delete_icon" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20"><div class="tags_p">' + tags + '</div></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20"><div class="tags_p" style=' + users_style + '>' + users + '</div></div><div class="tags_wrapper"><img src="imgs/location-gray.png" width="20"><div class="tags_p">' + location_centroid + '</div></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></li>';
+                    var element = '<li class="collection"><div class="cover_delete"></div><div class="tiles_li"><div class="outer"><div class="tooltip_delete"><p>Are you sure you want to delete this collection? This action cannot be undone!</p><span class="cancel_delete">Cancel</span><span class="confirm_delete">Yes</span></div><div class="delete_icon" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20"><div class="tags_p">' + tags + '</div></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20"><div class="tags_p" style=' + users_style + '>' + users + '</div></div><div class="tags_wrapper"><img src="imgs/location-gray.png" width="20"><div class="tags_p">' + location_centroid + '</div></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></li>';
                     $tiles.append(element);
                     var options = {
                         autoResize: true,
@@ -1687,42 +1517,9 @@ function get_collections(flag) {
         },
         error: function (e) {
             $("#collection_loader,.well,.controls .btn_material").hide();
-            switch (translation_param) {
-                case "en":
-                    $('#myModal h1').html("Oops. Something went wrong!");
-                    $('#myModal p').html("Your collections can not be loaded.");
-                    $('#myModal').reveal();
-                    break;
-                case "el":
-                    $('#myModal h1').html("Κάτι πήγε στραβά!");
-                    $('#myModal p').html("Δεν μπορέσαμε να φορτώσουμε τις συλλογές σας.");
-                    $('#myModal').reveal();
-                    break;
-                case "it":
-                    $('#myModal h1').html("Si e' verificato un problema!");
-                    $('#myModal p').html("Le tue raccolte non possono essere caricate.");
-                    $('#myModal').reveal();
-                    break;
-                case "tr":
-                    $('#myModal h1').html("Birşeyler yanlış gitti!");
-                    $('#myModal p').html("Koleksiyonlarınız yüklenemiyor.");
-                    $('#myModal').reveal();
-                    break;
-                case "es":
-                    $('#myModal h1').html("Algo salió mal!");
-                    $('#myModal p').html("No hemos podido cargar sus colecciones.");
-                    $('#myModal').reveal();
-                    break;
-                case "ca":
-                    $('#myModal h1').html("Ups! S'ha produït un error!");
-                    $('#myModal p').html("Els reculls no s'han pogut carregar.");
-                    $('#myModal').reveal();
-                    break;
-                default:
-                    $('#myModal h1').html("Oops. Something went wrong!");
-                    $('#myModal p').html("Your collections can not be loaded.");
-                    $('#myModal').reveal();
-            }
+            $('#myModal h1').html("Oops. Something went wrong!");
+            $('#myModal p').html("Your collections can not be loaded.");
+            $('#myModal').reveal();
         }
     });
 }
@@ -1770,23 +1567,6 @@ function nFormatter_easy(num) {
     }
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
-
-$("#dropdown").on("click", function (e) {
-    e.preventDefault();
-
-    if ($(this).hasClass("open")) {
-        $(this).removeClass("open");
-        $(this).children("ul").slideUp("fast");
-    } else {
-        $(this).addClass("open");
-        $(this).children("ul").slideDown("fast");
-    }
-});
-
-$("#dropdown li").click(function () {
-    $('#lang').html($(this).text());
-    $(location).attr('href', 'index.html?translation=' + $(this).attr('id') + "&user_id=" + user_id);
-});
 
 $("#text_user").click(function () {
     if ($(this).hasClass('text_user_on')) {
@@ -1837,56 +1617,14 @@ function validate_expression() {
     // cannot start with AND or OR or NOT
     if ($expression.find('li').eq(0).hasClass('logic_operator')) {
         $expression.find('li').eq(0).addClass('error_operator');
-        switch (translation_param) {
-            case "en":
-                $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
-                break;
-            case "el":
-                $error_exp.slideDown().find('span').html("Η λογική έκφραση δεν μπορεί να ξεκινάει με λογικό τελεστή.");
-                break;
-            case "it":
-                $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
-                break;
-            case "tr":
-                $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
-                break;
-            case "es":
-                $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
-                break;
-            case "ca":
-                $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
-                break;
-            default:
-                $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
-        }
+        $error_exp.slideDown().find('span').html("Logical query cannot start with logical operator.");
         return;
     }
 
     // cannot end with AND or OR or NOT
     if ($expression.find('li').last().hasClass('logic_operator')) {
         $expression.find('li').last().addClass('error_operator');
-        switch (translation_param) {
-            case "en":
-                $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
-                break;
-            case "el":
-                $error_exp.slideDown().find('span').html("Η λογική έκφραση δεν μπορεί να τελειώνει με λογικό τελεστή.");
-                break;
-            case "it":
-                $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
-                break;
-            case "tr":
-                $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
-                break;
-            case "es":
-                $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
-                break;
-            case "ca":
-                $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
-                break;
-            default:
-                $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
-        }
+        $error_exp.slideDown().find('span').html("Logical query cannot end with logical operator.");
         return;
     }
 
@@ -1894,28 +1632,7 @@ function validate_expression() {
     $('.tag_operator').each(function () {
         if ($(this).next('li').hasClass("tag_operator")) {
             $(this).addClass('error_operator');
-            switch (translation_param) {
-                case "en":
-                    $error_exp.slideDown().find('span').html("You cannot use two tags next to each other.");
-                    break;
-                case "el":
-                    $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις δυο ετικέτες τη μια δίπλα στην άλλη.");
-                    break;
-                case "it":
-                    $error_exp.slideDown().find('span').html("You cannot use two tags next to each other.");
-                    break;
-                case "tr":
-                    $error_exp.slideDown().find('span').html("You cannot use two tags next to each other.");
-                    break;
-                case "es":
-                    $error_exp.slideDown().find('span').html("You cannot use two tags next to each other.");
-                    break;
-                case "ca":
-                    $error_exp.slideDown().find('span').html("You cannot use two tags next to each other.");
-                    break;
-                default:
-                    $error_exp.slideDown().find('span').html("You cannot use two tags next to each other.");
-            }
+            $error_exp.slideDown().find('span').html("You cannot use two tags next to each other.");
             valid_expr = false;
         }
     });
@@ -1927,28 +1644,7 @@ function validate_expression() {
     $('.logic_operator').each(function () {
         if ($(this).next('li').hasClass("logic_operator")) {
             $(this).addClass('error_operator');
-            switch (translation_param) {
-                case "en":
-                    $error_exp.slideDown().find('span').html("You cannot use two logical operators next to each other.");
-                    break;
-                case "el":
-                    $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις δυο λογικούς τελεστές τον ένα δίπλα στον άλλο.");
-                    break;
-                case "it":
-                    $error_exp.slideDown().find('span').html("You cannot use two logical operators next to each other.");
-                    break;
-                case "tr":
-                    $error_exp.slideDown().find('span').html("You cannot use two logical operators next to each other.");
-                    break;
-                case "es":
-                    $error_exp.slideDown().find('span').html("You cannot use two logical operators next to each other.");
-                    break;
-                case "ca":
-                    $error_exp.slideDown().find('span').html("You cannot use two logical operators next to each other.");
-                    break;
-                default:
-                    $error_exp.slideDown().find('span').html("You cannot use two logical operators next to each other.");
-            }
+            $error_exp.slideDown().find('span').html("You cannot use two logical operators next to each other.");
             valid_expr = false;
         }
     });
@@ -1961,28 +1657,7 @@ function validate_expression() {
         if ($(this).hasClass("close_parenthesis")) {
             if ($(this).next('li').hasClass("open_parenthesis")) {
                 $(this).next('li').addClass('error_operator');
-                switch (translation_param) {
-                    case "en":
-                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a closing parenthesis \"]\".");
-                        break;
-                    case "el":
-                        $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις μια ανοιχτή παρένθεση \"[\" ακριβώς μετά από μια κλειστή \"]\"");
-                        break;
-                    case "it":
-                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a closing parenthesis \"]\".");
-                        break;
-                    case "tr":
-                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a closing parenthesis \"]\".");
-                        break;
-                    case "es":
-                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a closing parenthesis \"]\".");
-                        break;
-                    case "ca":
-                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a closing parenthesis \"]\".");
-                        break;
-                    default:
-                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a closing parenthesis \"]\".");
-                }
+                $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a closing parenthesis \"]\".");
                 valid_expr = false;
             }
         }
@@ -1990,28 +1665,7 @@ function validate_expression() {
         if ($(this).hasClass("open_parenthesis")) {
             if ($(this).next('li').hasClass("close_parenthesis")) {
                 $(this).next('li').addClass('error_operator');
-                switch (translation_param) {
-                    case "en":
-                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after an opening parenthesis \"[\".");
-                        break;
-                    case "el":
-                        $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις μια κλειστή παρένθεση \"]\" ακριβώς μετά από μια ανοιχτή \"[\".");
-                        break;
-                    case "it":
-                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after an opening parenthesis \"[\".");
-                        break;
-                    case "tr":
-                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after an opening parenthesis \"[\".");
-                        break;
-                    case "es":
-                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after an opening parenthesis \"[\".");
-                        break;
-                    case "ca":
-                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after an opening parenthesis \"[\".");
-                        break;
-                    default:
-                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after an opening parenthesis \"[\".");
-                }
+                $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after an opening parenthesis \"[\".");
                 valid_expr = false;
             }
         }
@@ -2019,28 +1673,7 @@ function validate_expression() {
         if ($(this).hasClass("close_parenthesis")) {
             if ($(this).prev('li').hasClass("logic_operator")) {
                 $(this).addClass('error_operator');
-                switch (translation_param) {
-                    case "en":
-                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after a logical operator.");
-                        break;
-                    case "el":
-                        $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις μια κλειστή παρένθεση \"]\" ακριβώς μετά από ένα λογικό τελεστή.");
-                        break;
-                    case "it":
-                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after a logical operator.");
-                        break;
-                    case "tr":
-                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after a logical operator.");
-                        break;
-                    case "es":
-                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after a logical operator.");
-                        break;
-                    case "ca":
-                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after a logical operator.");
-                        break;
-                    default:
-                        $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after a logical operator.");
-                }
+                $error_exp.slideDown().find('span').html("You cannot use a closing parenthesis \"]\" right after a logical operator.");
                 valid_expr = false;
             }
         }
@@ -2048,28 +1681,7 @@ function validate_expression() {
         if ($(this).hasClass("open_parenthesis")) {
             if ($(this).next('li').hasClass("logic_operator")) {
                 $(this).next('li').addClass('error_operator');
-                switch (translation_param) {
-                    case "en":
-                        $error_exp.slideDown().find('span').html("You cannot use a logical operator right after an opening parenthesis \"[\".");
-                        break;
-                    case "el":
-                        $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις ένα λογικό τελεστή ακριβώς μετά από μια ανοιχτή παρένθεση \"[\".");
-                        break;
-                    case "it":
-                        $error_exp.slideDown().find('span').html("You cannot use a logical operator right after an opening parenthesis \"[\".");
-                        break;
-                    case "tr":
-                        $error_exp.slideDown().find('span').html("You cannot use a logical operator right after an opening parenthesis \"[\".");
-                        break;
-                    case "es":
-                        $error_exp.slideDown().find('span').html("You cannot use a logical operator right after an opening parenthesis \"[\".");
-                        break;
-                    case "ca":
-                        $error_exp.slideDown().find('span').html("You cannot use a logical operator right after an opening parenthesis \"[\".");
-                        break;
-                    default:
-                        $error_exp.slideDown().find('span').html("You cannot use a logical operator right after an opening parenthesis \"[\".");
-                }
+                $error_exp.slideDown().find('span').html("You cannot use a logical operator right after an opening parenthesis \"[\".");
                 valid_expr = false;
             }
         }
@@ -2077,28 +1689,7 @@ function validate_expression() {
         if ($(this).hasClass("open_parenthesis")) {
             if ($(this).prev('li').hasClass("tag_operator")) {
                 $(this).addClass('error_operator');
-                switch (translation_param) {
-                    case "en":
-                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a tag.");
-                        break;
-                    case "el":
-                        $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις μια ανοιχτή παρένθεση \"[\" ακριβώς μετά από μια ετικέτα.");
-                        break;
-                    case "it":
-                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a tag.");
-                        break;
-                    case "tr":
-                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a tag.");
-                        break;
-                    case "es":
-                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a tag.");
-                        break;
-                    case "ca":
-                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a tag.");
-                        break;
-                    default:
-                        $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a tag.");
-                }
+                $error_exp.slideDown().find('span').html("You cannot use an opening parenthesis \"[\" right after a tag.");
                 valid_expr = false;
             }
         }
@@ -2106,28 +1697,7 @@ function validate_expression() {
         if ($(this).hasClass("close_parenthesis")) {
             if ($(this).next('li').hasClass("tag_operator")) {
                 $(this).next('li').addClass('error_operator');
-                switch (translation_param) {
-                    case "en":
-                        $error_exp.slideDown().find('span').html("You cannot use a tag right after a closing parenthesis \"]\".");
-                        break;
-                    case "el":
-                        $error_exp.slideDown().find('span').html("Δεν μπορείς να χρησιμοποιήσεις μια ετικέτα ακριβώς μετά από μια κλειστή παρένθεση \"]\".");
-                        break;
-                    case "it":
-                        $error_exp.slideDown().find('span').html("You cannot use a tag right after a closing parenthesis \"]\".");
-                        break;
-                    case "tr":
-                        $error_exp.slideDown().find('span').html("You cannot use a tag right after a closing parenthesis \"]\".");
-                        break;
-                    case "es":
-                        $error_exp.slideDown().find('span').html("You cannot use a tag right after a closing parenthesis \"]\".");
-                        break;
-                    case "ca":
-                        $error_exp.slideDown().find('span').html("You cannot use a tag right after a closing parenthesis \"]\".");
-                        break;
-                    default:
-                        $error_exp.slideDown().find('span').html("You cannot use a tag right after a closing parenthesis \"]\".");
-                }
+                $error_exp.slideDown().find('span').html("You cannot use a tag right after a closing parenthesis \"]\".");
                 valid_expr = false;
             }
         }
@@ -2212,7 +1782,7 @@ $("#done_users").click(function () {
     $('#no_results,.Typeahead-spinner,#adv_loading').hide();
     $('#user_advanced').val("").blur();
     if ($("#users").find("li").length === 100) {
-        $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
+        $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
         $('#max_users,#max_users_advanced').slideDown();
     }
     if (edit_mode) {
@@ -2235,7 +1805,7 @@ $("#cancel_users").click(function () {
     $('#no_results,.Typeahead-spinner,#adv_loading').hide();
     $('#user_advanced').val("").blur();
     if ($("#users").find("li").length === 100) {
-        $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube").prop('disabled', true);
+        $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
         $('#max_users,#max_users_advanced').slideDown();
     }
     if (edit_mode) {
@@ -2255,7 +1825,7 @@ $("#cancel_edit").click(function () {
     $('#edit_buttons,#edit_col_heading').hide();
     edit_mode = false;
     $('#tags,#users,#col_name').empty();
-    $('#interest,#hashtag,#location_input,#tag_advanced,#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Instagram,#user_RSS,#user_Youtube').prop('disabled', false);
+    $('#interest,#hashtag,#location_input,#tag_advanced,#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube').prop('disabled', false);
     $('#interest,#hashtag,#location_input,#user_RSS').val("").blur();
     $('.mapbox-gl-draw_polygon').attr('disabled', false);
     $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
@@ -2330,52 +1900,10 @@ $("#done_start,#done_edit").click(function () {
     if ($(this).hasClass('deactivated')) {
         $('.error_expr_collection').slideDown();
         if (($('#col_name').text() === "") && ($('#interest').val() === "")) {
-            switch (translation_param) {
-                case "en":
-                    $('.error_expr_collection').find('span').html("You have to specify a collection name.")
-                    break;
-                case "el":
-                    $('.error_expr_collection').find('span').html("Πρέπει να ορίσεις ένα όνομα συλλογής.");
-                    break;
-                case "it":
-                    $('.error_expr_collection').find('span').html("Devi specificare il nome di una raccolta.");
-                    break;
-                case "tr":
-                    $('.error_expr_collection').find('span').html("Bir koleksiyon adı belirlemelisiniz.");
-                    break;
-                case "es":
-                    $('.error_expr_collection').find('span').html("Se tiene que especificar un nombre de colección.");
-                    break;
-                case "ca":
-                    $('.error_expr_collection').find('span').html("Heu d'especificar un nom de recull.");
-                    break;
-                default:
-                    $('.error_expr_collection').find('span').html("You have to specify a collection name.");
-            }
+            $('.error_expr_collection').find('span').html("You have to specify a collection name.")
         }
         else if (($('#tags li').length === 0 ) && ($('#users').find('li').length === 0) && ($.map_get_polygon_points().features.length === 0)) {
-            switch (translation_param) {
-                case "en":
-                    $('.error_expr_collection').find('span').html("You have to specify at least one keyword or a user or a location.");
-                    break;
-                case "el":
-                    $('.error_expr_collection').find('span').html("Πρέπει να ορίσεις τουλάχιστον μια ετικέτα ή ένα χρήστη ή μια τοποθεσία.");
-                    break;
-                case "it":
-                    $('.error_expr_collection').find('span').html("Devi specificare almeno una parola chiave o un utente.");
-                    break;
-                case "tr":
-                    $('.error_expr_collection').find('span').html("En az bir anahtar kelime veya kullanıcı belirlemelisiniz.");
-                    break;
-                case "es":
-                    $('.error_expr_collection').find('span').html("Se tiene que especificar al menos una palabra clave o un usuario.");
-                    break;
-                case "ca":
-                    $('.error_expr_collection').find('span').html("Heu d'especificar com mínim un usuari o una paraula clau.");
-                    break;
-                default:
-                    $('.error_expr_collection').find('span').html("You have to specify at least one keyword or a user or a location.");
-            }
+            $('.error_expr_collection').find('span').html("You have to specify at least one keyword or a user or a location.");
         }
     }
     else {
@@ -2527,42 +2055,9 @@ function collection_begin() {
                 $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
             },
             error: function (e) {
-                switch (translation_param) {
-                    case "en":
-                        $('#myModal h1').html("Oops. Something went wrong!");
-                        $('#myModal p').html("Your collection has not be submitted. Please try again.");
-                        $('#myModal').reveal();
-                        break;
-                    case "el":
-                        $('#myModal h1').html("Κάτι πήγε στραβά!");
-                        $('#myModal p').html("Η συλλογή δεν υποβλήθηκε. Προσπάθησε ξανά.");
-                        $('#myModal').reveal();
-                        break;
-                    case "it":
-                        $('#myModal h1').html("Si e' verificato un problema!");
-                        $('#myModal p').html("La tua raccolta non è stata visualizzata. Prova ancora.");
-                        $('#myModal').reveal();
-                        break;
-                    case "tr":
-                        $('#myModal h1').html("Birşeyler yanlış gitti!");
-                        $('#myModal p').html("Koleksiyonunuz gönderilemedi. Lütfen tekrar deneyiniz.");
-                        $('#myModal').reveal();
-                        break;
-                    case "es":
-                        $('#myModal h1').html("Algo salió mal!");
-                        $('#myModal p').html("Su colección no ha sido presentada . Por favor, inténtelo de nuevo.");
-                        $('#myModal').reveal();
-                        break;
-                    case "ca":
-                        $('#myModal h1').html("Ups! S'ha produït un error!");
-                        $('#myModal p').html("El recull no s'ha tramès correctament. Torneu-ho a provar.");
-                        $('#myModal').reveal();
-                        break;
-                    default:
-                        $('#myModal h1').html("Oops. Something went wrong.");
-                        $('#myModal p').html("Your collection has not be submitted. Please try again.");
-                        $('#myModal').reveal();
-                }
+                $('#myModal h1').html("Oops. Something went wrong!");
+                $('#myModal p').html("Your collection has not be submitted. Please try again.");
+                $('#myModal').reveal();
             }
         });
     }

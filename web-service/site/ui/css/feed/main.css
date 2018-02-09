@@ -178,16 +178,6 @@ html, body {
     background-image: url("../../imgs/facebook-16.png")
 }
 
-.ff-type-instagram {
-    background: #ab7d63;
-    background-image: url("../../imgs/instagram-16-black.png");
-    background-repeat: no-repeat;
-    background-position: center
-}
-
-.ff-type-instagram:hover {
-    background-image: url("../../imgs/instagram-16.png")
-}
 
 .ff-type-google {
     background: #d34836;
@@ -330,7 +320,8 @@ html, body {
     background: #F47421;
     width: 240px;
     text-align: center;
-    position: relative
+    position: fixed;
+    z-index: 1;
 }
 
 #logo {
@@ -338,7 +329,8 @@ html, body {
 }
 
 #logo h1 {
-    margin-bottom: 0
+    margin-bottom: 0;
+    margin-top: 49px;
 }
 
 #logo p {
@@ -561,21 +553,21 @@ html, body {
     top: 256px;
     bottom: 19px;
     border-left: 1px solid #e2e2e2;
-    height: -moz-calc(100% - 550px);
-    height: -webkit-calc(100% - 550px);
-    height: calc(100% - 550px)
+    height: -moz-calc(100% - 508px);
+    height: -webkit-calc(100% - 508px);
+    height: calc(100% - 508px)
 }
 
 .top:before {
-    top: 550px
+    top: 508px
 }
 
 .top2:before {
-    top: 382px
+    top: 340px
 }
 
 .top3:before {
-    top: 424px
+    top: 382px
 }
 
 .top5:before {
@@ -583,20 +575,17 @@ html, body {
 }
 
 .top6:before {
-    top: 466px
+    top: 424px
 }
 
 .top4:before {
     top: 298px
 }
-.top7:before {
-    top: 340px
-}
 
 .dash:before {
-    height: -moz-calc(100% - 508px);
-    height: -webkit-calc(100% - 508px);
-    height: calc(100% - 508px)
+    height: -moz-calc(100% - 466px);
+    height: -webkit-calc(100% - 466px);
+    height: calc(100% - 466px)
 }
 
 .inlist li a:before {
@@ -799,9 +788,6 @@ html, body {
     background-color: #E12E34
 }
 
-.instagramcolor {
-    background-color: #ab7d63
-}
 
 .googlecolor {
     background-color: #d34836
@@ -1531,7 +1517,7 @@ html, body {
     display: none !important
 }
 
-.sub5 p, .sub7 p {
+.sub5 p {
     margin: 0;
     width: 150px;
     position: relative;
@@ -1539,12 +1525,12 @@ html, body {
     left: 7px;
 }
 
-.sub5 a, .sub7 a {
+.sub5 a {
     line-height: normal !important;
     padding: 8px 15px 0 40px !important;
 }
 
-.sub5 .label, .sub7 .label {
+.sub5 .label {
     position: relative;
     top: -32px;
 }
@@ -1924,10 +1910,11 @@ html, body {
 }
 
 #back_icon {
-    position: absolute;
+    position: fixed;
     top: 7px;
-    right: 5px;
+    left: 215px;
     cursor: pointer;
+    z-index: 2;
 }
 
 .list_table {
@@ -3169,22 +3156,6 @@ html, body {
     width: 12px;
     position: relative;
     top: -1px;
-}
-
-.translation_p {
-    margin: 6px 0;
-    font-size: 12px;
-    color: #83BCFF;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.translation_p_list {
-    margin: 4px 0;
-    font-size: 12px;
-    color: #2B59C3;
-    font-weight: bold;
-    cursor: pointer;
 }
 
 .blur {

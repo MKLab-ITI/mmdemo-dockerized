@@ -34,12 +34,12 @@
 <div id="download_modal" class="reveal-modal">
     <div class="panel-heading">
         <h2 class="background">
-            <span data-lang="download_header">Download Options</span>
+            Download Options
         </h2>
     </div>
     <div id="download_options">
         <div id="download_name">
-            <label id="download_name_label" for="file_name" data-lang="download_file_name">Document Name</label>
+            <label id="download_name_label" for="file_name">Document Name</label>
             <input class="download_name" id="file_name" type="text" placeholder="Name your file..."
                    autocomplete="off"/>
         </div>
@@ -47,7 +47,7 @@
             <div class="box_selection">
                 <img src="imgs/table-32.png"/>
 
-                <p style="margin-bottom: 0;"><span data-lang="download_table">Current Table</span><br><span
+                <p style="margin-bottom: 0;">Current Table<br><span
                         id="page_desc">(page:1, pagesize:50)</span></p>
                 <input class="radio_but" type="radio" id="current_data" name="data" checked><label
                     for="current_data"></label>
@@ -56,7 +56,7 @@
                 <p class="diagonal_text">Coming Soon</p>
                 <img src="imgs/data-32.png"/>
 
-                <p style="margin-bottom: 0;" data-lang="download_all">All Data<br><br></p>
+                <p style="margin-bottom: 0;">All Data<br><br></p>
                 <input class="radio_but" type="radio" id="all_data" name="data" disabled><label
                     for="all_data"></label>
             </div>
@@ -70,17 +70,17 @@
 
             <div id="info_wrap">
                 <div class="info_msg">
-                    <div class="header_msg" data-lang="warning_header">File doesn't contain harmful content!</div>
-                    <p data-lang="warning_p">Possible warning from Excel can be ignored.</p>
+                    <div class="header_msg">File doesn't contain harmful content!</div>
+                    <p>Possible warning from Excel can be ignored.</p>
                 </div>
             </div>
         </div>
     </div>
     <div id="download_buttons">
-        <div class="btn_material action_button done" id="download_ok"><img src="imgs/save-white_16.png"><span
-                data-lang="download_button">DOWNLOAD</span></div>
-        <div class="btn_material action_button cancel" id="download_cancel"><img src="imgs/cancel-white_16.png"><span
-                data-lang="download_button_cancel">CANCEL</span>
+        <div class="btn_material action_button done" id="download_ok"><img
+                src="imgs/save-white_16.png">DOWNLOAD
+        </div>
+        <div class="btn_material action_button cancel" id="download_cancel"><img src="imgs/cancel-white_16.png">CANCEL
         </div>
     </div>
     <a class="close-reveal-modal">&#215;</a>
@@ -96,21 +96,20 @@
     <div id="logo">
         <h1 style="cursor: pointer">Social Tracker</h1>
 
-        <p data-lang="slider_title">Discover how media is shared in Social Networks...</p>
+        <p>Discover how media is shared in Social Networks...</p>
     </div>
     <div id="settings">
-        <div class="nav-sidebar"><span data-lang="slider_search">SEARCH</span></div>
+        <div class="nav-sidebar">SEARCH</div>
         <div id="ff-search">
             <img class="icon-search" src="imgs/search-12.png" alt="search-icon">
             <input id="query" name="q" type="text" size="40" placeholder="Search..." autocomplete="off">
             <img class="icon-clear" src="imgs/close-black.png" alt="close-icon">
         </div>
-        <div class="nav-sidebar"><span data-lang="slider_settings">SETTINGS</span></div>
+        <div class="nav-sidebar">SETTINGS</div>
         <div class="ff-filter-holder">
             <span class="ff-filter ff-type-twitter close" id="Twitter"></span>
             <span class="ff-filter ff-type-google close" id="GooglePlus"></span>
             <span class="ff-filter ff-type-facebook close" id="Facebook"></span>
-            <!--<span class="ff-filter ff-type-instagram close" id="Instagram"></span>-->
             <span class="ff-filter ff-type-flickr close" id="Flickr"></span>
             <span class="ff-filter ff-type-youtube close" id="Youtube"></span>
             <span class="ff-filter ff-type-rss close" id="RSS"></span>
@@ -119,7 +118,7 @@
             <li id="hop4">
                 <a href="#" class="item">
                     <img src="imgs/lang-16.png" alt="icon"/>
-                    <span class="text" data-lang="slider_settings_language"> LANGUAGE </span>
+                    <span class="text"> LANGUAGE </span>
                     <img src="imgs/arrow-right-16.png" alt="icon" class="arrow"/>
                 </a>
                 <ul class="inlist" id="languages"></ul>
@@ -127,7 +126,7 @@
             <li id="hop10">
                 <a href="#" class="item">
                     <img src="imgs/topics-16.png" alt="icon"/>
-                    <span class="text" data-lang="slider_settings_topics"> TOPICS </span>
+                    <span class="text"> TOPICS </span>
                     <img src="imgs/arrow-right-16.png" alt="icon" class="arrow"/>
                 </a>
                 <ul class="inlist top4" id="topics">
@@ -135,56 +134,45 @@
                             class="label">1K</span></a></li>
                 </ul>
             </li>
-            <li id="hop13">
-                <a href="#" class="item">
-                    <img src="imgs/concepts-16.png" alt="icon"/>
-                    <span class="text" data-lang="slider_settings_concepts"> CONCEPTS </span>
-                    <img src="imgs/arrow-right-16.png" alt="icon" class="arrow"/>
-                </a>
-                <ul class="inlist top7" id="concepts">
-                    <li class="sub7"><a href="#" class="active_concept"><p>All</p><span
-                            class="label">1K</span></a></li>
-                </ul>
-            </li>
             <li id="hop8">
                 <a href="#" class="item">
                     <img src="imgs/retweet-16.png" alt="icon"/>
-                    <span class="text" data-lang="slider_settings_original"> ORIGINAL </span>
+                    <span class="text"> ORIGINAL </span>
                     <img src="imgs/arrow-right-16.png" alt="icon" class="arrow"/>
                 </a>
                 <ul class="inlist top2">
-                    <li class="sub3"><a href="#" data-lang="settings_all" data-id="all">All</a></li>
-                    <li class="sub3"><a href="#" data-lang="settings_original" data-id="original">Original</a></li>
-                    <li class="sub3"><a href="#" data-lang="settings_share" data-id="share">Share</a></li>
+                    <li class="sub3"><a href="#" data-id="all">All</a></li>
+                    <li class="sub3"><a href="#" data-id="original">Original</a></li>
+                    <li class="sub3"><a href="#" data-id="share">Share</a></li>
                 </ul>
             </li>
             <li id="hop9">
                 <a href="#" class="item">
                     <img src="imgs/type-16.png" alt="icon"/>
-                    <span class="text" data-lang="slider_settings_type"> TYPE </span>
+                    <span class="text"> TYPE </span>
                     <img src="imgs/arrow-right-16.png" alt="icon" class="arrow"/>
                 </a>
                 <ul class="inlist top3">
-                    <li class="sub4"><a href="#" data-lang="settings_all" data-id="all">All</a></li>
-                    <li class="sub4"><a href="#" data-lang="settings_media" data-id="media">Media</a></li>
-                    <li class="sub4"><a href="#" data-lang="settings_text" data-id="text">Text</a></li>
+                    <li class="sub4"><a href="#" data-id="all">All</a></li>
+                    <li class="sub4"><a href="#" data-id="media">Media</a></li>
+                    <li class="sub4"><a href="#" data-id="text">Text</a></li>
                 </ul>
             </li>
             <li id="hop12">
                 <a href="#" class="item">
                     <img src="imgs/unique-16.png" alt="icon"/>
-                    <span class="text" data-lang="slider_settings_unique"> UNIQUE </span>
+                    <span class="text"> UNIQUE </span>
                     <img src="imgs/arrow-right-16.png" alt="icon" class="arrow"/>
                 </a>
                 <ul class="inlist top6">
-                    <li class="sub6"><a href="#" data-lang="settings_false" data-id="false">False</a></li>
-                    <li class="sub6"><a href="#" data-lang="settings_true" data-id="true">True</a></li>
+                    <li class="sub6"><a href="#" data-id="false">False</a></li>
+                    <li class="sub6"><a href="#" data-id="true">True</a></li>
                 </ul>
             </li>
             <li id="hop11">
                 <a href="#" class="item">
                     <img src="imgs/date-16.png" alt="icon"/>
-                    <span class="text" data-lang="slider_settings_date"> DATE </span>
+                    <span class="text"> DATE </span>
                     <img src="imgs/arrow-right-16.png" alt="icon" class="arrow"/>
                 </a>
                 <ul class="inlist top5">
@@ -196,14 +184,13 @@
             <li id="hop5">
                 <a href="#" class="item">
                     <img src="imgs/sort-16.png" alt="icon"/>
-                    <span class="text" data-lang="slider_settings_sort"> SORT </span>
+                    <span class="text"> SORT </span>
                     <img src="imgs/arrow-right-16.png" alt="icon" class="arrow"/>
                 </a>
                 <ul class="inlist top">
-                    <li class="sub2"><a href="#" data-lang="settings_recency" data-id="recency">Recency</a></li>
-                    <li class="sub2"><a href="#" data-lang="settings_popularity" data-id="popularity">Popularity</a>
-                    </li>
-                    <li class="sub2"><a href="#" data-lang="settings_relevance" data-id="relevance">Relevance</a></li>
+                    <li class="sub2"><a href="#" data-id="recency">Recency</a></li>
+                    <li class="sub2"><a href="#" data-id="popularity">Popularity</a></li>
+                    <li class="sub2"><a href="#" data-id="relevance">Relevance</a></li>
                 </ul>
             </li>
         </ul>
@@ -213,7 +200,7 @@
             <li class="action" id="hop6">
                 <div>
                     <img src="imgs/share-24.png" alt="icon" class="bottom-icon"/>
-                    <span class="page" data-id="Feed" data-lang="view_feed">Feed</span>
+                    <span class="page" data-id="Feed">Feed</span>
 
                     <div class="informer">0</div>
                 </div>
@@ -221,7 +208,7 @@
             <li class="action" style="border:0" id="hop7">
                 <div>
                     <img src="imgs/chart-24.png" alt="icon" class="bottom-icon"/>
-                    <span data-lang="view_dashboard" data-id="Dashboard">Dashboard</span>
+                    <span data-id="Dashboard">Dashboard</span>
                 </div>
             </li>
         </ul>
@@ -232,7 +219,7 @@
         <ul class="sidebar-terms">
             <li><a href="http://iti.gr/" target="_blank">CERTH-ITI</a></li>
             <li><a href="http://mklab.iti.gr/" target="_blank">MKLAB</a></li>
-            <li><a href="#" id="help" data-lang="help">HELP</a></li>
+            <li><a href="#" id="help">HELP</a></li>
         </ul>
     </div>
 </div>
@@ -245,17 +232,19 @@
     </div>
 </div>
 <div id="main">
-    <div id="loading" class="opened"><span data-lang="loading">Loading posts, please wait.....</span>
+    <div id="loading" class="opened">Loading posts, please wait.....
         <img id="loadimg" src="imgs/loading.gif" alt="loading.."/>
     </div>
-    <div id="deleted_msg_user"><p><img src="imgs/check-circle-16-green.png"><span data-lang="rate_menu_changes">Changes Saved!</span> <span data-lang="rate_menu_undo" id="undo_but_user_list">Undo?</span></p></div>
-    <div id="deleted_msg_post"><p><img src="imgs/check-circle-16-green.png"><span data-lang="rate_menu_changes">Changes Saved!</span> <span data-lang="rate_menu_undo" id="undo_but_user_post">Undo?</span></p></div>
+    <div id="deleted_msg_user"><p><img src="imgs/check-circle-16-green.png">Changes Saved!
+        <span id="undo_but_user_list">Undo?</span></p></div>
+    <div id="deleted_msg_post"><p><img src="imgs/check-circle-16-green.png">Changes Saved!
+        <span id="undo_but_user_post">Undo?</span></p></div>
 
     <div id="toolbar">
         <div id="posts_info"></div>
         <img id="download_icon" src="imgs/download-24.png">
 
-        <div id="items_num"><span data-lang="settings_posts">Posts</span>
+        <div id="items_num"><span>Posts</span>
 
             <div class="itemsPerPage">
                 <span>20</span>
@@ -264,29 +253,31 @@
             </div>
         </div>
         <div class="verticalLine"></div>
-        <div id="items_view"><span data-lang="settings_view">View</span>
+        <div id="items_view">View
             <img id="gallery_icon" src="imgs/gallery-16-gray.png">
             <img id="list_icon" src="imgs/list-16-gray.png">
         </div>
     </div>
     <ul id="tiles"></ul>
     <div id="list_actions">
-        <p><span id="rows_selected">-</span><span data-lang="info_rows"> row(s) selected</span></p>
+        <p><span id="rows_selected">-</span> row(s) selected</p>
 
-        <div id="exclude_user_list"><img src="imgs/remove_user_gray.png"><span data-lang="rate_menu_user_plural">Exclude User(s)</span></div>
-        <div id="exclude_item_list"><img src="imgs/remove_post_gray.png"><span data-lang="rate_menu_item_plural">Exclude Item(s)</span></div>
+        <div id="exclude_user_list"><img src="imgs/remove_user_gray.png">Exclude User(s)
+        </div>
+        <div id="exclude_item_list"><img src="imgs/remove_post_gray.png">Exclude Item(s)
+        </div>
     </div>
     <table id="list_table" class="list_table">
         <thead class="thead-default">
         <tr>
             <th></th>
-            <th data-lang="list_user">User</th>
-            <th data-lang="settings_text">Text</th>
-            <th data-lang="settings_media">Media</th>
-            <th data-lang="list_date">Date</th>
-            <th data-lang="list_source">Source</th>
-            <th data-lang="settings_popularity">Popularity</th>
-            <th data-lang="settings_relevance">Relevance</th>
+            <th>User</th>
+            <th>Text</th>
+            <th>Media</th>
+            <th>Date</th>
+            <th>Source</th>
+            <th>Popularity</th>
+            <th>Relevance</th>
         </tr>
         </thead>
         <tbody>
@@ -350,11 +341,11 @@
                 <div class="minitext">
                     <p id="posts_num">0</p>
 
-                    <p data-lang="statistics_posts">Posts Made</p>
+                    <p>Posts Made</p>
                     <img src="imgs/message-128.png" alt="message-icon" style="margin-top:-72px;width: 72px;">
                 </div>
                 <div class="details">
-                    <p data-lang="social_mix">Social Mix</p>
+                    <p>Social Mix</p>
                     <img class="activestat" id="count" src="imgs/arrow-right-24-black.png" alt="arrow-icon">
                 </div>
             </div>
@@ -404,11 +395,11 @@
                 <div class="minitext">
                     <p id="users_num">0</p>
 
-                    <p data-lang="statistics_users">Users Talking</p>
+                    <p>Users Talking</p>
                     <img src="imgs/users-128.png" alt="users-icon">
                 </div>
                 <div class="details">
-                    <p data-lang="social_mix" style="background-color: #19b698">Social Mix</p>
+                    <p style="background-color: #19b698">Social Mix</p>
                     <img id="users" src="imgs/arrow-right-24.png" alt="arrow-icon">
                 </div>
             </div>
@@ -458,11 +449,11 @@
                 <div class="minitext">
                     <p id="reach_num">0</p>
 
-                    <p data-lang="statistics_reached">Users Reached</p>
+                    <p>Users Reached</p>
                     <img src="imgs/eye-128.png" alt="eye-icon" style="margin-top:-90px;width: 100px;">
                 </div>
                 <div class="details">
-                    <p data-lang="social_mix" style="background-color: #ea6153">Social Mix</p>
+                    <p style="background-color: #ea6153">Social Mix</p>
                     <img id="reach" src="imgs/arrow-right-24.png" alt="arrow-icon">
                 </div>
             </div>
@@ -512,11 +503,11 @@
                 <div class="minitext">
                     <p id="endo_num">0</p>
 
-                    <p data-lang="statistics_endorsements">Endorsements</p>
+                    <p>Endorsements</p>
                     <img src="imgs/star-128.png" alt="endo-icon">
                 </div>
                 <div class="details">
-                    <p data-lang="social_mix" style="background-color: #00acee">Social Mix</p>
+                    <p style="background-color: #00acee">Social Mix</p>
                     <img id="endorsement" src="imgs/arrow-right-24.png" alt="arrow-icon">
                 </div>
             </div>
@@ -560,7 +551,7 @@
                 </g>
             </svg>
             <div class="box-pad">
-                <div class="box-pad-header" id="timeline_head"><span data-lang="timeline">Timeline</span>
+                <div class="box-pad-header" id="timeline_head">Timeline
                             <span style="float: right;">
                                 <img src="imgs/settings-16.png" alt="icon" id="set2" class="arrow2"
                                      style="width: 14px"/>
@@ -571,16 +562,16 @@
                 </div>
                 <div id="inner-set2">
                     <div class="analysis">
-                        <small class="per" data-lang="timeline_per">Per</small>
-                        <span class="analysiszone" data-lang="timeline_hour" id="hours">HOUR</span>
+                        <small class="per">Per</small>
+                        <span class="analysiszone" id="hours">HOUR</span>
                     </div>
                     <div class="analysis activeanalysis">
-                        <small class="per" data-lang="timeline_per">Per</small>
-                        <span class="analysiszone" data-lang="timeline_day" id="days">DAY</span>
+                        <small class="per">Per</small>
+                        <span class="analysiszone" id="days">DAY</span>
                     </div>
                     <div class="analysis">
-                        <small class="per" data-lang="timeline_per">Per</small>
-                        <span class="analysiszone" data-lang="timeline_week" id="weeks">WEEK</span>
+                        <small class="per">Per</small>
+                        <span class="analysiszone" id="weeks">WEEK</span>
                     </div>
                 </div>
                 <p id="erase_analysis"></p>
@@ -623,7 +614,7 @@
                 </g>
             </svg>
             <div class="box-pad">
-                <div class="box-pad-header" id="socialmix_head"><span data-lang="social_mix">Social Mix</span>
+                <div class="box-pad-header" id="socialmix_head">Social Mix
                             <span style="float: right;">
                                 <img src="imgs/arrow-right-16.png" alt="icon" id="down1" class="arrow2"/>		
                                 <img src="imgs/x-mark-16-white.png" alt="icon" id="close1" class="arrow2"
@@ -675,7 +666,7 @@
                         </rect>
                     </g>
                 </svg>
-                <div class="box-pad-header no-border" id="heatmap_head"><span data-lang="heatmap">HeatMap</span>
+                <div class="box-pad-header no-border" id="heatmap_head">HeatMap
                             <span style="float: right;">
                                 <img src="imgs/arrow-right-16.png" alt="icon" id="down3" class="arrow2"/>
                                 <img src="imgs/x-mark-16-white.png" alt="icon" id="close3" class="arrow2"
@@ -729,7 +720,7 @@
                         </rect>
                     </g>
                 </svg>
-                <div class="box-pad-header no-border" id="usersloc_head"><span data-lang="users_location">Users Locations</span>
+                <div class="box-pad-header no-border" id="usersloc_head">Users Locations
                             <span style="float: right;">
                                 <img src="imgs/arrow-right-16.png" alt="icon" id="down4" class="arrow2"/>
                                 <img src="imgs/x-mark-16-white.png" alt="icon" id="close4" class="arrow2"
@@ -788,7 +779,7 @@
                         </rect>
                     </g>
                 </svg>
-                <div class="box-pad-header" id="activeuser_head"><span data-lang="active_users">Active Users</span>
+                <div class="box-pad-header" id="activeuser_head">Active Users
                             <span style="float: right;">
                                 <img src="imgs/settings-16.png" alt="icon" id="set5" class="arrow2"
                                      style="width: 14px"/>
@@ -799,23 +790,23 @@
                 </div>
                 <div id="inner-set5">
                     <div class="numbers">
-                        <small class="top_title" data-lang="top_number">Top</small>
+                        <small class="top_title">Top</small>
                         <span class="topnum" id="num10">10</span>
                     </div>
                     <div class="numbers">
-                        <small class="top_title" data-lang="top_number">Top</small>
+                        <small class="top_title">Top</small>
                         <span class="topnum" id="num30">30</span>
                     </div>
                     <div class="numbers activenumber">
-                        <small class="top_title" data-lang="top_number">Top</small>
+                        <small class="top_title">Top</small>
                         <span class="topnum" id="num50">50</span>
                     </div>
                     <div class="numbers">
-                        <small class="top_title" data-lang="top_number">Top</small>
+                        <small class="top_title">Top</small>
                         <span class="topnum" id="num100">100</span>
                     </div>
                     <div class="numbers">
-                        <small class="top_title" data-lang="top_number">Top</small>
+                        <small class="top_title">Top</small>
                         <span class="topnum" id="num200">200</span>
                     </div>
                 </div>
@@ -869,7 +860,7 @@
                         </rect>
                     </g>
                 </svg>
-                <div class="box-pad-header" id="tags_head"><span data-lang="entities">Entities</span>
+                <div class="box-pad-header" id="tags_head">Entities
                 <span style="float: right;">
                     <img src="imgs/settings-16.png" alt="icon" id="set6" class="arrow2" style="width: 14px"/>
                     <img src="imgs/arrow-right-16.png" alt="icon" id="down6" class="arrow2"/>
@@ -878,41 +869,41 @@
                 </div>
                 <div id="inner-set6" style="height:88px">
                     <div class="numbers_tags">
-                        <small class="top_title" data-lang="top_number">Top</small>
+                        <small class="top_title">Top</small>
                         <span class="topnum" id="tag10">10</span>
                     </div>
                     <div class="numbers_tags">
-                        <small class="top_title" data-lang="top_number">Top</small>
+                        <small class="top_title">Top</small>
                         <span class="topnum" id="tag30">30</span>
                     </div>
                     <div class="numbers_tags activenumber_tag">
-                        <small class="top_title" data-lang="top_number">Top</small>
+                        <small class="top_title">Top</small>
                         <span class="topnum" id="tag50">50</span>
                     </div>
                     <div class="numbers_tags">
-                        <small class="top_title" data-lang="top_number">Top</small>
+                        <small class="top_title">Top</small>
                         <span class="topnum" id="tag100">100</span>
                     </div>
                     <div class="sort_by" style="width:50%">
-                        <small class="per" data-lang="entities_sort">Sort By</small>
-                        <span class="sortzone" id="type" data-lang="entities_sort_type">TYPE</span>
+                        <small class="per">Sort By</small>
+                        <span class="sortzone" id="type">TYPE</span>
                     </div>
                     <div class="sort_by activesort" style="width:50%">
-                        <small class="per" data-lang="entities_sort">Sort By</small>
-                        <span class="sortzone" id="appearance" data-lang="entities_sort_frequency">FREQUENCY</span>
+                        <small class="per">Sort By</small>
+                        <span class="sortzone" id="appearance">FREQUENCY</span>
                     </div>
                 </div>
-                <p id="animate" data-lang="entity_animate">Animate</p>
+                <p id="animate">Animate</p>
 
                 <div id="tags">
                     <svg id="tags_all"></svg>
                     <div id="legend">
                         <div class="legendcolor" style="background-color:#89A894"></div>
-                        <div class="legendtext" data-lang="entity_person">PERSON</div>
+                        <div class="legendtext">PERSON</div>
                         <div class="legendcolor" style="background-color:#0B7189"></div>
-                        <div class="legendtext" data-lang="entity_tag">TAG</div>
+                        <div class="legendtext">TAG</div>
                         <div class="legendcolor" style="background-color:#745B5E"></div>
-                        <div class="legendtext" data-lang="entity_organization">ORGANIZATION</div>
+                        <div class="legendtext">ORGANIZATION</div>
                     </div>
                     <div id="animation_wrapper">
                         <div class="animation_icon">
@@ -934,7 +925,16 @@
                             <input id="range_animate" value="" name="animate"/>
                         </div>
                     </div>
-                    <table class="flatTable"></table>
+                    <table class="flatTable">
+                        <thead>
+                        <tr>
+                            <td>ΕΝΤΙΤΥ</td>
+                            <td>TYPE</td>
+                            <td>FREQUENCY</td>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -983,7 +983,6 @@
 
 <script src="js/feed/parse_languages.js"></script>
 <script src="js/feed/parse_topics.js"></script>
-<script src="js/feed/parse_concepts.js"></script>
 <script src="js/feed/tour.js"></script>
 <!--END JS -->
 

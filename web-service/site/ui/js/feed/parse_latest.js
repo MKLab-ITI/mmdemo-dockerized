@@ -1,7 +1,7 @@
 function parse_latest(pagenum) {
     $.ajax({
         type: "GET",
-        url: api_folder + "items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&q=" + query_param + "&concepts=" + concept_param + "&source=" + source_param + "&unique=" + unique_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&q=" + query_param + "&source=" + source_param + "&unique=" + unique_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             if (pagelocation === "latest") {
@@ -62,11 +62,6 @@ function parse_latest(pagenum) {
                             shared = nFormatter(json.items[i].shares) + " shares";
                             iconsource = 'imgs/google+-16-black.png';
                             colorclass = 'color googlecolor';
-                            break;
-                        case "Instagram":
-                            shared = nFormatter(json.items[i].views) + " views";
-                            iconsource = 'imgs/instagram-16-black.png';
-                            colorclass = 'color instagramcolor';
                             break;
                         case "RSS":
                             shared = nFormatter(json.items[i].shares) + " shares";
@@ -147,74 +142,9 @@ function parse_latest(pagenum) {
                         menu_icons.setAttribute('class', 'menu_icons');
                         divouter.appendChild(menu_icons);
 
-                        var translation_p = document.createElement('p');
-                        translation_p.setAttribute('class', 'translation_p original');
-                        translation_p.setAttribute('data-original', title);
+                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
 
-                        switch (translation_param) {
-                            case "en":
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', language + '-en');
-                                }
-                                break;
-                            case "el":
-                                menu_actions.innerHTML = '<p class="rate_menu">Πατήστε για Αξιολόγηση</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Αξιολόγηση</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Αφαίρεση</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="refresh_but">Ανανέωση?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Αφαίρεση Χρήστη</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Αφαίρεση Δημοσίευσης</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="remove_but">Αφαίρεση Δημοσιεύσεων</span> ή <span class="undo_but">Αναίρεση?</span></p></div></div></div>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "Δείτε τη μετάφραση";
-                                    translation_p.setAttribute('data-pair', 'en-el');
-                                }
-                                break;
-                            case "it":
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-it');
-                                }
-                                break;
-                            case "tr":
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-tr');
-                                }
-                                break;
-                            case "es":
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-es');
-                                }
-                                break;
-                            case "ca":
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-ca');
-                                }
-                                break;
-                            default:
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', language + '-en');
-                                }
-                        }
 
                         var colored = document.createElement('div');
                         colored.setAttribute('class', colorclass);
@@ -301,74 +231,9 @@ function parse_latest(pagenum) {
                         menu_icons.setAttribute('class', 'menu_icons');
                         divouter.appendChild(menu_icons);
 
-                        var translation_p = document.createElement('p');
-                        translation_p.setAttribute('class', 'translation_p original');
-                        translation_p.setAttribute('data-original', title);
+                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
 
-                        switch (translation_param) {
-                            case "en":
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', language + '-en');
-                                }
-                                break;
-                            case "el":
-                                menu_actions.innerHTML = '<p class="rate_menu">Πατήστε για Αξιολόγηση</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Αξιολόγηση</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Αφαίρεση</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="refresh_but">Ανανέωση?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Αφαίρεση Χρήστη</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Αφαίρεση Δημοσίευσης</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="remove_but">Αφαίρεση Δημοσιεύσεων</span> ή <span class="undo_but">Αναίρεση?</span></p></div></div></div>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "Δείτε τη μετάφραση";
-                                    translation_p.setAttribute('data-pair', 'en-el');
-                                }
-                                break;
-                            case "it":
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-it');
-                                }
-                                break;
-                            case "tr":
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-tr');
-                                }
-                                break;
-                            case "es":
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-es');
-                                }
-                                break;
-                            case "ca":
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-ca');
-                                }
-                                break;
-                            default:
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', language + '-en');
-                                }
-                        }
 
                         var colored = document.createElement('div');
                         colored.setAttribute('class', colorclass);
@@ -405,111 +270,18 @@ function parse_latest(pagenum) {
 
                 var $posts_info = $('#posts_info');
                 var $tiles_li = $('#tiles > li');
-                switch (translation_param) {
-                    case "en":
-                        switch (sort_param) {
-                            case "recency":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                break;
-                            case "popularity":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                                break;
-                            case "relevance":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                                break;
-                            default:
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                        }
+                switch (sort_param) {
+                    case "recency":
+                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
                         break;
-                    case "el":
-                        switch (sort_param) {
-                            case "recency":
-                                $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο προσφάτων.');
-                                break;
-                            case "popularity":
-                                $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο δημοφιλή.');
-                                break;
-                            case "relevance":
-                                $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο σχετικών.');
-                                break;
-                            default:
-                                $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο προσφάτων.');
-                        }
+                    case "popularity":
+                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
                         break;
-                    case "it":
-                        switch (sort_param) {
-                            case "recency":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                break;
-                            case "popularity":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                                break;
-                            case "relevance":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                                break;
-                            default:
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                        }
-                        break;
-                    case "tr":
-                        switch (sort_param) {
-                            case "recency":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                break;
-                            case "popularity":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                                break;
-                            case "relevance":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                                break;
-                            default:
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                        }
-                        break;
-                    case "es":
-                        switch (sort_param) {
-                            case "recency":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                break;
-                            case "popularity":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                                break;
-                            case "relevance":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                                break;
-                            default:
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                        }
-                        break;
-                    case "ca":
-                        switch (sort_param) {
-                            case "recency":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                break;
-                            case "popularity":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                                break;
-                            case "relevance":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                                break;
-                            default:
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                        }
+                    case "relevance":
+                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
                         break;
                     default:
-                        switch (sort_param) {
-                            case "recency":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                break;
-                            case "popularity":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                                break;
-                            case "relevance":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                                break;
-                            default:
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                        }
+                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
                 }
 
                 if (json.items.length === 5) {
@@ -524,94 +296,16 @@ function parse_latest(pagenum) {
                 if ((json.items.length === 0) && (pagenum === 1)) {
                     $("#loading,#posts_info").hide();
                     if (query_param !== "") {
-                        switch (translation_param) {
-                            case "en":
-                                $('#myModal h1').html("No results!");
-                                $('#myModal p').html("The internet is not talking about that keyword.");
-                                $('#myModal').reveal();
-                                loadimage(99, query_param, 12);
-                                break;
-                            case "el":
-                                $('#myModal h1').html("Κανένα Αποτέλεσμα!");
-                                $('#myModal p').html("Δεν υπάρχουν αποτελέσματα για αυτήν την ετικέτα.");
-                                $('#myModal').reveal();
-                                loadimage(99, query_param, 12);
-                                break;
-                            case "it":
-                                $('#myModal h1').html("Nessun risultato!");
-                                $('#myModal p').html("Nessun risultato per questa parola chiave.");
-                                $('#myModal').reveal();
-                                loadimage(99, query_param, 12);
-                                break;
-                            case "tr":
-                                $('#myModal h1').html("Sonuç bulunamadı!");
-                                $('#myModal p').html("Bu anahtar kelimeyle ilgili sonuç bulunamadı.");
-                                $('#myModal').reveal();
-                                loadimage(99, query_param, 12);
-                                break;
-                            case "es":
-                                $('#myModal h1').html("¡No hay resultados!");
-                                $('#myModal p').html("No existen resultados para esta etiqueta.");
-                                $('#myModal').reveal();
-                                loadimage(99, query_param, 12);
-                                break;
-                            case "ca":
-                                $('#myModal h1').html("No s'ha trobat cap resultat!");
-                                $('#myModal p').html("A Internet no hi ha cap referència rellevant sobre aquesta paraula clau.");
-                                $('#myModal').reveal();
-                                loadimage(99, query_param, 12);
-                                break;
-                            default:
-                                $('#myModal h1').html("No results!");
-                                $('#myModal p').html("The internet is not talking about that keyword.");
-                                $('#myModal').reveal();
-                                loadimage(99, query_param, 12);
-                        }
+                        $('#myModal h1').html("No results!");
+                        $('#myModal p').html("The internet is not talking about that keyword.");
+                        $('#myModal').reveal();
+                        loadimage(99, query_param, 12);
                     }
                     else {
-                        switch (translation_param) {
-                            case "en":
-                                $('#myModal h1').html("No results!");
-                                $('#myModal p').html("The internet is not talking about that collection.");
-                                $('#myModal').reveal();
-                                loadimage(1, "dummylatest", pagenum);
-                                break;
-                            case "el":
-                                $('#myModal h1').html("Κανένα Αποτέλεσμα!");
-                                $('#myModal p').html("Δεν υπάρχουν αποτελέσματα για αυτήν την συλλογή.");
-                                $('#myModal').reveal();
-                                loadimage(99, query_param, 12);
-                                break;
-                            case "it":
-                                $('#myModal h1').html("Nessun risultato!");
-                                $('#myModal p').html("Nessun risultato per questa raccolta.");
-                                $('#myModal').reveal();
-                                loadimage(99, query_param, 12);
-                                break;
-                            case "tr":
-                                $('#myModal h1').html("Sonuç bulunamadı!");
-                                $('#myModal p').html("Bu koleksiyonla ilgili sonuç bulunamadı.");
-                                $('#myModal').reveal();
-                                loadimage(99, query_param, 12);
-                                break;
-                            case "es":
-                                $('#myModal h1').html("¡No hay resultados!");
-                                $('#myModal p').html("No hay resultados para esta colección.");
-                                $('#myModal').reveal();
-                                loadimage(99, query_param, 12);
-                                break;
-                            case "ca":
-                                $('#myModal h1').html("No s'ha trobat cap resultat!");
-                                $('#myModal p').html("A Internet no hi ha cap referència rellevant sobre aquest recull.");
-                                $('#myModal').reveal();
-                                loadimage(99, query_param, 12);
-                                break;
-                            default:
-                                $('#myModal h1').html("No results!");
-                                $('#myModal p').html("The internet is not talking about that collection.");
-                                $('#myModal').reveal();
-                                loadimage(1, "dummylatest", pagenum);
-                        }
+                        $('#myModal h1').html("No results!");
+                        $('#myModal p').html("The internet is not talking about that collection.");
+                        $('#myModal').reveal();
+                        loadimage(1, "dummylatest", pagenum);
                     }
 
                 }
@@ -628,425 +322,29 @@ function parse_latest_list(pagenum) {
     $('tbody tr:hidden').remove();
     $.ajax({
         type: "GET",
-        url: api_folder + "items?collection=" + collection_param + "&nPerPage=" + items + "&pageNumber=" + pagenum + "&concepts=" + concept_param + "&q=" + query_param + "&source=" + source_param + "&unique=" + unique_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "items?collection=" + collection_param + "&nPerPage=" + items + "&pageNumber=" + pagenum + "&q=" + query_param + "&source=" + source_param + "&unique=" + unique_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             if (pagelocation === "latest") {
                 var $update_field = $("#update_field");
                 $("#loading").hide();
                 if ((json.items.length === 0) && (pagenum === 1)) {
-                    switch (translation_param) {
-                        case "en":
-                            $update_field.html("Last item in current view: -");
-                            break;
-                        case "el":
-                            $update_field.html("Τελαυταία Δημοσίευση: -");
-                            break;
-                        case "it":
-                            $update_field.html("Ultimo messaggio: -");
-                            break;
-                        case "tr":
-                            $update_field.html("Bu görüntüleme için son öğe: -");
-                            break;
-                        case "es":
-                            $update_field.html("Último mensaje: -");
-                            break;
-                        case "ca":
-                            $update_field.html("Darrer element en la vista actual: -");
-                            break;
-                        default:
-                            $update_field.html("Last item in current view: -");
-                    }
+                    $update_field.html("Last item in current view: -");
                     var $myModal = $('#myModal');
                     var $end = $('#end');
-                    var noData;
                     $('.list_table,#posts_info,#download_icon,.well').hide();
                     if (query_param !== "") {
-                        switch (translation_param) {
-                            case "en":
-                                $myModal.find('h1').html("No results!");
-                                $myModal.find('p').html("The internet is not talking about that keyword.");
-                                $myModal.reveal();
-                                switch (translation_param) {
-                                    case "en":
-                                        noData = "No items for keyword:";
-                                        break;
-                                    case "el":
-                                        noData = "Δεν υπάρχουν δημοσιεύσεις για:";
-                                        break;
-                                    case "it":
-                                        noData = "Nessun oggetto per la parola chiave:";
-                                        break;
-                                    case "tr":
-                                        noData = "Bu anahtar kelimeye uygun sonuç bulunamadı:";
-                                        break;
-                                    case "es":
-                                        noData = "No hay datos para la palabra clave:";
-                                        break;
-                                    case "ca":
-                                        noData = "No hi ha dades relacionades amb la paraula clau:";
-                                        break;
-                                    default:
-                                        noData = "No items for keyword:";
-                                }
-                                break;
-                            case "el":
-                                $myModal.find('h1').html("Κανένα Αποτέλεσμα!");
-                                $myModal.find('p').html("Δεν υπάρχουν αποτελέσματα για αυτήν την ετικέτα.");
-                                $myModal.reveal();
-                                switch (translation_param) {
-                                    case "en":
-                                        noData = "No items for keyword:";
-                                        break;
-                                    case "el":
-                                        noData = "Δεν υπάρχουν δημοσιεύσεις για:";
-                                        break;
-                                    case "it":
-                                        noData = "Nessun oggetto per la parola chiave:";
-                                        break;
-                                    case "tr":
-                                        noData = "Bu anahtar kelimeye uygun sonuç bulunamadı:";
-                                        break;
-                                    case "es":
-                                        noData = "No hay datos para la palabra clave:";
-                                        break;
-                                    case "ca":
-                                        noData = "No hi ha dades relacionades amb la paraula clau:";
-                                        break;
-                                    default:
-                                        noData = "No items for keyword:";
-                                }
-                                break;
-                            case "it":
-                                $myModal.find('h1').html("Nessun risultato!");
-                                $myModal.find('p').html("Nessun risultato per questa parola chiave.");
-                                $myModal.reveal();
-                                switch (translation_param) {
-                                    case "en":
-                                        noData = "No items for keyword:";
-                                        break;
-                                    case "el":
-                                        noData = "Δεν υπάρχουν δημοσιεύσεις για:";
-                                        break;
-                                    case "it":
-                                        noData = "Nessun oggetto per la parola chiave:";
-                                        break;
-                                    case "tr":
-                                        noData = "Bu anahtar kelimeye uygun sonuç bulunamadı:";
-                                        break;
-                                    case "es":
-                                        noData = "No hay datos para la palabra clave:";
-                                        break;
-                                    case "ca":
-                                        noData = "No hi ha dades relacionades amb la paraula clau:";
-                                        break;
-                                    default:
-                                        noData = "No items for keyword:";
-                                }
-                                break;
-                            case "tr":
-                                $myModal.find('h1').html("Sonuç bulunamadı!");
-                                $myModal.find('p').html("Bu anahtar kelimeyle ilgili sonuç bulunamadı.");
-                                $myModal.reveal();
-                                switch (translation_param) {
-                                    case "en":
-                                        noData = "No items for keyword:";
-                                        break;
-                                    case "el":
-                                        noData = "Δεν υπάρχουν δημοσιεύσεις για:";
-                                        break;
-                                    case "it":
-                                        noData = "Nessun oggetto per la parola chiave:";
-                                        break;
-                                    case "tr":
-                                        noData = "Bu anahtar kelimeye uygun sonuç bulunamadı:";
-                                        break;
-                                    case "es":
-                                        noData = "No hay datos para la palabra clave:";
-                                        break;
-                                    case "ca":
-                                        noData = "No hi ha dades relacionades amb la paraula clau:";
-                                        break;
-                                    default:
-                                        noData = "No items for keyword:";
-                                }
-                                break;
-                            case "es":
-                                $myModal.find('h1').html("¡No hay resultados!");
-                                $myModal.find('p').html("No existen resultados para esta etiqueta.");
-                                $myModal.reveal();
-                                switch (translation_param) {
-                                    case "en":
-                                        noData = "No items for keyword:";
-                                        break;
-                                    case "el":
-                                        noData = "Δεν υπάρχουν δημοσιεύσεις για:";
-                                        break;
-                                    case "it":
-                                        noData = "Nessun oggetto per la parola chiave:";
-                                        break;
-                                    case "tr":
-                                        noData = "Bu anahtar kelimeye uygun sonuç bulunamadı:";
-                                        break;
-                                    case "es":
-                                        noData = "No hay datos para la palabra clave:";
-                                        break;
-                                    case "ca":
-                                        noData = "No hi ha dades relacionades amb la paraula clau:";
-                                        break;
-                                    default:
-                                        noData = "No items for keyword:";
-                                }
-                                break;
-                            case "ca":
-                                $myModal.find('h1').html("No s'ha trobat cap resultat!");
-                                $myModal.find('p').html("A Internet no hi ha cap referència rellevant sobre aquesta paraula clau.");
-                                $myModal.reveal();
-                                switch (translation_param) {
-                                    case "en":
-                                        noData = "No items for keyword:";
-                                        break;
-                                    case "el":
-                                        noData = "Δεν υπάρχουν δημοσιεύσεις για:";
-                                        break;
-                                    case "it":
-                                        noData = "Nessun oggetto per la parola chiave:";
-                                        break;
-                                    case "tr":
-                                        noData = "Bu anahtar kelimeye uygun sonuç bulunamadı:";
-                                        break;
-                                    case "es":
-                                        noData = "No hay datos para la palabra clave:";
-                                        break;
-                                    case "ca":
-                                        noData = "No hi ha dades relacionades amb la paraula clau:";
-                                        break;
-                                    default:
-                                        noData = "No items for keyword:";
-                                }
-                                break;
-                            default:
-                                $myModal.find('h1').html("No results!");
-                                $myModal.find('p').html("The internet is not talking about that keyword.");
-                                $myModal.reveal();
-                                switch (translation_param) {
-                                    case "en":
-                                        noData = "No items for keyword:";
-                                        break;
-                                    case "el":
-                                        noData = "Δεν υπάρχουν δημοσιεύσεις για:";
-                                        break;
-                                    case "it":
-                                        noData = "Nessun oggetto per la parola chiave:";
-                                        break;
-                                    case "tr":
-                                        noData = "Bu anahtar kelimeye uygun sonuç bulunamadı:";
-                                        break;
-                                    case "es":
-                                        noData = "No hay datos para la palabra clave:";
-                                        break;
-                                    case "ca":
-                                        noData = "No hi ha dades relacionades amb la paraula clau:";
-                                        break;
-                                    default:
-                                        noData = "No items for keyword:";
-                                }
-                        }
-                        $end.find('p').html(noData + "<span style='color:red'> " + query_param + "</span>");
+                        $myModal.find('h1').html("No results!");
+                        $myModal.find('p').html("The internet is not talking about that keyword.");
+                        $myModal.reveal();
+                        $end.find('p').html("No items for keyword:<span style='color:red'> " + query_param + "</span>");
                         $end.show();
                     }
                     else {
-                        switch (translation_param) {
-                            case "en":
-                                $myModal.find('h1').html("No results!");
-                                $myModal.find('p').html("The internet is not talking about that collection.");
-                                $myModal.reveal();
-                                switch (translation_param) {
-                                    case "en":
-                                        noData = "No more results";
-                                        break;
-                                    case "el":
-                                        noData = "Τέλος Αποτελεσμάτων";
-                                        break;
-                                    case "it":
-                                        noData = "Nessun ulteriore risultato";
-                                        break;
-                                    case "tr":
-                                        noData = "Daha fazla sonuç bulunamadı";
-                                        break;
-                                    case "es":
-                                        noData = "No hay más resultados";
-                                        break;
-                                    case "ca":
-                                        noData = "No hi ha més resultats";
-                                        break;
-                                    default:
-                                        noData = "No more results";
-                                }
-                                break;
-                            case "el":
-                                $myModal.find('h1').html("Κανένα Αποτέλεσμα!");
-                                $myModal.find('p').html("Δεν υπάρχουν αποτελέσματα για αυτήν την συλλογή.");
-                                $myModal.reveal();
-                                switch (translation_param) {
-                                    case "en":
-                                        noData = "No more results";
-                                        break;
-                                    case "el":
-                                        noData = "Τέλος Αποτελεσμάτων";
-                                        break;
-                                    case "it":
-                                        noData = "Nessun ulteriore risultato";
-                                        break;
-                                    case "tr":
-                                        noData = "Daha fazla sonuç bulunamadı";
-                                        break;
-                                    case "es":
-                                        noData = "No hay más resultados";
-                                        break;
-                                    case "ca":
-                                        noData = "No hi ha més resultats";
-                                        break;
-                                    default:
-                                        noData = "No more results";
-                                }
-                                break;
-                            case "it":
-                                $myModal.find('h1').html("Nessun risultato!");
-                                $myModal.find('p').html("Nessun risultato per questa raccolta.");
-                                $myModal.reveal();
-                                switch (translation_param) {
-                                    case "en":
-                                        noData = "No more results";
-                                        break;
-                                    case "el":
-                                        noData = "Τέλος Αποτελεσμάτων";
-                                        break;
-                                    case "it":
-                                        noData = "Nessun ulteriore risultato";
-                                        break;
-                                    case "tr":
-                                        noData = "Daha fazla sonuç bulunamadı";
-                                        break;
-                                    case "es":
-                                        noData = "No hay más resultados";
-                                        break;
-                                    case "ca":
-                                        noData = "No hi ha més resultats";
-                                        break;
-                                    default:
-                                        noData = "No more results";
-                                }
-                                break;
-                            case "tr":
-                                $myModal.find('h1').html("Sonuç bulunamadı!");
-                                $myModal.find('p').html("Bu koleksiyonla ilgili sonuç bulunamadı.");
-                                $myModal.reveal();
-                                switch (translation_param) {
-                                    case "en":
-                                        noData = "No more results";
-                                        break;
-                                    case "el":
-                                        noData = "Τέλος Αποτελεσμάτων";
-                                        break;
-                                    case "it":
-                                        noData = "Nessun ulteriore risultato";
-                                        break;
-                                    case "tr":
-                                        noData = "Daha fazla sonuç bulunamadı";
-                                        break;
-                                    case "es":
-                                        noData = "No hay más resultados";
-                                        break;
-                                    case "ca":
-                                        noData = "No hi ha més resultats";
-                                        break;
-                                    default:
-                                        noData = "No more results";
-                                }
-                                break;
-                            case "es":
-                                $myModal.find('h1').html("¡No hay resultados!");
-                                $myModal.find('p').html("No hay resultados para esta colección.");
-                                $myModal.reveal();
-                                switch (translation_param) {
-                                    case "en":
-                                        noData = "No more results";
-                                        break;
-                                    case "el":
-                                        noData = "Τέλος Αποτελεσμάτων";
-                                        break;
-                                    case "it":
-                                        noData = "Nessun ulteriore risultato";
-                                        break;
-                                    case "tr":
-                                        noData = "Daha fazla sonuç bulunamadı";
-                                        break;
-                                    case "es":
-                                        noData = "No hay más resultados";
-                                        break;
-                                    case "ca":
-                                        noData = "No hi ha més resultats";
-                                        break;
-                                    default:
-                                        noData = "No more results";
-                                }
-                                break;
-                            case "ca":
-                                $myModal.find('h1').html("No s'ha trobat cap resultat!");
-                                $myModal.find('p').html("A Internet no hi ha cap referència rellevant sobre aquest recull.");
-                                $myModal.reveal();
-                                switch (translation_param) {
-                                    case "en":
-                                        noData = "No more results";
-                                        break;
-                                    case "el":
-                                        noData = "Τέλος Αποτελεσμάτων";
-                                        break;
-                                    case "it":
-                                        noData = "Nessun ulteriore risultato";
-                                        break;
-                                    case "tr":
-                                        noData = "Daha fazla sonuç bulunamadı";
-                                        break;
-                                    case "es":
-                                        noData = "No hay más resultados";
-                                        break;
-                                    case "ca":
-                                        noData = "No hi ha més resultats";
-                                        break;
-                                    default:
-                                        noData = "No more results";
-                                }
-                                break;
-                            default:
-                                $myModal.find('h1').html("No results!");
-                                $myModal.find('p').html("The internet is not talking about that collection.");
-                                $myModal.reveal();
-                                switch (translation_param) {
-                                    case "en":
-                                        noData = "No more results";
-                                        break;
-                                    case "el":
-                                        noData = "Τέλος Αποτελεσμάτων";
-                                        break;
-                                    case "it":
-                                        noData = "Nessun ulteriore risultato";
-                                        break;
-                                    case "tr":
-                                        noData = "Daha fazla sonuç bulunamadı";
-                                        break;
-                                    case "es":
-                                        noData = "No hay más resultados";
-                                        break;
-                                    case "ca":
-                                        noData = "No hi ha més resultats";
-                                        break;
-                                    default:
-                                        noData = "No more results";
-                                }
-                        }
-                        $end.find('p').html(noData);
+                        $myModal.find('h1').html("No results!");
+                        $myModal.find('p').html("The internet is not talking about that collection.");
+                        $myModal.reveal();
+                        $end.find('p').html("No more results");
                         $end.show();
                     }
                 }
@@ -1061,124 +359,22 @@ function parse_latest_list(pagenum) {
                         now = Math.floor(now / 60);
                         if (now > 60) {
                             now = Math.floor(now / 60);
-                            switch (translation_param) {
-                                case "en":
-                                    range = "hours";
-                                    break;
-                                case "el":
-                                    range = "ώρες";
-                                    break;
-                                case "it":
-                                    range = "ore";
-                                    break;
-                                case "tr":
-                                    range = "saatler";
-                                    break;
-                                case "es":
-                                    range = "horas";
-                                    break;
-                                case "ca":
-                                    range = "hores";
-                                    break;
-                                default:
-                                    range = "hours";
-                            }
+                            range = "hours";
                             if (now > 24) {
                                 now = Math.floor(now / 24);
-                                switch (translation_param) {
-                                    case "en":
-                                        range = "days";
-                                        break;
-                                    case "el":
-                                        range = "μέρες";
-                                        break;
-                                    case "it":
-                                        range = "giorni";
-                                        break;
-                                    case "tr":
-                                        range = "günler";
-                                        break;
-                                    case "es":
-                                        range = "días";
-                                        break;
-                                    case "ca":
-                                        range = "dies";
-                                        break;
-                                    default:
-                                        range = "days";
-                                }
+                                range = "days";
                             }
                         }
                         if (now < 0) {
                             now = 0;
                         }
-                        switch (translation_param) {
-                            case "en":
-                                $update_field.html("Last item in current view:&nbsp;" + now + "&nbsp;" + range + " ago");
-                                break;
-                            case "el":
-                                $update_field.html("Τελευταία Δημοσίευση:&nbsp;" + now + "&nbsp;" + range + " πριν");
-                                break;
-                            case "it":
-                                $update_field.html("Ultimo messaggio:&nbsp;" + now + "&nbsp;" + range + " fa");
-                                break;
-                            case "tr":
-                                $update_field.html("Bu görüntüleme için son öğe:&nbsp;" + now + "&nbsp;" + range + " önce");
-                                break;
-                            case "es":
-                                $update_field.html("Último mensaje:&nbsp;" + now + "&nbsp;" + range + " hace");
-                                break;
-                            case "ca":
-                                $update_field.html("Darrer element en la vista actual:&nbsp;" + now + "&nbsp;" + range + " fa");
-                                break;
-                            default:
-                                $update_field.html("Last item in current view:&nbsp;" + now + "&nbsp;" + range + " ago");
-                        }
+                        $update_field.html("Last item in current view:&nbsp;" + now + "&nbsp;" + range + " ago");
                     }
                     var first_but, prev_but, next_but, last_but;
-                    switch (translation_param) {
-                        case "en":
-                            first_but = "First";
-                            prev_but = "Previous";
-                            next_but = "Next";
-                            last_but = "Last";
-                            break;
-                        case "el":
-                            first_but = "Πρώτη";
-                            prev_but = "Προηγούμενη";
-                            next_but = "Επόμενη";
-                            last_but = "Τελευταία";
-                            break;
-                        case "it":
-                            first_but = "First";
-                            prev_but = "Previous";
-                            next_but = "Next";
-                            last_but = "Last";
-                            break;
-                        case "tr":
-                            first_but = "First";
-                            prev_but = "Previous";
-                            next_but = "Next";
-                            last_but = "Last";
-                            break;
-                        case "es":
-                            first_but = "First";
-                            prev_but = "Previous";
-                            next_but = "Next";
-                            last_but = "Last";
-                            break;
-                        case "ca":
-                            first_but = "First";
-                            prev_but = "Previous";
-                            next_but = "Next";
-                            last_but = "Last";
-                            break;
-                        default:
-                            first_but = "First";
-                            prev_but = "Previous";
-                            next_but = "Next";
-                            last_but = "Last";
-                    }
+                    first_but = "First";
+                    prev_but = "Previous";
+                    next_but = "Next";
+                    last_but = "Last";
                     var title, source, publicationTime, shared, shared_order, relevance_order, screenname, profileimage, page, userpage, thumb, colorclass, iconsource, onerror, uid, id, language;
                     var $pagination_list = $('#pagination_list');
                     $('.list_table,#posts_info,#download_icon,.well').show();
@@ -1200,29 +396,6 @@ function parse_latest_list(pagenum) {
                             parse_latest_list(page);
                         }
                     });
-                    var saved = "";
-                    switch (translation_param) {
-                        case "en":
-                            saved = "Saved";
-                            break;
-                        case "el":
-                            saved = "Αποθήκευση";
-                            break;
-                        case "it":
-                            saved = "Saved";
-                            break;
-                        case "tr":
-                            saved = "Saved";
-                            break;
-                        case "es":
-                            saved = "Saved";
-                            break;
-                        case "ca":
-                            saved = "Saved";
-                            break;
-                        default:
-                            saved = "Saved";
-                    }
                     for (var i = 0; i < json.items.length; i++) {
 
                         uid = json.items[i].user.id;
@@ -1287,12 +460,6 @@ function parse_latest_list(pagenum) {
                                 iconsource = 'imgs/google+-16-color.png';
                                 colorclass = 'avatar-source googlecolor';
                                 break;
-                            case "Instagram":
-                                shared = nFormatter(json.items[i].views) + " views";
-                                shared_order = json.items[i].views;
-                                iconsource = 'imgs/instagram-16-color.png';
-                                colorclass = 'avatar-source instagramcolor';
-                                break;
                             case "RSS":
                                 shared = nFormatter(json.items[i].shares) + " shares";
                                 shared_order = json.items[i].shares;
@@ -1314,44 +481,6 @@ function parse_latest_list(pagenum) {
                             onerror = "imgError2(this,null,null);"
                         }
 
-                        var translation_element = "";
-                        switch (translation_param) {
-                            case "en":
-                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
-                                    translation_element = '<p class="translation_p_list original" data-original="' + title.replace(/([\"\'])/g,'\x27') + '" data-pair="' + language + '-en">See translation</p>';
-                                }
-                                break;
-                            case "el":
-                                if (language === "en") {
-                                    translation_element = "<p class='translation_p_list original' data-original=" + title.replace(/([\"\'])/g,'\x27') + " data-pair='en-el'>Δείτε τη μετάφραση</p>";
-                                }
-                                break;
-                            case "it":
-                                if (language === "en") {
-                                    translation_element = "<p class='translation_p_list original' data-original='" + title.replace(/([\"\'])/g,'\x27') + "' data-pair='en-it'>See translation</p>";
-                                }
-                                break;
-                            case "tr":
-                                if (language === "en") {
-                                    translation_element = "<p class='translation_p_list original' data-original='" + title.replace(/([\"\'])/g,'\x27') + "' data-pair='en-tr'>See translation</p>";
-                                }
-                                break;
-                            case "es":
-                                if (language === "en") {
-                                    translation_element = "<p class='translation_p_list original' data-original='" + title.replace(/([\"\'])/g,'\x27') + "' data-pair='en-es'>See translation</p>";
-                                }
-                                break;
-                            case "ca":
-                                if (language === "en") {
-                                    translation_element = "<p class='translation_p_list original' data-original='" + title.replace(/([\"\'])/g,'\x27') + "' data-pair='en-ca'>See translation</p>";
-                                }
-                                break;
-                            default:
-                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
-                                    translation_element = "<p class='translation_p_list original' data-original='" + title.replace(/([\"\'])/g,'\x27') + "' data-pair='" + language + "-en'>See translation</p>";
-                                }
-                        }
-
                         var display_time = new Date(publicationTime * 1);
                         var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                         var year = display_time.getUTCFullYear();
@@ -1363,11 +492,11 @@ function parse_latest_list(pagenum) {
 
                         var td_selection = '<td><div class="checkbox_table"><input type="checkbox" value="1" id="checkbox_table' + i + '" name=""><label for="checkbox_table' + i + '"></label></div></td>';
                         var td_user = '<td data-order="' + screenname + '"><div class="list_avatar"><div class="avatar_wrapper"><img src="' + profileimage + '" class="img-avatar" onerror="' + onerror + '" onclick="redirect(\'' + userpage + '\')"><span class="' + colorclass + '"></span></div><div class="avatar_name" onclick="redirect(\'' + userpage + '\')">' + screenname + '</div></div></td>';
-                        var td_text = '<td data-order="' + title + '"><div class="list_title" data-redirect=' + page + '><p class="text_title">' + title +'</span>'+ translation_element + '</div></td>';
+                        var td_text = '<td data-order="' + title + '"><div class="list_title" data-redirect=' + page + '><p class="text_title">' + title + '</p></div></td>';
                         var td_date = ' <td data-order="' + display_time.getTime() + '"><div class="list_date">' + time + '</div></td>';
                         var td_source = ' <td data-order="' + source + '"><img class="list_source_icon" src="' + iconsource + '"></td>';
                         var td_popularity = ' <td data-order="' + shared_order + '"><div class="list_shares">' + shared + '</div></td>';
-                        var td_relevance = ' <td data-order="' + relevance_order + '"><div class="relevance_changed"><img src="imgs/check-circle-16-green.png">' + saved + '</div><div class="relevance_slider"></div></td>';
+                        var td_relevance = ' <td data-order="' + relevance_order + '"><div class="relevance_changed"><img src="imgs/check-circle-16-green.png">Saved</div><div class="relevance_slider"></div></td>';
                         var td_media;
                         if (json.items[i].type === "item") {
                             td_media = '<td><span class="missing_media">-</span></td>';
@@ -1386,111 +515,18 @@ function parse_latest_list(pagenum) {
 
                     var $posts_info = $('#posts_info');
                     var start_gap = ((pagenum - 1) * items) + 1;
-                    switch (translation_param) {
-                        case "en":
-                            switch (sort_param) {
-                                case "recency":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
-                                    break;
-                                case "popularity":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most popular.');
-                                    break;
-                                case "relevance":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most relevant.');
-                                    break;
-                                default:
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
-                            }
+                    switch (sort_param) {
+                        case "recency":
+                            $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
                             break;
-                        case "el":
-                            switch (sort_param) {
-                                case "recency":
-                                    $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> πιο προσφάτων.');
-                                    break;
-                                case "popularity":
-                                    $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> πιο δημοφιλή.');
-                                    break;
-                                case "relevance":
-                                    $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> πιο σχετικών.');
-                                    break;
-                                default:
-                                    $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> πιο προσφάτων.');
-                            }
+                        case "popularity":
+                            $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most popular.');
                             break;
-                        case "it":
-                            switch (sort_param) {
-                                case "recency":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
-                                    break;
-                                case "popularity":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most popular.');
-                                    break;
-                                case "relevance":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most relevant.');
-                                    break;
-                                default:
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
-                            }
-                            break;
-                        case "tr":
-                            switch (sort_param) {
-                                case "recency":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
-                                    break;
-                                case "popularity":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most popular.');
-                                    break;
-                                case "relevance":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most relevant.');
-                                    break;
-                                default:
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
-                            }
-                            break;
-                        case "es":
-                            switch (sort_param) {
-                                case "recency":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
-                                    break;
-                                case "popularity":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most popular.');
-                                    break;
-                                case "relevance":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most relevant.');
-                                    break;
-                                default:
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
-                            }
-                            break;
-                        case "ca":
-                            switch (sort_param) {
-                                case "recency":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
-                                    break;
-                                case "popularity":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most popular.');
-                                    break;
-                                case "relevance":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most relevant.');
-                                    break;
-                                default:
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
-                            }
+                        case "relevance":
+                            $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most relevant.');
                             break;
                         default:
-                            switch (sort_param) {
-                                case "recency":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
-                                    break;
-                                case "popularity":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most popular.');
-                                    break;
-                                case "relevance":
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most relevant.');
-                                    break;
-                                default:
-                                    $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
-                            }
+                            $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
                     }
                     var $list_table = $("#list_table");
                     var column;
@@ -1587,7 +623,7 @@ function more_latest() {
             pagenum++;
             $.ajax({
                 type: "GET",
-                url: api_folder + "items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&concepts=" + concept_param + "&q=" + query_param + "&source=" + source_param + "&sort=" + sort_param + "&unique=" + unique_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+                url: api_folder + "items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&q=" + query_param + "&source=" + source_param + "&sort=" + sort_param + "&unique=" + unique_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
                 dataType: "json",
                 success: function (json) {
                     if (pagelocation === "latest") {
@@ -1650,11 +686,6 @@ function more_latest() {
                                     shared = nFormatter(json.items[i].shares) + " shares";
                                     iconsource = 'imgs/google+-16-black.png';
                                     colorclass = 'color googlecolor';
-                                    break;
-                                case "Instagram":
-                                    shared = nFormatter(json.items[i].views) + " views";
-                                    iconsource = 'imgs/instagram-16-black.png';
-                                    colorclass = 'color instagramcolor';
                                     break;
                                 case "RSS":
                                     shared = nFormatter(json.items[i].shares) + " shares";
@@ -1734,74 +765,8 @@ function more_latest() {
                                 menu_icons.setAttribute('class', 'menu_icons');
                                 divouter.appendChild(menu_icons);
 
-                                var translation_p = document.createElement('p');
-                                translation_p.setAttribute('class', 'translation_p original');
-                                translation_p.setAttribute('data-original', title);
-
-                                switch (translation_param) {
-                                    case "en":
-                                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                        if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
-                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                            translation_p.innerHTML = "See translation";
-                                            translation_p.setAttribute('data-pair', language + '-en');
-                                        }
-                                        break;
-                                    case "el":
-                                        menu_actions.innerHTML = '<p class="rate_menu">Πατήστε για Αξιολόγηση</p>';
-                                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Αξιολόγηση</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Αφαίρεση</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="refresh_but">Ανανέωση?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Αφαίρεση Χρήστη</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Αφαίρεση Δημοσίευσης</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="remove_but">Αφαίρεση Δημοσιεύσεων</span> ή <span class="undo_but">Αναίρεση?</span></p></div></div></div>';
-                                        if (language === "en") {
-                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                            translation_p.innerHTML = "Δείτε τη μετάφραση";
-                                            translation_p.setAttribute('data-pair', 'en-el');
-                                        }
-                                        break;
-                                    case "it":
-                                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                        if (language === "en") {
-                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                            translation_p.innerHTML = "See translation";
-                                            translation_p.setAttribute('data-pair', 'en-it');
-                                        }
-                                        break;
-                                    case "tr":
-                                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                        if (language === "en") {
-                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                            translation_p.innerHTML = "See translation";
-                                            translation_p.setAttribute('data-pair', 'en-tr');
-                                        }
-                                        break;
-                                    case "es":
-                                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                        if (language === "en") {
-                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                            translation_p.innerHTML = "See translation";
-                                            translation_p.setAttribute('data-pair', 'en-es');
-                                        }
-                                        break;
-                                    case "ca":
-                                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                        if (language === "en") {
-                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                            translation_p.innerHTML = "See translation";
-                                            translation_p.setAttribute('data-pair', 'en-ca');
-                                        }
-                                        break;
-                                    default:
-                                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                        if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
-                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                            translation_p.innerHTML = "See translation";
-                                            translation_p.setAttribute('data-pair', language + '-en');
-                                        }
-                                }
+                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
 
                                 var colored = document.createElement('div');
                                 colored.setAttribute('class', colorclass);
@@ -1891,74 +856,8 @@ function more_latest() {
                                 menu_icons.setAttribute('class', 'menu_icons');
                                 divouter.appendChild(menu_icons);
 
-                                var translation_p = document.createElement('p');
-                                translation_p.setAttribute('class', 'translation_p original');
-                                translation_p.setAttribute('data-original', title);
-
-                                switch (translation_param) {
-                                    case "en":
-                                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                        if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
-                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                            translation_p.innerHTML = "See translation";
-                                            translation_p.setAttribute('data-pair', language + '-en');
-                                        }
-                                        break;
-                                    case "el":
-                                        menu_actions.innerHTML = '<p class="rate_menu">Πατήστε για Αξιολόγηση</p>';
-                                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Αξιολόγηση</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Αφαίρεση</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="refresh_but">Ανανέωση?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Αφαίρεση Χρήστη</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Αφαίρεση Δημοσίευσης</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="remove_but">Αφαίρεση Δημοσιεύσεων</span> ή <span class="undo_but">Αναίρεση?</span></p></div></div></div>';
-                                        if (language === "en") {
-                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                            translation_p.innerHTML = "Δείτε τη μετάφραση";
-                                            translation_p.setAttribute('data-pair', 'en-el');
-                                        }
-                                        break;
-                                    case "it":
-                                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                        if (language === "en") {
-                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                            translation_p.innerHTML = "See translation";
-                                            translation_p.setAttribute('data-pair', 'en-it');
-                                        }
-                                        break;
-                                    case "tr":
-                                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                        if (language === "en") {
-                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                            translation_p.innerHTML = "See translation";
-                                            translation_p.setAttribute('data-pair', 'en-tr');
-                                        }
-                                        break;
-                                    case "es":
-                                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                        if (language === "en") {
-                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                            translation_p.innerHTML = "See translation";
-                                            translation_p.setAttribute('data-pair', 'en-es');
-                                        }
-                                        break;
-                                    case "ca":
-                                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                        if (language === "en") {
-                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                            translation_p.innerHTML = "See translation";
-                                            translation_p.setAttribute('data-pair', 'en-ca');
-                                        }
-                                        break;
-                                    default:
-                                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                        if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
-                                            p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                            translation_p.innerHTML = "See translation";
-                                            translation_p.setAttribute('data-pair', language + '-en');
-                                        }
-                                }
+                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
 
                                 var colored = document.createElement('div');
                                 colored.setAttribute('class', colorclass);
@@ -1994,111 +893,18 @@ function more_latest() {
                         }
                         var $posts_info = $('#posts_info');
                         var $tiles_li = $('#tiles > li');
-                        switch (translation_param) {
-                            case "en":
-                                switch (sort_param) {
-                                    case "recency":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                        break;
-                                    case "popularity":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                                        break;
-                                    case "relevance":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                                        break;
-                                    default:
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                }
+                        switch (sort_param) {
+                            case "recency":
+                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
                                 break;
-                            case "el":
-                                switch (sort_param) {
-                                    case "recency":
-                                        $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο προσφάτων.');
-                                        break;
-                                    case "popularity":
-                                        $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο δημοφιλή.');
-                                        break;
-                                    case "relevance":
-                                        $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο σχετικών.');
-                                        break;
-                                    default:
-                                        $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο προσφάτων.');
-                                }
+                            case "popularity":
+                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
                                 break;
-                            case "it":
-                                switch (sort_param) {
-                                    case "recency":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                        break;
-                                    case "popularity":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                                        break;
-                                    case "relevance":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                                        break;
-                                    default:
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                }
-                                break;
-                            case "tr":
-                                switch (sort_param) {
-                                    case "recency":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                        break;
-                                    case "popularity":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                                        break;
-                                    case "relevance":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                                        break;
-                                    default:
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                }
-                                break;
-                            case "es":
-                                switch (sort_param) {
-                                    case "recency":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                        break;
-                                    case "popularity":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                                        break;
-                                    case "relevance":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                                        break;
-                                    default:
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                }
-                                break;
-                            case "ca":
-                                switch (sort_param) {
-                                    case "recency":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                        break;
-                                    case "popularity":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                                        break;
-                                    case "relevance":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                                        break;
-                                    default:
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                }
+                            case "relevance":
+                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
                                 break;
                             default:
-                                switch (sort_param) {
-                                    case "recency":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                        break;
-                                    case "popularity":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                                        break;
-                                    case "relevance":
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                                        break;
-                                    default:
-                                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                                }
+                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
                         }
                         if (json.items.length === 0) {
                             end = 1;
@@ -2119,7 +925,7 @@ function more_latest() {
 function parse_new(count) {
     $.ajax({
         type: "GET",
-        url: api_folder + "items?collection=" + collection_param + "&nPerPage=" + count + "&pageNumber=1&q=" + query_param + "&concepts=" + concept_param + "&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "items?collection=" + collection_param + "&nPerPage=" + count + "&pageNumber=1&q=" + query_param + "&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             if (pagelocation === "latest") {
@@ -2178,11 +984,6 @@ function parse_new(count) {
                             shared = nFormatter(json.items[i].shares) + " shares";
                             iconsource = 'imgs/google+-16-black.png';
                             colorclass = 'color googlecolor';
-                            break;
-                        case "Instagram":
-                            shared = nFormatter(json.items[i].views) + " views";
-                            iconsource = 'imgs/instagram-16-black.png';
-                            colorclass = 'color instagramcolor';
                             break;
                         case "RSS":
                             shared = nFormatter(json.items[i].shares) + " shares";
@@ -2262,74 +1063,8 @@ function parse_new(count) {
                         menu_icons.setAttribute('class', 'menu_icons');
                         divouter.appendChild(menu_icons);
 
-                        var translation_p = document.createElement('p');
-                        translation_p.setAttribute('class', 'translation_p original');
-                        translation_p.setAttribute('data-original', title);
-
-                        switch (translation_param) {
-                            case "en":
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', language + '-en');
-                                }
-                                break;
-                            case "el":
-                                menu_actions.innerHTML = '<p class="rate_menu">Πατήστε για Αξιολόγηση</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Αξιολόγηση</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Αφαίρεση</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν <span class="refresh_but">Ανανέωση?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Αφαίρεση Χρήστη</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Αφαίρεση Δημοσίευσης</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="remove_but">Αφαίρεση Δημοσιεύσεων</span> ή <span class="undo_but">Αναίρεση?</span></p></div></div></div>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "Δείτε τη μετάφραση";
-                                    translation_p.setAttribute('data-pair', 'en-el');
-                                }
-                                break;
-                            case "it":
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-it');
-                                }
-                                break;
-                            case "tr":
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-tr');
-                                }
-                                break;
-                            case "es":
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-es');
-                                }
-                                break;
-                            case "ca":
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-ca');
-                                }
-                                break;
-                            default:
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', language + '-en');
-                                }
-                        }
+                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
 
                         var colored = document.createElement('div');
                         colored.setAttribute('class', colorclass);
@@ -2418,74 +1153,9 @@ function parse_new(count) {
                         menu_icons.setAttribute('class', 'menu_icons');
                         divouter.appendChild(menu_icons);
 
-                        var translation_p = document.createElement('p');
-                        translation_p.setAttribute('class', 'translation_p original');
-                        translation_p.setAttribute('data-original', title);
+                        menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
+                        menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
 
-                        switch (translation_param) {
-                            case "en":
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', language + '-en');
-                                }
-                                break;
-                            case "el":
-                                menu_actions.innerHTML = '<p class="rate_menu">Πατήστε για Αξιολόγηση</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Αξιολόγηση</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Αφαίρεση</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="refresh_but">Ανανέωση?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Αφαίρεση Χρήστη</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Αφαίρεση Δημοσίευσης</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">Αποθήκευση</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="remove_but">Αφαίρεση Δημοσιεύσεων</span> ή <span class="undo_but">Αναίρεση?</span></p></div></div></div>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "Δείτε τη μετάφραση";
-                                    translation_p.setAttribute('data-pair', 'en-el');
-                                }
-                                break;
-                            case "it":
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-it');
-                                }
-                                break;
-                            case "tr":
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-tr');
-                                }
-                                break;
-                            case "es":
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-es');
-                                }
-                                break;
-                            case "ca":
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                if (language === "en") {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', 'en-ca');
-                                }
-                                break;
-                            default:
-                                menu_icons.innerHTML = '<span class="close_menu">×</span><ul class="tabs"><li class="current"><a class="rate" href="javascript:void(0)"><img src="imgs/star-16-white.png">Rate</a></li><li><a class="exclude" href="javascript:void(0)"><img src="imgs/delete-16-gray.png">Exclude</a></li></ul><div class="rate_tab"><div class="relevance_slider"></div><button type="button" class="btn btn-secondary rate_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="refresh"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="refresh_but">Refresh?</span></p></div></div><div class="exclude_tab"><div class="exclude_buttons"><input id="exclude_user_' + uid + '" type="radio" name="remove_' + id + '" value="user"><label for="exclude_user_' + uid + '">Exclude User</label> <input id="exclude_item_' + id + '" type="radio" name="remove_' + id + '" value="item" checked> <label for="exclude_item_' + id + '">Exclude Item</label></div><button type="button" class="btn btn-secondary exclude_save_but"><img src="imgs/save-white_16.png">SAVE</button><div class="remove"><img src="imgs/check-circle-16-green.png"><p>Changes Saved! <span class="remove_but">Remove item(s)</span> or <span class="undo_but">Undo?</span></p></div></div></div>';
-                                menu_actions.innerHTML = '<p class="rate_menu">Click to Rate</p>';
-                                if ((language === "de") || (language === "ca") || (language === "it") || (language === "el") || (language === "es") || (language === "tr") || (language === "fr") || (language === "nl") || (language === "ru") || (language === "uk")) {
-                                    p.parentNode.insertBefore(translation_p, p.nextSibling);
-                                    translation_p.innerHTML = "See translation";
-                                    translation_p.setAttribute('data-pair', language + '-en');
-                                }
-                        }
 
                         var colored = document.createElement('div');
                         colored.setAttribute('class', colorclass);
@@ -2521,111 +1191,18 @@ function parse_new(count) {
                 }
                 var $posts_info = $('#posts_info');
                 var $tiles_li = $('#tiles > li');
-                switch (translation_param) {
-                    case "en":
-                        switch (sort_param) {
-                            case "recency":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');
-                                break;
-                            case "popularity":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most popular.');
-                                break;
-                            case "relevance":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most relevant.');
-                                break;
-                            default:
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');
-                        }
+                switch (sort_param) {
+                    case "recency":
+                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');
                         break;
-                    case "el":
-                        switch (sort_param) {
-                            case "recency":
-                                $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + ' πιο προσφάτων.');
-                                break;
-                            case "popularity":
-                                $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + ' πιο δημοφιλή.');
-                                break;
-                            case "relevance":
-                                $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + ' πιο σχετικών.');
-                                break;
-                            default:
-                                $posts_info.html(json.total + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + ' πιο προσφάτων.');
-                        }
+                    case "popularity":
+                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most popular.');
                         break;
-                    case "it":
-                        switch (sort_param) {
-                            case "recency":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');
-                                break;
-                            case "popularity":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most popular.');
-                                break;
-                            case "relevance":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most relevant.');
-                                break;
-                            default:
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');
-                        }
-                        break;
-                    case "tr":
-                        switch (sort_param) {
-                            case "recency":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');
-                                break;
-                            case "popularity":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most popular.');
-                                break;
-                            case "relevance":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most relevant.');
-                                break;
-                            default:
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');
-                        }
-                        break;
-                    case "es":
-                        switch (sort_param) {
-                            case "recency":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');
-                                break;
-                            case "popularity":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most popular.');
-                                break;
-                            case "relevance":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most relevant.');
-                                break;
-                            default:
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');
-                        }
-                        break;
-                    case "ca":
-                        switch (sort_param) {
-                            case "recency":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');
-                                break;
-                            case "popularity":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most popular.');
-                                break;
-                            case "relevance":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most relevant.');
-                                break;
-                            default:
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');
-                        }
+                    case "relevance":
+                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most relevant.');
                         break;
                     default:
-                        switch (sort_param) {
-                            case "recency":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');
-                                break;
-                            case "popularity":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most popular.');
-                                break;
-                            case "relevance":
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most relevant.');
-                                break;
-                            default:
-                                $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');
-                        }
+                        $posts_info.html(json.total + ' posts. Showing 1 - ' + $tiles_li.length + ' most recent.');
                 }
                 loadimage(2, "dummylatest", 12);
             }

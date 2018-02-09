@@ -4,13 +4,12 @@ function draw_social_mix(flag, view) {
         facebook = 0,
         flickr = 0,
         youtube = 0,
-        instagram = 0,
         rss = 0,
         google = 0;
 
     $.ajax({
         type: "GET",
-        url: api_folder + "statistics?collection=" + collection_param + "&concepts=" + concept_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&q=" + query_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "statistics?collection=" + collection_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&q=" + query_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             var stream, count;
@@ -33,9 +32,6 @@ function draw_social_mix(flag, view) {
                         break;
                     case "GooglePlus":
                         google = count;
-                        break;
-                    case "Instagram":
-                        instagram = count;
                         break;
                     case "RSS":
                         rss = count;
@@ -64,10 +60,6 @@ function draw_social_mix(flag, view) {
                 y: google,
                 image_path: "./imgs/google+-16-color.png"
             }, {
-                key: "Instagram",
-                y: instagram,
-                image_path: "./imgs/instagram-16-color.png"
-            }, {
                 key: "RSS",
                 y: rss,
                 image_path: "./imgs/rss-16-color.png"
@@ -94,10 +86,6 @@ function draw_social_mix(flag, view) {
                 y: 0,
                 image_path: "./imgs/google+-16-color.png"
             }, {
-                key: "<img src=" + "./imgs/instagram-16-color.png" + ">",
-                y: 0,
-                image_path: "./imgs/instagram-16-color.png"
-            }, {
                 key: "<img src=" + "./imgs/rss-16-color.png" + ">",
                 y: 0,
                 image_path: "./imgs/rss-16-color.png"
@@ -107,29 +95,6 @@ function draw_social_mix(flag, view) {
                 image_path: "./imgs/white.png"
             }];
 
-            var noData;
-            switch (translation_param) {
-                case "en":
-                    noData = "No Data Available";
-                    break;
-                case "el":
-                    noData = "Δεν υπάρχουν δεδομένα";
-                    break;
-                case "it":
-                    noData = "Nessun dato disponibile";
-                    break;
-                case "tr":
-                    noData = "Uygun veri bulunamadı";
-                    break;
-                case "es":
-                    noData = "Datos no disponibles";
-                    break;
-                case "ca":
-                    noData = "No hi ha dades disponibles";
-                    break;
-                default:
-                    noData = "No Data Available"
-            }
             nv.addGraph(function () {
 
                 var chart = nv.models.pieChart()
@@ -141,7 +106,7 @@ function draw_social_mix(flag, view) {
                     })
                     .padAngle(0)
                     .donutRatio(0.65)
-                    .noData(noData)
+                    .noData("No Data Available")
                     .labelThreshold(.05)
                     .showLabels(true)
                     .color(['#3b5998', '#00acee', '#ff0084', '#FF0202', '#d34836', '#ab7d63', '#1e90ff', '#ffffff'])

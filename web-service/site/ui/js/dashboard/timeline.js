@@ -11,89 +11,19 @@ function draw_timeline() {
     var datenow = new Date();
     datenow.setDate(datenow.getDate() - 61);
     var date = datenow.getTime();
-    switch (translation_param) {
-        case "en":
-            if (resolution === "hours") {
-                $('#erase_analysis').html("Per Hour");
-            }
-            else if (resolution === "days") {
-                $('#erase_analysis').html("Per Day");
-            }
-            else {
-                $('#erase_analysis').html("Per Week");
-            }
-            break;
-        case "el":
-            if (resolution === "hours") {
-                $('#erase_analysis').html("Ανά Ώρα");
-            }
-            else if (resolution === "days") {
-                $('#erase_analysis').html("Ανά Ημέρα");
-            }
-            else {
-                $('#erase_analysis').html("Ανά Εβδομάδα");
-            }
-            break;
-        case "it":
-            if (resolution === "hours") {
-                $('#erase_analysis').html("Per Ora");
-            }
-            else if (resolution === "days") {
-                $('#erase_analysis').html("Per Giorno");
-            }
-            else {
-                $('#erase_analysis').html("Per Settimana");
-            }
-            break;
-        case "tr":
-            if (resolution === "hours") {
-                $('#erase_analysis').html("Her Saat");
-            }
-            else if (resolution === "days") {
-                $('#erase_analysis').html("Her Gün");
-            }
-            else {
-                $('#erase_analysis').html("Her Hafta");
-            }
-            break;
-        case "es":
-            if (resolution === "hours") {
-                $('#erase_analysis').html("Por Hora");
-            }
-            else if (resolution === "days") {
-                $('#erase_analysis').html("Por Dia");
-            }
-            else {
-                $('#erase_analysis').html("Por Semana");
-            }
-            break;
-        case "ca":
-            if (resolution === "hours") {
-                $('#erase_analysis').html("Per Hora");
-            }
-            else if (resolution === "days") {
-                $('#erase_analysis').html("Per Dia");
-            }
-            else {
-                $('#erase_analysis').html("Per Setmana");
-            }
-            break;
-        default:
-            if (resolution === "hours") {
-                $('#erase_analysis').html("Per Hour");
-            }
-            else if (resolution === "days") {
-                $('#erase_analysis').html("Per Day");
-            }
-            else {
-                $('#erase_analysis').html("Per Week");
-            }
-            break;
+    if (resolution === "hours") {
+        $('#erase_analysis').html("Per Hour");
+    }
+    else if (resolution === "days") {
+        $('#erase_analysis').html("Per Day");
+    }
+    else {
+        $('#erase_analysis').html("Per Week");
     }
 
     $.ajax({
         type: "GET",
-        url: api_folder+"timeline?resolution=" + resolution + "&language=" + language_param + "&concepts=" + concept_param + "&collection=" + collection_param + "&q=" + query_param + "&since=" + date + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "timeline?resolution=" + resolution + "&language=" + language_param + "&collection=" + collection_param + "&q=" + query_param + "&since=" + date + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             var timeline_values = [];
@@ -104,33 +34,10 @@ function draw_timeline() {
                     y: timeline[i].count
                 });
             }
-            var noData;
-            switch (translation_param) {
-                case "en":
-                    noData = "No Data Available";
-                    break;
-                case "el":
-                    noData = "Δεν υπάρχουν δεδομένα";
-                    break;
-                case "it":
-                    noData="Nessun dato disponibile";
-                    break;
-                case "tr":
-                    noData="Uygun veri bulunamadı";
-                    break;
-                case "es":
-                    noData = "Datos no disponibles";
-                    break;
-                case "ca":
-                    noData = "No hi ha dades disponibles";
-                    break;
-                default:
-                    noData = "No Data Available"
-            }
             nv.addGraph(function () {
                 var chart = nv.models.lineWithFocusChart()
                     .showLegend(false)
-                    .noData(noData)
+                    .noData("No Data Available")
                     .margin({"top": 15});
 
                 if (resolution === "hours") {

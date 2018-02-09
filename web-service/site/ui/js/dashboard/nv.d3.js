@@ -11287,141 +11287,25 @@
                 // if title is specified and donut, put it in the middle
                 if (donut && title) {
                     g_pie.append("text").attr('class', 'nv-pie-title');
-
+                    var to_return = "";
                     wrap.select('.nv-pie-title')
                         .style("text-anchor", "middle")
-                        .text(function (d) {
-
-
-                            var to_return;
+                        .text(function () {
                             if ($('.activestat').attr('id') === "count") {
-                                switch (translation_param) {
-                                    case "en":
-                                        to_return = "Posts";
-                                        title = "Posts";
-                                        break;
-                                    case "el":
-                                        to_return = "Δημοσιεύσεις";
-                                        title = "Δημοσιεύσεις";
-                                        break;
-                                    case "it":
-                                        to_return = "Post";
-                                        title = "Post";
-                                        break;
-                                    case "tr":
-                                        to_return = "Gönderiler";
-                                        title = "Gönderiler";
-                                        break;
-                                    case "es":
-                                        to_return = "Mensajes";
-                                        title = "Mensajes";
-                                        break;
-                                    case "ca":
-                                        to_return = "Publicacions";
-                                        title = "Publicacions";
-                                        break;
-                                    default:
-                                        to_return = "Posts";
-                                        title = "Posts";
-                                }
+                                to_return = "Posts";
                             }
                             else if ($('.activestat').attr('id') === "users") {
-                                switch (translation_param) {
-                                    case "en":
-                                        to_return = "Users";
-                                        title = "Users";
-                                        break;
-                                    case "el":
-                                        to_return = "Χρήστες";
-                                        title = "Χρήστες";
-                                        break;
-                                    case "it":
-                                        to_return = "Utenti";
-                                        title = "Utenti";
-                                        break;
-                                    case "tr":
-                                        to_return = "Kullanıcılar";
-                                        title = "Kullanıcılar";
-                                        break;
-                                    case "es":
-                                        to_return = "Usuarioas";
-                                        title = "Usuarioas";
-                                        break;
-                                    case "ca":
-                                        to_return = "Usuaris";
-                                        title = "Usuaris";
-                                        break;
-                                    default:
-                                        to_return = "Users";
-                                        title = "Users";
-                                }
+                                to_return = "Users";
                             }
                             else if ($('.activestat').attr('id') === "reach") {
-                                switch (translation_param) {
-                                    case "en":
-                                        to_return = "Reach";
-                                        title = "Reach";
-                                        break;
-                                    case "el":
-                                        to_return = "Θέαση";
-                                        title = "Θέαση";
-                                        break;
-                                    case "it":
-                                        to_return = "Consultati";
-                                        title = "Consultati";
-                                        break;
-                                    case "tr":
-                                        to_return = "Ulaşılan";
-                                        title = "Ulaşılan";
-                                        break;
-                                    case "es":
-                                        to_return = "Sobrepasado";
-                                        title = "Sobrepasado";
-                                        break;
-                                    case "ca":
-                                        to_return = "Involucrats";
-                                        title = "Involucrats";
-                                        break;
-                                    default:
-                                        to_return = "Reach"
-                                        title = "Reach";
-                                }
+                                to_return = "Reach";
                             }
                             else {
-                                switch (translation_param) {
-                                    case "en":
-                                        to_return = "Endorsements";
-                                        title = "Endorsements";
-                                        break;
-                                    case "el":
-                                        to_return = "Φιλοφρονήσεις";
-                                        title = "Φιλοφρονήσεις";
-                                        break;
-                                    case "it":
-                                        to_return = "Approvati";
-                                        title = "Approvati";
-                                        break;
-                                    case "tr":
-                                        to_return = "Onaylananlar";
-                                        title = "Onaylananlar";
-                                        break;
-                                    case "es":
-                                        to_return = "Atenciones";
-                                        title = "Atenciones";
-                                        break;
-                                    case "ca":
-                                        to_return = "Adhesions";
-                                        title = "Adhesions";
-                                        break;
-                                    default:
-                                        to_return = "Endorsements";
-                                        title = "Endorsements";
-                                }
+                                to_return = "Endorsements";
                             }
                             return to_return;
-
                         })
-                        .style("font-size", (Math.min(availableWidth, availableHeight)) * donutRatio * 1.8 / (title.length + 2) + "px")
+                        .style("font-size", (Math.min(availableWidth, availableHeight)) * donutRatio * 1.8 / (to_return.length + 2) + "px")
                         .attr("dy", "0.35em") // trick to vertically center text
                         .attr('transform', function (d, i) {
                             return 'translate(0, ' + titleOffset + ')';

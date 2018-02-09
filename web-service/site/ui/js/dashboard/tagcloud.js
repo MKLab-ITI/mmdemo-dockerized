@@ -13,30 +13,6 @@ var pause = document.querySelector('.pause');
 function draw_hashtags(source) {
     $('#gates_tooltip').remove();
     $('#tags_all').empty();
-    var $flatTable = $('.flatTable');
-    switch (translation_param) {
-        case "en":
-            $flatTable.html('<thead><tr><td>ΕΝΤΙΤΥ</td><td>TYPE</td><td>FREQUENCY</td></tr></thead>');
-            break;
-        case "el":
-            $flatTable.html('<thead><tr><td>ΟΝΤΟΤΗΤΑ</td><td>ΤΥΠΟΣ</td><td>ΣΥΧΝΟΤΗΤΑ</td></tr></thead>');
-            break;
-        case "it":
-            $flatTable.html('<thead><tr><td>ENTITA</td><td>TIPO</td><td>FREQUENZA</td></tr></thead>');
-            break;
-        case "tr":
-            $flatTable.html('<thead><tr><td>GİRİŞ</td><td>TÜR</td><td>FREQUENZA</td></tr></thead>');
-            break;
-        case "es":
-            $flatTable.html('<thead><tr><td>ENTIDAD</td><td>TIPO</td><td>FRECUENCIA</td></tr></thead>');
-            break;
-        case "ca":
-            $flatTable.html('<thead><tr><td>ENTITAT</td><td>TIPUS</td><td>FREQÜÈNCIA</td></tr></thead>');
-            break;
-        default:
-            $flatTable.html('<thead><tr><td>ΕΝΤΙΤΥ</td><td>TYPE</td><td>FREQUENCY</td></tr></thead>');
-            break;
-    }
     var dataent = [];
     var max_amount = -1;
     var BubbleChart, root;
@@ -54,7 +30,7 @@ function draw_hashtags(source) {
                     "animation-play-state": "running",
                     "animation": "dash " + delay + "s linear infinite running"
                 });
-                url_call = api_folder+"terms?n=300&collection=" + collection_param + "&concepts=" + concept_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param;
+                url_call = api_folder+"terms?n=300&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param;
             }
             else {
                 for (var time = 0; time < timeouts.length; time++) {
@@ -63,30 +39,7 @@ function draw_hashtags(source) {
                 timeouts = [];
                 $('#animation_wrapper').slideUp(1000);
                 $('#animate').show();
-                url_call = api_folder+"terms?n=" + top + "&collection=" + collection_param + "&concepts=" + concept_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param;
-            }
-            var noData;
-            switch (translation_param) {
-                case "en":
-                    noData = "No Data Available";
-                    break;
-                case "el":
-                    noData = "Δεν υπάρχουν δεδομένα";
-                    break;
-                case "it":
-                    noData="Nessun dato disponibile";
-                    break;
-                case "tr":
-                    noData="Uygun veri bulunamadı";
-                    break;
-                case "es":
-                    noData="Datos no disponibles";
-                    break;
-                case "ca":
-                    noData="No hi ha dades disponibles";
-                    break;
-                default:
-                    noData = "No Data Available"
+                url_call = api_folder+"terms?n=" + top + "&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param;
             }
             $.ajax({
                 type: "GET",
@@ -94,33 +47,13 @@ function draw_hashtags(source) {
                 dataType: "json",
                 success: function (json) {
                     var len = json.length;
+                    var $flatTable=$('.flatTable');
+                    $flatTable.find('tbody').empty();
                     for (var i = 0; i < len; i++) {
                         var frequency = json[i].count;
                         var token = json[i].field;
                         var typecolor = json[i].type;
-                        var $flatTable=$('.flatTable');
-                        switch (translation_param) {
-                            case "en":
-                                $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_tag">Refresh</span> or <span class="undo_but_tag">Undo?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Entity is included in input! <span class="confirm_exclude_tag_but">Exclude</span> or <span class="confirm_undo_tag_but">Undo?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
-                                break;
-                            case "el":
-                                $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Αφαίρεση</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="refresh_but_tag">Ανανέωση</span> ή <span class="undo_but_tag">Αναίρεση?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Η οντότητα είναι μέρος της εισόδου! <span class="confirm_exclude_tag_but">Αφαίρεση</span> ή <span class="confirm_undo_tag_but">Αναίρεση?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
-                                break;
-                            case "it":
-                                $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_tag">Refresh</span> or <span class="undo_but_tag">Undo?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Entity is included in input! <span class="confirm_exclude_tag_but">Exclude</span> or <span class="confirm_undo_tag_but">Undo?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
-                                break;
-                            case "tr":
-                                $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_tag">Refresh</span> or <span class="undo_but_tag">Undo?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Entity is included in input! <span class="confirm_exclude_tag_but">Exclude</span> or <span class="confirm_undo_tag_but">Undo?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
-                                break;
-                            case "es":
-                                $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_tag">Refresh</span> or <span class="undo_but_tag">Undo?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Entity is included in input! <span class="confirm_exclude_tag_but">Exclude</span> or <span class="confirm_undo_tag_but">Undo?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
-                                break;
-                            case "ca":
-                                $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_tag">Refresh</span> or <span class="undo_but_tag">Undo?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Entity is included in input! <span class="confirm_exclude_tag_but">Exclude</span> or <span class="confirm_undo_tag_but">Undo?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
-                                break;
-                            default:
-                                $flatTable.append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_tag">Refresh</span> or <span class="undo_but_tag">Undo?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Entity is included in input! <span class="confirm_exclude_tag_but">Exclude</span> or <span class="confirm_undo_tag_but">Undo?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
-                        }
+                        $flatTable.find('tbody').append('<tr><td>' + token + '<div class="exclude_tag" data-tag="'+token+'"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_tag"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_tag">Refresh</span> or <span class="undo_but_tag">Undo?</span></p></div><div class="confirm_remove_tag"><img src="imgs/attention-16-red.png"><p>Entity is included in input! <span class="confirm_exclude_tag_but">Exclude</span> or <span class="confirm_undo_tag_but">Undo?</span></p></div></td><td>' + (typecolor).toUpperCase() + '</td><td>' + frequency + '</td></tr>')
                         var appearance;
                         var id = i + 1;
                         if (between(i, 0, Math.round(len / 10))) {
@@ -148,7 +81,7 @@ function draw_hashtags(source) {
                             .attr('dy', '-.7em')
                             .attr('x', ($('#tags').width() / 2) - 80)
                             .attr('y', 240)
-                            .text(noData);
+                            .text("No Data Available");
                     }
                 },
                 async: false
@@ -365,7 +298,7 @@ function draw_hashtags(source) {
             var nodes = this.nodes;
             $.ajax({
                 type: "GET",
-                url: api_folder+"terms?n=" + top + "&collection=" + collection_param + "&concepts=" + concept_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + start + "&until=" + end,
+                url: api_folder+"terms?n=" + top + "&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + start + "&until=" + end,
                 dataType: "json",
                 success: function (json) {
                     var len = json.length;
@@ -462,7 +395,7 @@ function draw_hashtags(source) {
             var nodes = this.nodes;
             $.ajax({
                 type: "GET",
-                url: api_folder+"terms?n=" + top + "&collection=" + collection_param + "&concepts=" + concept_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + start + "&until=" + end,
+                url: api_folder+"terms?n=" + top + "&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + start + "&until=" + end,
                 dataType: "json",
                 success: function (json) {
                     $('.flatTable tbody').empty();
@@ -546,42 +479,8 @@ function draw_hashtags(source) {
 
         BubbleChart.prototype.display_labels_appearance = function () {
             var years, years_data, years_x;
-            /*years_x = {
-             "OFTEN": 150,
-             "OCCASIONALLY": (this.width / 2),
-             "SELDOM": this.width - 150
-             };*/
-            //years_data = d3.keys(years_x);
-            switch (translation_param) {
-                case "en":
-                    years_data = ["OFTEN", "OCCASIONALLY", "SELDOM"];
-                    years_x = [150, (this.width / 2), this.width - 150];
-                    break;
-                case "el":
-                    years_data = ["ΣΥΧΝΑ", "ΠΕΡΙΣΤΑΣΙΑΚΑ", "ΣΠΑΝΙΑ"];
-                    years_x = [150, (this.width / 2), this.width - 150];
-                    break;
-                case "it":
-                    years_data = ["SPESSO", "OCCASIONALMENTE", "RARAMENTE"];
-                    years_x = [150, (this.width / 2), this.width - 150];
-                    break;
-                case "tr":
-                    years_data = ["SIK SIK", "ARA SIRA", "NADİREN"];
-                    years_x = [150, (this.width / 2), this.width - 150];
-                    break;
-                case "es":
-                    years_data = ["A MENUDO", "DE VEZ EN CUANDO", "RARAMENTE"];
-                    years_x = [150, (this.width / 2), this.width - 150];
-                    break;
-                case "ca":
-                    years_data = ["SOVINT", "OCASIONALMENT", "RARAMENT"];
-                    years_x = [150, (this.width / 2), this.width - 150];
-                    break;
-                default:
-                    years_data = ["OFTEN", "OCCASIONALLY", "SELDOM"];
-                    years_x = [150, (this.width / 2), this.width - 150];
-                    break;
-            }
+            years_data = ["OFTEN", "OCCASIONALLY", "SELDOM"];
+            years_x = [150, (this.width / 2), this.width - 150];
             years = this.vis.selectAll(".appearance").data(years_data);
             return years.enter().append("text").attr("class", "appearance").attr("x", (function (_this) {
                 return function (d) {
@@ -598,42 +497,8 @@ function draw_hashtags(source) {
 
         BubbleChart.prototype.display_labels_type = function () {
             var years, years_data, years_x;
-            /*years_x = {
-             "PERSON": 150,
-             "TAG": (this.width / 2),
-             "LOCATION": this.width - 150
-             };
-             years_data = d3.keys(years_x);*/
-            switch (translation_param) {
-                case "en":
-                    years_data = ["PERSON", "TAG", "ORGANIZATION"];
-                    years_x = [150, (this.width / 2), this.width - 150];
-                    break;
-                case "el":
-                    years_data = ["ΑΤΟΜΟ", "ETIKETA", "ΟΡΓΑΝΙΣΜΟΣ"];
-                    years_x = [150, (this.width / 2), this.width - 150];
-                    break;
-                case "it":
-                    years_data = ["PERSONA", "TAG", "ORGANIZZAZIONE"];
-                    years_x = [150, (this.width / 2), this.width - 150];
-                    break;
-                case "tr":
-                    years_data = ["KİŞİ", "ETİKET", "ORGANİZASYON"];
-                    years_x = [150, (this.width / 2), this.width - 150];
-                    break;
-                case "es":
-                    years_data = ["PERSONA", "ETIQUETA", "ORGANIZACIÓN"];
-                    years_x = [150, (this.width / 2), this.width - 150];
-                    break;
-                case "ca":
-                    years_data = ["PERSONA", "ETIQUETA", "ORGANITZACIÓ"];
-                    years_x = [150, (this.width / 2), this.width - 150];
-                    break;
-                default:
-                    years_data = ["PERSON", "TAG", "ORGANIZATION"];
-                    years_x = [150, (this.width / 2), this.width - 150];
-                    break;
-            }
+            years_data = ["PERSON", "TAG", "ORGANIZATION"];
+            years_x = [150, (this.width / 2), this.width - 150];
             years = this.vis.selectAll(".appearance").data(years_data);
             return years.enter().append("text").attr("class", "appearance").attr("x", (function (_this) {
                 return function (d) {
@@ -825,47 +690,9 @@ $('#animate').click(function () {
     var gap = Math.ceil(($range.data().ionRangeSlider.result.to - $range.data().ionRangeSlider.result.from));
     days_animation = Math.floor(gap / 86400);
     if (days_animation < 3) {
-        switch (translation_param) {
-            case "en":
-                $('#myModal h1').html("Not Enough Data!");
-                $('#myModal p').html("Time window must exceed 3 days.");
-                $('#myModal').reveal();
-                break;
-            case "el":
-                $('#myModal h1').html("Δεν υπάρχουν αρκετά δεδομένα!");
-                $('#myModal p').html("Το χρονικό παράθυρο πρέπει να είναι μεγαλύτερο από 3 ημέρες.");
-                $('#myModal').reveal();
-                loadimage(99, query_param, 12);
-                break;
-            case "it":
-                $('#myModal h1').html("Dati insufficienti!");
-                $('#myModal p').html("La finestra temporale deve essere superiore a 3 giorni.");
-                $('#myModal').reveal();
-                loadimage(99, query_param, 12);
-                break;
-            case "tr":
-                $('#myModal h1').html("Yeterli veri yok!");
-                $('#myModal p').html("Zaman penceresi 3 günü aşmalıdır.");
-                $('#myModal').reveal();
-                loadimage(99, query_param, 12);
-                break;
-            case "es":
-                $('#myModal h1').html("¡No hay suficientes datos!");
-                $('#myModal p').html("Ventana de tiempo debe ser superior a 3 días.");
-                $('#myModal').reveal();
-                loadimage(99, query_param, 12);
-                break;
-            case "ca":
-                $('#myModal h1').html("No hi ha dades suficients!");
-                $('#myModal p').html("La finestra de temps ha de ser superior a 3 dies.");
-                $('#myModal').reveal();
-                loadimage(99, query_param, 12);
-                break;
-            default:
-                $('#myModal h1').html("Not Enough Data!");
-                $('#myModal p').html("Time window must exceed 3 days.");
-                $('#myModal').reveal();
-        }
+        $('#myModal h1').html("Not Enough Data!");
+        $('#myModal p').html("Time window must exceed 3 days.");
+        $('#myModal').reveal();
     }
     else {
         $("#load6").show();

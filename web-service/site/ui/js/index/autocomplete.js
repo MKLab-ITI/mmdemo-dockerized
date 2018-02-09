@@ -2,7 +2,6 @@ $(function () {
     twitter_autocomplete();
     googleplus_autocomplete();
     facebook_autocomplete();
-    //instagram_autocomplete();
     youtube_autocomplete();
 });
 
@@ -166,61 +165,6 @@ function facebook_autocomplete() {
     }).on('typeahead:asynccancel typeahead:asyncreceive', function () {
         $('.Typeahead-spinner').hide();
     });
-
-}
-function instagram_autocomplete() {
-    var engine, remoteHost, template, empty;
-
-    $.support.cors = true;
-
-    remoteHost = api_folder + 'search/users';
-    template = Handlebars.compile($("#result-template_instagram").html());
-    empty = Handlebars.compile($("#empty-template_instagram").html());
-
-    engine = new Bloodhound({
-        identify: function (o) {
-            return o.id_str;
-        },
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name', 'screen_name'),
-        dupDetector: function (a, b) {
-            return a.id_str === b.id_str;
-        },
-        remote: {
-            url: remoteHost + '?source=Instagram&q=%QUERY',
-            wildcard: '%QUERY'
-        }
-    });
-
-    function engineWithDefaults(q, sync, async) {
-        engine.search(q, sync, async);
-    }
-
-    $('#user_Instagram').typeahead({
-        hint: false,
-        menu: $('.Typeahead-menu'),
-        minLength: 2,
-        classNames: {
-            open: 'is-open',
-            empty: 'is-empty',
-            cursor: 'is-active',
-            suggestion: 'Typeahead-suggestion',
-            selectable: 'Typeahead-selectable'
-        }
-    }, {
-        source: engineWithDefaults,
-        displayKey: 'username',
-        limit: 40,
-        templates: {
-            suggestion: template,
-            empty: empty
-        }
-    }).on('typeahead:asyncrequest', function () {
-        $('.Typeahead-spinner').show();
-    }).on('typeahead:asynccancel typeahead:asyncreceive', function () {
-        $('.Typeahead-spinner').hide();
-    });
-
 }
 function youtube_autocomplete() {
     var engine, remoteHost, template, empty;

@@ -780,13 +780,8 @@
                     $(ui.handle)
                         .find(".ui-slider-tip")
                         .html(val);
-
                 });
-
         }
-
     };
-
     $.extend(true, $.ui.slider.prototype, extensionMethods);
-
 })(jQuery);

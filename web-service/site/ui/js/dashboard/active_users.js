@@ -7,39 +7,9 @@ function show_active_users() {
 
     $.ajax({
         type: "GET",
-        url: api_folder + "users?n=" + top + "&collection=" + collection_param + "&q=" + query_param + "&concepts=" + concept_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "users?n=" + top + "&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
-            var noData, posts_name;
-            switch (translation_param) {
-                case "en":
-                    noData = "No Data Available";
-                    posts_name = "posts";
-                    break;
-                case "el":
-                    noData = "Δεν υπάρχουν δεδομένα";
-                    posts_name = "δημοσιεύσεις";
-                    break;
-                case "it":
-                    noData = "Nessun dato disponibile";
-                    posts_name = "post";
-                    break;
-                case "tr":
-                    noData = "Uygun veri bulunamadı";
-                    posts_name = "gönderiler";
-                    break;
-                case "es":
-                    noData = "Datos no disponibles";
-                    posts_name = "mensajes";
-                    break;
-                case "ca":
-                    noData = "No hi ha dades disponibles";
-                    posts_name = "publicacions";
-                    break;
-                default:
-                    noData = "No Data Available";
-                    posts_name = "posts";
-            }
             for (var i = 0; i < json.length; i++) {
                 username = json[i].username;
                 count = json[i].count;
@@ -74,10 +44,6 @@ function show_active_users() {
                         color_bar = "#FF0202";
                         icon = "imgs/youtube-16-color.png";
                         break;
-                    case "Instagram":
-                        color_bar = "#ab7d63";
-                        icon = "imgs/instagram-16-color.png";
-                        break;
                     case "GooglePlus":
                         color_bar = "#d34836";
                         icon = "imgs/google+-16-color.png";
@@ -96,28 +62,7 @@ function show_active_users() {
                     onerror = "imgError2(this,null,null);"
                 }
                 var $user_images=$('#users_images');
-                switch (translation_param) {
-                    case "en":
-                        $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>')
-                        break;
-                    case "el":
-                        $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Αφαίρεση</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Οι αλλαγές αποθηκεύτηκαν! <span class="refresh_but_user">Ανανέωση</span> ή <span class="undo_but_user">Αναίρεση?</span></p></div></div>')
-                        break;
-                    case "it":
-                        $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>')
-                        break;
-                    case "tr":
-                        $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>')
-                        break;
-                    case "es":
-                        $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>')
-                        break;
-                    case "ca":
-                        $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>')
-                        break;
-                    default:
-                        $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + ' ' + posts_name + '</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>')
-                }
+                $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + 'posts</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>');
             }
             var data_bar = [{
                 key: "Users",
@@ -135,7 +80,7 @@ function show_active_users() {
                     })
                     .staggerLabels(true)
                     .showValues(false)
-                    .noData(noData)
+                    .noData("No Data Available")
                     .duration(2000)
                     .margin({bottom: 10, left: 35, top: 26})
                     .showXAxis(false);
@@ -159,9 +104,6 @@ function show_active_users() {
                             break;
                         case "#FF0202":
                             image = "imgs/youtube-16-color.png";
-                            break;
-                        case "#ab7d63":
-                            image = "imgs/instagram-16-color.png";
                             break;
                         case "#d34836":
                             image = "imgs/google+-16-color.png";

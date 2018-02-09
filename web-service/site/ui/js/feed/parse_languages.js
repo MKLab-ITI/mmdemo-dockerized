@@ -1,6 +1,6 @@
 $.ajax({
     type: "GET",
-    url: api_folder + "top/language?collection=" + collection_param + "&source=Facebook,Twitter,Flickr,Youtube,Instagram,RSS,GooglePlus&since=" + language_since + "&until=" + language_until,
+    url: api_folder + "top/language?collection=" + collection_param + "&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=" + language_since + "&until=" + language_until,
     dataType: "json",
     success: function (json) {
 

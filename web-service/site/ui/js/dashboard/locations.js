@@ -24,7 +24,7 @@ function draw_locations() {
 
     $.ajax({
         type: "GET",
-        url: api_folder+"top/country?collection=" + collection_param + "&q=" + query_param + "&concepts=" + concept_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param+ "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "top/country?collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             countall = 0;
@@ -54,36 +54,13 @@ function draw_locations() {
 
             var chart = new google.visualization.GeoChart(document.getElementById('locations'));
             chart.draw(data, options);
-
-            var noData;
-            switch (translation_param) {
-                case "en":
-                    noData="No Data Available";
-                    break;
-                case "el":
-                    noData="Δεν υπάρχουν δεδομένα";
-                    break;
-                case "it":
-                    noData="Nessun dato disponibile";
-                    break;
-                case "tr":
-                    noData="Uygun veri bulunamadı";
-                    break;
-                case "es":
-                    noData = "Datos no disponibles";
-                    break;
-                case "ca":
-                    noData = "No hi ha dades disponibles";
-                    break;
-                default:
-                    noData="No Data Available"
-            }
+            var $gages = $('#gages');
             switch ($values.length) {
                 case 0:
-                    $('#gages').html('<div class="no-data">'+noData+'</div>');
+                    $gages.html('<div class="no-data">No Data Available</div>');
                     break;
                 case 1:
-                    $('#gages').html('<div id="g1"></div>');
+                    $gages.html('<div id="g1"></div>');
                     $('#g1').css('width', '100%');
                     g1 = new JustGage({
                         id: "g1",
@@ -106,7 +83,7 @@ function draw_locations() {
                     });
                     break;
                 case 2:
-                    $('#gages').html('<div id="g1"></div><div id="g2"></div>');
+                    $gages.html('<div id="g1"></div><div id="g2"></div>');
                     $('#g1,#g2').css('width', '50%');
                     g1 = new JustGage({
                         id: "g1",
@@ -149,7 +126,7 @@ function draw_locations() {
                     });
                     break;
                 default:
-                    $('#gages').html('<img src="imgs/arrow-89-24.png" class="arrow3" id="arrow3-left"/><div id="g1"></div><div id="g2"></div><div id="g3"></div><img src="imgs/arrow-25-24.png" class="arrow3" id="arrow3-right"/>');
+                    $gages.html('<img src="imgs/arrow-89-24.png" class="arrow3" id="arrow3-left"/><div id="g1"></div><div id="g2"></div><div id="g3"></div><img src="imgs/arrow-25-24.png" class="arrow3" id="arrow3-right"/>');
                     if ($values.length > 3) {
                         $('.arrow3').eq(1).show();
                     }
@@ -229,7 +206,7 @@ function draw_gages(direction) {
         current_direction++;
         $.ajax({
             type: "GET",
-            url: api_folder+"top/country?collection=" + collection_param + "&q=" + query_param + "&concepts=" + concept_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param+ "&since=" + since_param + "&until=" + until_param,
+            url: api_folder + "top/country?collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
             dataType: "json",
             success: function (json) {
                 var $values = json.values;
@@ -379,7 +356,7 @@ function draw_gages(direction) {
         current_direction--;
         $.ajax({
             type: "GET",
-            url: api_folder+"top/country?collection=" + collection_param + "&q=" + query_param + "&concepts=" + concept_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param+ "&since=" + since_param + "&until=" + until_param,
+            url: api_folder + "top/country?collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
             dataType: "json",
             success: function (json) {
                 var $values = json.values;

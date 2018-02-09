@@ -16,13 +16,11 @@ var sort_param = gup('sort');
 var original_param = gup('original');
 var type_param = gup('type');
 var topic_param = gup('topics').replace(/%20/g, ' ');
-var concept_param = gup('concepts').replace(/%20/g, ' ');
 var query_param = gup('query').replace(/%20/g, ' ');
 var source_param = gup('source');
 var since_param = parseInt(gup('since'));
 var until_param = parseInt(gup('until'));
 var section_param = gup('section');
-var translation_param = gup('translation');
 var view_param = gup("view");
 var language_since;
 var language_until;
@@ -152,7 +150,7 @@ $.ajax({
                 onFinish: function (e) {
                     since_param = e.from * 1000;
                     until_param = e.to * 1000;
-                    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+                    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
 
                     if ($('.page').data('id') === "Feed") {
                         $("#loading").show();
@@ -238,7 +236,7 @@ $.ajax({
                     interval();
                 }
             }
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
         }
     },
     error: function () {
@@ -312,7 +310,7 @@ $(function () {
                     }
                     section_param = "feed";
                     pagelocation = "latest";
-                    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+                    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
                     $("#tiles").empty();
                     $("#main").show(0);
                     $("#loading").show();
@@ -349,7 +347,7 @@ $(function () {
                 $('#loadingbar').hide().css('width', '0%');
                 section_param = "dashboard";
                 pagelocation = "dashboard";
-                window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+                window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
                 $("#tiles").empty();
                 $("#main").hide(0);
                 $("#end,#loadmore,#list_actions,#deleted_msg_user,#deleted_msg_post").hide();
@@ -369,7 +367,7 @@ $(function () {
                     show_active_users();
                     show_locations();
                     draw_hashtags("classic");
-                }, 900);//couse a little bit laggy
+                }, 900);//cause a little bit laggy
             }
         }
     });
@@ -391,7 +389,7 @@ $(function () {
             }
         }
         source_param = typearr.join(",");
-        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
         if ($('.page').data('id') === "Feed") {
             $("#loading").show();
             $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -429,7 +427,7 @@ $(function () {
             $(this).find('a').addClass('activelan');
             language_param = $(".sub1 .activelan").text().toLowerCase();
             language_param = language_param.substr(0, language_param.indexOf(' '));
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
             if ($('.page').data('id') === "Feed") {
                 $("#loading").show();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -467,7 +465,7 @@ $(function () {
             $('.sub2 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             sort_param = $(".sub2 .activelan").data('id');
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
             $("#loading").show();
             $('.informer').html("0").stop().animate({"opacity": "0"});
             $(window).unbind('.more_latest');
@@ -492,7 +490,7 @@ $(function () {
             $('.sub3 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             original_param = $(".sub3 .activelan").data('id').toLowerCase();
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
             if ($('.page').data('id') === "Feed") {
                 $("#loading").show();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -530,7 +528,7 @@ $(function () {
             $('.sub4 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             type_param = $(".sub4 .activelan").data('id');
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
             if ($('.page').data('id') === "Feed") {
                 $("#loading").show();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -569,7 +567,7 @@ $(function () {
             $('.sub6 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             unique_param = $(".sub6 .activelan").data('id');
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
             if ($('.page').data('id') === "Feed") {
                 $("#loading").show();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -608,7 +606,7 @@ $(function () {
             $('.sub5 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             topic_param = $(".sub5 .activelan").find('p').data('query');
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
             if ($('.page').data('id') === "Feed") {
                 $("#loading").show();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -638,45 +636,6 @@ $(function () {
             }
         }
     });
-    $("#settings").on("click", ".sub7", function (e) {
-        e.preventDefault();
-        if (!($(this).find('a').hasClass('activelan'))) {
-            abort();
-            $('#loadingbar').hide().css('width', '0%');
-            $('.sub7 a').removeClass('activelan');
-            $(this).find('a').addClass('activelan');
-            concept_param = $(".sub7 .activelan").find('p').text();
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
-            if ($('.page').data('id') === "Feed") {
-                $("#loading").show();
-                $('.informer').html("0").stop().animate({"opacity": "0"});
-                $(window).unbind('.more_latest');
-                if (view_param === "list") {
-                    $(".list_table tbody").empty();
-                    $(".well,#end,#posts_info,#download_icon").hide();
-                    parse_latest_list(1);
-                }
-                else {
-                    $("#tiles").empty();
-                    $("#main").height(0);
-                    $("#end,#loadmore,#posts_info").hide();
-                    parse_latest(1);
-                }
-            }
-            else {
-                $("#load1,#load2,#load3,#load4,#load5,#load6,.load0").show();
-                $('#chart_line, .minitext, #chart_pie, #heatmap, #users_locations, #active_users, #tags').animate({opacity: 0.4}, 400);
-                show_heatmap();
-                show_stats();
-                draw_social_mix(0, $('.activestat').attr('id'));
-                draw_timeline();
-                show_locations();
-                show_active_users();
-                draw_hashtags("classic");
-            }
-        }
-    });
-
     $('.lb-outerContainer, .lb-dataContainer').hover(function () {
         $('.lb-dataContainer').stop().animate({
             "opacity": 1
@@ -1018,28 +977,7 @@ function minutes() {
         var range = "minutes";
         var time = $('#tiles').find('li').eq(0).attr('data-time');
         if (typeof time === "undefined") {
-            switch (translation_param) {
-                case "en":
-                    $("#update_field").html("Last item in current view: -");
-                    break;
-                case "el":
-                    $("#update_field").html("Τελαυταία Δημοσίευση: -");
-                    break;
-                case "it":
-                    $("#update_field").html("Ultimo messaggio: -");
-                    break;
-                case "tr":
-                    $("#update_field").html("Bu görüntüleme için son öğe: -");
-                    break;
-                case "es":
-                    $("#update_field").html("Último mensaje: -");
-                    break;
-                case "ca":
-                    $("#update_field").html("Darrer element en la vista actual: -");
-                    break;
-                default:
-                    $("#update_field").html("Last item in current view: -");
-            }
+            $("#update_field").html("Last item in current view: -");
         }
         else {
             var seconds = parseInt(new Date().getTime() / 1000);
@@ -1048,79 +986,16 @@ function minutes() {
 
             if (now > 60) {
                 now = Math.floor(now / 60);
-                switch (translation_param) {
-                    case "en":
-                        range = "hours";
-                        break;
-                    case "el":
-                        range = "ώρες";
-                        break;
-                    case "it":
-                        range = "ore";
-                        break;
-                    case "tr":
-                        range = "saatler";
-                        break;
-                    case "es":
-                        range = "horas";
-                        break;
-                    case "ca":
-                        range = "hores";
-                        break;
-                    default:
-                        range = "hours";
-                }
+                range = "hours";
                 if (now > 24) {
                     now = Math.floor(now / 24);
-                    switch (translation_param) {
-                        case "en":
-                            range = "days";
-                            break;
-                        case "el":
-                            range = "μέρες";
-                            break;
-                        case "it":
-                            range = "giorni";
-                            break;
-                        case "tr":
-                            range = "günler";
-                            break;
-                        case "es":
-                            range = "días";
-                            break;
-                        case "ca":
-                            range = "dies";
-                            break;
-                        default:
-                            range = "days";
-                    }
+                    range = "days";
                 }
             }
             if (now < 0) {
                 now = 0;
             }
-            switch (translation_param) {
-                case "en":
-                    $("#update_field").html("Last item in current view:&nbsp;" + now + "&nbsp;" + range + " ago");
-                    break;
-                case "el":
-                    $("#update_field").html("Τελευταία Δημοσίευση:&nbsp;" + now + "&nbsp;" + range + " πριν");
-                    break;
-                case "it":
-                    $("#update_field").html("Ultimo messaggio:&nbsp;" + now + "&nbsp;" + range + " fa");
-                    break;
-                case "tr":
-                    $("#update_field").html("Bu görüntüleme için son öğe:&nbsp;" + now + "&nbsp;" + range + " önce");
-                    break;
-                case "es":
-                    $("#update_field").html("Último mensaje:&nbsp;" + now + "&nbsp;" + range + " hace");
-                    break;
-                case "ca":
-                    $("#update_field").html("Darrer element en la vista actual:&nbsp;" + now + "&nbsp;" + range + " fa");
-                    break;
-                default:
-                    $("#update_field").html("Last item in current view:&nbsp;" + now + "&nbsp;" + range + " ago");
-            }
+            $("#update_field").html("Last item in current view:&nbsp;" + now + "&nbsp;" + range + " ago");
         }
     }, 1000);
 }
@@ -1141,10 +1016,10 @@ function interval() {
             titlelast = titletop;
         }
         until_param = +moment().format("X") * 1000;
-        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
         $.ajax({
             type: "GET",
-            url: api_folder + "items?collection=" + collection_param + "&concepts=" + concept_param + "&q=" + query_param + "&nPerPage=12&pageNumber=1&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+            url: api_folder + "items?collection=" + collection_param + "&q=" + query_param + "&nPerPage=12&pageNumber=1&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
             dataType: "json",
             success: function (json) {
                 if (pagelocation === "latest") {
@@ -1229,13 +1104,7 @@ function open_slider() {
 }
 
 $('#logo h1,#back_icon').click(function () {
-    if (translation_param !== "en") {
-        window.location.href = "index.html?user_id=" + user_id + "&translation=" + translation_param;
-    }
-    else {
-        window.location.href = "index.html?user_id=" + user_id;
-    }
-
+    window.location.href = "index.html?user_id=" + user_id;
 });
 function gup(name) {
     name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
@@ -1271,7 +1140,7 @@ $('#gallery_icon,#list_icon').click(function () {
         }
         abort();
         $('#loadingbar').hide().css('width', '0%');
-        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
 
         $("#loading").show();
         $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -1303,7 +1172,7 @@ $('.itemsPerPage span').click(function () {
 });
 $('.icon-clear').click(function () {
     query_param = "";
-    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&concepts=" + concept_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param + "&translation=" + translation_param);
+    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
     document.getElementById("query").value = "";
     $("#ff-search").find("input[type='text']").removeClass("searchon");
     $(this).hide();
@@ -1340,29 +1209,7 @@ $('#download_icon').click(function () {
     var pagesize = $('.active_items').text();
     var $page_desc = $('#page_desc');
     $('#file_name').val($('#collection').text() + '_' + page + '_' + pagesize);
-    switch (translation_param) {
-        case "en":
-            $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
-            break;
-        case "el":
-            $page_desc.text("(σελίδα:" + page + ", μέγεθος:" + pagesize + ")");
-            break;
-        case "it":
-            $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
-            break;
-        case "tr":
-            $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
-            break;
-        case "es":
-            $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
-            break;
-        case "ca":
-            $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
-            break;
-        default:
-            $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
-            break;
-    }
+    $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
     $('#download_modal').reveal();
 });
 
@@ -1375,145 +1222,6 @@ $(".btn-group").on("click", ".btn-default", function (e) {
     }
     $('.btn-group').find('button').removeClass('btn-primary').addClass('btn-default');
     $(this).addClass('btn-primary').removeClass('btn-default');
-});
-$("#tiles").on("click", ".translation_p", function () {
-    var $this = $(this);
-    if ($this.hasClass('original')) {
-        var pair = $this.attr('data-pair');
-        switch (translation_param) {
-            case "en":
-                $this.text('Show in original');
-                break;
-            case "el":
-                $this.text('Δείτε το πρωτότυπο');
-                break;
-            case "it":
-                $this.text('Show in original');
-                break;
-            case "tr":
-                $this.text('Show in original');
-                break;
-            case "es":
-                $this.text('Show in original');
-                break;
-            case "ca":
-                $this.text('Show in original');
-                break;
-            default:
-                $this.text('Show in original');
-                break;
-        }
-        $this.removeClass('original');
-        $this.siblings('.title').addClass('blur');
-        $.ajax({
-            type: "GET",
-            url: "http://translate.linguatec.org/TranslationService/Translate.asmx/translate?language_pair=" + pair + "&text=" + encodeURIComponent($this.attr('data-original')),
-            dataType: "json",
-            success: function (json) {
-                $this.siblings('.title').text(json.translation);
-                $this.siblings('.title').removeClass('blur');
-                $(window).trigger('resize');
-            },
-            async: true
-        });
-    }
-    else {
-        switch (translation_param) {
-            case "en":
-                $this.text('See translation');
-                break;
-            case "el":
-                $this.text('Δείτε τη μετάφραση');
-                break;
-            case "it":
-                $this.text('See translation');
-                break;
-            case "tr":
-                $this.text('See translation');
-                break;
-            case "es":
-                $this.text('See translation');
-                break;
-            case "ca":
-                $this.text('See translation');
-                break;
-            default:
-                $this.text('See translation');
-                break;
-        }
-        $this.siblings('.title').text($this.attr('data-original'));
-        $this.addClass('original');
-        $(window).trigger('resize');
-    }
-});
-$("#list_table").on("click", ".translation_p_list", function (e) {
-    e.stopPropagation();
-    var $this = $(this);
-    if ($this.hasClass('original')) {
-        var pair = $this.attr('data-pair');
-        switch (translation_param) {
-            case "en":
-                $this.text('Show in original');
-                break;
-            case "el":
-                $this.text('Δείτε το πρωτότυπο');
-                break;
-            case "it":
-                $this.text('Show in original');
-                break;
-            case "tr":
-                $this.text('Show in original');
-                break;
-            case "es":
-                $this.text('Show in original');
-                break;
-            case "ca":
-                $this.text('Show in original');
-                break;
-            default:
-                $this.text('Show in original');
-                break;
-        }
-        $this.removeClass('original');
-        $this.parent('.list_title').addClass('blur');
-        $.ajax({
-            type: "GET",
-            url: "http://translate.linguatec.org/TranslationService/Translate.asmx/translate?language_pair=" + pair + "&text=" + encodeURIComponent($this.attr('data-original')),
-            dataType: "json",
-            success: function (json) {
-                $this.parent('.list_title').removeClass('blur');
-                $this.siblings('.text_title').text(json.translation);
-            },
-            async: true
-        });
-    }
-    else {
-        switch (translation_param) {
-            case "en":
-                $this.text('See translation');
-                break;
-            case "el":
-                $this.text('Δείτε τη μετάφραση');
-                break;
-            case "it":
-                $this.text('See translation');
-                break;
-            case "tr":
-                $this.text('See translation');
-                break;
-            case "es":
-                $this.text('See translation');
-                break;
-            case "ca":
-                $this.text('See translation');
-                break;
-            default:
-                $this.text('See translation');
-                break;
-        }
-        $this.siblings('.text_title').text($this.attr('data-original'));
-        $this.addClass('original');
-    }
 });
 $("#list_table").on("click", ".list_title", function () {
     window.open($(this).attr('data-redirect'), '_blank');
@@ -1629,111 +1337,18 @@ $("#tiles").on("click", ".remove_but", function () {
     var $tiles_li = $('#tiles > li');
     var $posts_info = $('#posts_info');
     var total_items = $posts_info.text().split(' ')[0] - count_items;
-    switch (translation_param) {
-        case "en":
-            switch (sort_param) {
-                case "recency":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                    break;
-                case "popularity":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                    break;
-                case "relevance":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                    break;
-                default:
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-            }
+    switch (sort_param) {
+        case "recency":
+            $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
             break;
-        case "el":
-            switch (sort_param) {
-                case "recency":
-                    $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο προσφάτων.');
-                    break;
-                case "popularity":
-                    $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο δημοφιλή.');
-                    break;
-                case "relevance":
-                    $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο σχετικών.');
-                    break;
-                default:
-                    $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή 1 - ' + $tiles_li.length + '</span> πιο προσφάτων.');
-            }
+        case "popularity":
+            $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
             break;
-        case "it":
-            switch (sort_param) {
-                case "recency":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                    break;
-                case "popularity":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                    break;
-                case "relevance":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                    break;
-                default:
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-            }
-            break;
-        case "tr":
-            switch (sort_param) {
-                case "recency":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                    break;
-                case "popularity":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                    break;
-                case "relevance":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                    break;
-                default:
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-            }
-            break;
-        case "es":
-            switch (sort_param) {
-                case "recency":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                    break;
-                case "popularity":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                    break;
-                case "relevance":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                    break;
-                default:
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-            }
-            break;
-        case "ca":
-            switch (sort_param) {
-                case "recency":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                    break;
-                case "popularity":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                    break;
-                case "relevance":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                    break;
-                default:
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-            }
+        case "relevance":
+            $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
             break;
         default:
-            switch (sort_param) {
-                case "recency":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-                    break;
-                case "popularity":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most popular.');
-                    break;
-                case "relevance":
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most relevant.');
-                    break;
-                default:
-                    $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
-            }
+            $posts_info.html(total_items + ' posts. Showing 1 - ' + $tiles_li.length + '</span> most recent.');
     }
     $(window).trigger('resize');
 });
@@ -1973,111 +1588,18 @@ $('#exclude_user_list').click(function () {
             var pagesize = $('.active_items').text();
             var start_gap = ((page - 1) * pagesize) + 1;
 
-            switch (translation_param) {
-                case "en":
-                    switch (sort_param) {
-                        case "recency":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                            break;
-                        case "popularity":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
-                            break;
-                        case "relevance":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
-                            break;
-                        default:
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                    }
+            switch (sort_param) {
+                case "recency":
+                    $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
                     break;
-                case "el":
-                    switch (sort_param) {
-                        case "recency":
-                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο προσφάτων.');
-                            break;
-                        case "popularity":
-                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο δημοφιλή.');
-                            break;
-                        case "relevance":
-                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο σχετικών.');
-                            break;
-                        default:
-                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο προσφάτων.');
-                    }
+                case "popularity":
+                    $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
                     break;
-                case "it":
-                    switch (sort_param) {
-                        case "recency":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                            break;
-                        case "popularity":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
-                            break;
-                        case "relevance":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
-                            break;
-                        default:
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                    }
-                    break;
-                case "tr":
-                    switch (sort_param) {
-                        case "recency":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                            break;
-                        case "popularity":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
-                            break;
-                        case "relevance":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
-                            break;
-                        default:
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                    }
-                    break;
-                case "es":
-                    switch (sort_param) {
-                        case "recency":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                            break;
-                        case "popularity":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
-                            break;
-                        case "relevance":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
-                            break;
-                        default:
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                    }
-                    break;
-                case "ca":
-                    switch (sort_param) {
-                        case "recency":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                            break;
-                        case "popularity":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
-                            break;
-                        case "relevance":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
-                            break;
-                        default:
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                    }
+                case "relevance":
+                    $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
                     break;
                 default:
-                    switch (sort_param) {
-                        case "recency":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                            break;
-                        case "popularity":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
-                            break;
-                        case "relevance":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
-                            break;
-                        default:
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                    }
+                    $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
             }
         },
         error: function () {
@@ -2131,115 +1653,19 @@ $('#exclude_item_list').click(function () {
             var page = $('#pagination_list').data('twbsPagination').getCurrentPage();
             var pagesize = $('.active_items').text();
             var start_gap = ((page - 1) * pagesize) + 1;
-
-            switch (translation_param) {
-                case "en":
-                    switch (sort_param) {
-                        case "recency":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                            break;
-                        case "popularity":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
-                            break;
-                        case "relevance":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
-                            break;
-                        default:
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                    }
+            switch (sort_param) {
+                case "recency":
+                    $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
                     break;
-                case "el":
-                    switch (sort_param) {
-                        case "recency":
-                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο προσφάτων.');
-                            break;
-                        case "popularity":
-                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο δημοφιλή.');
-                            break;
-                        case "relevance":
-                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο σχετικών.');
-                            break;
-                        default:
-                            $posts_info.html(total_items + ' δημοσιεύσεις. Προβολή ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> πιο προσφάτων.');
-                    }
+                case "popularity":
+                    $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
                     break;
-                case "it":
-                    switch (sort_param) {
-                        case "recency":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                            break;
-                        case "popularity":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
-                            break;
-                        case "relevance":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
-                            break;
-                        default:
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                    }
-                    break;
-                case "tr":
-                    switch (sort_param) {
-                        case "recency":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                            break;
-                        case "popularity":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
-                            break;
-                        case "relevance":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
-                            break;
-                        default:
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                    }
-                    break;
-                case "es":
-                    switch (sort_param) {
-                        case "recency":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                            break;
-                        case "popularity":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
-                            break;
-                        case "relevance":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
-                            break;
-                        default:
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                    }
-                    break;
-                case "ca":
-                    switch (sort_param) {
-                        case "recency":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                            break;
-                        case "popularity":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
-                            break;
-                        case "relevance":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
-                            break;
-                        default:
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                    }
+                case "relevance":
+                    $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
                     break;
                 default:
-                    switch (sort_param) {
-                        case "recency":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                            break;
-                        case "popularity":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most popular.');
-                            break;
-                        case "relevance":
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most relevant.');
-                            break;
-                        default:
-                            $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
-                    }
+                    $posts_info.html(total_items + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('tbody tr:visible').length - 1) + '</span> most recent.');
             }
-
-
         },
         error: function () {
         }
@@ -2324,53 +1750,6 @@ function pad(n) {
 var orderextraction = function (node) {
     return node.getAttribute('data-order');
 };
-$(function () {
-    $.ajax({
-        url: 'language.xml',
-        success: function (xml) {
-            $(xml).find('translation').each(function () {
-                var id = $(this).attr('id');
-                var text = $(this).find(translation_param).text();
-                if (text) {
-                    $('*[data-lang=' + id + ']').html(text);
-                }
-            });
-        },
-        async: false
-    });
-    var $query = $('#query');
-    var $file_name = $('#file_name');
-    switch (translation_param) {
-        case "en":
-            $query.attr("placeholder", "Search...");
-            $file_name.attr("placeholder", "Name your file...");
-            break;
-        case "el":
-            $query.attr("placeholder", "Αναζήτηση...");
-            $file_name.attr("placeholder", "Ονόμασε το αρχείο...");
-            break;
-        case "it":
-            $query.attr("placeholder", "Cerca...");
-            $file_name.attr("placeholder", "Name your file...");
-            break;
-        case "tr":
-            $query.attr("placeholder", "Ara...");
-            $file_name.attr("placeholder", "Name your file...");
-            break;
-        case "es":
-            $query.attr("placeholder", "Ara...");
-            $file_name.attr("placeholder", "Name your file...");
-            break;
-        case "ca":
-            $query.attr("placeholder", "Cerca...");
-            $file_name.attr("placeholder", "Name your file...");
-            break;
-        default:
-            $query.attr("placeholder", "Search...");
-            $file_name.attr("placeholder", "Name your file...");
-            break;
-    }
-});
 function unique(list) {
     var result = [];
     $.each(list, function (i, e) {

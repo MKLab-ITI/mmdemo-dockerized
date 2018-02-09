@@ -19,7 +19,8 @@
     <link rel="stylesheet" href="css/feed/foundation.css">
     <link rel="stylesheet" href="css/index/main.css">
     <link rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.css'/>
-    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.17.4/mapbox-gl-draw.css'/>
+    <link rel='stylesheet'
+          href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.17.4/mapbox-gl-draw.css'/>
     <!--END CSS -->
 
 </head>
@@ -36,8 +37,8 @@
             <div class="header_menu">
                 <h2 class="header">Social Tracker</h2>
                 <ul id="mainmenu" class="right">
-                    <li data-lang="menu_discover">Discover</li>
-                    <li data-lang="menu_browse">Browse</li>
+                    <li>Discover</li>
+                    <li>Browse</li>
                 </ul>
             </div>
         </div>
@@ -46,16 +47,16 @@
 <section class="second-section">
     <div class="row bigWidth">
         <div class="small-12 medium-12 large-6 columns">
-            <h2 class="text_white"><span data-lang="section1_search">Search </span><span class="text_blue">#</span>,
-                <span data-lang="section1_monitor">Monitor </span><span class="text_blue">@</span><br>
-                <span class="text-blue text-medium change-text" data-lang="section1_networks">in Social Networks</span>
+            <h2 class="text_white">Search <span class="text_blue">#</span>,
+                Monitor <span class="text_blue">@</span><br>
+                <span class="text-blue text-medium change-text">in Social Networks</span>
             </h2>
 
-            <p class="description"><span data-lang="section1_description">Track & inform about the latest environmental issues</span>,
-                <span class="text_blue" data-lang="section1_description_2">real time</span>
+            <p class="description">Track & inform about the latest environmental issues,
+                <span class="text_blue">real time</span>
             </p>
 
-            <div class="btn-primary" id="discover"><span data-lang="menu_discover">Discover</span></div>
+            <div class="btn-primary" id="discover">Discover</div>
         </div>
         <div class="small-12 medium-12 large-6 columns" style="overflow:hidden">
             <div id="data-orbit-section">
@@ -96,12 +97,11 @@
     <div id="particles-js">
         <div class="row bigWidth">
             <div class="small-12 medium-12 large-12 columns">
-                <h3 class="text_title" id="start_col_heading"><span
-                        data-lang="section2_title_start">What do you want to</span>
-                    <span class="text_blue" data-lang="section2_title_start_2"> monitor?</span></h3>
+                <h3 class="text_title" id="start_col_heading">What do you want to
+                    <span class="text_blue"> monitor?</span></h3>
 
                 <h3 class="text_title" id="edit_col_heading"><span
-                        data-lang="section2_title_edit">Improve your collection: </span>
+                        >Improve your collection: </span>
                     <span class="text_blue" id="edit_col_name"></span></h3>
             </div>
             <div id="name_section" class="small-12 medium-12 large-12 columns ontop">
@@ -109,7 +109,7 @@
 
                 <div class="input-field" style="padding-bottom: 10px">
                     <input id="interest" class="user_input" type="text" autocomplete="off" placeholder="">
-                    <label for="interest" data-lang="section2_input_collection">Collection Name</label>
+                    <label for="interest">Collection Name</label>
                     <img class="search_icon" src="imgs/enter-gray.png" id="enter_icon" alt="search">
                 </div>
                 <div id="col_name"></div>
@@ -119,13 +119,13 @@
 
                 <div class="input-field">
                     <input id="hashtag" class="user_input" type="text" autocomplete="off" placeholder="">
-                    <label for="hashtag" data-lang="section2_input_tags">Type your Tags</label>
+                    <label for="hashtag">Type your Tags</label>
                     <img class="search_icon" src="imgs/search-gray.png" id="search_icon_1" alt="search">
                 </div>
-                <p class="advanced" id="advanced_tag_search" data-lang="section2_adv_tags">Advanced Tags</p>
+                <p class="advanced" id="advanced_tag_search">Advanced Tags</p>
 
                 <div id="examples_1" class="examples">
-                    <p data-lang="section2_examples">Examples:</p>
+                    <p>Examples:</p>
                     <ul>
                         <li>pollution</li>
                         <li>overpopulation</li>
@@ -134,7 +134,7 @@
                     </ul>
                 </div>
                 <div class="info" id="max_tags">
-                    <strong data-lang="section2_info">Info: </strong><span data-lang="section2_max_tags">Max number (20) of tags reached.</span>
+                    <strong>Info: </strong>Max number (20) of tags reached.
                 </div>
                 <div id="user_tags">
                     <ul id="tags" class="tags"></ul>
@@ -145,40 +145,33 @@
 
                 <div class="input-field" id="Twitter_input">
                     <input id="user_Twitter" class="user_input" type="text" autocomplete="off" placeholder="">
-                    <label for="user_Twitter" data-lang="section2_input_Twitter">Type your Users from Twitter</label>
+                    <label for="user_Twitter">Type your Users from Twitter</label>
                     <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
                 </div>
                 <div class="input-field" id="GooglePlus_input">
                     <input id="user_GooglePlus" class="user_input" type="text" autocomplete="off" placeholder="">
-                    <label for="user_GooglePlus" data-lang="section2_input_GooglePlus">Type your Users from
+                    <label for="user_GooglePlus">Type your Users from
                         GooglePlus</label>
                     <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
                 </div>
                 <div class="input-field" id="Facebook_input">
                     <input id="user_Facebook" class="user_input" type="text" autocomplete="off" placeholder="">
-                    <label for="user_Facebook" data-lang="section2_input_Facebook">Type your Users from
+                    <label for="user_Facebook">Type your Users from
                         Facebook</label>
                     <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
                 </div>
-                <!--<div class="input-field" id="Instagram_input">
-                    <input id="user_Instagram" class="user_input" type="text" autocomplete="off" placeholder="">
-                    <label for="user_Instagram" data-lang="section2_input_Instagram">Type your Users from
-                        Instagram</label>
-                    <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
-                    <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
-                </div>-->
                 <div class="input-field" id="Youtube_input">
                     <input id="user_Youtube" class="user_input" type="text" autocomplete="off" placeholder="">
-                    <label for="user_Youtube" data-lang="section2_input_Youtube">Type your Users from Youtube</label>
+                    <label for="user_Youtube">Type your Users from Youtube</label>
                     <img class="search_icon users_icon" src="imgs/search-gray.png" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
                 </div>
                 <div class="input-field" id="RSS_input">
                     <input id="user_RSS" class="user_input" type="text" autocomplete="off" placeholder="">
-                    <label for="user_RSS" data-lang="section2_input_RSS">Type your RSS</label>
+                    <label for="user_RSS">Type your RSS</label>
                     <img class="search_icon users_icon" src="imgs/search-gray.png" id="search_icon_3" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
 
@@ -193,14 +186,13 @@
                     <span class="ff-filter-users ff-type-twitter-users open" id="Twitter"></span>
                     <span class="ff-filter-users ff-type-google-users close" id="GooglePlus"></span>
                     <span class="ff-filter-users ff-type-facebook-users close" id="Facebook"></span>
-                    <!--<span class="ff-filter-users ff-type-instagram-users close" id="Instagram"></span>-->
                     <span class="ff-filter-users ff-type-youtube-users close" id="Youtube"></span>
                     <span class="ff-filter-users ff-type-rss-users close" id="RSS"></span>
                 </div>
-                <p class="advanced" id="advanced_user_search" data-lang="section2_adv_search">Users suggestion</p>
+                <p class="advanced" id="advanced_user_search">Users suggestion</p>
 
                 <div class="examples">
-                    <p data-lang="section2_examples">Examples:</p>
+                    <p>Examples:</p>
                     <ul>
                         <li id="example_1">Greenpeace<img class="examples_icon"
                                                           src="imgs/twitter-16-black.png"></li>
@@ -208,37 +200,34 @@
                                                    src="imgs/google+-16-black.png"></li>
                         <li id="example_3">CapeNature<img class="examples_icon"
                                                           src="imgs/facebook-16-black.png"></li>
-                        <!--<li class="example_4" id="example_4">green4ema<img class="examples_icon"
-                                                                           src="imgs/instagram-16-black.png"></li>-->
                     </ul>
                 </div>
                 <div class="info" id="max_users">
-                    <strong data-lang="section2_info">Info: </strong><span data-lang="section2_max_users">Max number (100) of users reached.</span>
+                    <strong>Info: </strong>Max number (100) of users reached.
                 </div>
                 <div id="user_users">
                     <ul id="users" class="tags"></ul>
                 </div>
             </div>
             <div id="advanced_user" class="small-12 medium-12 large-12 columns ontop">
-                <p class="advanced_p" data-lang="section2_adv_search">Users suggestion</p>
+                <p class="advanced_p">Users suggestion</p>
 
                 <div class="ff-filter-holder_adv">
                     <span class="ff-filter-users_adv ff-type-twitter-users open_adv" id="adv_Twitter"></span>
                     <span class="ff-filter-users_adv ff-type-google-users open_adv" id="adv_GooglePlus"></span>
                     <span class="ff-filter-users_adv ff-type-facebook-users open_adv" id="adv_Facebook"></span>
-                    <!--<span class="ff-filter-users_adv ff-type-instagram-users open_adv" id="adv_Instagram"></span>-->
                     <span class="ff-filter-users_adv ff-type-youtube-users open_adv" id="adv_Youtube"></span>
                 </div>
                 <img id="text_user_icon" src="imgs/text_user.png" alt="text_user">
 
                 <div class="input-field" style="margin-top:0">
                     <input id="user_advanced" class="user_input" type="text" autocomplete="off" placeholder="">
-                    <label for="user_advanced" data-lang="section2_input_users_keyword">Type a keyword</label>
+                    <label for="user_advanced">Type a keyword</label>
                     <img class="search_icon" src="imgs/search-gray.png" id="search_icon_2" alt="search">
                     <img class="Typeahead-spinner" src="imgs/spinner.GIF" alt="spinner">
                 </div>
                 <div class="examples">
-                    <p data-lang="section2_examples">Examples:</p>
+                    <p>Examples:</p>
                     <ul>
                         <li id="example_5">Greenpeace<img class="examples_icon"
                                                           src="imgs/twitter-16-black.png"></li>
@@ -246,38 +235,37 @@
                                                    src="imgs/google+-16-black.png"></li>
                         <li id="example_7">CapeNature<img class="examples_icon"
                                                           src="imgs/facebook-16-black.png"></li>
-                        <!--<li class="example_4" id="example_8">green4ema<img class="examples_icon"
-                                                                           src="imgs/instagram-16-black.png"></li>-->
                     </ul>
                 </div>
                 <div class="info" id="max_users_advanced">
-                    <strong data-lang="section2_info">Info: </strong><span data-lang="section2_max_users">Max number (100) of users reached.</span>
+                    <strong>Info: </strong>Max number (100) of users reached.
                 </div>
-                <div id="adv_loading" data-lang="section2_advanced_loading">Please wait, this may take a few
+                <div id="adv_loading">Please wait, this may take a few
                     seconds...
                 </div>
                 <div id="user_users_adv">
                     <ul id="users_adv" class="tags"></ul>
-                    <p id="no_results" data-lang="section2_no_results">No results for this keyword</p>
+                    <p id="no_results">No results for this keyword</p>
                 </div>
                 <div id="users_images"></div>
-                <div class="btn_material action_button done" id="done_users"><img src="imgs/save-white_16.png"><span
-                        data-lang="section2_done_button">I'M DONE, SAVE CHANGES</span></div>
+                <div class="btn_material action_button done" id="done_users"><img src="imgs/save-white_16.png">I'M DONE,
+                    SAVE CHANGES
+                </div>
                 <div class="btn_material action_button cancel" id="cancel_users"><img
-                        src="imgs/cancel-white_16.png"><span data-lang="section2_cancel_button">CANCEL AND BACK</span>
+                        src="imgs/cancel-white_16.png">CANCEL AND BACK
                 </div>
             </div>
             <div id="advanced_tag" class="small-12 medium-12 large-12 columns ontop">
-                <p class="advanced_p" data-lang="section2_adv_tags">Advanced Tags</p>
+                <p class="advanced_p">Advanced Tags</p>
                 <img id="logic_icon" src="imgs/logic_32_gray.png" alt="text_user">
 
                 <div class="input-field" style="margin-top:0">
                     <input id="tag_advanced" class="user_input" type="text" autocomplete="off" placeholder="">
-                    <label for="tag_advanced" data-lang="section2_input_tags">Type your Tags</label>
+                    <label for="tag_advanced">Type your Tags</label>
                     <img class="search_icon" src="imgs/search-gray.png" id="search_icon_4" alt="search">
                 </div>
                 <div id="examples_2" class="examples">
-                    <p data-lang="section2_examples">Examples:</p>
+                    <p>Examples:</p>
                     <ul>
                         <li>pollution AND waste</li>
                         <li>plastic OR recycle</li>
@@ -285,17 +273,17 @@
                     </ul>
                 </div>
                 <div class="info" id="max_tags_advanced">
-                    <strong data-lang="section2_info">Info: </strong><span data-lang="section2_max_tags">Max number (20) of tags reached.</span>
+                    <strong>Info: </strong>Max number (20) of tags reached.
                 </div>
                 <div id="user_tags_adv">
                     <ul id="tags_adv" class="tags"></ul>
                 </div>
-                <p class="drag_area_title" data-lang="section2_dragzone_title">Enter tags, drag and format logical
+                <p class="drag_area_title">Enter tags, drag and format logical
                     expressions:</p>
 
                 <div id="actions_expression">
-                    <div class="round_button" id="add_expr" data-lang="section2_add_expr">Add</div>
-                    <div class="round_button" id="clear_expr" data-lang="section2_clear_expr">Clear</div>
+                    <div class="round_button" id="add_expr">Add</div>
+                    <div class="round_button" id="clear_expr">Clear</div>
                 </div>
                 <div id="drag_area">
                     <ul id="expression" class="list_tags"></ul>
@@ -310,23 +298,25 @@
                     <p id="not_add">+ NOT</p>
                 </div>
                 <div id="error_expr" class="error_expr">
-                    <strong data-lang="section2_error">Error: </strong><span></span>
+                    <strong>Error: </strong><span></span>
                 </div>
-                <div class="btn_material action_button done" id="done_tags"><img src="imgs/save-white_16.png"><span
-                        data-lang="section2_done_button">I'M DONE, SAVE CHANGES</span></div>
+                <div class="btn_material action_button done" id="done_tags"><img src="imgs/save-white_16.png">I'M DONE,
+                    SAVE CHANGES
+                </div>
                 <div class="btn_material action_button cancel" id="cancel_tags"><img
-                        src="imgs/cancel-white_16.png"><span data-lang="section2_cancel_button">CANCEL AND BACK</span>
+                        src="imgs/cancel-white_16.png">CANCEL AND BACK
                 </div>
             </div>
             <div id="map_input" class="small-12 medium-6 large-6 medium-offset-2 columns ontop">
                 <img id="location_icon" src="imgs/location-gray.png" alt="location">
+
                 <div class="input-field">
                     <input id="location_input" class="user_input" type="text" autocomplete="off" placeholder="">
-                    <label for="location_input" data-lang="section2_input_locations">Type your Locations</label>
+                    <label for="location_input">Type your Locations</label>
                     <img class="search_icon" src="imgs/search-gray.png" id="search_icon_5" alt="search">
                 </div>
                 <div id="examples_3" class="examples">
-                    <p data-lang="section2_examples">Examples:</p>
+                    <p>Examples:</p>
                     <ul>
                         <li>Stockholm</li>
                         <li>Crete</li>
@@ -334,42 +324,51 @@
                         <li>Barcelona</li>
                     </ul>
                 </div>
-                <div id="polygons_num"><span id="polygon_count">0</span> <span data-lang="section2_polygons">Polygon(s) created</span></div>
+                <div id="polygons_num"><span id="polygon_count">0</span> Polygon(s) created
+                </div>
                 <div class="info" id="max_locations">
-                    <strong data-lang="section2_info">Info: </strong><span data-lang="section2_max_locations">Max number (5) of locations reached.</span>
+                    <strong>Info: </strong>Max number (5) of locations reached.
                 </div>
                 <div class="error_expr error_expr_location">
-                    <strong data-lang="section2_error">Error: </strong><span data-lang="section2_error_geocode">We couldn't geocode this location.</span>
+                    <strong>Error: </strong>We couldn't geocode this location.
                 </div>
             </div>
             <div id="map_toggle" class="small-12 medium-2 large-2 columns ontop">
-                <h4 data-lang="section2_map">Open Map</h4>
+                <h4>Open Map</h4>
                 <input class="map_input map_input_skewed" id="map_button" type="checkbox"/>
                 <label class="tgl-btn" data-tg-off="OFF" data-tg-on="ON" for="map_button"></label>
             </div>
             <div id="map_desc" class="small-12 medium-12 large-12 columns ontop">
-                <p><span data-lang="section2_map_desc_1">Create polygons by clicking</span><button class=" example_but mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_polygon"></button><span data-lang="section2_map_desc_2">, and selecting points on the map. Note that the first and last point must define the same location, which completes the loop. Erase polygons by clicking</span><button class="example_but mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_trash"></button><span data-lang="section2_map_desc_3">. Editable polygons are shown with</span> <span style="color:#F26430" data-lang="section2_map_desc_4">red</span><span data-lang="section2_map_desc_5"> color. Defined polygons are shown with </span><span style="color:#088" data-lang="section2_map_desc_6">blue</span> <span data-lang="section2_map_desc_7">color. Select them to change state.</span></p>
+                <p>Create polygons by clicking
+                    <button class=" example_but mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_polygon"></button>
+                    , and selecting points on the map. Note that the first and last point must define the same location,
+                    which completes the loop. Erase polygons by clicking
+                    <button class="example_but mapbox-gl-draw_ctrl-draw-btn mapbox-gl-draw_trash"></button>
+                    . Editable polygons are shown with <span
+                            style="color:#F26430">red</span> color. Defined polygons are shown with <span
+                            style="color:#088">blue</span> color. Select them to change state.
+                </p>
             </div>
             <div id='map' class=""></div>
             <div id="start_buttons" class="small-12 medium-12 large-12 columns ontop">
                 <div class="btn_material action_button done deactivated" id="done_start"><img
-                        src="imgs/save-white_16.png"><span
-                        data-lang="section2_start_button">START COLLECTION</span></div>
-                <div class="btn_material action_button cancel" id="cancel_start"><img
-                        src="imgs/cancel-white_16.png"><span data-lang="section2_clear_button">CLEAR ALL</span>
+                        src="imgs/save-white_16.png">START COLLECTION</div>
+                <div class="btn_material action_button cancel" id="cancel_start">
+                    <img src="imgs/cancel-white_16.png">CLEAR ALL
                 </div>
                 <div class="error_expr error_expr_collection">
-                    <strong data-lang="section2_error">Error: </strong><span></span>
+                    <strong>Error: </strong><span></span>
                 </div>
             </div>
             <div id="edit_buttons" class="small-12 medium-12 large-12 columns ontop">
-                <div class="btn_material action_button done" id="done_edit"><img src="imgs/save-white_16.png"><span
-                        data-lang="section2_done_button">I'M DONE, SAVE CHANGES</span></div>
+                <div class="btn_material action_button done" id="done_edit"><img src="imgs/save-white_16.png">I'M DONE,
+                    SAVE CHANGES
+                </div>
                 <div class="btn_material action_button cancel" id="cancel_edit"><img
-                        src="imgs/cancel-white_16.png"><span data-lang="section2_cancel_button">CANCEL AND BACK</span>
+                        src="imgs/cancel-white_16.png">CANCEL AND BACK
                 </div>
                 <div class="error_expr error_expr_collection">
-                    <strong data-lang="section2_error">Error: </strong><span></span>
+                    <strong>Error: </strong><span></span>
                 </div>
             </div>
         </div>
@@ -383,7 +382,6 @@
                 <ul>
                     <li class="facebook_color"><img src="imgs/facebook-16.png" alt="icon" class="factory_img"></li>
                     <li class="twitter_color"><img src="imgs/twitter-16.png" alt="icon" class="factory_img"></li>
-                    <!--<li class="instagram_color"><img src="imgs/instagram-16.png" alt="icon" class="factory_img"></li>-->
                     <li class="google_color"><img src="imgs/google+-16.png" alt="icon" class="factory_img"></li>
                     <li class="flickr_color"><img src="imgs/flickr-16.png" alt="icon" class="factory_img"></li>
                     <li class="youtube_color"><img src="imgs/youtube-16-letter.png" alt="icon" class="factory_img"></li>
@@ -402,35 +400,32 @@
 <section class="fifth-section">
     <div class="row">
         <div class="small-12 medium-12 large-12 columns">
-            <h3 class="text_title_col" data-lang="section4_title">COLLECTIONS</h3>
+            <h3 class="text_title_col">COLLECTIONS</h3>
 
-            <p class="text_p" data-lang="section4_description">Browse all created collections, Inform on latest trending
+            <p class="text_p">Browse all created collections, Inform on latest trending
                 topics</p>
         </div>
     </div>
     <div class="row bigWidth">
         <div class="small-12 medium-12 large-12 columns">
             <div class="no_collections">
-                <h1><span data-lang="section4_no_collections_1">Create a</span> <span class="text_blue"
-                                                                                      data-lang="section4_no_collections_2">collection</span>
-                    <span data-lang="section4_no_collections_3">now and start exploring Social Media!</span></h1>
+                <h1>Create a <span class="text_blue">collection</span>
+                    now and start exploring Social Media!</h1>
 
-                <div class="btn_discover" data-lang="menu_discover">Discover</div>
+                <div class="btn_discover">Discover</div>
             </div>
             <div class="controls">
-                <div class="btn_material active" id="all" data-lang="section4_filter_all">ALL</div>
-                <div class="btn_material" id="running" data-lang="section4_filter_running">RUNNING
+                <div class="btn_material active" id="all">ALL</div>
+                <div class="btn_material" id="running">RUNNING
                 </div>
-                <div class="btn_material" id="stopped" data-lang="section4_filter_stopped">STOPPED
+                <div class="btn_material" id="stopped">STOPPED
                 </div>
             </div>
-            <p class="text_p" id="no_stopped"><span data-lang="section4_no_stopped_1">You haven't any</span> <span
-                    style="font-weight: bold;color: #E53D00;" data-lang="section4_no_stopped_2">stopped</span> <span
-                    data-lang="section4_no_stopped_3">collections!</span></p>
+            <p class="text_p" id="no_stopped">You haven't any <span
+                    style="font-weight: bold;color: #E53D00;">stopped</span> collections!</p>
 
-            <p class="text_p" id="no_running"><span data-lang="section4_no_stopped_1">You haven't any</span> <span
-                    style="font-weight: bold;color: #0A8754;" data-lang="section4_no_running_2">running</span> <span
-                    data-lang="section4_no_stopped_3">collections!</span></p>
+            <p class="text_p" id="no_running">You haven't any <span
+                    style="font-weight: bold;color: #0A8754;">running</span> collections!</p>
 
             <div id="collection_loader">
                 <div class="square_load"></div>
@@ -458,26 +453,14 @@
             <div class="logo_footer">
                 <div id="social_icons"></div>
 
-                <p style="margin: 15px 0 0 10px;"><span style="font-size:16px">©</span> 2015 <a class="text_blue"
-                                                                                                id="project_url"
-                                                                                                href="#"
-                                                                                                target="_blank"> Social
+                <p style="margin: 15px 0 10px 10px;"><span style="font-size:16px">©</span> 2015 <a class="text_blue"
+                                                                                                   id="project_url"
+                                                                                                   href="#"
+                                                                                                   target="_blank">
+                    Social
                     Tracker</a>.
 
-                    <span data-lang="footer_text">All rights reserved</span>.</p>
-
-                <div id="dropdown" class="ddmenu">
-                    <span id="lang">English</span>
-                    <span class="carret"></span>
-                    <ul>
-                        <li id="el">Ελληνικά</li>
-                        <li id="en">English</li>
-                        <li id="it">Italiano</li>
-                        <li id="tr">Türkçe</li>
-                        <li id="es">Español</li>
-                        <li id="ca">Català</li>
-                    </ul>
-                </div>
+                    All rights reserved.</p>
             </div>
         </div>
     </div>
@@ -562,25 +545,6 @@
         </div>
     </div>
 </script>
-<!--<script id="result-template_instagram" type="text/x-handlebars-template">
-    <div class="container_users">
-        <div style="display:none">{{id}}</div>
-        <div style="display:none">{{name}}</div>
-        <div class="background"
-             style="background-image: url(imgs/instagram-bg.jpg);left:0;background-position: 0 -27px;"></div>
-        <div class="content">
-            <div class="list_avatar">
-                <img src="{{profileImage}}" alt="list_avatar"
-                     style="border: 4px solid #ab7d63 ; box-shadow: 0 1px 1px rgba(0, 0, 0, .6), 0 -1px 0 #ab7d63 ;">
-            </div>
-            <div class="text">
-                <h4>{{emptyString name}}</h4>
-
-                <p>{{emptyString username}}</p>
-            </div>
-        </div>
-    </div>
-</script>-->
 <script id="result-template_youtube" type="text/x-handlebars-template">
     <div class="container_users">
         <div style="display:none">{{id}}</div>
@@ -612,9 +576,6 @@
 <script id="empty-template_facebook" type="text/x-handlebars-template">
     <div class="EmptyMessage">This username is not used in Facebook!</div>
 </script>
-<!--<script id="empty-template_instagram" type="text/x-handlebars-template">
-    <div class="EmptyMessage">This username is not used in Instagram!</div>
-</script>-->
 <script id="empty-template_youtube" type="text/x-handlebars-template">
     <div class="EmptyMessage">This username is not used in Youtube!</div>
 </script>
@@ -627,7 +588,6 @@
 <script src="js/index/jquery_drag.js"></script>
 <script src="js/config.js"></script>
 <script src="js/index/ajax_abort.js"></script>
-<script src="js/index/translate.js"></script>
 <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 <script src="js/index/network.js"></script>
 <script src="js/feed/jquery.wookmark.js"></script>
@@ -639,7 +599,8 @@
 <script src="js/index/typeahed.js"></script>
 <script src="js/index/autocomplete.js"></script>
 <script src='js/index/polylabel.js'></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOOPffhARnRWiCM2TyhJbHkmbDbpxrWec&libraries=places&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOOPffhARnRWiCM2TyhJbHkmbDbpxrWec&libraries=places&callback=initMap"
+        async defer></script>
 <!-- END JS -->
 </body>
 </html>

@@ -178,7 +178,6 @@ html, body {
     background-image: url("../../imgs/facebook-16.png")
 }
 
-
 .ff-type-google {
     background: #d34836;
     background-image: url("../../imgs/google+-16-black.png");
@@ -317,7 +316,7 @@ html, body {
 #collection {
     font: bold 12px/18px 'Roboto slab', sans-serif;
     padding: 5px 0;
-    background: #F47421;
+    background: #FF7D00;
     width: 240px;
     text-align: center;
     position: fixed;
@@ -787,7 +786,6 @@ html, body {
 .youtubecolor {
     background-color: #E12E34
 }
-
 
 .googlecolor {
     background-color: #d34836
@@ -2400,7 +2398,7 @@ html, body {
 }
 
 .done {
-    background-color: #47b8e5;
+    background-color: #37c1e9;
     margin-top: 20px;
 }
 

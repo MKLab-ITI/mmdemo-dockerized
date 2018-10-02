@@ -2,7 +2,7 @@ mmdemo-dockerized
 ===========================
 
 This project dockerizes the multimedia demo that can be used for the collection of social media items from multiple sources. The only prerequisite is a machine with a running
-instance of [Docker](https://docs.docker.com/engine/quickstart/) and [Docker Compose](https://docs.docker.com/compose/overview/). You can find a running instance of the demo in this [link](http://step-mklab.iti.gr). It uses Docker Compose to buddle all the services into the same [YAML file](https://github.com/MKLab-ITI/mmdemo-dockerized/blob/master/docker-compose.yml) and makes easier the deployment of the application.
+instance of [Docker](https://docs.docker.com/engine/quickstart/) and [Docker Compose](https://docs.docker.com/compose/overview/). It uses Docker Compose to buddle all the services into the same [YAML file](https://github.com/MKLab-ITI/mmdemo-dockerized/blob/master/docker-compose.yml) and makes easier the deployment of the application.
 
 The services that multimedia demo is built upon are the following:
 
@@ -10,7 +10,7 @@ The services that multimedia demo is built upon are the following:
 * [redis](http://redis.io/) - Redis is an open source, in-memory data structure store, used as database, cache and message broker. Used primarily as a publish/subscribe service between different components of the demo.
 * [mongodb](https://www.mongodb.com/) - MongoDB is an open-source, document database. Used to store items collected from social media platforms.  
 * [solr](http://lucene.apache.org/solr/) - Solr is the popular, blazing-fast, open source enterprise search platform built on Apache Lucene. Is used primarily for the indexing of the collected social media items.
-* [web](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/web-service) - This service consists of two parts: 1) A REST API used to provide access to the collected social media items and to expose several statistics related to them, and 2) the web interface of this [demo](http://step-mklab.iti.gr).
+* [web](https://github.com/MKLab-ITI/mmdemo-dockerized/tree/master/web-service) - This service consists of two parts: 1) A REST API used to provide access to the collected social media items and to expose several statistics related to them, and 2) the web interface of this demo.
 * [streammanager](https://github.com/MKLab-ITI/mklab-stream-manager) - Stream Manager monitors a set of seven social streams : Twitter, Facebook, Instagram, Google+, Flickr and Youtube to collect content relevant to a set of keywords, users or locations, by using the corresponding APIs that are provided from each platform.
 
 ![mmdemo architecture](https://raw.githubusercontent.com/MKLab-ITI/mmdemo-dockerized/master/mmdemo_arch.png)

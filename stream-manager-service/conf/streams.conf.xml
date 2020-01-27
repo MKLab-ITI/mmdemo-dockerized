@@ -85,14 +85,6 @@
       </Parameter>
     </Filter>
     <!-- EnvironmentalClassifier -->
-    <Filter id="EnvironmentalClassifier">
-      <Parameter name="Classpath">
-        <![CDATA[gr.iti.mklab.sfc.filters.EnvironmentalClassifier]]>
-      </Parameter>
-      <Parameter name="threshold">
-        <![CDATA[0.25]]>
-      </Parameter>
-    </Filter>
 		<Filter id="SwearFilter">
       <Parameter name="Classpath">
         <![CDATA[gr.iti.mklab.sfc.filters.SwearItemFilter]]>
@@ -236,17 +228,6 @@
          	<Parameter name="timeWindow"><![CDATA[15]]></Parameter>
        	</Stream>
 				-->
-
-    <!-- Google+ Stream Handler
-    	<Stream id="GooglePlus">
-   			<Parameter name="Classpath">
-          		<![CDATA[gr.iti.mklab.sfc.streams.impl.GooglePlusStream]]>
-          	</Parameter>
-         	<Parameter name="Key"><![CDATA[]]></Parameter>
-           	<Parameter name="maxRequests"><![CDATA[100]]></Parameter>
-         	<Parameter name="timeWindow"><![CDATA[15]]></Parameter>
-    	</Stream>
-      -->
     <!-- Instagram Stream Handler
       	<Stream id="Instagram">
           	<Parameter name="Classpath">

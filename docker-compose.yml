@@ -88,7 +88,7 @@ services:
   streammanager:
     build:
       context: stream-manager-service
-    image: streammanager:0.5
+    image: streammanager:lightweight
     volumes:
       - ./stream-manager-service/conf:/stream_manager/conf
     restart: always

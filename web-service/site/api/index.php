@@ -1325,6 +1325,10 @@ $app->post(
 
             $collection->status = "running";
 
+            if(!isset($collection->favorite)) {
+                $collection->favorite = false;
+            }
+
             if(isset($collection->polygons)) {
                 $locations = array();
                 foreach($collection->polygons as $plg) {
@@ -1388,6 +1392,7 @@ $app->post(
         $cid = $collection->_id;
 
         $previousCollection = $mongoDAO->getCollection($cid);
+
         if ($previousCollection != null) {
             if(isset($collection->accounts)) {
                 foreach($collection->accounts as $account) {
@@ -1480,6 +1485,44 @@ $app->post(
         echo json_encode($collection);
     }
 )->name("edit_collection");
+
+$app->post('/collection/:uid/:cid/favorite',
+    function ($uid, $cid) use($app, $mongoDAO) {
+        $request = $app->request();
+
+        $bodyJson = $request->getBody();
+        $body = json_decode($bodyJson);
+        $favorite =  $body->favorite;
+
+        if (is_bool($favorite) === false) {
+            echo json_encode(array(
+                'error' => "Favorite parameter is not boolean. Provide true or false!"
+            ));
+            return;
+        }
+
+        $collection = $mongoDAO->getCollection($cid);
+
+        if ($collection->ownerId !== $uid) {
+            echo json_encode(array(
+                'error' => "User $uid is not the owner"
+            ));
+            return;
+        }
+
+        if ($collection->favorite === $favorite) {
+            echo json_encode(array(
+                'error' => "Favorite is already $favorite"
+            ));
+            return;
+        }
+
+        $fieldsToUpdate = array('favorite' => $favorite);
+        $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
+
+        echo json_encode($fieldsToUpdate);
+
+    })->name('set_fav');
 
 $app->post(
     '/collection/:cid/excludeKeywords',

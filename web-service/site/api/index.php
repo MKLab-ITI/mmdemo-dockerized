@@ -187,6 +187,9 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
     $original = $request->get('original');
     $type = $request->get('type');
 
+    $min_relevance = $request->get('min_relevance');
+    $max_relevance = $request->get('max_relevance');
+
     $concept = $request->get('concepts');
     if($concept != null && $concept !== '' && $concept !== 'all') {
         $concept = "environment.$concept";
@@ -197,6 +200,8 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
     $sort = $request->get('sort');
 
     $query = $request->get('q');
+    $user = $request->get('user');
+
     $topicQuery = $request->get('topicQuery');
     if($topicQuery != null && $topicQuery != '*') {
         if($query == null) {
@@ -225,11 +230,13 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
         $owner_id = $collection['$ownerId'];
 
         if($collection != null) {
-
-            $judgements = $mongoDAO->getRelevanceJudgements($collectionId);
+            $judgements = null;
+            if ($min_relevance != null || $max_relevance != null) {
+                $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $min_relevance, $max_relevance);
+            }
 
             // query formulation
-            $q = $utils->formulateCollectionQuery($collection);
+            $collection_query = $utils->formulateCollectionQuery($collection);
 
             // Add filters if available
             $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
@@ -238,11 +245,11 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
 
             $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
-            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept, $nearLocations);
-            $results = $textIndex->searchItems($q, $pageNumber, $nPerPage,  $filters, $sort, $judgements, $unique, $query);
+            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
+                $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements, $concept, $nearLocations);
+            $results = $textIndex->searchItems($collection_query, $pageNumber, $nPerPage,  $filters, $sort, $unique, $query);
 
-            $facet = $textIndex->getFacet('language', $q, $filters, 100, true, null, $unique, null, 'fcs');
-            $facet = $facet['values'];
+            $facet = $textIndex->getFacet('language', $collection_query, $filters, 100, true, null, $unique, null, 'fcs');
         }
     }
     else {
@@ -257,11 +264,10 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             $query = $utils->formulateLogicalQuery($keywords);
             $query = "title:($query) OR description:($query)";
 
-            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null, null, null, null);
-            $results = $textIndex->searchItems($query, $pageNumber, $nPerPage,  $filters, $sort, null, $unique, $hl);
+            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null, $user, null, null, null);
+            $results = $textIndex->searchItems($query, $pageNumber, $nPerPage,  $filters, $sort, $unique, $hl);
 
             $facet = $textIndex->getFacet('language', $query, $filters, 100, true, null, $unique, null, 'fcs');
-            $facet = $facet['values'];
         }
     }
 
@@ -295,6 +301,7 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
         'nPerPage' => $nPerPage,
         'total' => $results['numFound'],
         'filters' => $filters,
+        'collection_query' => isset($collection_query) ? $collection_query : '',
         'languages' => $facet
     );
 
@@ -343,7 +350,8 @@ $app->get('/summary', function() use($mongoDAO, $textIndex, $utils, $app) {
             $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
             $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
             $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-            $filters = $utils->getFilters($since, $until, $source, 'original', $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+            $filters = $utils->getFilters($since, $until, $source, 'original', $type, $language, $query, null,
+                $itemsToExclude, $usersToExclude, $keywordsToExclude);
 
             $results = $textIndex->getSummary($q, $length,  $filters);
             foreach($results as $result) {
@@ -376,10 +384,14 @@ $app->get(
         $original = $request->get('original');
         $type = $request->get('type');
 
+        $user = $request->get('user');
+
         $concept = $request->get('concepts');
         if($concept != null && $concept !== '' && $concept !== 'all') {
             $concept = "environment.$concept";
         }
+
+        $judgements = array();
 
         $unique = $request->get('unique')==null ? false : $request->get('unique');
 
@@ -410,9 +422,12 @@ $app->get(
                         $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
                         $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
-                        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept, $nearLocations);
+                        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query,
+                            $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements,
+                            $concept, $nearLocations);
 
-                        $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique, $concept);
+                        $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude,
+                                null, $unique, $concept);
                         $facet = $memcached->get($requestHash);
                         if($facet == false || count($facet) < 2) {
                             $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, $prefix, $unique, null, 'fcs');
@@ -454,6 +469,8 @@ $app->get(
         $language = $request->get('language');
         $source = $request->get('source');
 
+        $user = $request->get('user');
+
         $unique = $request->get('unique')==null ? false : $request->get('unique');
 
         $query = $request->get('q');
@@ -477,7 +494,8 @@ $app->get(
                     $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
                     $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
-                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
+                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
+                        $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null, $nearLocations);
 
                     $facet = $textIndex->getFacet('topics', $collectionQuery, $filters, $n, false, "environment.", $unique, null, 'fcs');
 
@@ -547,7 +565,8 @@ $app->get(
                     $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
                     $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
-                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept, $nearLocations);
+                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, null,
+                        $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $concept, $nearLocations);
 
                     $facet = $textIndex->getFacet('uidFacet', $collectionQuery, $filters, $n, false, null, $unique, null, 'fcs');
 
@@ -628,76 +647,6 @@ $app->get(
                         return;
                     }
 
-                    /*
-                                        $q = $utils->formulateCollectionQuery($collection);
-
-                                        // Add filters if available
-                                        $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
-                                        $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-                                        $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-
-
-                                        $urls = array();
-                                        $filters = $utils->getFilters("*", "*", "all", "true", "text", null, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
-                                        $results = $textIndex->searchItems($q, 1, 500,  $filters, "popularity", array(), true, $query);
-                                        foreach($results['docs'] as $result) {
-                                            $item = $mongoDAO->getItem($result['id']);
-                                            if($item != null && isset($item['links'])) {
-                                                $urls = array_merge($urls, $item['links']);
-                                            }
-                                        }
-                                        $urls = array_unique($urls);
-                                        */
-
-
-
-                    /*
-                                       $i = 0;
-                                       $ch = curl_init();
-                                       curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                                       curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
-                                       curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
-                                       foreach($urls as $url) {
-                                           if (preg_match('/twitter.com/', $url) || preg_match('/fb.me/', $url)) {
-                                               continue;
-                                           }
-
-                                           try {
-                                               curl_setopt($ch, CURLOPT_URL, $url);
-                                               $html = curl_exec($ch);
-
-                                               $i = $i + 1;
-                                               if($i > 5) {
-                                                   break;
-                                               }
-
-
-                                               //$result = $readability->init();
-                                               //if ($result) {
-                                                   // display the title of the page
-                                               //    $articles[] = array(
-                                               //        'title' => $readability->getTitle()->textContent,
-                                               //        'content' => $readability->getContent()->textContent
-                                               //    );
-                                               //} else {
-                                               //    echo 'Looks like we couldn\'t find the content. :(';
-                                               //}
-                                           }
-                                           catch(Exception $e) {
-                                               continue;
-                                           }
-                                       }
-                                       curl_close($ch);
-
-
-                                       $articles[] = array('title' => 'Ciclista mexicana Ingid Drexel  en 34 en Mundial de Ruta', 'url'=> 'http://hablandodeviajes.com/murcia/ruta-ciclista-de-los-alcazares-a-la-manga',
-                                           'image' => 'http://i2.wp.com/www.deviajepormurcia.com/wp-content/uploads/Mar-Menor-Trip-Pic.jpg?resize=500%2C350',
-                                           'content' => 'Ciclista mexicana Ingid Drexel  en 34 en Mundial de Ruta\nPlata y bronce para taekwondoines mexicanos en Marruecos\nCiclista mexicana Ingid Drexel  en 34 en Mundial de Ruta\nLa mexicana Ingrid Drexel finalizó en el sitio 34 dentro del gran fondo del Campeonato Mundial de Ciclismo de Ruta, que tuvo lugar en esta ciudad noruega, donde la ganadora fue la holandesa Chantal...\nNotimex. 23.09.2017 - 19:21h\nLa mexicana Ingrid Drexel finalizó en el sitio 34 dentro del gran fondo del Campeonato Mundial de Ciclismo de Ruta, que tuvo lugar en esta ciudad noruega, donde la ganadora fue la holandesa Chantal Blaak.\nDrexel Clouthier, olímpica en Londres 2012 y quien milita en un equipo profesional en Estados Unidos, cruzó la meta a 28 segundos de Blaak, luego que esta detuvo el reloj en 4:06:30 horas, para dejar con la plata a la australiana Katrin Garfoot con 4:06:58.\nCon el bronce se quedó la danesa Amalie Dideriksen, con el mismo tiempo que la australiana al final de los 152.8 kilómetros de recorrido que hicieron las 153 pedalistas.');
-                                       $articles[] = array('title' => 'Ruta Ciclista de Los Alcázares a La Manga - blogs de Viajes', 'url'=> 'http://hablandodeviajes.com/murcia/ruta-ciclista-de-los-alcazares-a-la-manga',
-                                           'content' => 'Ruta Ciclista de Los Alcázares a La Manga\n-\nFuente: de viaje por murcia - Ver todas las noticias de este sitio\nRuta Ciclista de Los Alcázares a La Manga\nSe acerca el buen tiempo y salir a entrenar con bici es de lo más agradable sobre todo en esta zona del sureste español.\nHoy cogemos nuestro coche y nos vamos hasta la localidad de Los Alcázares en la orilla del mar Menor para hacer un recorrido hasta el final de la Manga y regresar de nuevo a Los Alcázares.\nSi hace un día soleado con un ligero viento de levante vamos a disfrutar de este recorrido enormemente.\nSalimos de los Alcázares con el Mar Menor a nuestra izquierda para dirigirnos a Los Urrutias. Podremos disfrutar de una zona donde se pueden ver aves migratorias como los Flamencos.\nAtravesamos Los Urrutias para ir hacia los Nietos, uno de los lugares de veraneo más típicos de los cartageneros que no salen de la Región en verano.\nAl salir de Los Nietos llegaremos a Los Belones para seguir adelante por carreteras que de servicio paralelas a la autovía Cartagena La Manga.\nNos queda pasar por el Camping Villas Caravaning para pasar de largo la entrada a Playa Honda y llegar a un cruce detrás de un circuito de Karts que tomaremos a la izquierda para pasar por las salinas ya abandonadas que nos sirven de.entrada a la Manga.\nEncuentra ofertas de viajes online con Rumbo y ven a disfrutar de las maravillas de esa ruta ciclista por el Mar Menor.');
-
-                           `           */
-
                     $memcached->set($requestHash, $articles, time() + 600);
                 }
             }
@@ -729,6 +678,8 @@ $app->get(
         $language = $request->get('language');
         $source = $request->get('source');
 
+        $user = $request->get('user');
+
         $unique = $request->get('unique')==null ? false : $request->get('unique');
 
         $query = $request->get('q');
@@ -751,7 +702,8 @@ $app->get(
                     $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
                     $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
-                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept, $nearLocations);
+                    $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
+                        $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $concept, $nearLocations);
 
                     $termsToExclude = preg_split("/[\s,]+/", $query);
                     $termsToExclude = array_map(function($k) {
@@ -814,6 +766,8 @@ $app->get(
         $language = $request->get('language');
         $source = $request->get('source');
 
+        $user = $request->get('user');
+
         $collectionId = $request->get('collection');
 
         $query = $request->get('q');
@@ -842,7 +796,9 @@ $app->get(
                 $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
                 $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
-                $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
+                $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query, $user,
+                    $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null, $nearLocations);
+
                 $q = $utils->formulateCollectionQuery($collection);
 
                 $points = $textIndex->get2DFacet('latlonRPT', $q, $filters, $minLat, $maxLat, $minLong, $maxLong);
@@ -870,6 +826,8 @@ $app->get(
         $type = $request->get('type');
         $language = $request->get('language');
         $source = $request->get('source');
+
+        $user = $request->get('user');
 
         $concept = $request->get('concepts');
         if($concept != null && $concept !== '' && $concept !== 'all') {
@@ -916,7 +874,9 @@ $app->get(
             $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
             $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
-            $filters = $utils->getFilters(($since==null?"*":$since), ($until==null?"*":$until), $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept, $nearLocations);
+            $filters = $utils->getFilters(($since==null?"*":$since), ($until==null?"*":$until),  $source, $original,
+                $type, $language, $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude,
+                null, $concept, $nearLocations);
 
             $q = $utils->formulateCollectionQuery($collection);
             if($since == null) {
@@ -926,7 +886,7 @@ $app->get(
                 $until = 1000*time();
             }
 
-            $requestHash = "timeline_$gap\_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique, $concept);
+            $requestHash = "timeline_$gap\_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $unique, $concept);
             $cachedTimeline = $memcached->get($requestHash);
             if($cachedTimeline != false) {
                 echo json_encode(array('timeline' => $cachedTimeline));
@@ -963,6 +923,8 @@ $app->get(
         $original = $request->get('original');
         $type = $request->get('type');
         $language = $request->get('language');
+
+        $user = $request->get('user');
 
         $concept = $request->get('concepts');
         if($concept != null && $concept !== '' && $concept !== 'all') {
@@ -1012,9 +974,10 @@ $app->get(
                 $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
                 $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
-                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept, $nearLocations);
+                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
+                    $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $concept, $nearLocations);
 
-                $requestHash = "stats_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique, $concept);
+                $requestHash = "stats_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $unique, $concept);
 
 
                 $cachedStatistics = $memcached->get($requestHash);
@@ -1069,6 +1032,8 @@ $app->get(
         $source = $request->get('source');
         $language = $request->get('language');
 
+        $user = $request->get('user');
+
         $concept = $request->get('concepts');
         if($concept != null && $concept !== '' && $concept !== 'all') {
             $concept = "environment.$concept";
@@ -1095,13 +1060,14 @@ $app->get(
                 $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
                 $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
-                $filters = $utils->getFilters($since, $until, $source, 'original', null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept, $nearLocations);
+                $filters = $utils->getFilters($since, $until, $source, 'original', null, $language, $query, $user,
+                    $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $concept, $nearLocations);
 
                 $count = $textIndex->countItems($collectionQuery, $filters);
 
                 $topics[] = array('label' => 'All', 'query' => '*', 'score' => 1, 'items' => $count);
 
-                $requestHash = "topics_".$utils->getParametersHash($collectionId, "*", "*", $source, true, null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $concept);
+                $requestHash = "topics_".$utils->getParametersHash($collectionId, "*", "*", $source, true, null, $language, $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null, $concept);
                 $cachedTopics = $memcached->get($requestHash);
                 if($cachedTopics != false && count($cachedTopics) > 1) {
                     echo json_encode(array("topics"=>$cachedTopics));
@@ -1142,6 +1108,8 @@ $app->get(
         $collectionId = $request->get('collection');
         $source = $request->get('source');
 
+        $user = $request->get('user');
+
         $language = $request->get('language');
 
         $query = $request->get('q');
@@ -1157,7 +1125,9 @@ $app->get(
         $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
         $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
         $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-        $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude);
+        $filters = $utils->getFilters($since, $until, $source, null, null, $language, $query, $user,
+            $itemsToExclude, $usersToExclude, $keywordsToExclude);
+
         if($collectionId != null) {
             $collection = $mongoDAO->getCollection($collectionId);
             if ($collection != null) {
@@ -1269,14 +1239,16 @@ $app->get(
             $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
             $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
-            $filters = $utils->getFilters($since, $until, "all", null, null, null, null, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
+            $filters = $utils->getFilters($since, $until, "all", null, null, null, null, null,
+                $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null, $nearLocations);
 
             $collection['filters'] = $filters;
 
             $count = $textIndex->countItems($q, $filters);
             $collection['items'] = $count;
 
-            $filters = $utils->getFilters($since, $until, "all", null, "media", null, null, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
+            $filters = $utils->getFilters($since, $until, "all", null, "media", null, null, null,
+                $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null, $nearLocations);
 
             $facet = $textIndex->getFacet('mediaIds', $q, $filters, 3, false, null, false, null, 'fc');
             $collection['facet'] = $facet;
@@ -1902,7 +1874,6 @@ $app->get(
     }
 )->name("get_collection");
 
-
 $app->get(
     '/relevance/:cid',
     function($cid) use ($mongoDAO, $app) {
@@ -1932,7 +1903,6 @@ $app->get(
         echo json_encode($judgements);
     }
 )->name('user_relevance_judgments');
-
 
 $app->get(
     '/relevance/:cid/:iid',

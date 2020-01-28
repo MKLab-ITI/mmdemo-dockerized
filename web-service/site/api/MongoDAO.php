@@ -410,6 +410,27 @@ class MongoDAO {
     }
 
 
+    public function getItemsOfSpecificRelevance($cid, $min_relevance, $max_relevance) {
+        $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
+
+        $rj_range = array();
+        if ($min_relevance != null) {
+            $rj_range['$gte'] = $min_relevance;
+        }
+        if ($max_relevance != null) {
+            $rj_range['$lte'] = $max_relevance;
+        }
+
+        $q = array("cid" => $cid, 'relevance' => $rj_range);
+        $params = ['sort' => ['relevance' => -1]];
+
+        $cursor = $mongoCollection->find($q, $params);
+
+        $rj = iterator_to_array($cursor, false);
+
+        return $rj;
+    }
+
     public function getUserRelevanceJudgements($uid, $cid=null, $iid=null, $n=-1) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
 

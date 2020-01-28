@@ -108,7 +108,9 @@ class Utils {
         return implode(' OR ', $query);
     }
 
-    public function getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept=null, $nearLocations=null) {
+    public function getFilters($since, $until, $source, $original, $type, $language, $query, $user,
+                               $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements=null,
+                               $concept=null, $nearLocations=null) {
 
         // Add filters if available
         $filters = array();
@@ -116,11 +118,16 @@ class Utils {
         // filter by query
         if ($query != null && $query != '') {
             $query = urldecode($query);
-            $keywords = explode(',', $query);
+            if (preg_match('/\".+\"/m', $query)) {
+                $filters['{!cache=false}allText'] = $query;
+            }
+            else {
+                $keywords = explode(',', $query);
+                $filterTextQuery = $this->formulateLogicalQuery($keywords);
 
-            $filterTextQuery = $this->formulateLogicalQuery($keywords);
-            // Do not cache it
-            $filters['{!cache=false}allText'] = $filterTextQuery;
+                // Do not cache it
+                $filters['{!cache=false}allText'] = $filterTextQuery;
+            }
         }
 
         if($concept != null && $concept !== '' && $concept !== 'all') {
@@ -139,6 +146,10 @@ class Utils {
         }
         else {
             $filters['-source'] = "*";
+        }
+
+        if($user != null) {
+            $filters["username"] = "$user*";
         }
 
         if($original != null) {
@@ -208,11 +219,26 @@ class Utils {
             }
         }
 
+        if($judgements != null && count($judgements) > 0) {
+            $ids_of_rj = array_map(function($rj) { return $rj['iid'];}, $judgements);
+            $ids_of_rj = implode(' OR ', $ids_of_rj);
+            if($ids_of_rj != null) {
+                if ($filters == null) {
+                    $filters = array();
+                }
+                $filters["id"] = "($ids_of_rj)";
+            }
+        }
+
         return $filters;
     }
 
-    public function getParametersHash($cid, $since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $unique, $concept) {
-        $data = $this->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept);
+    public function getParametersHash($cid, $since, $until, $source, $original, $type, $language, $query, $user,
+                                      $itemsToExclude, $usersToExclude, $keywordsToExclude,
+                                      $judgements, $unique, $concept) {
+
+        $data = $this->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
+            $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements, $concept);
         $data['unique'] = $unique;
 
         $input_str = json_encode($data);

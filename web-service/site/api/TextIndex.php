@@ -25,15 +25,9 @@ class TextIndex {
     }
 
 
-    public function searchItems($q, $pageNumber=1, $nPerPage=20, $filters=null, $sort=null, $judgements=null, $unique=false, $hlq=null) {
+    public function searchItems($q, $pageNumber=1, $nPerPage=20, $filters=null, $sort=null, $unique=false, $hlq=null) {
 
         $query = $this->client->createSelect();
-
-        //todo: use relevance feedback to improve discrimination power of the query
-        $expandedQueryTerms = array();
-        if($judgements != null && count($judgements) > 0) {
-            //$expandedQueryTerms = Utils::expandQuery($judgements, $q, $this);
-        }
 
         if($filters != null && isset($filters['geofilters'])) {
             $helper = $query->getHelper();
@@ -76,13 +70,16 @@ class TextIndex {
 
         // sort by
         if($sort != null && $sort != 'recency') {
-
             if($sort === 'relevance') {
                 $query->addSort('score', Solarium\QueryType\Select\Query\Query::SORT_DESC);
                 $query->addSort('sum(product(0.7,likesFacet),product(0.3,sharesFacet))', Solarium\QueryType\Select\Query\Query::SORT_DESC);
             }
             else if($sort === 'popularity') {
                 $query->addSort('sum(product(0.7,likesFacet),product(0.3,sharesFacet))', Solarium\QueryType\Select\Query\Query::SORT_DESC);
+                $query->addSort('publicationTimeFacet', Solarium\QueryType\Select\Query\Query::SORT_DESC);
+            }
+            else if($sort === 'user') {
+                $query->addSort('username', Solarium\QueryType\Select\Query\Query::SORT_DESC);
                 $query->addSort('publicationTimeFacet', Solarium\QueryType\Select\Query\Query::SORT_DESC);
             }
             else {

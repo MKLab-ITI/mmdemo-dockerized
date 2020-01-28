@@ -25,15 +25,19 @@ class Utils {
             }
             else {
                 $keyword = trim($keyword);
-                $keyword = preg_split("/\s+/", $keyword);
-                if (count($keyword) > 1) {
-                    $queryParts[] = '(' . implode(' AND ', $keyword) . ')';
-                } else {
-                    $queryParts[] = implode(' AND ', $keyword);
+                if (preg_match('/\".+\"/m', $keyword)) {
+                    $queryParts[] = $keyword;
+                }
+                else {
+                    $keyword = preg_split("/\s+/", $keyword);
+                    if (count($keyword) > 1) {
+                        $queryParts[] = '(' . implode(' AND ', $keyword) . ')';
+                    } else {
+                        $queryParts[] = implode(' AND ', $keyword);
+                    }
                 }
             }
         }
-
         $query = implode(' OR ', $queryParts);
         return $query;
     }

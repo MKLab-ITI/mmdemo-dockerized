@@ -212,11 +212,18 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
     $pageNumber = $request->get('pageNumber')==null ? 1 : $request->get('pageNumber');
     $nPerPage = $request->get('nPerPage')==null ? 20 : $request->get('nPerPage');
 
+    $owner_id = null;
+
     $filters = array();
     $items = array();
     $results = array();
+
+    $facet = [];
+
     if($collectionId != null) {
         $collection = $mongoDAO->getCollection($collectionId);
+        $owner_id = $collection['$ownerId'];
+
         if($collection != null) {
 
             $judgements = $mongoDAO->getRelevanceJudgements($collectionId);
@@ -234,6 +241,8 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $itemsToExclude, $usersToExclude, $keywordsToExclude, $concept, $nearLocations);
             $results = $textIndex->searchItems($q, $pageNumber, $nPerPage,  $filters, $sort, $judgements, $unique, $query);
 
+            $facet = $textIndex->getFacet('language', $q, $filters, 100, true, null, $unique, null, 'fcs');
+            $facet = $facet['values'];
         }
     }
     else {
@@ -251,6 +260,8 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null, null, null, null);
             $results = $textIndex->searchItems($query, $pageNumber, $nPerPage,  $filters, $sort, null, $unique, $hl);
 
+            $facet = $textIndex->getFacet('language', $query, $filters, 100, true, null, $unique, null, 'fcs');
+            $facet = $facet['values'];
         }
     }
 
@@ -258,7 +269,6 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
     foreach($results['docs'] as $result) {
         $item = $mongoDAO->getItem($result['id']);
         $item['score'] = $result['score'];
-        $item['normalizedScore'] = round((4 * $result['normalizedScore']) + 1);
         $item['minhash'] = $result['minhash'];
         $item['cleanTitle'] = $result['cleanTitle'];
         $item['rank'] = $rank;
@@ -269,6 +279,13 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
             $item['title'] = $result['title_hl'];
         }
 
+        if ($owner_id != null && $collectionId != null) {
+            $rel = $mongoDAO->getRelevanceJudgement($owner_id, $collectionId, $result['id']);
+            if ($rel != null) {
+                $item['relevance'] = $rel['relevance'];
+            }
+        }
+
         $items[] = $item;
     }
 
@@ -277,7 +294,8 @@ $app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
         'pageNumber' => $pageNumber,
         'nPerPage' => $nPerPage,
         'total' => $results['numFound'],
-        'filters' => $filters
+        'filters' => $filters,
+        'languages' => $facet
     );
 
     echo json_encode($response);
@@ -1210,9 +1228,10 @@ $app->get(
         $nPerPage = $request->get("nPerPage")==null ? 6 : (int) $request->get("nPerPage");
 
         $status = $request->get("status"); // stopped / running
+        $favorite = $request->get("favorite");
 
 		$all = $mongoDAO->getUserCollections($uid, $status);
-		$userCollections = $mongoDAO->getUserCollections($uid, $status, $pageNumber, $nPerPage);
+		$userCollections = $mongoDAO->getUserCollections($uid, $status, $pageNumber, $nPerPage, $favorite);
 
         $collections = array();
         foreach($userCollections as &$collection) {
@@ -1895,6 +1914,8 @@ $app->get(
             $item = $mongoDAO->getItem($iid);
             if($item != null) {
                 $item['relevance'] = $judgement['relevance'];
+                $item['user_id'] = $judgement['uid'];
+
                 $response[] = $item;
             }
         }
@@ -1902,6 +1923,16 @@ $app->get(
         echo json_encode(array('judgements' => $response));
     }
 )->name('collection_relevance_judgments');
+
+$app->get(
+    '/relevance/user/:uid/:cid',
+    function($uid, $cid) use ($mongoDAO, $app) {
+        $judgements = $mongoDAO->getUserRelevanceJudgements($uid, $cid);
+
+        echo json_encode($judgements);
+    }
+)->name('user_relevance_judgments');
+
 
 $app->get(
     '/relevance/:cid/:iid',

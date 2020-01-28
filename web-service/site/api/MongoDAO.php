@@ -291,13 +291,17 @@ class MongoDAO {
         return $collections;
     }
 
-    public function getUserCollections($uid, $status=null, $pageNumber=null, $nPerPage=null) {
+    public function getUserCollections($uid, $status=null, $pageNumber=null, $nPerPage=null, $favorite=null) {
 
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 
         $query = array('ownerId' => $uid);
         if($status != null && ($status==='stopped' || $status==='running')) {
             $query['status'] = $status;
+        }
+
+        if($favorite != null && is_bool($favorite)) {
+            $query['favorite'] = $favorite;
         }
 
         $options = array('sort' => ['creationDate' => -1]);
@@ -382,7 +386,6 @@ class MongoDAO {
         catch(Exception $e) {
             return $e->getMessage();
         }
-
     }
 
 
@@ -404,6 +407,42 @@ class MongoDAO {
 
         $rj = iterator_to_array($cursor, false);
         return $rj;
+    }
+
+
+    public function getUserRelevanceJudgements($uid, $cid=null, $iid=null, $n=-1) {
+        $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
+
+        $q = array("uid" => $uid);
+
+        if($cid != null) {
+            $q['cid'] = $cid;
+        }
+
+        if($iid != null) {
+            $q['iid'] = $iid;
+        }
+
+        $params = [
+            'sort' => ['relevance' => -1],
+        ];
+
+        if ($n > 0) {
+            $params['limit'] = $n;
+        }
+
+        $cursor = $mongoCollection->find($q, $params);
+
+        $rj = iterator_to_array($cursor, false);
+        return $rj;
+    }
+
+    public function getRelevanceJudgement($uid, $cid, $iid) {
+        $q = array("uid" => $uid, "cid" => $cid, "iid" => $iid);
+
+        $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
+        $rel = $mongoCollection->findOne($q);
+        return $rel;
     }
 
     public function insertItemUnderMonitoring($iid, $cid) {

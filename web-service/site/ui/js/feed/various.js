@@ -1,14 +1,3 @@
-if (project_name !== "") {
-    $('#logo').find('h1').text(project_name);
-    document.title = project_name;
-}
-if (project_favicon !== "") {
-    var link = document.createElement('link');
-    link.rel = 'shortcut icon';
-    link.href = project_favicon;
-    document.getElementsByTagName('head')[0].appendChild(link);
-}
-
 var collection_param = gup('collection');
 var language_param = gup('language');
 var unique_param = gup('unique');

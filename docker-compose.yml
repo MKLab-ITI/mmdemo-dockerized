@@ -42,6 +42,8 @@ services:
   mongodb:
     image: mongo:3.2.11
     command: mongod --auth
+    ports:
+      - "27017:27017"
     volumes:
       - ./mongo_data_dir:/data/db
     restart: always

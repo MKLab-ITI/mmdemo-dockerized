@@ -1191,25 +1191,23 @@ $app->get(
     function ($uid) use($mongoDAO, $textIndex, $utils, $app, $redisClient, $memcached) {
 
         $request = $app->request();
-
         $cached = $request->get("cached");
 
 		$pageNumber = $request->get("pageNumber")==null ? 1 : (int) $request->get("pageNumber");
         $nPerPage = $request->get("nPerPage")==null ? 6 : (int) $request->get("nPerPage");
 
         $status = $request->get("status"); // stopped / running
-        $favorite = $request->get("favorite");
 
         $query = $request->get("q");
 
 		$all = $mongoDAO->getUserCollections($uid, $status);
-		$userCollections = $mongoDAO->getUserCollections($uid, $status, $pageNumber, $nPerPage, $favorite, $query);
+
+        $userFavCollections = $mongoDAO->getUserCollections($uid, null, null, null, true, null);
+		$userCollections = $mongoDAO->getUserCollections($uid, $status, $pageNumber, $nPerPage, false, $query);
 
         $collections = array();
         foreach($userCollections as &$collection) {
-
             $cid = $collection['_id'];
-
             if($cached != "false") {
                 $cachedCollection = $memcached->get($cid);
                 if ($cachedCollection != false &&
@@ -1275,7 +1273,6 @@ $app->get(
                 //unset($collection['nearLocations']);
             }
             $collection['polygons'] = $polygons;
-
             if(count($collection['facet']) > 0) {
                 foreach($collection['facet'] as $ft) {
                     $mId = $ft['field'];
@@ -1286,12 +1283,93 @@ $app->get(
                     }
                 }
             }
-
             $memcached->set($cid, $collection, time() + 300);
             $collections[] = $collection;
         }
 
-        echo json_encode(array('ownerId' => $uid, 'collections'=>$collections, 'count'=>count($all)));
+        $favCollections = array();
+        foreach($userFavCollections as &$collection) {
+            $cid = $collection['_id'];
+            if($cached != "false") {
+                $cachedCollection = $memcached->get($cid);
+                if ($cachedCollection != false &&
+                    (($cachedCollection['items'] > 0 && count($cachedCollection['facet']) > 0)
+                        || (time()*1000 - $cachedCollection['creationDate']) > (1 * 3600000))) {
+                    $collections[] = $cachedCollection;
+                    continue;
+                }
+            }
+
+            $lastExecution = $redisClient->get($cid);
+            if($lastExecution != null) {
+                $collection['lastExecution'] = $lastExecution;
+            }
+
+            if($collection['status'] != 'stopped') {
+                $collection['stopDate'] = 1000 * time();
+            }
+
+            $q = $utils->formulateCollectionQuery($collection);
+
+            $collection['query'] = $q;
+
+            $since = $collection['since'];
+            $until = $collection['stopDate'];
+
+            $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+            $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+            $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+            $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+
+            $filters = $utils->getFilters($since, $until, "all", null, null, null, null, null,
+                $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null, $nearLocations);
+
+            $collection['filters'] = $filters;
+
+            $count = $textIndex->countItems($q, $filters);
+            $collection['items'] = $count;
+
+            $filters = $utils->getFilters($since, $until, "all", null, "media", null, null, null,
+                $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null, $nearLocations);
+
+            $facet = $textIndex->getFacet('mediaIds', $q, $filters, 3, false, null, false, null, 'fc');
+            $collection['facet'] = $facet;
+
+            $polygons = array();
+            if(isset($collection['nearLocations'])) {
+                foreach($collection['nearLocations'] as $location) {
+                    $polygon = array(
+                        'centroid' => $location['name']
+                    );
+
+                    if(isset($location['polygon'])) {
+                        $peaks = array();
+                        foreach ($location['polygon'] as $peak) {
+                            $peaks[] = array('lat' => $peak['latitude'], 'long' => $peak['longitude']);
+                        }
+                        $polygon['peaks'] = $peaks;
+                    }
+                    $polygons[] = $polygon;
+                }
+
+                //unset($collection['nearLocations']);
+            }
+            $collection['polygons'] = $polygons;
+            if(count($collection['facet']) > 0) {
+                foreach($collection['facet'] as $ft) {
+                    $mId = $ft['field'];
+                    $mItem = $mongoDAO->getMediaItem($mId);
+                    if($mItem != null) {
+                        $collection['mediaUrl'] = $mItem['url'];
+                        break;
+                    }
+                }
+            }
+            $memcached->set($cid, $collection, time() + 300);
+            $favCollections[] = $collection;
+        }
+
+        echo json_encode(array('ownerId' => $uid, 'collections'=>$collections, 'favs'=> $favCollections, 'count'=>count($all)));
     }
 )->name("get_user_collections");
 

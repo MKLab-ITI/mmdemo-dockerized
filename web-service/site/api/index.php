@@ -1201,9 +1201,7 @@ $app->get(
         $query = $request->get("q");
 
 		$all = $mongoDAO->getUserCollections($uid, $status);
-
-        $userFavCollections = $mongoDAO->getUserCollections($uid, null, null, null, 'true', null);
-		$userCollections = $mongoDAO->getUserCollections($uid, $status, $pageNumber, $nPerPage, 'false', $query);
+		$userCollections = $mongoDAO->getUserCollections($uid, $status, $pageNumber, $nPerPage, null, $query);
 
         $collections = array();
         foreach($userCollections as &$collection) {
@@ -1287,6 +1285,9 @@ $app->get(
             $collections[] = $collection;
         }
 
+
+        $userFavCollections = $mongoDAO->getUserCollections($uid, null, null, null, 'true', null);
+
         $favCollections = array();
         foreach($userFavCollections as &$favCollection) {
             $cid = $favCollection['_id'];
@@ -1295,7 +1296,7 @@ $app->get(
                 if ($cachedCollection != false &&
                     (($cachedCollection['items'] > 0 && count($cachedCollection['facet']) > 0)
                         || (time()*1000 - $cachedCollection['creationDate']) > (1 * 3600000))) {
-                    $collections[] = $cachedCollection;
+                    $favCollections[] = $cachedCollection;
                     continue;
                 }
             }
@@ -1370,7 +1371,9 @@ $app->get(
             $favCollections[] = $favCollection;
         }
 
-        echo json_encode(array('ownerId' => $uid, 'collections'=>$collections, 'favs'=> $favCollections, 'count'=>count($all)));
+        echo json_encode(array('ownerId' => $uid, 'collections'=>$collections,
+            'favs'=> $favCollections, 'count'=>count($all)));
+
     }
 )->name("get_user_collections");
 

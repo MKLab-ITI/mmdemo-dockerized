@@ -291,7 +291,7 @@ class MongoDAO {
         return $collections;
     }
 
-    public function getUserCollections($uid, $status=null, $pageNumber=null, $nPerPage=null, $favorite=null, $qt=null) {
+    public function getUserCollections($uid, $status=null, $pageNumber=null, $nPerPage=null, $favorite=null, $q=null) {
 
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 
@@ -307,8 +307,8 @@ class MongoDAO {
             $query['favorite'] = $favorite;
         }
 
-        if($qt != null && $qt != '') {
-            $query['title'] = array('$regex' => "/$qt/");
+        if($q != null && $q != '') {
+            $query['title'] = array('$regex' => $q);
         }
 
         $options = array('sort' => ['creationDate' => -1]);

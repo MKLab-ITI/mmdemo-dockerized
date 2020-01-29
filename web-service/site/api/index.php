@@ -1078,7 +1078,8 @@ $app->get(
                     return;
                 }
 
-                $clusters = $textIndex->getClusters($collectionQuery, $filters, 5000);
+                $rows_to_be_used = 1000;
+                $clusters = $textIndex->getClusters($collectionQuery, $filters, $rows_to_be_used);
 
                 foreach($clusters as $cluster) {
                     if($cluster['score'] > 0 && count($cluster['docs']) >= 15) {
@@ -1088,7 +1089,7 @@ $app->get(
                             'label' => $cluster['labels'][0],
                             'query' => $topicQuery,
                             'score' => $cluster['score'],
-                            'items' => round((count($cluster['docs']) / 1000) * $count),
+                            'docs_count' => round((count($cluster['docs']) / $rows_to_be_used) * $count),
                             'docs' => $cluster['docs']
                         );
 
@@ -1100,7 +1101,7 @@ $app->get(
                                 $concept, $nearLocations);
 
                             $topicCount = $textIndex->countItems($collectionQuery, $topicFilters);
-                            $topic['count'] = $topicCount;
+                            $topic['items'] = $topicCount;
                         }
 
                         $topics[] = $topic;

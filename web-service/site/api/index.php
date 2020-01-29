@@ -1480,7 +1480,7 @@ $app->post(
 )->name("edit_collection");
 
 $app->post('/collection/:uid/:cid/favorite',
-    function ($uid, $cid) use($app, $mongoDAO) {
+    function ($uid, $cid) use($app, $mongoDAO, $memcached) {
         $request = $app->request();
 
         $bodyJson = $request->getBody();
@@ -1513,6 +1513,8 @@ $app->post('/collection/:uid/:cid/favorite',
 
         $fieldsToUpdate = array('favorite' => $favorite);
         $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
+
+        $memcached->delete($cid);
 
         echo json_encode($fieldsToUpdate);
 

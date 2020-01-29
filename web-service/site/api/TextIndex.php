@@ -660,6 +660,7 @@ class TextIndex {
                 $geoFilterPart = $helper->geofilt('latlonRPT', $geo['latitude'], $geo['longitude'], $geo['radius']);
                 $geoParts[] = "latlonRPT:$geoFilterPart";
             }
+
             if($q != null &&  $q !== '') {
                 $q = $q . ' OR (' . implode(' OR ', $geoParts) . ')';
             }

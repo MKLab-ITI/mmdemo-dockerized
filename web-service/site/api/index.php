@@ -175,7 +175,8 @@ $app->get('/items/:id/statistics',
 /**
  *  GET /items
  */
-$app->get('/items', function() use($mongoDAO, $textIndex, $utils, $app) {
+$app->get('/items',
+    function() use($mongoDAO, $textIndex, $utils, $app) {
 
     $request = $app->request();
 
@@ -1060,8 +1061,11 @@ $app->get(
                 $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
                 $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
-                $filters = $utils->getFilters($since, $until, $source, 'original', null, $language, $query, $user,
-                    $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $concept, $nearLocations);
+                $original = null;
+                $type = null;
+                $judgements = null;
+                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
+                    $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements, $concept, $nearLocations);
 
                 $count = $textIndex->countItems($collectionQuery, $filters);
 
@@ -1074,16 +1078,30 @@ $app->get(
                     return;
                 }
 
-                $clusters = $textIndex->getClusters($collectionQuery, $filters, 3000);
+                $clusters = $textIndex->getClusters($collectionQuery, $filters, 5000);
+
                 foreach($clusters as $cluster) {
                     if($cluster['score'] > 0 && count($cluster['docs']) >= 15) {
+
+                        $topicQuery = implode(',',$cluster['labels']);
                         $topic = array(
                             'label' => $cluster['labels'][0],
-                            'query' => implode(',',$cluster['labels']),
+                            'query' => $topicQuery,
                             'score' => $cluster['score'],
                             'items' => round((count($cluster['docs']) / 1000) * $count),
                             'docs' => $cluster['docs']
                         );
+
+                        if($topicQuery != '*') {
+                            $query = ($query == null) ? $topicQuery : $query . ' ' . $topicQuery;
+
+                            $topicFilters = $utils->getFilters($since, $until, $source, $original, $type, $language,
+                                $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements,
+                                $concept, $nearLocations);
+
+                            $topicCount = $textIndex->countItems($collectionQuery, $topicFilters);
+                            $topic['count'] = $topicCount;
+                        }
 
                         $topics[] = $topic;
                     }

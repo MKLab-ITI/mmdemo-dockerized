@@ -1081,7 +1081,8 @@ $app->get(
                             'label' => $cluster['labels'][0],
                             'query' => implode(',',$cluster['labels']),
                             'score' => $cluster['score'],
-                            'items' => round((count($cluster['docs']) / 1000) * $count)
+                            'items' => round((count($cluster['docs']) / 1000) * $count),
+                            'docs' => $cluster['docs']
                         );
 
                         $topics[] = $topic;

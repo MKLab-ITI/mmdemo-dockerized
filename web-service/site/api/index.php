@@ -1200,8 +1200,9 @@ $app->get(
 
         $query = $request->get("q");
 
-		$all = $mongoDAO->getUserCollections($uid, $status);
-		$userCollections = $mongoDAO->getUserCollections($uid, $status, $pageNumber, $nPerPage, null, $query);
+        $c = $mongoDAO->countUserCollections($uid, $status, 'false', $query);
+
+		$userCollections = $mongoDAO->getUserCollections($uid, $status, $pageNumber, $nPerPage, 'false', $query);
 
         $collections = array();
         foreach($userCollections as &$collection) {
@@ -1371,8 +1372,7 @@ $app->get(
             $favCollections[] = $favCollection;
         }
 
-        echo json_encode(array('ownerId' => $uid, 'collections'=>$collections,
-            'favs'=> $favCollections, 'count'=>count($all)));
+        echo json_encode(array('ownerId' => $uid, 'collections'=>$collections, 'favs'=> $favCollections, 'count'=>$c));
 
     }
 )->name("get_user_collections");

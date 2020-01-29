@@ -323,6 +323,30 @@ class MongoDAO {
         return $collections;
     }
 
+    public function countUserCollections($uid, $status=null, $favorite=null, $q=null) {
+
+        $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
+
+        $query = array('ownerId' => $uid);
+        if($status != null && ($status==='stopped' || $status==='running')) {
+            $query['status'] = $status;
+        }
+
+        if($favorite != null) {
+            if(is_string($favorite)) {
+                $favorite = $favorite === 'true' ? true : false;
+            }
+            $query['favorite'] = $favorite;
+        }
+
+        if($q != null && $q != '') {
+            $query['title'] = new MongoDB\BSON\Regex("$q", 'i');
+        }
+
+        $c = $mongoCollection->count($query);
+        return $c;
+    }
+
     public function getCollection($cid) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 

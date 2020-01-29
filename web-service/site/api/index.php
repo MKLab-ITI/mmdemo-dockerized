@@ -1200,8 +1200,10 @@ $app->get(
         $status = $request->get("status"); // stopped / running
         $favorite = $request->get("favorite");
 
+        $query = $request->get("q");
+
 		$all = $mongoDAO->getUserCollections($uid, $status);
-		$userCollections = $mongoDAO->getUserCollections($uid, $status, $pageNumber, $nPerPage, $favorite);
+		$userCollections = $mongoDAO->getUserCollections($uid, $status, $pageNumber, $nPerPage, $favorite, $query);
 
         $collections = array();
         foreach($userCollections as &$collection) {
@@ -1496,7 +1498,7 @@ $app->post('/collection/:uid/:cid/favorite',
 
         if ($collection->ownerId !== $uid) {
             echo json_encode(array(
-                'error' => "User $uid is not the owner"
+                'error' => "User $uid is not the owner. Owner is $collection->ownerId"
             ));
             return;
         }
@@ -1874,6 +1876,40 @@ $app->get(
     }
 )->name("get_collection");
 
+$app->post('/collection/:uid/:cid/copy/:new_uid',
+    function ($uid, $cid, $new_uid) use($mongoDAO, $redisClient, $memcached) {
+        $collection_to_copy = $mongoDAO->getCollection($cid);
+        if($collection_to_copy == null) {
+            echo json_encode(array('error'=>"Collection $cid does not exist"));
+            return;
+        }
+        if($collection_to_copy['ownerId'] != $uid) {
+            echo json_encode(array('error'=>"User $uid is not the owner. Only the owner can copy a collection"));
+            return;
+        }
+
+        unset($collection_to_copy->_id);
+
+        $t = 1000 * time();
+        $collection_to_copy->creationDate = $t;
+        $collection_to_copy->updateDate = $t;
+        $collection_to_copy->since = $t - (15 * 24 * 3600000);
+
+        $collection_to_copy->ownerId = $new_uid;
+        $collection_to_copy->status = "running";
+        $collection_to_copy->favorite = false;
+
+        $mongoDAO->insertCollection($collection_to_copy);
+
+        $newMessage = json_encode($collection_to_copy);
+        $redisClient->publish("collections:new", $newMessage);
+
+        $memcached->delete($collection_to_copy->_id);
+
+        echo json_encode($collection_to_copy);
+    }
+)->name("copy_collection");
+
 $app->get(
     '/relevance/:cid',
     function($cid) use ($mongoDAO, $app) {
@@ -1996,6 +2032,7 @@ $app->get('/terms/vectors',
         echo json_encode(array("query"=>$q, "vectors"=>$tv));
     }
 )->name("term_vectors");
+
 
 /**
  *  GET /detect/users

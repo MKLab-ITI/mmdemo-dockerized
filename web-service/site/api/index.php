@@ -1094,10 +1094,9 @@ $app->get(
                         );
 
                         if($topicQuery != '*') {
-                            $query = ($query == null) ? $topicQuery : $query . ' ' . $topicQuery;
-
+                            $topicQuery = ($query == null) ? $topicQuery : $query . ' ' . $topicQuery;
                             $topicFilters = $utils->getFilters($since, $until, $source, $original, $type, $language,
-                                $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements,
+                                $topicQuery, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements,
                                 $concept, $nearLocations);
 
                             $topicCount = $textIndex->countItems($collectionQuery, $topicFilters);

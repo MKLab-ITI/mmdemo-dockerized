@@ -300,7 +300,7 @@ class MongoDAO {
             $query['status'] = $status;
         }
 
-        if($favorite != null && is_bool($favorite)) {
+        if($favorite != null) {
             $query['favorite'] = $favorite;
         }
 

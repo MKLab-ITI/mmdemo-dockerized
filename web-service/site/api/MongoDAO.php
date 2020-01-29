@@ -308,7 +308,7 @@ class MongoDAO {
         }
 
         if($q != null && $q != '') {
-            $query['title'] = array('$regex' => $q);
+            $query['title'] = new MongoRegex('/' . $q . '/');
         }
 
         $options = array('sort' => ['creationDate' => -1]);

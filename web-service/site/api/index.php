@@ -1288,8 +1288,8 @@ $app->get(
         }
 
         $favCollections = array();
-        foreach($userFavCollections as &$collection) {
-            $cid = $collection['_id'];
+        foreach($userFavCollections as &$favCollection) {
+            $cid = $favCollection['_id'];
             if($cached != "false") {
                 $cachedCollection = $memcached->get($cid);
                 if ($cachedCollection != false &&
@@ -1302,32 +1302,32 @@ $app->get(
 
             $lastExecution = $redisClient->get($cid);
             if($lastExecution != null) {
-                $collection['lastExecution'] = $lastExecution;
+                $favCollection['lastExecution'] = $lastExecution;
             }
 
-            if($collection['status'] != 'stopped') {
-                $collection['stopDate'] = 1000 * time();
+            if($favCollection['status'] != 'stopped') {
+                $favCollection['stopDate'] = 1000 * time();
             }
 
-            $q = $utils->formulateCollectionQuery($collection);
+            $q = $utils->formulateCollectionQuery($favCollection);
 
-            $collection['query'] = $q;
+            $favCollection['query'] = $q;
 
-            $since = $collection['since'];
-            $until = $collection['stopDate'];
+            $since = $favCollection['since'];
+            $until = $favCollection['stopDate'];
 
-            $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
-            $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-            $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-            $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+            $itemsToExclude = isset($favCollection['itemsToExclude'])?$favCollection['itemsToExclude']:null;
+            $usersToExclude = isset($favCollection['usersToExclude'])?$favCollection['usersToExclude']:null;
+            $keywordsToExclude = isset($favCollection['keywordsToExclude'])?$favCollection['keywordsToExclude']:null;
+            $nearLocations = isset($favCollection['nearLocations'])?$favCollection['nearLocations']:null;
 
             $filters = $utils->getFilters($since, $until, "all", null, null, null, null, null,
                 $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null, $nearLocations);
 
-            $collection['filters'] = $filters;
+            $favCollection['filters'] = $filters;
 
             $count = $textIndex->countItems($q, $filters);
-            $collection['items'] = $count;
+            $favCollection['items'] = $count;
 
             $filters = $utils->getFilters($since, $until, "all", null, "media", null, null, null,
                 $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null, $nearLocations);
@@ -1336,8 +1336,8 @@ $app->get(
             $collection['facet'] = $facet;
 
             $polygons = array();
-            if(isset($collection['nearLocations'])) {
-                foreach($collection['nearLocations'] as $location) {
+            if(isset($favCollection['nearLocations'])) {
+                foreach($favCollection['nearLocations'] as $location) {
                     $polygon = array(
                         'centroid' => $location['name']
                     );
@@ -1354,19 +1354,20 @@ $app->get(
 
                 //unset($collection['nearLocations']);
             }
-            $collection['polygons'] = $polygons;
-            if(count($collection['facet']) > 0) {
-                foreach($collection['facet'] as $ft) {
+            $favCollection['polygons'] = $polygons;
+            if(count($favCollection['facet']) > 0) {
+                foreach($favCollection['facet'] as $ft) {
                     $mId = $ft['field'];
                     $mItem = $mongoDAO->getMediaItem($mId);
                     if($mItem != null) {
-                        $collection['mediaUrl'] = $mItem['url'];
+                        $favCollection['mediaUrl'] = $mItem['url'];
                         break;
                     }
                 }
             }
-            $memcached->set($cid, $collection, time() + 300);
-            $favCollections[] = $collection;
+
+            $memcached->set($cid, $favCollection, time() + 300);
+            $favCollections[] = $favCollection;
         }
 
         echo json_encode(array('ownerId' => $uid, 'collections'=>$collections, 'favs'=> $favCollections, 'count'=>count($all)));

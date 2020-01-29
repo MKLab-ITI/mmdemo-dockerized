@@ -1496,16 +1496,17 @@ $app->post('/collection/:uid/:cid/favorite',
 
         $collection = $mongoDAO->getCollection($cid);
 
-        if ($collection->ownerId !== $uid) {
+        $ownerId = $collection['ownerId'];
+        if ($ownerId !== $uid) {
             echo json_encode(array(
-                'error' => "User $uid is not the owner. Owner is $collection->ownerId"
+                'error' => "User $uid is not the owner. Owner is $ownerId"
             ));
             return;
         }
 
-        if ($collection->favorite === $favorite) {
+        if ($collection['favorite'] === $favorite) {
             echo json_encode(array(
-                'error' => "Favorite is already $favorite"
+                'error' => "Favorite is already ".$collection['favorite']
             ));
             return;
         }

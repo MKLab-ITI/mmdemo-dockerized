@@ -301,7 +301,10 @@ class MongoDAO {
         }
 
         if($favorite != null) {
-            $query['favorite'] = $favorite === 'true'? true: false;
+            if(is_string($favorite)) {
+                $favorite = $favorite === 'true' ? true : false;
+            }
+            $query['favorite'] = $favorite;
         }
 
         if($qt != null && $qt != '') {

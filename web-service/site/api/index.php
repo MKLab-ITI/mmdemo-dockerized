@@ -1202,8 +1202,8 @@ $app->get(
 
 		$all = $mongoDAO->getUserCollections($uid, $status);
 
-        $userFavCollections = $mongoDAO->getUserCollections($uid, null, null, null, true, null);
-		$userCollections = $mongoDAO->getUserCollections($uid, $status, $pageNumber, $nPerPage, false, $query);
+        $userFavCollections = $mongoDAO->getUserCollections($uid, null, null, null, 'true', null);
+		$userCollections = $mongoDAO->getUserCollections($uid, $status, $pageNumber, $nPerPage, 'false', $query);
 
         $collections = array();
         foreach($userCollections as &$collection) {

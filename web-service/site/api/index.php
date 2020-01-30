@@ -1022,9 +1022,9 @@ $app->get(
 
                 $counts = $textIndex->fieldsCount("uidFacet", $q, $filters, $unique, "source");
 
-
+                $followersMean = $statistics['followersFacet']['mean'];
                 $statistics['endorsement'] = $statistics['likesFacet']['sum'];
-                $statistics['reach'] = $statistics['followersFacet']['sum'] / $statistics['followersFacet']['mean'];
+                $statistics['reach'] = $statistics['followersFacet']['sum'] / $followersMean > 0 ? $followersMean : 1;
                 $statistics['users'] = $counts['uidFacet']['cardinality'];
 
                 $sources = $textIndex->getFacet('source', $q, $filters, -1, false, null, $unique, null, 'enum');

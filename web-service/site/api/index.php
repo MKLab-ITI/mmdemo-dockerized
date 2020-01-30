@@ -226,7 +226,7 @@ $app->get('/items',
 
     if($collectionId != null) {
         $collection = $mongoDAO->getCollection($collectionId);
-        $owner_id = $collection['$ownerId'];
+        $owner_id = $collection['ownerId'];
 
         if($collection != null) {
             $judgements = null;
@@ -304,7 +304,8 @@ $app->get('/items',
         'filters' => $filters,
         'collection_query' => isset($collection_query) ? $collection_query : '',
         'languages' => $facet,
-        'results' => $results
+        'results' => $results,
+        'owner' => $owner_id
     );
 
     echo json_encode($response);
@@ -1810,7 +1811,6 @@ $app->post(
             $fieldsToUpdate = array(
                 'itemsToExclude' => $itemsToExclude,
                 'updateDate' => 1000 * time()
-
             );
 
             $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);

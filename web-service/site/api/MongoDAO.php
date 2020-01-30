@@ -446,10 +446,11 @@ class MongoDAO {
 
         $rj_range = array();
         if ($min_relevance != null) {
-            $rj_range['$gte'] = $min_relevance;
+            $rj_range['$gte'] = intval($min_relevance);
         }
+
         if ($max_relevance != null) {
-            $rj_range['$lte'] = $max_relevance;
+            $rj_range['$lte'] = intval($max_relevance);
         }
 
         $q = array("cid" => $cid, 'relevance' => $rj_range);

@@ -272,28 +272,30 @@ $app->get('/items',
         }
     }
 
-    $rank = ($pageNumber - 1) * $nPerPage;
-    foreach($results['docs'] as $result) {
-        $item = $mongoDAO->getItem($result['id']);
-        $item['score'] = $result['score'];
-        $item['minhash'] = $result['minhash'];
-        $item['cleanTitle'] = $result['cleanTitle'];
-        $item['rank'] = $rank;
+    $rank = $nPerPage * ($pageNumber - 1);
+    if(isset($results['docs'])) {
+        foreach ($results['docs'] as $result) {
+            $item = $mongoDAO->getItem($result['id']);
+            $item['score'] = $result['score'];
+            $item['minhash'] = $result['minhash'];
+            $item['cleanTitle'] = $result['cleanTitle'];
+            $item['rank'] = $rank;
 
-        $rank += 1;
-        if(isset($result['title_hl'])) {
-            $item['originalTitle'] = $item['title'];
-            $item['title'] = $result['title_hl'];
-        }
-
-        if ($owner_id != null && $collectionId != null) {
-            $rel = $mongoDAO->getRelevanceJudgement($owner_id, $collectionId, $result['id']);
-            if ($rel != null) {
-                $item['relevance'] = $rel['relevance'];
+            $rank += 1;
+            if (isset($result['title_hl'])) {
+                $item['originalTitle'] = $item['title'];
+                $item['title'] = $result['title_hl'];
             }
-        }
 
-        $items[] = $item;
+            if ($owner_id != null && $collectionId != null) {
+                $rel = $mongoDAO->getRelevanceJudgement($owner_id, $collectionId, $result['id']);
+                if ($rel != null) {
+                    $item['relevance'] = $rel['relevance'];
+                }
+            }
+
+            $items[] = $item;
+        }
     }
 
     $response = array(
@@ -303,7 +305,8 @@ $app->get('/items',
         'total' => $results['numFound'],
         'filters' => $filters,
         'collection_query' => isset($collection_query) ? $collection_query : '',
-        'languages' => $facet
+        'languages' => $facet,
+        'results' => $results
     );
 
     echo json_encode($response);
@@ -1078,7 +1081,7 @@ $app->get(
                     return;
                 }
 
-                $rows_to_be_used = 1000;
+                $rows_to_be_used = 5000;
                 $clusters = $textIndex->getClusters($collectionQuery, $filters, $rows_to_be_used);
 
                 foreach($clusters as $cluster) {

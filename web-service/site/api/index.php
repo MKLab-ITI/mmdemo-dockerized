@@ -1024,7 +1024,7 @@ $app->get(
 
                 $followersMean = $statistics['followersFacet']['mean'];
                 $statistics['endorsement'] = $statistics['likesFacet']['sum'];
-                $statistics['reach'] = $statistics['followersFacet']['sum'] / $followersMean > 0 ? $followersMean : 1;
+                $statistics['reach'] = $statistics['followersFacet']['sum'] / ($followersMean > 0 ? $followersMean : 1);
                 $statistics['users'] = $counts['uidFacet']['cardinality'];
 
                 $sources = $textIndex->getFacet('source', $q, $filters, -1, false, null, $unique, null, 'enum');
@@ -1037,7 +1037,6 @@ $app->get(
                 }
 
                 $statistics['sources'] = $sources;
-
                 $statistics['query'] = $query;
                 $statistics['filters'] = $filters;
 

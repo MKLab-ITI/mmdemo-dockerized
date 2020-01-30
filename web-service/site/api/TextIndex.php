@@ -650,6 +650,7 @@ class TextIndex {
     }
 
     public function getClusters($q, $filters = null, $rows=1000) {
+
         // get a select query instance
         $query = $this->client->createSelect();
 

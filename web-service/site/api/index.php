@@ -224,6 +224,8 @@ $app->get('/items',
 
     $facet = [];
 
+    $judgements = null;
+
     if($collectionId != null) {
         $collection = $mongoDAO->getCollection($collectionId);
         $owner_id = $collection['ownerId'];
@@ -305,7 +307,8 @@ $app->get('/items',
         'collection_query' => isset($collection_query) ? $collection_query : '',
         'languages' => $facet,
         'results' => $results,
-        'owner' => $owner_id
+        'owner' => $owner_id,
+        'judgements' => $judgements
     );
 
     echo json_encode($response);

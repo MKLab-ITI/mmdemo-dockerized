@@ -190,6 +190,7 @@ $app->get('/items',
 
     $min_relevance = $request->get('min_relevance');
     $max_relevance = $request->get('max_relevance');
+    $user = $request->get('user');
 
     $concept = $request->get('concepts');
     if($concept != null && $concept !== '' && $concept !== 'all') {
@@ -197,11 +198,8 @@ $app->get('/items',
     }
 
     $unique = $request->get('unique')==null ? false : $request->get('unique');
-
     $sort = $request->get('sort');
-
     $query = $request->get('q');
-    $user = $request->get('user');
 
     $topicQuery = $request->get('topicQuery');
     if($topicQuery != null && $topicQuery != '*') {
@@ -311,7 +309,8 @@ $app->get('/items',
 
     echo json_encode($response);
 
-})->name("items");
+}
+)->name("items");
 
 /**
  *  GET /summary
@@ -389,6 +388,8 @@ $app->get(
         $type = $request->get('type');
 
         $user = $request->get('user');
+        $min_rel = $request->get('min_relevance');
+        $max_rel = $request->get('max_relevance');
 
         $concept = $request->get('concepts');
         if($concept != null && $concept !== '' && $concept !== 'all') {
@@ -426,12 +427,19 @@ $app->get(
                         $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
                         $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
+                        if ($min_rel != null || $max_rel != null) {
+                            $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $min_rel, $max_rel);
+                        }
+
                         $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query,
                             $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements,
                             $concept, $nearLocations);
 
-                        $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude,
-                                null, $unique, $concept);
+                        $requestHash = $field."_".$utils->getParametersHash($collectionId, $since, $until, $source,
+                                $original, $type, $language, $query, $user,
+                                $itemsToExclude, $usersToExclude, $keywordsToExclude,
+                                $judgements, $unique, $concept);
+
                         $facet = $memcached->get($requestHash);
                         if($facet == false || count($facet) < 2) {
                             $facet = $textIndex->getFacet($field, $collectionQuery, $filters, $n, true, $prefix, $unique, null, 'fcs');
@@ -832,6 +840,8 @@ $app->get(
         $source = $request->get('source');
 
         $user = $request->get('user');
+        $min_rel = $request->get('min_relevance');
+        $max_rel = $request->get('max_relevance');
 
         $concept = $request->get('concepts');
         if($concept != null && $concept !== '' && $concept !== 'all') {
@@ -878,9 +888,14 @@ $app->get(
             $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
             $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
+            $judgements = null;
+            if ($min_rel != null || $max_rel != null) {
+                $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $min_rel, $max_rel);
+            }
+
             $filters = $utils->getFilters(($since==null?"*":$since), ($until==null?"*":$until),  $source, $original,
                 $type, $language, $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude,
-                null, $concept, $nearLocations);
+                $judgements, $concept, $nearLocations);
 
             $q = $utils->formulateCollectionQuery($collection);
             if($since == null) {
@@ -890,7 +905,10 @@ $app->get(
                 $until = 1000*time();
             }
 
-            $requestHash = "timeline_$gap\_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $unique, $concept);
+            $requestHash = "timeline_".$gap."_".$utils->getParametersHash($collectionId, $since, $until, $source,
+                    $original, $type, $language, $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude,
+                    $judgements, $unique, $concept);
+
             $cachedTimeline = $memcached->get($requestHash);
             if($cachedTimeline != false) {
                 echo json_encode(array('timeline' => $cachedTimeline));
@@ -902,7 +920,8 @@ $app->get(
             $rangeFacet = $textIndex->getRangeFacet('publicationTime', $q, $filters, $gap, $start, $end, $unique);
             foreach($rangeFacet as $bin) {
                 if($bin['count'] > 0) {
-                    $entry = array('timestamp'=>$bin['field'], 'date'=>date($dateFormat, $bin['field']/1000), 'count' => $bin['count']);
+                    $entry = array('timestamp'=>$bin['field'],
+                        'date'=>date($dateFormat, $bin['field']/1000), 'count' => $bin['count']);
                     $tm[] = $entry;
                 }
             }
@@ -928,6 +947,8 @@ $app->get(
         $type = $request->get('type');
         $language = $request->get('language');
 
+        $min_rel = $request->get('min_relevance');
+        $max_rel = $request->get('max_relevance');
         $user = $request->get('user');
 
         $concept = $request->get('concepts');
@@ -978,10 +999,17 @@ $app->get(
                 $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
                 $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
-                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
-                    $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $concept, $nearLocations);
+                $judgements = null;
+                if ($min_rel != null || $max_rel != null) {
+                    $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $min_rel, $max_rel);
+                }
 
-                $requestHash = "stats_".$utils->getParametersHash($collectionId, $since, $until, $source, $original, $type, $language, $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $unique, $concept);
+                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
+                    $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements, $concept, $nearLocations);
+
+                $requestHash = "stats_".$utils->getParametersHash($collectionId, $since, $until, $source, $original,
+                        $type, $language, $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude,
+                        $judgements, $unique, $concept);
 
 
                 $cachedStatistics = $memcached->get($requestHash);
@@ -997,7 +1025,6 @@ $app->get(
 
                 $statistics['endorsement'] = $statistics['likesFacet']['sum'];
                 $statistics['reach'] = $statistics['followersFacet']['sum'] / $statistics['followersFacet']['mean'];
-                //$statistics['reach'] = $statistics['followersFacet']['sum'];
                 $statistics['users'] = $counts['uidFacet']['cardinality'];
 
                 $sources = $textIndex->getFacet('source', $q, $filters, -1, false, null, $unique, null, 'enum');
@@ -1110,7 +1137,9 @@ $app->get(
                     }
                 }
 
-                $memcached->set($requestHash, $topics, time()+301);
+                if (count($topics) > 0) {
+                    $memcached->set($requestHash, $topics, time() + 301);
+                }
             }
         }
 
@@ -1477,7 +1506,7 @@ $app->post(
 
         echo json_encode($collection);
     }
-)->name("insert_collection");
+    )->name("insert_collection");
 
 $app->post(
     '/collection/edit',

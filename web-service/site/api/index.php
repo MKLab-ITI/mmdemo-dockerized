@@ -196,7 +196,6 @@ $app->get('/items',
     if($concept != null && $concept !== '' && $concept !== 'all') {
         $concept = "environment.$concept";
     }
-
     $unique = $request->get('unique')==null ? false : $request->get('unique');
     $sort = $request->get('sort');
     $query = $request->get('q');
@@ -207,7 +206,7 @@ $app->get('/items',
             $query = $topicQuery;
         }
         else {
-            $query = $query . ' ' . $topicQuery;
+            $query = $query . ',' . $topicQuery;
         }
     }
 
@@ -306,9 +305,9 @@ $app->get('/items',
         'filters' => $filters,
         'collection_query' => isset($collection_query) ? $collection_query : '',
         'languages' => $facet,
-        'results' => $results,
+        //'results' => $results,
         'owner' => $owner_id,
-        'judgements' => $judgements
+        //'judgements' => $judgements
     );
 
     echo json_encode($response);
@@ -613,8 +612,6 @@ $app->get(
         $request = $app->request();
 
         $cached = $request->get('cached');
-
-        $query = $request->get('q');
         $collectionId = $request->get('collection');
         if($collectionId != null) {
             $collection = $mongoDAO->getCollection($collectionId);

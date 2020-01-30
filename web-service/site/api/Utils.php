@@ -122,7 +122,7 @@ class Utils {
         // filter by query
         if ($query != null && $query != '') {
             $query = urldecode($query);
-            if (preg_match('/\".+\"/m', $query)) {
+            if (preg_match('/^\".+\"$/m', $query)) {
                 $filters['{!cache=false}allText'] = $query;
             }
             else {

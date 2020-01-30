@@ -79,7 +79,7 @@ class TextIndex {
                 $query->addSort('publicationTimeFacet', Solarium\QueryType\Select\Query\Query::SORT_DESC);
             }
             else if($sort === 'user') {
-                $query->addSort('username', Solarium\QueryType\Select\Query\Query::SORT_DESC);
+                $query->addSort('username', Solarium\QueryType\Select\Query\Query::SORT_ASC);
                 $query->addSort('publicationTimeFacet', Solarium\QueryType\Select\Query\Query::SORT_DESC);
             }
             else {

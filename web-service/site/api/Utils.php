@@ -38,7 +38,7 @@ class Utils {
                 }
             }
         }
-        $query = implode(' OR ', $queryParts);
+        $query = implode(' AND ', $queryParts);
         return $query;
     }
 

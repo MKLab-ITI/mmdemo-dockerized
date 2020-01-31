@@ -226,7 +226,7 @@ $app->get('/items',
             $collection = $mongoDAO->getCollection($collectionId);
             $owner_id = $collection['ownerId'];
 
-            if(isset($collection['status']) && $collection['status'] === "stopped") {
+            if(isset($collection['status']) && $collection['status'] == "stopped") {
                 if (isset($collection['stopDate']) && $collection['stopDate'] != null) {
                     $until = $collection['stopDate'];
                 }

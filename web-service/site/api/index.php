@@ -226,10 +226,11 @@ $app->get('/items',
             $collection = $mongoDAO->getCollection($collectionId);
             $owner_id = $collection['ownerId'];
 
-            if(isset($collection['stopDate']) && $collection['stopDate'] != null) {
-                $until = $collection['stopDate'];
+            if(isset($collection['status']) && $collection['status'] === "stopped") {
+                if (isset($collection['stopDate']) && $collection['stopDate'] != null) {
+                    $until = $collection['stopDate'];
+                }
             }
-
             if($collection != null) {
                 $judgements = null;
                 if ($min_relevance != null || $max_relevance != null) {
@@ -1938,7 +1939,7 @@ $app->get(
 
         $collection = $mongoDAO->getCollection($cid);
         if($collection != null) {
-            $ops = array('status' => 'running', 'updateDate' => 1000 * time());
+            $ops = array('status' => 'running', 'updateDate' => 1000 * time(), 'stopDate' => null);
             $mongoDAO->updateCollectionFields($cid, $ops);
 
             $startMessage = json_encode($collection);

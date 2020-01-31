@@ -177,82 +177,82 @@ $app->get('/items/:id/statistics',
  */
 $app->get('/items',
     function() use($mongoDAO, $textIndex, $utils, $app) {
+        $request = $app->request();
 
-    $request = $app->request();
+        $s = $request->get('since');
+        $u = $request->get('until');
+        $since = ($s==null || $s === '') ? '*' : $s;
+        $until = ($u==null || $u === '') ? '*' : $u;
 
-    $since = $request->get('since')==null ? '*' : $request->get('since');
-    $until = $request->get('until')==null ? '*' : $request->get('until');
+        $source = $request->get('source');
+        $language = $request->get('language');
+        $original = $request->get('original');
+        $type = $request->get('type');
 
-    $source = $request->get('source');
-    $language = $request->get('language');
-    $original = $request->get('original');
-    $type = $request->get('type');
+        $min_relevance = $request->get('min_relevance');
+        $max_relevance = $request->get('max_relevance');
+        $user = $request->get('user');
 
-    $min_relevance = $request->get('min_relevance');
-    $max_relevance = $request->get('max_relevance');
-    $user = $request->get('user');
-
-    $concept = $request->get('concepts');
-    if($concept != null && $concept !== '' && $concept !== 'all') {
-        $concept = "environment.$concept";
-    }
-    $unique = $request->get('unique')==null ? false : $request->get('unique');
-    $sort = $request->get('sort');
-    $query = $request->get('q');
-
-    $topicQuery = $request->get('topicQuery');
-    if($topicQuery != null && $topicQuery != '*') {
-        if($query == null) {
-            $query = $topicQuery;
+        $concept = $request->get('concepts');
+        if($concept != null && $concept !== '' && $concept !== 'all') {
+            $concept = "environment.$concept";
         }
-        else {
-            $query = $query . ',' . $topicQuery;
+        $unique = $request->get('unique')==null ? false : $request->get('unique');
+        $sort = $request->get('sort');
+        $query = $request->get('q');
+
+        $topicQuery = $request->get('topicQuery');
+        if($topicQuery != null && $topicQuery != '*') {
+            if($query == null) {
+                $query = $topicQuery;
+            }
+            else {
+                $query = $query . ',' . $topicQuery;
+            }
         }
-    }
 
-    $collectionId = $request->get('collection');
+        $collectionId = $request->get('collection');
+        $pageNumber = $request->get('pageNumber')==null ? 1 : $request->get('pageNumber');
+        $nPerPage = $request->get('nPerPage')==null ? 20 : $request->get('nPerPage');
 
-    $pageNumber = $request->get('pageNumber')==null ? 1 : $request->get('pageNumber');
-    $nPerPage = $request->get('nPerPage')==null ? 20 : $request->get('nPerPage');
+        $owner_id = null;
+        $filters = array();
+        $items = array();
+        $results = array();
+        $facet = [];
+        $judgements = null;
 
-    $owner_id = null;
+        if($collectionId != null) {
+            $collection = $mongoDAO->getCollection($collectionId);
+            $owner_id = $collection['ownerId'];
 
-    $filters = array();
-    $items = array();
-    $results = array();
-
-    $facet = [];
-
-    $judgements = null;
-
-    if($collectionId != null) {
-        $collection = $mongoDAO->getCollection($collectionId);
-        $owner_id = $collection['ownerId'];
-
-        if($collection != null) {
-            $judgements = null;
-            if ($min_relevance != null || $max_relevance != null) {
-                $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $min_relevance, $max_relevance);
+            if(isset($collection['stopDate'])) {
+                $until = $collection['stopDate'];
             }
 
-            // query formulation
-            $collection_query = $utils->formulateCollectionQuery($collection);
+            if($collection != null) {
+                $judgements = null;
+                if ($min_relevance != null || $max_relevance != null) {
+                    $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $min_relevance, $max_relevance);
+                }
 
-            // Add filters if available
-            $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
-            $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-            $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+                // query formulation
+                $collection_query = $utils->formulateCollectionQuery($collection);
 
-            $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+                // Add filters if available
+                $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+                $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+                $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+                $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
-            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
-                $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements, $concept, $nearLocations);
-            $results = $textIndex->searchItems($collection_query, $pageNumber, $nPerPage,  $filters, $sort, $unique, $query);
+                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
+                    $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements, $concept, $nearLocations);
 
-            $facet = $textIndex->getFacet('language', $collection_query, $filters, 100, true, null, $unique, null, 'fcs');
+                $results = $textIndex->searchItems($collection_query, $pageNumber, $nPerPage,  $filters, $sort, $unique, $query);
+                $facet = $textIndex->getFacet('language', $collection_query, $filters, 100, true, null, $unique, null, 'fcs');
+            }
         }
-    }
-    else {
+        else {
         // free text search outside collections
         if($query != null && $query != "") {
             // Add filters if available
@@ -271,48 +271,44 @@ $app->get('/items',
         }
     }
 
-    $rank = $nPerPage * ($pageNumber - 1);
-    if(isset($results['docs'])) {
-        foreach ($results['docs'] as $result) {
-            $item = $mongoDAO->getItem($result['id']);
-            $item['score'] = $result['score'];
-            $item['minhash'] = $result['minhash'];
-            $item['cleanTitle'] = $result['cleanTitle'];
-            $item['rank'] = $rank;
+        $rank = $nPerPage * ($pageNumber - 1);
+        if(isset($results['docs'])) {
+            foreach ($results['docs'] as $result) {
+                $item = $mongoDAO->getItem($result['id']);
+                $item['score'] = $result['score'];
+                $item['minhash'] = $result['minhash'];
+                $item['cleanTitle'] = $result['cleanTitle'];
+                $item['rank'] = $rank;
 
-            $rank += 1;
-            if (isset($result['title_hl'])) {
-                $item['originalTitle'] = $item['title'];
-                $item['title'] = $result['title_hl'];
-            }
-
-            if ($owner_id != null && $collectionId != null) {
-                $rel = $mongoDAO->getRelevanceJudgement($owner_id, $collectionId, $result['id']);
-                if ($rel != null) {
-                    $item['relevance'] = $rel['relevance'];
+                $rank += 1;
+                if (isset($result['title_hl'])) {
+                    $item['originalTitle'] = $item['title'];
+                    $item['title'] = $result['title_hl'];
                 }
+
+                if ($owner_id != null && $collectionId != null) {
+                    $rel = $mongoDAO->getRelevanceJudgement($owner_id, $collectionId, $result['id']);
+                    if ($rel != null) {
+                        $item['relevance'] = $rel['relevance'];
+                    }
+                }
+                $items[] = $item;
             }
-
-            $items[] = $item;
         }
+
+        $response = array(
+            'items' => $items,
+            'pageNumber' => $pageNumber,
+            'nPerPage' => $nPerPage,
+            'total' => $results['numFound'],
+            'filters' => $filters,
+            'collection_query' => isset($collection_query) ? $collection_query : '',
+            'languages' => $facet,
+            'owner' => $owner_id
+        );
+
+        echo json_encode($response);
     }
-
-    $response = array(
-        'items' => $items,
-        'pageNumber' => $pageNumber,
-        'nPerPage' => $nPerPage,
-        'total' => $results['numFound'],
-        'filters' => $filters,
-        'collection_query' => isset($collection_query) ? $collection_query : '',
-        'languages' => $facet,
-        //'results' => $results,
-        'owner' => $owner_id,
-        //'judgements' => $judgements
-    );
-
-    echo json_encode($response);
-
-}
 )->name("items");
 
 /**
@@ -322,8 +318,10 @@ $app->get('/summary', function() use($mongoDAO, $textIndex, $utils, $app) {
 
     $request = $app->request();
 
-    $since = $request->get('since')==null ? '*' : $request->get('since');
-    $until = $request->get('until')==null ? '*' : $request->get('until');
+    $s = $request->get('since');
+    $u = $request->get('until');
+    $since = ($s==null || $s === '') ? '*' : $s;
+    $until = ($u==null || $u === '') ? '*' : $u;
 
     $source = $request->get('source');
     $language = $request->get('language');
@@ -379,8 +377,10 @@ $app->get(
     function ($field) use ($mongoDAO, $textIndex, $utils, $app, $memcached) {
         $request = $app->request();
 
-        $since = $request->get('since') == null ? '*' : $request->get('since');
-        $until = $request->get('until') == null ? '*' : $request->get('until');
+        $s = $request->get('since');
+        $u = $request->get('until');
+        $since = ($s==null || $s === '') ? '*' : $s;
+        $until = ($u==null || $u === '') ? '*' : $u;
 
         $language = $request->get('language');
         $source = $request->get('source');
@@ -472,8 +472,10 @@ $app->get(
     function () use ($mongoDAO, $textIndex, $utils, $app) {
         $request = $app->request();
 
-        $since = $request->get('since') == null ? '*' : $request->get('since');
-        $until = $request->get('until') == null ? '*' : $request->get('until');
+        $s = $request->get('since');
+        $u = $request->get('until');
+        $since = ($s==null || $s === '') ? '*' : $s;
+        $until = ($u==null || $u === '') ? '*' : $u;
 
         $n = $request->get('n') == null ? 10 : $request->get('n');
         $collectionId = $request->get('collection');
@@ -541,8 +543,10 @@ $app->get(
     function () use ($mongoDAO, $textIndex, $utils, $app) {
         $request = $app->request();
 
-        $since = $request->get('since') == null ? '*' : $request->get('since');
-        $until = $request->get('until') == null ? '*' : $request->get('until');
+        $s = $request->get('since');
+        $u = $request->get('until');
+        $since = ($s==null || $s === '') ? '*' : $s;
+        $until = ($u==null || $u === '') ? '*' : $u;
 
         $n = $request->get('n') == null ? 10 : $request->get('n');
         $collectionId = $request->get('collection');
@@ -674,8 +678,10 @@ $app->get(
     function () use ($mongoDAO, $textIndex, $utils, $app) {
         $request = $app->request();
 
-        $since = $request->get('since') == null ? '*' : $request->get('since');
-        $until = $request->get('until') == null ? '*' : $request->get('until');
+        $s = $request->get('since');
+        $u = $request->get('until');
+        $since = ($s==null || $s === '') ? '*' : $s;
+        $until = ($u==null || $u === '') ? '*' : $u;
 
         $n = $request->get('n') == null ? 10 : $request->get('n');
         $collectionId = $request->get('collection');
@@ -773,8 +779,10 @@ $app->get(
 
         $request = $app->request();
 
-        $since = $request->get('since') == null ? '*' : $request->get('since');
-        $until = $request->get('until') == null ? '*' : $request->get('until');
+        $s = $request->get('since');
+        $u = $request->get('until');
+        $since = ($s==null || $s === '') ? '*' : $s;
+        $until = ($u==null || $u === '') ? '*' : $u;
 
         $language = $request->get('language');
         $source = $request->get('source');
@@ -939,9 +947,11 @@ $app->get(
     '/statistics',
     function () use($mongoDAO, $textIndex, $utils, $app, $memcached) {
         $request = $app->request();
+        $s = $request->get('since');
+        $u = $request->get('until');
+        $since = ($s==null || $s === '') ? '*' : $s;
+        $until = ($u==null || $u === '') ? '*' : $u;
 
-        $since = $request->get('since')==null ? '*' : $request->get('since');
-        $until = $request->get('until')==null ? '*' : $request->get('until');
 
         $source = $request->get('source');
         $original = $request->get('original');
@@ -1056,14 +1066,18 @@ $app->get(
 
         $request = $app->request();
 
-        $since = $request->get('since')==null ? '*' : $request->get('since');
-        $until = $request->get('until')==null ? '*' : $request->get('until');
+        $s = $request->get('since');
+        $u = $request->get('until');
+        $since = ($s==null || $s === '') ? '*' : $s;
+        $until = ($u==null || $u === '') ? '*' : $u;
 
         $collectionId = $request->get('collection');
         $source = $request->get('source');
         $language = $request->get('language');
 
         $user = $request->get('user');
+
+        $engine = $request->get('engine');
 
         $concept = $request->get('concepts');
         if($concept != null && $concept !== '' && $concept !== 'all') {
@@ -1109,7 +1123,7 @@ $app->get(
                 }
 
                 $rows_to_be_used = 5000;
-                $clusters = $textIndex->getClusters($collectionQuery, $filters, $rows_to_be_used);
+                $clusters = $textIndex->getClusters($collectionQuery, $filters, $rows_to_be_used, $engine);
 
                 foreach($clusters as $cluster) {
                     if($cluster['score'] > 0 && count($cluster['docs']) >= 15) {
@@ -1142,7 +1156,6 @@ $app->get(
                 }
             }
         }
-
         echo json_encode(array('topics' => $topics));
     }
 )->name("topics");
@@ -1153,8 +1166,10 @@ $app->get(
 
         $request = $app->request();
 
-        $since = $request->get('since')==null ? '*' : $request->get('since');
-        $until = $request->get('until')==null ? '*' : $request->get('until');
+        $s = $request->get('since');
+        $u = $request->get('until');
+        $since = ($s==null || $s === '') ? '*' : $s;
+        $until = ($u==null || $u === '') ? '*' : $u;
 
         $collectionId = $request->get('collection');
         $source = $request->get('source');

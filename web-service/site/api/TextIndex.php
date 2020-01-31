@@ -649,7 +649,9 @@ class TextIndex {
         return $facets;
     }
 
-    public function getClusters($q, $filters = null, $rows=1000) {
+    public function getClusters($q, $filters = null, $rows=1000, $engine='lingo') {
+
+        $engine = $engine == null ? 'lingo' : $engine;
 
         // get a select query instance
         $query = $this->client->createSelect();
@@ -674,7 +676,7 @@ class TextIndex {
         $query->setQuery($q);
 
         $query->setHandler('clustering');
-        $query->addParam('clustering.engine', 'lingo');
+        $query->addParam('clustering.engine', $engine);
         $query->addParam('carrot.title', 'cleanTitle');
         $query->addParam('carrot.lang', 'language_s');
 

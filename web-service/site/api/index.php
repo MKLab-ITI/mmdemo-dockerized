@@ -315,7 +315,9 @@ $app->get('/items',
             'languages' => $facet,
             'owner' => $owner_id,
             'collection' => $collectionId,
-            'judgements' => $judgements
+            'judgements' => $judgements,
+            'unique' => $unique,
+            'relevance' => $relevance
         );
 
         echo json_encode($response);

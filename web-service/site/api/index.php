@@ -234,6 +234,7 @@ $app->get('/items',
                     $until = $collection['stopDate'];
                 }
             }
+
             if($collection != null) {
                 $judgements = null;
                 if ($relevance != null) {
@@ -257,23 +258,23 @@ $app->get('/items',
             }
         }
         else {
-        // free text search outside collections
-        if($query != null && $query != "") {
-            // Add filters if available
-            $hl = $query;
+            // free text search outside collections
+            if($query != null && $query != "") {
+                // Add filters if available
+                $hl = $query;
 
-            $query = urldecode($query);
-            $keywords = explode(',', $query);
+                $query = urldecode($query);
+                $keywords = explode(',', $query);
 
-            $query = $utils->formulateLogicalQuery($keywords);
-            $query = "title:($query) OR description:($query)";
+                $query = $utils->formulateLogicalQuery($keywords);
+                $query = "title:($query) OR description:($query)";
 
-            $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null, $user, null, null, null);
-            $results = $textIndex->searchItems($query, $pageNumber, $nPerPage,  $filters, $sort, $unique, $hl);
+                $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null, $user, null, null, null);
+                $results = $textIndex->searchItems($query, $pageNumber, $nPerPage,  $filters, $sort, $unique, $hl);
 
-            $facet = $textIndex->getFacet('language', $query, $filters, 100, true, null, $unique, null, 'fcs');
+                $facet = $textIndex->getFacet('language', $query, $filters, 100, true, null, $unique, null, 'fcs');
+            }
         }
-    }
 
         $rank = $nPerPage * ($pageNumber - 1);
         if(isset($results['docs'])) {
@@ -308,7 +309,9 @@ $app->get('/items',
             'filters' => $filters,
             'collection_query' => isset($collection_query) ? $collection_query : '',
             'languages' => $facet,
-            'owner' => $owner_id
+            'owner' => $owner_id,
+            'collection' => $collectionId,
+            'judgements' => $judgements
         );
 
         echo json_encode($response);

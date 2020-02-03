@@ -190,7 +190,7 @@ $app->get('/items',
         $type = $request->get('type');
 
         $relevance = $request->get('relevance');
-        if ($relevance != null) {
+        if ($relevance != null && $relevance !== '') {
             $relevance = explode(",", $relevance);
         }
 

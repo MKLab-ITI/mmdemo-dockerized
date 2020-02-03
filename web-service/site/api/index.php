@@ -189,8 +189,11 @@ $app->get('/items',
         $original = $request->get('original');
         $type = $request->get('type');
 
-        $min_relevance = $request->get('min_relevance');
-        $max_relevance = $request->get('max_relevance');
+        $relevance = $request->get('relevance');
+        if ($relevance != null) {
+            $relevance = explode(",", $relevance);
+        }
+
         $user = $request->get('user');
 
         $concept = $request->get('concepts');
@@ -233,8 +236,8 @@ $app->get('/items',
             }
             if($collection != null) {
                 $judgements = null;
-                if ($min_relevance != null || $max_relevance != null) {
-                    $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $min_relevance, $max_relevance);
+                if ($relevance != null) {
+                    $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $relevance);
                 }
 
                 // query formulation
@@ -392,8 +395,10 @@ $app->get(
         $type = $request->get('type');
 
         $user = $request->get('user');
-        $min_rel = $request->get('min_relevance');
-        $max_rel = $request->get('max_relevance');
+        $relevance = $request->get('relevance');
+        if ($relevance != null) {
+            $relevance = explode(",", $relevance);
+        }
 
         $concept = $request->get('concepts');
         if($concept != null && $concept !== '' && $concept !== 'all') {
@@ -431,8 +436,8 @@ $app->get(
                         $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
                         $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
-                        if ($min_rel != null || $max_rel != null) {
-                            $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $min_rel, $max_rel);
+                        if ($relevance != null) {
+                            $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $relevance);
                         }
 
                         $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query,
@@ -850,8 +855,11 @@ $app->get(
         $source = $request->get('source');
 
         $user = $request->get('user');
-        $min_rel = $request->get('min_relevance');
-        $max_rel = $request->get('max_relevance');
+
+        $relevance = $request->get('relevance');
+        if ($relevance != null) {
+            $relevance = explode(",", $relevance);
+        }
 
         $concept = $request->get('concepts');
         if($concept != null && $concept !== '' && $concept !== 'all') {
@@ -899,8 +907,8 @@ $app->get(
             $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
             $judgements = null;
-            if ($min_rel != null || $max_rel != null) {
-                $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $min_rel, $max_rel);
+            if ($relevance != null) {
+                $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $relevance);
             }
 
             $filters = $utils->getFilters(($since==null?"*":$since), ($until==null?"*":$until),  $source, $original,
@@ -959,9 +967,12 @@ $app->get(
         $type = $request->get('type');
         $language = $request->get('language');
 
-        $min_rel = $request->get('min_relevance');
-        $max_rel = $request->get('max_relevance');
+        $relevance = $request->get('relevance');
         $user = $request->get('user');
+
+        if ($relevance != null) {
+            $relevance = explode(",", $relevance);
+        }
 
         $concept = $request->get('concepts');
         if($concept != null && $concept !== '' && $concept !== 'all') {
@@ -1012,8 +1023,8 @@ $app->get(
                 $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
                 $judgements = null;
-                if ($min_rel != null || $max_rel != null) {
-                    $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $min_rel, $max_rel);
+                if ($relevance != null) {
+                    $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $relevance);
                 }
 
                 $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,

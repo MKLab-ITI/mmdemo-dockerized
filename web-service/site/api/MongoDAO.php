@@ -441,26 +441,22 @@ class MongoDAO {
     }
 
 
-    public function getItemsOfSpecificRelevance($cid, $min_relevance, $max_relevance) {
+    public function getItemsOfSpecificRelevance($cid, $relevance) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
 
-        $rj_range = array();
-        if ($min_relevance != null) {
-            $rj_range['$gte'] = intval($min_relevance);
+        $q = array("cid" => $cid);
+        if ($relevance != null) {
+            $q['relevance'] = array('$in' => $relevance);
+            $params = ['sort' => ['relevance' => -1]];
+            $cursor = $mongoCollection->find($q, $params);
+            $rj = iterator_to_array($cursor, false);
+
+            return $rj;
+        }
+        else {
+            return null;
         }
 
-        if ($max_relevance != null) {
-            $rj_range['$lte'] = intval($max_relevance);
-        }
-
-        $q = array("cid" => $cid, 'relevance' => $rj_range);
-        $params = ['sort' => ['relevance' => -1]];
-
-        $cursor = $mongoCollection->find($q, $params);
-
-        $rj = iterator_to_array($cursor, false);
-
-        return $rj;
     }
 
     public function getUserRelevanceJudgements($uid, $cid=null, $iid=null, $n=-1) {

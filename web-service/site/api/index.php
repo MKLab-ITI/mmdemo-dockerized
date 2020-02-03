@@ -224,6 +224,7 @@ $app->get('/items',
         $results = array();
         $facet = [];
         $judgements = null;
+        $filters_count = 0;
 
         if($collectionId != null) {
             $collection = $mongoDAO->getCollection($collectionId);
@@ -237,7 +238,7 @@ $app->get('/items',
 
             if($collection != null) {
                 $judgements = null;
-                if ($relevance != null) {
+                if ($relevance != null && count($relevance) > 0) {
                     $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $relevance);
                 }
 
@@ -252,6 +253,8 @@ $app->get('/items',
 
                 $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
                     $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements, $concept, $nearLocations);
+
+                $filters_count = count($filters);
 
                 $results = $textIndex->searchItems($collection_query, $pageNumber, $nPerPage,  $filters, $sort, $unique, $query);
                 $facet = $textIndex->getFacet('language', $collection_query, $filters, 100, true, null, $unique, null, 'fcs');
@@ -307,6 +310,7 @@ $app->get('/items',
             'nPerPage' => $nPerPage,
             'total' => $results['numFound'],
             'filters' => $filters,
+            'filters_count' => $filters_count,
             'collection_query' => isset($collection_query) ? $collection_query : '',
             'languages' => $facet,
             'owner' => $owner_id,

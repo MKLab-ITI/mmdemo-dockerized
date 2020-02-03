@@ -446,7 +446,7 @@ class MongoDAO {
 
         $q = array("cid" => $cid);
         if ($relevance != null) {
-            $relevance = array_map('int', $relevance);
+            $relevance = array_map('intval', $relevance);
             $q['relevance'] = array('$in' => $relevance);
             $params = ['sort' => ['relevance' => -1]];
             $cursor = $mongoCollection->find($q, $params);

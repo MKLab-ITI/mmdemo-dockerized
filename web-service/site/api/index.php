@@ -2048,6 +2048,14 @@ $app->post('/collection/:uid/:cid/share',
 )->name('share_collection');
 
 
+$app->get('/owners',
+    function() use($mongoDAO) {
+        $owners = $mongoDAO->getOwners();
+
+        echo json_encode(array('owners' => $owners));
+    }
+)->name('get_owners');
+
 $app->get(
     '/relevance/:cid',
     function($cid) use ($mongoDAO, $app) {

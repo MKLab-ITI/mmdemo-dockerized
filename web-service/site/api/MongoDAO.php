@@ -53,6 +53,12 @@ class MongoDAO {
             $rjCollection->createIndex(array('cid' => 1, 'relevance' => 1));
     }
 
+    public function  getOwners() {
+        $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
+        $owners = $mongoCollection->distinct($fieldName='ownerId');
+        return $owners;
+    }
+
     public function getItem($id) {
         $collection = $this->db->selectCollection( MongoDAO::$ITEMS );
 

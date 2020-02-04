@@ -114,7 +114,7 @@ class Utils {
 
     public function getFilters($since, $until, $source, $original, $type, $language, $query, $user,
                                $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements=null,
-                               $concept=null, $nearLocations=null) {
+                               $nearLocations=null) {
 
         // Add filters if available
         $filters = array();
@@ -134,9 +134,6 @@ class Utils {
             }
         }
 
-        if($concept != null && $concept !== '' && $concept !== 'all') {
-            $filters['topics'] = "$concept";
-        }
 
         //filter by source
         if($source != null) {
@@ -239,15 +236,15 @@ class Utils {
 
     public function getParametersHash($cid, $since, $until, $source, $original, $type, $language, $query, $user,
                                       $itemsToExclude, $usersToExclude, $keywordsToExclude,
-                                      $judgements, $unique, $concept) {
+                                      $judgements, $unique, $prefix='') {
 
         $data = $this->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
-            $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements, $concept);
+            $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements);
         $data['unique'] = $unique;
 
         $input_str = json_encode($data);
 
-        return $cid . "_" . sha1($input_str);
+        return $prefix . $cid . "_" . sha1($input_str);
     }
 
     public static function expandQuery($judgements, $query, TextIndex $index) {
@@ -363,4 +360,37 @@ class Utils {
         return $d;
     }
 
+    public function getTopicsFromClusters($clusters, $count, $item_rows, $collectionQuery, $query, $since, $until,
+                                          $source, $original, $type, $language, $user,
+                                          $itemsToExclude, $usersToExclude, $keywordsToExclude,
+                                          $judgements, $nearLocations, $textIndex) {
+
+        foreach($clusters as $cluster) {
+            $topics[] = array('label' => 'All', 'query' => '*', 'score' => 1, 'items' => $count);
+            if($cluster['score'] > 0 && count($cluster['docs']) >= 15) {
+
+                $topicQuery = implode(',',$cluster['labels']);
+                $topic = array(
+                    'label' => $cluster['labels'][0],
+                    'query' => $topicQuery,
+                    'score' => $cluster['score'],
+                    'docs_count' => round((count($cluster['docs']) / $item_rows) * $count),
+                    'docs' => $cluster['docs']
+                );
+
+                if($topicQuery != '*') {
+                    $topicQuery = ($query == null) ? $topicQuery : $query . ' ' . $topicQuery;
+
+                    $topicFilters = $this->getFilters($since, $until, $source, $original, $type, $language,
+                        $topicQuery, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements,
+                        $nearLocations);
+
+                    $topicCount = $textIndex->countItems($collectionQuery, $topicFilters);
+                    $topic['items'] = $topicCount;
+                }
+
+                $topics[] = $topic;
+            }
+        }
+    }
 }

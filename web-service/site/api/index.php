@@ -1966,8 +1966,8 @@ $app->post('/collection/:uid/:cid/move_to_user/:new_uid',
 )->name("move_collection");
 
 
-$app->post('/collection/:uid/:cid/replicate',
-    function ($uid, $cid) use($mongoDAO, $redisClient, $memcached) {
+$app->post('/collection/:uid/:cid/replicate/:new_cid',
+    function ($uid, $cid, $new_cid) use($mongoDAO, $redisClient, $memcached) {
         $collection_to_copy = $mongoDAO->getCollection($cid);
         if($collection_to_copy == null) {
             echo json_encode(array('error'=>"Collection $cid does not exist"));
@@ -1981,7 +1981,7 @@ $app->post('/collection/:uid/:cid/replicate',
 
         $collection_to_copy['copiedFrom'] = $collection_to_copy['_id'];
         $collection_to_copy['title'] = 'copy of ' . $collection_to_copy['title'];
-        unset($collection_to_copy['_id']);
+        $collection_to_copy['_id'] = $new_cid;
 
         $t = 1000 * time();
         $collection_to_copy['creationDate'] = $t;

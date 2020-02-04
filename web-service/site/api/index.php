@@ -257,18 +257,26 @@ $app->get('/items',
                 $language_facet = $textIndex->getFacet('language', $collection_query, $filters, 100, true, null, $unique, null, 'fcs');
 
 
-                $requestHash = $utils->getParametersHash($collectionId, "*", "*", $source, true, null,
-                        $language, $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null,
+                $clusters_hash = $utils->getParametersHash($collectionId, '*', '*', $source, true, null, $language,
+                    $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null, "clusters_");
+
+                $topics_hash = $utils->getParametersHash($collectionId, $since, $until, $source, $original, $type,
+                        $language, $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $unique,
                         "topics_");
 
-                $topics = $memcached->get($requestHash);
-                if($topics == false || count($topics) == 1) {
+                $clusters = $memcached->get($clusters_hash);
+                if($clusters == false || count($clusters) == 0) {
                     $clusters = $textIndex->getClusters($collection_query, $filters, 5000);
+                    $memcached->set($clusters_hash, $clusters, time() + 301);
+                }
+
+                $topics = $memcached->get($topics_hash);
+                if($topics == false || count($topics) == 0) {
                     $topics = $utils->getTopicsFromClusters($clusters, $results['numFound'], 5000,
                         $collection_query, $query, $since, $until, $source, $original, $type, $language, $user,
                         $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements, $nearLocations, $textIndex);
                     if (count($topics) > 0) {
-                        $memcached->set($requestHash, $topics, time() + 301);
+                        $memcached->set($topics_hash, $topics, time() + 301);
                     }
                 }
 

@@ -1986,12 +1986,12 @@ $app->post('/collection/:uid/:cid/replicate',
         }
 
         $collection_to_copy['copiedFrom'] = $collection_to_copy->_id;
-        $collection_to_copy->title = 'copy of ' . $collection_to_copy->title;
+        $collection_to_copy['title'] = 'copy of ' . $collection_to_copy->title;
         unset($collection_to_copy->_id);
 
         $t = 1000 * time();
-        $collection_to_copy->creationDate = $t;
-        $collection_to_copy->updateDate = $t;
+        $collection_to_copy['creationDate'] = $t;
+        $collection_to_copy['updateDate'] = $t;
 
         $mongoDAO->insertCollection($collection_to_copy);
         $memcached->delete($collection_to_copy->_id);

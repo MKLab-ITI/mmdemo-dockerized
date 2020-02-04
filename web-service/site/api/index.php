@@ -1937,7 +1937,7 @@ $app->get(
     }
 )->name("get_collection");
 
-$app->post('/collection/:uid/:cid/copy/:new_uid',
+$app->post('/collection/:uid/:cid/copy_to_user/:new_uid',
     function ($uid, $cid, $new_uid) use($mongoDAO, $redisClient, $memcached) {
         $collection_to_copy = $mongoDAO->getCollection($cid);
         if($collection_to_copy == null) {
@@ -1949,16 +1949,12 @@ $app->post('/collection/:uid/:cid/copy/:new_uid',
             return;
         }
 
-        unset($collection_to_copy->_id);
 
         $t = 1000 * time();
-        $collection_to_copy->creationDate = $t;
-        $collection_to_copy->updateDate = $t;
-        $collection_to_copy->since = $t - (15 * 24 * 3600000);
+        $collection_to_copy['updateDate'] = $t;
 
-        $collection_to_copy->ownerId = $new_uid;
-        $collection_to_copy->status = "running";
-        $collection_to_copy->favorite = false;
+        $collection_to_copy['ownerId'] = $new_uid;
+        $collection_to_copy['favorite'] = false;
 
         $mongoDAO->insertCollection($collection_to_copy);
 
@@ -1985,16 +1981,16 @@ $app->post('/collection/:uid/:cid/replicate',
             return;
         }
 
-        $collection_to_copy['copiedFrom'] = $collection_to_copy->_id;
-        $collection_to_copy['title'] = 'copy of ' . $collection_to_copy->title;
-        unset($collection_to_copy->_id);
+        $collection_to_copy['copiedFrom'] = $collection_to_copy['_id'];
+        $collection_to_copy['title'] = 'copy of ' . $collection_to_copy['title'];
+        unset($collection_to_copy['_id']);
 
         $t = 1000 * time();
         $collection_to_copy['creationDate'] = $t;
         $collection_to_copy['updateDate'] = $t;
 
         $mongoDAO->insertCollection($collection_to_copy);
-        $memcached->delete($collection_to_copy->_id);
+        $memcached->delete($collection_to_copy['_id']);
 
         if ($collection_to_copy->status === 'running') {
             $newMessage = json_encode($collection_to_copy);

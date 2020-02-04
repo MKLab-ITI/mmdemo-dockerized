@@ -1983,7 +1983,7 @@ $app->post('/collection/:uid/:cid/replicate/:new_cid',
         }
 
         if($collection_to_copy['ownerId'] != $uid) {
-            echo json_encode(array('error'=>"User $uid is not the owner. Only the owner can copy a collection"));
+            echo json_encode(array('error'=>"User $uid is not the owner. Only the owner can replicate a collection"));
             return;
         }
 
@@ -2007,6 +2007,45 @@ $app->post('/collection/:uid/:cid/replicate/:new_cid',
 
     }
 )->name("replicate_collection");
+
+
+$app->post('/collection/:uid/:cid/share',
+    function ($uid, $cid) use($mongoDAO, $memcached, $app) {
+
+        $request = $app->request();
+        $bodyJson = $request->getBody();
+        $viewers = json_decode($bodyJson);
+
+        if ($viewers == null || !is_array($viewers) || count($viewers) == 0) {
+            echo json_encode(array('error'=>"No users to share"));
+            return;
+        }
+
+        $collection = $mongoDAO->getCollection($cid);
+        if($collection == null) {
+            echo json_encode(array('error'=>"Collection $cid does not exist"));
+            return;
+        }
+
+        if($collection['ownerId'] != $uid) {
+            echo json_encode(array('error'=>"User $uid is not the owner. Only the owner can share a collection"));
+            return;
+        }
+
+        if (in_array('viewers', $collection) && $collection['viewers'] != null && is_array($collection['viewers'])) {
+            $viewers = array_merge($viewers, $collection['viewers']);
+        }
+
+        $t = 1000 * time();
+        $fieldsToUpdate = array('updateDate' => $t, 'viewers' => $viewers);
+        $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
+
+        $collection = $mongoDAO->getCollection($cid);
+        $memcached->set($cid, $collection, time() + 300);
+        echo json_encode($collection);
+
+    }
+)->name('share_collection');
 
 
 $app->get(

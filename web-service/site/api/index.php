@@ -1047,8 +1047,8 @@ $app->get(
 
                 $count = $textIndex->countItems($collectionQuery, $filters);
 
-                $requestHash = "topics_".$utils->getParametersHash($collectionId, "*", "*", $source, true, null,
-                        $language, $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null);
+                $requestHash = $utils->getParametersHash($collectionId, "*", "*", $source, true, null, $language,
+                    $query, $user, $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null, "topics_");
 
                 $cachedTopics = $memcached->get($requestHash);
                 if($cachedTopics != false && count($cachedTopics) > 1) {
@@ -1985,7 +1985,7 @@ $app->post('/collection/:uid/:cid/replicate',
             return;
         }
 
-        $collection_to_copy->copiedFrom = $collection_to_copy->_id;
+        $collection_to_copy['copiedFrom'] = $collection_to_copy->_id;
         $collection_to_copy->title = 'copy of ' . $collection_to_copy->title;
         unset($collection_to_copy->_id);
 

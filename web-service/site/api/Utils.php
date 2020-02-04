@@ -365,8 +365,8 @@ class Utils {
                                           $itemsToExclude, $usersToExclude, $keywordsToExclude,
                                           $judgements, $nearLocations, $textIndex) {
 
+        $topics[] = array('label' => 'All', 'query' => '*', 'score' => 1, 'items' => $count);
         foreach($clusters as $cluster) {
-            $topics[] = array('label' => 'All', 'query' => '*', 'score' => 1, 'items' => $count);
             if($cluster['score'] > 0 && count($cluster['docs']) >= 15) {
 
                 $topicQuery = implode(',',$cluster['labels']);
@@ -392,5 +392,7 @@ class Utils {
                 $topics[] = $topic;
             }
         }
+
+        return $topics;
     }
 }

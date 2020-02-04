@@ -1937,7 +1937,7 @@ $app->get(
     }
 )->name("get_collection");
 
-$app->post('/collection/:uid/:cid/copy_to_user/:new_uid',
+$app->post('/collection/:uid/:cid/move_to_user/:new_uid',
     function ($uid, $cid, $new_uid) use($mongoDAO, $redisClient, $memcached) {
         $collection_to_copy = $mongoDAO->getCollection($cid);
         if($collection_to_copy == null) {
@@ -1949,23 +1949,21 @@ $app->post('/collection/:uid/:cid/copy_to_user/:new_uid',
             return;
         }
 
-
         $t = 1000 * time();
-        $collection_to_copy['updateDate'] = $t;
+        $fieldsToUpdate = array('updateDate' => $t, 'ownerId' => $new_uid, 'favorite' => false);
+        $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
 
-        $collection_to_copy['ownerId'] = $new_uid;
-        $collection_to_copy['favorite'] = false;
+        $collection = $mongoDAO->getCollection($cid);
 
-        $mongoDAO->insertCollection($collection_to_copy);
+        if($collection['ownerId'] != $new_uid || $collection['ownerId'] == $uid) {
+            echo json_encode(array('error'=>"Owner id has not changed"));
+            return;
+        }
 
-        $newMessage = json_encode($collection_to_copy);
-        $redisClient->publish("collections:new", $newMessage);
-
-        $memcached->delete($collection_to_copy->_id);
-
-        echo json_encode($collection_to_copy);
+        $memcached->set($cid, $collection, time() + 300);
+        echo json_encode($collection);
     }
-)->name("copy_collection");
+)->name("move_collection");
 
 
 $app->post('/collection/:uid/:cid/replicate',

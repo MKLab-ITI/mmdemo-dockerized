@@ -2041,7 +2041,7 @@ $app->post('/collection/:uid/:cid/share',
         $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
 
         $collection = $mongoDAO->getCollection($cid);
-        $memcached->set($cid, $collection, time() + 300);
+        $memcached->delete($cid);
         echo json_encode($collection);
 
     }

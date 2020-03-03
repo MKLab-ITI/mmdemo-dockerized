@@ -298,8 +298,7 @@ class MongoDAO {
 
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 
-        #$query = array('ownerId' => $uid);
-        $query = array('$or' => [array('ownerId' => $uid), array('viewers' => $uid)]);
+        $query = array('ownerId' => $uid);
 
         if($status != null && ($status==='stopped' || $status==='running')) {
             $query['status'] = $status;
@@ -332,8 +331,7 @@ class MongoDAO {
 
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 
-        #$query = array('ownerId' => $uid);
-        $query = array('$or' => [array('ownerId' => $uid), array('viewers' => $uid)]);
+        $query = array('ownerId' => $uid);
 
         if($status != null && ($status==='stopped' || $status==='running')) {
             $query['status'] = $status;
@@ -352,6 +350,39 @@ class MongoDAO {
 
         $c = $mongoCollection->count($query);
         return $c;
+    }
+
+    public function getUserSharedCollections($uid, $status=null, $pageNumber=null, $nPerPage=null, $favorite=null, $q=null) {
+
+        $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
+
+        $query = array('$or' => [array('ownerId' => $uid), array('viewers' => $uid)]);
+
+        if($status != null && ($status==='stopped' || $status==='running')) {
+            $query['status'] = $status;
+        }
+
+        if($favorite != null) {
+            if(is_string($favorite)) {
+                $favorite = $favorite === 'true' ? true : false;
+            }
+            $query['favorite'] = $favorite;
+        }
+
+        if($q != null && $q != '') {
+            $query['title'] = new MongoDB\BSON\Regex("$q", 'i');
+        }
+
+        $options = array('sort' => ['creationDate' => -1]);
+        if($pageNumber != null && $nPerPage != null) {
+            $options['skip'] = ($pageNumber-1)*$nPerPage;
+            $options['limit'] = $nPerPage;
+        }
+
+        $cursor = $mongoCollection->find($query, $options);
+        $collections = iterator_to_array($cursor, false);
+
+        return $collections;
     }
 
     public function getCollection($cid) {

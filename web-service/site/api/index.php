@@ -1235,7 +1235,7 @@ $app->get(
             $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
             $filters = $utils->getFilters($since, $until, "all", null, null, null, null, null,
-                $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null, $nearLocations);
+                $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
 
             $collection['filters'] = $filters;
 
@@ -1243,7 +1243,7 @@ $app->get(
             $collection['items'] = $count;
 
             $filters = $utils->getFilters($since, $until, "all", null, "media", null, null, null,
-                $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null, $nearLocations);
+                $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
 
             $facet = $textIndex->getFacet('mediaIds', $q, $filters, 3, false, null, false, null, 'fc');
             $collection['facet'] = $facet;
@@ -1281,7 +1281,6 @@ $app->get(
             $memcached->set($cid, $collection, time() + 300);
             $collections[] = $collection;
         }
-
 
         $userFavCollections = $mongoDAO->getUserCollections($uid, null, null, null, 'true', null);
 
@@ -1326,7 +1325,7 @@ $app->get(
             $nearLocations = isset($favCollection['nearLocations'])?$favCollection['nearLocations']:null;
 
             $filters = $utils->getFilters($since, $until, "all", null, null, null, null, null,
-                $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null, $nearLocations);
+                $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
 
             $favCollection['filters'] = $filters;
 
@@ -1334,10 +1333,10 @@ $app->get(
             $favCollection['items'] = $count;
 
             $filters = $utils->getFilters($since, $until, "all", null, "media", null, null, null,
-                $itemsToExclude, $usersToExclude, $keywordsToExclude, null, null, $nearLocations);
+                $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
 
             $facet = $textIndex->getFacet('mediaIds', $q, $filters, 3, false, null, false, null, 'fc');
-            $collection['facet'] = $facet;
+            $favCollection['facet'] = $facet;
 
             $polygons = array();
             if(isset($favCollection['nearLocations'])) {
@@ -1373,6 +1372,96 @@ $app->get(
             $memcached->set($cid, $favCollection, time() + 300);
             $favCollections[] = $favCollection;
         }
+
+        $userSharedCollections = $mongoDAO->getUserSharedCollections($uid, null, null, null, 'true', null);
+
+        $sharedCollections = array();
+        foreach($userSharedCollections as &$sharedCollection) {
+            $cid = $sharedCollection['_id'];
+
+            if (is_object($cid)) {
+                $cid = $cid->__toString();
+                $sharedCollection['_id'] = $cid;
+            }
+
+            if($cached != "false") {
+                $cachedCollection = $memcached->get($cid);
+                if ($cachedCollection != false &&
+                    (($cachedCollection['items'] > 0 && count($cachedCollection['facet']) > 0)
+                        || (time()*1000 - $cachedCollection['creationDate']) > (1 * 3600000))) {
+                    $sharedCollections[] = $cachedCollection;
+                    continue;
+                }
+            }
+
+            $lastExecution = $redisClient->get($cid);
+            if($lastExecution != null) {
+                $favCollection['lastExecution'] = $lastExecution;
+            }
+
+            if($sharedCollection['status'] != 'stopped') {
+                $sharedCollection['stopDate'] = 1000 * time();
+            }
+
+            $q = $utils->formulateCollectionQuery($sharedCollection);
+
+            $sharedCollection['query'] = $q;
+
+            $since = $sharedCollection['since'];
+            $until = $sharedCollection['stopDate'];
+
+            $itemsToExclude = isset($sharedCollection['itemsToExclude'])?$sharedCollection['itemsToExclude']:null;
+            $usersToExclude = isset($sharedCollection['usersToExclude'])?$sharedCollection['usersToExclude']:null;
+            $keywordsToExclude = isset($sharedCollection['keywordsToExclude'])?$sharedCollection['keywordsToExclude']:null;
+            $nearLocations = isset($sharedCollection['nearLocations'])?$sharedCollection['nearLocations']:null;
+
+            $filters = $utils->getFilters($since, $until, "all", null, null, null, null, null,
+                $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
+
+            $sharedCollection['filters'] = $filters;
+
+            $count = $textIndex->countItems($q, $filters);
+            $sharedCollection['items'] = $count;
+
+            $filters = $utils->getFilters($since, $until, "all", null, "media", null, null, null,
+                $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
+
+            $facet = $textIndex->getFacet('mediaIds', $q, $filters, 3, false, null, false, null, 'fc');
+            $sharedCollection['facet'] = $facet;
+
+            $polygons = array();
+            if(isset($sharedCollection['nearLocations'])) {
+                foreach($sharedCollection['nearLocations'] as $location) {
+                    $polygon = array(
+                        'centroid' => $location['name']
+                    );
+
+                    if(isset($location['polygon'])) {
+                        $peaks = array();
+                        foreach ($location['polygon'] as $peak) {
+                            $peaks[] = array('lat' => $peak['latitude'], 'long' => $peak['longitude']);
+                        }
+                        $polygon['peaks'] = $peaks;
+                    }
+                    $polygons[] = $polygon;
+                }
+            }
+            $sharedCollection['polygons'] = $polygons;
+            if(count($sharedCollection['facet']) > 0) {
+                foreach($sharedCollection['facet'] as $ft) {
+                    $mId = $ft['field'];
+                    $mItem = $mongoDAO->getMediaItem($mId);
+                    if($mItem != null) {
+                        $sharedCollection['mediaUrl'] = $mItem['url'];
+                        break;
+                    }
+                }
+            }
+
+            $memcached->set($cid, $sharedCollection, time() + 300);
+            $sharedCollections[] = $sharedCollection;
+        }
+
 
         echo json_encode(array('ownerId' => $uid, 'collections'=>$collections, 'favs'=> $favCollections, 'count'=>$c));
 

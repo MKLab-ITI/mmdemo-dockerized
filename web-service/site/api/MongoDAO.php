@@ -352,7 +352,7 @@ class MongoDAO {
         return $c;
     }
 
-    public function getUserSharedCollections($uid, $status=null, $pageNumber=null, $nPerPage=null, $favorite=null, $q=null) {
+    public function getUserSharedCollections($uid, $status=null, $pageNumber=null, $nPerPage=null, $q=null) {
 
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 
@@ -360,13 +360,6 @@ class MongoDAO {
 
         if($status != null && ($status==='stopped' || $status==='running')) {
             $query['status'] = $status;
-        }
-
-        if($favorite != null) {
-            if(is_string($favorite)) {
-                $favorite = $favorite === 'true' ? true : false;
-            }
-            $query['favorite'] = $favorite;
         }
 
         if($q != null && $q != '') {

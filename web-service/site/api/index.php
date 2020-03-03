@@ -1373,7 +1373,7 @@ $app->get(
             $favCollections[] = $favCollection;
         }
 
-        $userSharedCollections = $mongoDAO->getUserSharedCollections($uid, null, null, null, 'true', null);
+        $userSharedCollections = $mongoDAO->getUserSharedCollections($uid, null, null, null, null);
 
         $sharedCollections = array();
         foreach($userSharedCollections as &$sharedCollection) {

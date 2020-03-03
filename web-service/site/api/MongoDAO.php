@@ -355,8 +355,13 @@ class MongoDAO {
 
     public function getCollection($cid) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
+        if(strlen($cid) == "24" && ctype_xdigit($cid)){
+            $query = array("_id" => array('$in' => [$cid, new MongoDB\BSON\ObjectId($cid)]));
+        }
+        else {
+            $query = array("_id" =>$cid);
+        }
 
-        $query = array("_id" => array('$in' => [$cid, new MongoDB\BSON\ObjectId($cid)]));
         $collection = $mongoCollection->findOne($query);
 
         return $collection;
@@ -364,7 +369,14 @@ class MongoDAO {
 
     public function collectionExists($cid) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
-        $query = array("_id" => $cid);
+
+        if(strlen($cid) == "24" && ctype_xdigit($cid)){
+            $query = array("_id" => array('$in' => [$cid, new MongoDB\BSON\ObjectId($cid)]));
+        }
+        else {
+            $query = array("_id" =>$cid);
+        }
+
         $c = $mongoCollection->count($query);
 
         return $c > 0;
@@ -378,14 +390,26 @@ class MongoDAO {
     public function updateCollection($cid, $collection) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 
-        $criteria = array("_id" => $cid);
+        if(strlen($cid) == "24" && ctype_xdigit($cid)){
+            $criteria = array("_id" => array('$in' => [$cid, new MongoDB\BSON\ObjectId($cid)]));
+        }
+        else {
+            $criteria = array("_id" =>$cid);
+        }
+
         $mongoCollection->updateOne($criteria, $collection);
     }
 
     public function updateCollectionFields($cid, $fieldsToUpdate) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 
-        $criteria = array("_id" => $cid);
+        if(strlen($cid) == "24" && ctype_xdigit($cid)){
+            $criteria = array("_id" => array('$in' => [$cid, new MongoDB\BSON\ObjectId($cid)]));
+        }
+        else {
+            $criteria = array("_id" =>$cid);
+        }
+
         $ops = array('$set' => $fieldsToUpdate);
 
         $mongoCollection->updateOne($criteria, $ops);
@@ -394,7 +418,13 @@ class MongoDAO {
     public function deleteCollection($cid) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 
-        $criteria = array("_id" => $cid);
+        if(strlen($cid) == "24" && ctype_xdigit($cid)){
+            $criteria = array("_id" => array('$in' => [$cid, new MongoDB\BSON\ObjectId($cid)]));
+        }
+        else {
+            $criteria = array("_id" =>$cid);
+        }
+
         $status = $mongoCollection->deleteMany($criteria);
 
         return $status;
@@ -425,7 +455,6 @@ class MongoDAO {
         }
     }
 
-
     public function getRelevanceJudgements($cid, $iid=null, $n=20) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
 
@@ -445,7 +474,6 @@ class MongoDAO {
         $rj = iterator_to_array($cursor, false);
         return $rj;
     }
-
 
     public function getItemsOfSpecificRelevance($cid, $relevance) {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);

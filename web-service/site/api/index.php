@@ -1193,8 +1193,9 @@ $app->get(
         foreach($userCollections as &$collection) {
             $cid = $collection['_id'];
 
-            $collection['id_type'] = gettype($cid);
-
+            if (is_object($cid)) {
+                $collection['id_type'] = $cid.__toString();
+            }
             if($cached != "false") {
                 $cachedCollection = $memcached->get($cid);
                 if ($cachedCollection != false &&

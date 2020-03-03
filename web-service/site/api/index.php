@@ -1194,8 +1194,10 @@ $app->get(
             $cid = $collection['_id'];
 
             if (is_object($cid)) {
-                $collection['id_type'] = $cid->__toString();
+                $cid = $cid->__toString();
+                $collection['_id'] = $cid;
             }
+
             if($cached != "false") {
                 $cachedCollection = $memcached->get($cid);
                 if ($cachedCollection != false &&

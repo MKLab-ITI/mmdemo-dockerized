@@ -1191,7 +1191,10 @@ $app->get(
 
         $collections = array();
         foreach($userCollections as &$collection) {
-            $cid = $collection['_id'];
+            $cid = (string) $collection['_id'];
+
+            $collection['id_type'] = gettype($cid);
+
             if($cached != "false") {
                 $cachedCollection = $memcached->get($cid);
                 if ($cachedCollection != false &&

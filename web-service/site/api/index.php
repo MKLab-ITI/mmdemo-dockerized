@@ -1191,7 +1191,7 @@ $app->get(
 
         $collections = array();
         foreach($userCollections as &$collection) {
-            $cid = (string) $collection['_id'];
+            $cid = $collection['_id'];
 
             $collection['id_type'] = gettype($cid);
 

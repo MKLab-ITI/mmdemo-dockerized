@@ -1283,6 +1283,12 @@ $app->get(
         $favCollections = array();
         foreach($userFavCollections as &$favCollection) {
             $cid = $favCollection['_id'];
+
+            if (is_object($cid)) {
+                $cid = $cid->__toString();
+                $favCollection['_id'] = $cid;
+            }
+
             if($cached != "false") {
                 $cachedCollection = $memcached->get($cid);
                 if ($cachedCollection != false &&

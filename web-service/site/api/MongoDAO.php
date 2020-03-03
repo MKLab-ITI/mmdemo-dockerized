@@ -150,8 +150,6 @@ class MongoDAO {
         return $items_states;
     }
 
-
-
     public function getMediaItem($id) {
         $collection = $this->db->selectCollection( MongoDAO::$MEDIA_ITEMS );
 
@@ -192,7 +190,6 @@ class MongoDAO {
         }
         return $user;
     }
-
 
     public function getItems($since, $until, $pageNumber, $nPerPage, $source=null, $language=null, $sort=null, $label=null, $onlyGeoTagged=false) {
 

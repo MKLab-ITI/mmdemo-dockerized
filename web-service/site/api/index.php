@@ -2052,6 +2052,8 @@ $app->post('/collection/:uid/:cid/share',
             $viewers = array_merge($viewers, $collection['viewers']);
         }
 
+        $viewers = array_diff($viewers, [""]);
+
         $t = 1000 * time();
         $fieldsToUpdate = array('updateDate' => $t, 'viewers' => $viewers);
         $mongoDAO->updateCollectionFields($cid, $fieldsToUpdate);
@@ -2178,7 +2180,6 @@ $app->get('/search/users',
     }
 )->name("user_search");
 
-
 $app->get('/terms/vectors',
     function() use ($app, $textIndex) {
 
@@ -2193,7 +2194,6 @@ $app->get('/terms/vectors',
         echo json_encode(array("query"=>$q, "vectors"=>$tv));
     }
 )->name("term_vectors");
-
 
 /**
  *  GET /detect/users

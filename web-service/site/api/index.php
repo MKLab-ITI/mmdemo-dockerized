@@ -1985,7 +1985,6 @@ $app->post('/collection/:uid/:cid/move_to_user/:new_uid',
     }
 )->name("move_collection");
 
-
 $app->post('/collection/:uid/:cid/replicate/:new_cid',
     function ($uid, $cid, $new_cid) use($mongoDAO, $redisClient, $memcached) {
         $collection_to_copy = $mongoDAO->getCollection($cid);
@@ -2019,7 +2018,6 @@ $app->post('/collection/:uid/:cid/replicate/:new_cid',
 
     }
 )->name("replicate_collection");
-
 
 $app->post('/collection/:uid/:cid/share',
     function ($uid, $cid) use($mongoDAO, $memcached, $app) {
@@ -2058,7 +2056,6 @@ $app->post('/collection/:uid/:cid/share',
 
     }
 )->name('share_collection');
-
 
 $app->get('/owners',
     function() use($mongoDAO) {

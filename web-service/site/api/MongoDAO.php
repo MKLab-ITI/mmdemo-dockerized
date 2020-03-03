@@ -357,6 +357,8 @@ class MongoDAO {
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 
         $query = array("_id" => $cid);
+        $query = array("_id" => new MongoDB\BSON\ObjectId($cid));
+
         $collection = $mongoCollection->findOne($query);
 
         return $collection;

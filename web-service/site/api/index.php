@@ -498,7 +498,6 @@ $app->get(
     }
 )->name("top");
 
-
 $app->get(
     '/users',
     function () use ($mongoDAO, $textIndex, $utils, $app) {

@@ -24,7 +24,7 @@ function draw_locations() {
 
     $.ajax({
         type: "GET",
-        url: api_folder + "top/country?collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "top/country?collection=" + collection_param + "&user=" + user_query_param + "&q=" + keyword_query_param + "&relevance=" + relevance_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             countall = 0;
@@ -206,7 +206,7 @@ function draw_gages(direction) {
         current_direction++;
         $.ajax({
             type: "GET",
-            url: api_folder + "top/country?collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+            url: api_folder + "top/country?collection=" + collection_param + "&user=" + user_query_param + "&q=" + keyword_query_param + "&relevance=" + relevance_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
             dataType: "json",
             success: function (json) {
                 var $values = json.values;
@@ -356,7 +356,7 @@ function draw_gages(direction) {
         current_direction--;
         $.ajax({
             type: "GET",
-            url: api_folder + "top/country?collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+            url: api_folder + "top/country?collection=" + collection_param + "&user=" + user_query_param + "&q=" + keyword_query_param + "&relevance=" + relevance_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
             dataType: "json",
             success: function (json) {
                 var $values = json.values;

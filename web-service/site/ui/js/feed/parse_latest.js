@@ -1,13 +1,42 @@
 function parse_latest(pagenum) {
     $.ajax({
         type: "GET",
-        url: api_folder + "items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&q=" + query_param + "&source=" + source_param + "&unique=" + unique_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&user=" + user_query_param + "&q=" + keyword_query_param + "&relevance=" + relevance_param + "&source=" + source_param + "&unique=" + unique_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             if (pagelocation === "latest") {
                 var title, source, publicationTime, shared, screenname, profileimage, uid, id, relevance_score, page, userpage, thumb, colorclass, iconsource, onerror, style_favicon, style_icon, language;
 
                 $('#tiles,#posts_info').show();
+                $("#languages").empty();
+                for (var l = 0, count, lang; l < json.languages.length; l++) {
+                    lang = json.languages[l].field;
+                    count = json.languages[l].count;
+                    $("#languages").append('<li class="sub1"><a href="#">' + lang.toUpperCase() + ' <span class="label">' + nFormatter(count) + '</span></a></li>')
+                }
+                $(".sub1").each(function () {
+                    $this_a = $(this).find('a');
+                    if ($this_a.text().split(' ')[0].toLowerCase() === language_param) {
+                        $this_a.addClass('activelan');
+                        return false;
+                    }
+                });
+                $("#topics").empty();
+                var $topics = json.topics;
+                for (var t = 0, items, label, query; t < $topics.length; t++) {
+                    label = $topics[t].label;
+                    items = $topics[t].items;
+                    query = $topics[t].query;
+                    $("#topics").append('<li class="sub5"><a href="#"><p data-query="' + query + '">' + label + '</p><span class="label">' + nFormatter(items) + '</span></a></li>');
+                }
+                $(".sub5").each(function () {
+                    $this_a = $(this).find('a');
+                    var $this_p = $this_a.find('p');
+                    if ($this_p.data("query") === topic_param) {
+                        $this_a.addClass('activelan');
+                        return false;
+                    }
+                });
                 for (var i = 0; i < json.items.length; i++) {
                     title = json.items[i].title;
                     if (title === "") {
@@ -19,7 +48,10 @@ function parse_latest(pagenum) {
                     publicationTime = json.items[i].publicationTime;
                     language = json.items[i].language;
                     screenname = json.items[i].user.username;
-                    relevance_score = json.items[i].normalizedScore;
+                    relevance_score = "0";
+                    if (json.items[i].hasOwnProperty('relevance')) {
+                        relevance_score = json.items[i].relevance;
+                    }
                     profileimage = json.items[i].user.profileImage;
                     id = json.items[i].id.replace(/#/g, "%23");
                     uid = json.items[i].user.id;
@@ -124,6 +156,13 @@ function parse_latest(pagenum) {
                         profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                         divouter.appendChild(profile);
 
+                        if (json.items[i].hasOwnProperty('relevance')) {
+                            var rating = document.createElement('p');
+                            rating.setAttribute('class', 'star_rating');
+                            rating.innerHTML = '<img src="imgs/star_icon.png">' + json.items[i].relevance;
+                            divouter.appendChild(rating);
+                        }
+
                         var name = document.createElement('span');
                         name.setAttribute('class', 'ff-name');
                         name.innerText = screenname;
@@ -213,6 +252,13 @@ function parse_latest(pagenum) {
                         profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                         divouter.appendChild(profile);
 
+                        if (json.items[i].hasOwnProperty('relevance')) {
+                            var rating = document.createElement('p');
+                            rating.setAttribute('class', 'star_rating star_rating_media');
+                            rating.innerHTML = '<img src="imgs/star_icon.png">' + json.items[i].relevance
+                            divouter.appendChild(rating);
+                        }
+
                         var name = document.createElement('span');
                         name.setAttribute('class', 'ff-name');
                         name.innerText = screenname;
@@ -294,12 +340,24 @@ function parse_latest(pagenum) {
                 }
 
                 if ((json.items.length === 0) && (pagenum === 1)) {
-                    $("#loading,#posts_info").hide();
-                    if (query_param !== "") {
+                    $("#loading,#posts_info").hide();//+ "&user=" + user_query_param
+                    if ((keyword_query_param !== "") && (user_query_param !== "")) {
                         $('#myModal h1').html("No results!");
-                        $('#myModal p').html("The internet is not talking about that keyword.");
+                        $('#myModal p').html("There are no results for this keyword and user combination");
                         $('#myModal').reveal();
-                        loadimage(99, query_param, 12);
+                        loadimage(99, keyword_query_param + "----------" + user_query_param, 12);
+                    }
+                    else if (keyword_query_param !== "") {
+                        $('#myModal h1').html("No results!");
+                        $('#myModal p').html("There are no results for this keyword");
+                        $('#myModal').reveal();
+                        loadimage(98, keyword_query_param, 12);
+                    }
+                    else if (user_query_param !== "") {
+                        $('#myModal h1').html("No results!");
+                        $('#myModal p').html("There are no results for this user");
+                        $('#myModal').reveal();
+                        loadimage(97, user_query_param, 12);
                     }
                     else {
                         $('#myModal h1').html("No results!");
@@ -322,7 +380,7 @@ function parse_latest_list(pagenum) {
     $('tbody tr:hidden').remove();
     $.ajax({
         type: "GET",
-        url: api_folder + "items?collection=" + collection_param + "&nPerPage=" + items + "&pageNumber=" + pagenum + "&q=" + query_param + "&source=" + source_param + "&unique=" + unique_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "items?collection=" + collection_param + "&nPerPage=" + items + "&user=" + user_query_param + "&pageNumber=" + pagenum + "&relevance=" + relevance_param + "&q=" + keyword_query_param + "&relevance=" + relevance_param + "&source=" + source_param + "&unique=" + unique_param + "&sort=" + sort_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             if (pagelocation === "latest") {
@@ -333,11 +391,25 @@ function parse_latest_list(pagenum) {
                     var $myModal = $('#myModal');
                     var $end = $('#end');
                     $('.list_table,#posts_info,#download_icon,.well').hide();
-                    if (query_param !== "") {
+                    if ((keyword_query_param !== "") && (user_query_param !== "")) {
                         $myModal.find('h1').html("No results!");
-                        $myModal.find('p').html("The internet is not talking about that keyword.");
+                        $myModal.find('p').html("The internet is not talking about this keyword and user combination.");
                         $myModal.reveal();
-                        $end.find('p').html("No items for keyword:<span style='color:red'> " + query_param + "</span>");
+                        $end.find('p').html("No items for keyword:<span style='color:red'> " + keyword_query_param + "</span> combined with user:<span style='color:red'> " + user_query_param + "</span>");
+                        $end.show();
+                    }
+                    else if (keyword_query_param !== "") {
+                        $myModal.find('h1').html("No results!");
+                        $myModal.find('p').html("The internet is not talking about this keyword.");
+                        $myModal.reveal();
+                        $end.find('p').html("No items for keyword:<span style='color:red'> " + keyword_query_param + "</span>");
+                        $end.show();
+                    }
+                    else if (user_query_param !== "") {
+                        $myModal.find('h1').html("No results!");
+                        $myModal.find('p').html("The internet is not talking about this user.");
+                        $myModal.reveal();
+                        $end.find('p').html("No items for user:<span style='color:red'> " + user_query_param + "</span>");
                         $end.show();
                     }
                     else {
@@ -396,6 +468,35 @@ function parse_latest_list(pagenum) {
                             parse_latest_list(page);
                         }
                     });
+                    $("#languages").empty();
+                    for (var l = 0, count, lang; l < json.languages.length; l++) {
+                        lang = json.languages[l].field;
+                        count = json.languages[l].count;
+                        $("#languages").append('<li class="sub1"><a href="#">' + lang.toUpperCase() + ' <span class="label">' + nFormatter(count) + '</span></a></li>')
+                    }
+                    $(".sub1").each(function () {
+                        $this_a = $(this).find('a');
+                        if ($this_a.text().split(' ')[0].toLowerCase() === language_param) {
+                            $this_a.addClass('activelan');
+                            return false;
+                        }
+                    });
+                    $("#topics").empty();
+                    var $topics = json.topics;
+                    for (var t = 0, items, label, query; t < $topics.length; t++) {
+                        label = $topics[t].label;
+                        items = $topics[t].items;
+                        query = $topics[t].query;
+                        $("#topics").append('<li class="sub5"><a href="#"><p data-query="' + query + '">' + label + '</p><span class="label">' + nFormatter(items) + '</span></a></li>');
+                    }
+                    $(".sub5").each(function () {
+                        $this_a = $(this).find('a');
+                        var $this_p = $this_a.find('p');
+                        if ($this_p.data("query") === topic_param) {
+                            $this_a.addClass('activelan');
+                            return false;
+                        }
+                    });
                     for (var i = 0; i < json.items.length; i++) {
 
                         uid = json.items[i].user.id;
@@ -425,7 +526,10 @@ function parse_latest_list(pagenum) {
                         if (profileimage === "imgs/noprofile.gif") {
                             profileimage = "http://getfavicon.appspot.com/" + page;
                         }
-                        relevance_order = json.items[i].normalizedScore;
+                        relevance_order = 0;
+                        if (json.items[i].hasOwnProperty('relevance')) {
+                            relevance_order = json.items[i].relevance;
+                        }
                         onerror = false;
                         switch (source) {
                             case "Youtube":
@@ -497,6 +601,8 @@ function parse_latest_list(pagenum) {
                         var td_source = ' <td data-order="' + source + '"><img class="list_source_icon" src="' + iconsource + '"></td>';
                         var td_popularity = ' <td data-order="' + shared_order + '"><div class="list_shares">' + shared + '</div></td>';
                         var td_relevance = ' <td data-order="' + relevance_order + '"><div class="relevance_changed"><img src="imgs/check-circle-16-green.png">Saved</div><div class="relevance_slider"></div></td>';
+                        var td_url = ' <td data-order="' + page + '"><div class="list_shares">' + page + '</div></td>';
+
                         var td_media;
                         if (json.items[i].type === "item") {
                             td_media = '<td><span class="missing_media">-</span></td>';
@@ -509,7 +615,7 @@ function parse_latest_list(pagenum) {
                             }
                             td_media = '<td><a href="' + thumb + '" onclick="return false;" rel="lightbox" rev="<div style=\'display:none\' class=\'redirect\'>' + page + '</div><p class=\'lbp\'>' + screenname + '</p><img class=\'lbimg\' src=\'' + profileimage + '\' width=50 height=50 onerror=\'' + onerror + '\' data-link=\'' + userpage + '\'><p class=\'lbp2\'>' + title + '</p><p class=\'lbp3\'>' + shared + '</p><p class=\'lbp4\'>  ' + time + '</p>"><img class="list_media" src="' + thumb + '" width="24" onerror="imgError1(this);"></a></td>';
                         }
-                        var td = td_selection + td_user + td_text + td_media + td_date + td_source + td_popularity + td_relevance;
+                        var td = td_selection + td_user + td_text + td_media + td_date + td_source + td_popularity + td_relevance + td_url;
                         $('.list_table tbody').append('<tr data-uid="' + uid + '" data-id="' + id + '">' + td + '</tr>');
                     }
 
@@ -528,13 +634,13 @@ function parse_latest_list(pagenum) {
                         default:
                             $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
                     }
-                    var $list_table = $("#list_table");
+                    /*var $list_table = $("#list_table");
                     var column;
                     if ($('.tablesorter-headerAsc').length === 1) {
                         column = $('.tablesorter-headerAsc').index();
                         $list_table.trigger("destroy");
                         $list_table.tablesorter({
-                            headers: {0: {sorter: false}, 3: {sorter: false}},
+                            headers: {0: {sorter: false}, 2: {sorter: false},3: {sorter: false},5: {sorter: false},7: {sorter: false}},
                             sortList: [[column, 0]],
                             textExtraction: orderextraction
                         });
@@ -543,7 +649,7 @@ function parse_latest_list(pagenum) {
                         column = $('.tablesorter-headerDesc').index();
                         $list_table.trigger("destroy");
                         $list_table.tablesorter({
-                            headers: {0: {sorter: false}, 3: {sorter: false}},
+                            headers: {0: {sorter: false}, 2: {sorter: false},3: {sorter: false},5: {sorter: false},7: {sorter: false}},
                             sortList: [[column, 1]],
                             textExtraction: orderextraction
                         });
@@ -551,10 +657,10 @@ function parse_latest_list(pagenum) {
                     else {
                         $list_table.trigger("destroy");
                         $list_table.tablesorter({
-                            headers: {0: {sorter: false}, 3: {sorter: false}},
+                            headers: {0: {sorter: false}, 2: {sorter: false},3: {sorter: false},5: {sorter: false},7: {sorter: false}},
                             textExtraction: orderextraction
                         });
-                    }
+                    }*/
                     var doubleLabels = [
                         "<i>1</i>",
                         "<i>2</i>",
@@ -575,6 +681,7 @@ function parse_latest_list(pagenum) {
                                     $('#deleted_msg_user,#deleted_msg_post').slideUp(500);
                                     $('tbody tr:hidden').remove();
                                     var $this = $(this);
+                                    $(this).find('.ui-state-default').show();
                                     $this.parents('td').attr('data-order', ui.value);
                                     $("#list_table").trigger("update");
                                     var viewData = {
@@ -605,7 +712,15 @@ function parse_latest_list(pagenum) {
                         });
                     $('.relevance_slider:not(".initiated")').each(function () {
                         $(this).addClass('initiated');
-                        $(this).slider("value", $(this).parents('td').attr('data-order'));
+                        var score = $(this).parents('td').attr('data-order');
+                        if (score == "0") {
+                            $(this).slider("value", "1");
+                            $(this).find('.ui-state-default').hide();
+                            $(this).find('.ui-slider-pip-selected').removeClass('ui-slider-pip-selected');
+                        }
+                        else {
+                            $(this).slider("value", score);
+                        }
                     });
                 }
             }
@@ -618,12 +733,12 @@ function more_latest() {
     var pagenum = 10;
     $(window).unbind('.more_latest');
     $(window).bind("scroll.more_latest", function () {
-        if ((($('#main').height()) + 93) <= ($(window).height() + $(window).scrollTop())) {
+        if ((($('#main').height()) + 53) <= ($(window).height() + $(window).scrollTop())) {
             $("#loadmore").show();
             pagenum++;
             $.ajax({
                 type: "GET",
-                url: api_folder + "items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&q=" + query_param + "&source=" + source_param + "&sort=" + sort_param + "&unique=" + unique_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+                url: api_folder + "items?collection=" + collection_param + "&nPerPage=5&pageNumber=" + pagenum + "&user=" + user_query_param + "&q=" + keyword_query_param + "&relevance=" + relevance_param + "&relevance=" + relevance_param + "&source=" + source_param + "&sort=" + sort_param + "&unique=" + unique_param + "&language=" + language_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
                 dataType: "json",
                 success: function (json) {
                     if (pagelocation === "latest") {
@@ -642,7 +757,10 @@ function more_latest() {
                             publicationTime = json.items[i].publicationTime;
                             language = json.items[i].language;
                             screenname = json.items[i].user.username;
-                            relevance_score = json.items[i].normalizedScore;
+                            relevance_score = "0";
+                            if (json.items[i].hasOwnProperty('relevance')) {
+                                relevance_score = json.items[i].relevance;
+                            }
                             profileimage = json.items[i].user.profileImage;
                             id = json.items[i].id.replace(/#/g, "%23");
                             uid = json.items[i].user.id;
@@ -747,6 +865,13 @@ function more_latest() {
                                 profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                                 divouter.appendChild(profile);
 
+                                if (json.items[i].hasOwnProperty('relevance')) {
+                                    var rating = document.createElement('p');
+                                    rating.setAttribute('class', 'star_rating');
+                                    rating.innerHTML = '<img src="imgs/star_icon.png">' + json.items[i].relevance
+                                    divouter.appendChild(rating);
+                                }
+
                                 var name = document.createElement('span');
                                 name.setAttribute('class', 'ff-name');
                                 name.innerText = screenname;
@@ -838,6 +963,13 @@ function more_latest() {
                                 profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                                 divouter.appendChild(profile);
 
+                                if (json.items[i].hasOwnProperty('relevance')) {
+                                    var rating = document.createElement('p');
+                                    rating.setAttribute('class', 'star_rating star_rating_media');
+                                    rating.innerHTML = '<img src="imgs/star_icon.png">' + json.items[i].relevance
+                                    divouter.appendChild(rating);
+                                }
+
                                 var name = document.createElement('span');
                                 name.setAttribute('class', 'ff-name');
                                 name.innerText = screenname;
@@ -925,7 +1057,7 @@ function more_latest() {
 function parse_new(count) {
     $.ajax({
         type: "GET",
-        url: api_folder + "items?collection=" + collection_param + "&nPerPage=" + count + "&pageNumber=1&q=" + query_param + "&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "items?collection=" + collection_param + "&nPerPage=" + count + "&pageNumber=1&q=" + keyword_query_param + "&user=" + user_query_param + "&source=" + source_param + "&relevance=" + relevance_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&language=" + language_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             if (pagelocation === "latest") {
@@ -941,7 +1073,10 @@ function parse_new(count) {
                     publicationTime = json.items[i].publicationTime;
                     language = json.items[i].language;
                     screenname = json.items[i].user.username;
-                    relevance_score = json.items[i].normalizedScore;
+                    relevance_score = "0";
+                    if (json.items[i].hasOwnProperty('relevance')) {
+                        relevance_score = json.items[i].relevance;
+                    }
                     profileimage = json.items[i].user.profileImage;
                     id = json.items[i].id.replace(/#/g, "%23");
                     uid = json.items[i].user.id;
@@ -1045,6 +1180,13 @@ function parse_new(count) {
                         profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                         divouter.appendChild(profile);
 
+                        if (json.items[i].hasOwnProperty('relevance')) {
+                            var rating = document.createElement('p');
+                            rating.setAttribute('class', 'star_rating');
+                            rating.innerHTML = '<img src="imgs/star_icon.png">' + json.items[i].relevance
+                            divouter.appendChild(rating);
+                        }
+
                         var name = document.createElement('span');
                         name.setAttribute('class', 'ff-name');
                         name.innerText = screenname;
@@ -1134,6 +1276,13 @@ function parse_new(count) {
                         profile.setAttribute('onerror', onerror);
                         profile.setAttribute('onclick', 'redirect("' + userpage + '")');
                         divouter.appendChild(profile);
+
+                        if (json.items[i].hasOwnProperty('relevance')) {
+                            var rating = document.createElement('p');
+                            rating.setAttribute('class', 'star_rating star_rating_media');
+                            rating.innerHTML = '<img src="imgs/star_icon.png">' + json.items[i].relevance
+                            divouter.appendChild(rating);
+                        }
 
                         var name = document.createElement('span');
                         name.setAttribute('class', 'ff-name');

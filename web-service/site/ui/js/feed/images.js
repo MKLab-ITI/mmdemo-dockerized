@@ -13,8 +13,7 @@ function loadimage(end, page, pagenum) {
 
             var handler = $('#tiles > li');
             handler.wookmark(options);
-            var doubleLabels = []
-            doubleLabels = [
+            var doubleLabels = [
                 "<i>1</i><span>Irrelevant</span>",
                 "<i>2</i>",
                 "<i>3</i>",
@@ -34,6 +33,7 @@ function loadimage(end, page, pagenum) {
                     change: function (event, ui) {
                         if (event.originalEvent) {
                             var $this = $(this);
+                            $this.children(":first").show();
                             $this.siblings('.refresh').slideUp(300, function () {
                                 $this.siblings('.rate_save_but').slideDown();
                             });
@@ -47,7 +47,14 @@ function loadimage(end, page, pagenum) {
 
             $('.relevance_slider:not(".initiated")').each(function (i, obj) {
                 $(this).addClass('initiated');
-                $(this).slider("value", $(this).parents('li').attr('data-score'));
+                var score = $(this).parents('li').attr('data-score');
+                if (score == "0") {
+                    $(this).slider("value", "1");
+                    $(this).find('span').eq(0).hide();
+                }
+                else {
+                    $(this).slider("value", score);
+                }
             });
             if (!(first_loading)) {
                 $("#loading, #loadmore").hide();
@@ -63,7 +70,13 @@ function loadimage(end, page, pagenum) {
                 }, 500);
             }
             else if (end === 99) {
+                $('#end p').html("No items for keyword:<span style='color:red'> " + page.split("----------")[0] + "</span> combined with user:<span style='color:red'> " + page.split("----------")[1] + "</span>");
+            }
+            else if (end === 98) {
                 $('#end p').html("No items for keyword:<span style='color:red'> " + page + "</span>");
+            }
+            else if (end === 97) {
+                $('#end p').html("No items for user:<span style='color:red'> " + page + "</span>");
             }
             else if (end === 2) {
                 $("#end").show();
@@ -112,5 +125,11 @@ function loadimage(end, page, pagenum) {
                 }
             }
         }
+        $('#tiles li').each(function (i, obj) {
+            var score = $(this).attr('data-score');
+            if (score == "0") {
+                $(this).find('.ui-slider-pip-selected').removeClass('ui-slider-pip-selected');
+            }
+        });
     });
 }

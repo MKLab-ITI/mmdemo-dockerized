@@ -1,10 +1,19 @@
 function parse_search() {
-    query_param = document.getElementById("query").value;
-    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
-    $('.icon-clear').show();
+    keyword_query_param = document.getElementById("query_keyword").value;
+    user_query_param = document.getElementById("query_user").value;
+    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&relevance=" + relevance_param + "&relevance=" + relevance_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+
     abort();
     $('#loadingbar').hide().css('width', '0%');
-    $("#ff-search input[type='text']").addClass("searchon");
+    if(keyword_query_param!=""){
+        $("#query_keyword").addClass("searchon");
+        $('#clear_keyword_search').show();
+    }
+    if(user_query_param!=""){
+        $("#query_user").addClass("searchon");
+        $('#clear_user_search').show();
+    }
+
     $("#main").height(0);
     $("#tiles").empty();
     $("#loading").show();

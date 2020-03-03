@@ -9,7 +9,7 @@
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="author" content="Laaposto">
 
-    <link rel="shortcut icon" href="imgs/favicon.ico"/>
+    <link rel="shortcut icon" href="imgs/favicon.png"/>
 
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Roboto+Slab:400,300,700&subset=latin,cyrillic-ext,greek-ext,greek,latin-ext,cyrillic'
           rel='stylesheet' type='text/css'>
@@ -267,9 +267,9 @@
                 <div id="examples_2" class="examples">
                     <p>Examples:</p>
                     <ul>
-                        <li>pollution AND waste</li>
-                        <li>plastic OR recycle</li>
-                        <li>(clean OR electric) AND vehicles</li>
+                        <li data-edit="pollutionSANDSwasteS">pollution AND waste</li>
+                        <li data-edit="plasticSORSrecycleS">plastic OR recycle</li>
+                        <li data-edit="PAROScleanSORSelectricSPARCSANDSvehiclesS">(clean OR electric) AND vehicles</li>
                     </ul>
                 </div>
                 <div class="info" id="max_tags_advanced">
@@ -409,11 +409,37 @@
     </div>
     <div class="row bigWidth">
         <div class="small-12 medium-12 large-12 columns">
-            <div class="no_collections">
-                <h1>Create a <span class="text_blue">collection</span>
+            <h2 class="background"><span>PINNED</span></h2>
+            <div class="no_collections" id="no_collections_fav">
+                <h1>You don't have any pinned collections. Pin a <span class="text_blue">collection</span>
+                    to appear here!</h1>
+
+                <!--<div class="btn_discover">Create</div>-->
+            </div>
+            <div class="collection_loader" id="fav_loading">
+                <div class="square_load"></div>
+                <div class="square_load"></div>
+                <div class="square_load square_last"></div>
+                <div class="square_load square_clear"></div>
+                <div class="square_load"></div>
+                <div class="square_load square_last"></div>
+                <div class="square_load square_clear"></div>
+                <div class="square_load"></div>
+                <div class="square_load square_last"></div>
+            </div>
+            <div id="Container_fav">
+                <ul id="tiles_fav"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="row bigWidth">
+        <div class="small-12 medium-12 large-12 columns">
+            <h2 class="background"><span>COLLECTIONS</span></h2>
+            <div class="no_collections" id="no_collections_normal">
+                <h1>You don't have any collections. Create a <span class="text_blue">collection</span>
                     now and start exploring Social Media!</h1>
 
-                <div class="btn_discover">Discover</div>
+                <div class="btn_discover">Create</div>
             </div>
             <div class="controls">
                 <div class="btn_material active" id="all">ALL</div>
@@ -422,13 +448,23 @@
                 <div class="btn_material" id="stopped">STOPPED
                 </div>
             </div>
+            <div id="query_collection_wrapper">
+                <div class="input-field">
+                    <input id="query_collection" class="user_input" type="text" autocomplete="off" placeholder="">
+                    <label for="query_collection" class="">Search for Collections...</label>
+                    <img class="search_icon" src="imgs/enter-gray.png" id="enter_icon_collection" alt="search">
+                </div>
+                <p id="clear_query">Clear Search</p>
+            </div>
             <p class="text_p" id="no_stopped">You haven't any <span
                     style="font-weight: bold;color: #E53D00;">stopped</span> collections!</p>
 
             <p class="text_p" id="no_running">You haven't any <span
                     style="font-weight: bold;color: #0A8754;">running</span> collections!</p>
+            <p class="text_p" id="no_query">You haven't any collections matching "<span
+                    style="font-weight: bold;color: #37c1e9;"></span>"</p>
 
-            <div id="collection_loader">
+            <div class="collection_loader" id="normal_loading">
                 <div class="square_load"></div>
                 <div class="square_load"></div>
                 <div class="square_load square_last"></div>
@@ -439,8 +475,8 @@
                 <div class="square_load"></div>
                 <div class="square_load square_last"></div>
             </div>
-            <div id="Container" class="container">
-                <ul id="tiles"></ul>
+            <div id="Container_normal">
+                <ul id="tiles_normal"></ul>
             </div>
         </div>
     </div>
@@ -600,7 +636,7 @@
 <script src="js/index/typeahed.js"></script>
 <script src="js/index/autocomplete.js"></script>
 <script src='js/index/polylabel.js'></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOOPffhARnRWiCM2TyhJbHkmbDbpxrWec&libraries=places&callback=initMap"
+<script src="https://maps.googleapis.com/maps/api/js?key={YOUR_API_KEY_HERE}&libraries=places&callback=initMap"
         async defer></script>
 <!-- END JS -->
 </body>

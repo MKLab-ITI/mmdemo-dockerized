@@ -16,38 +16,16 @@ function resizedw(trigger) {
             open_slider();
         }
     }
-
+    var space = 0;
     if ($("#hop5").is(":visible")) {
-        if ($(window).height() > 980) {
-            $("#footer").css({'bottom': '0', 'position': 'absolute', 'margin-top': '0'});
-        } else if ($(window).height() < 771) {
-            $("#footer").css({'bottom': 'auto', 'position': 'relative', 'margin-top': '10px'});
-        } else {
-            setTimeout(function () {
-                $("#footer").css({
-                    'position': 'relative',
-                    'margin-top': '0',
-                    'bottom': -($("#slider").height() - 766) + 'px'
-                });
-            }, 700);
-        }
+        space = $(window).height() - 28 - 49 - 92 - 616 - 107 + 3;
     }
     else {
-        if ($(window).height() > 916) {
-            setTimeout(function () {
-                $("#footer").css({'bottom': '0', 'position': 'absolute', 'margin-top': '0'});
-            }, 700);
-        } else if ($(window).height() < 713) {
-            $("#footer").css({'bottom': 'auto', 'position': 'relative', 'margin-top': '13px'});
-        } else {
-            setTimeout(function () {
-                $("#footer").css({
-                    'position': 'relative',
-                    'margin-top': '0',
-                    'bottom': -($("#slider").height() - 701) + 'px'
-                });
-            }, 700);
-        }
-
+        space = $(window).height() - 28 - 49 - 92 - 574 - 107 + 3+23;
+    }
+    if (space > 0) {
+        $("#footer").css({
+            'margin-top': space + 'px'
+        });
     }
 }

@@ -5,19 +5,27 @@ var sort_param = gup('sort');
 var original_param = gup('original');
 var type_param = gup('type');
 var topic_param = gup('topics').replace(/%20/g, ' ');
-var query_param = gup('query').replace(/%20/g, ' ');
+var keyword_query_param = gup('queryKeyword').replace(/%20/g, ' ');
+var user_query_param = gup('queryUser').replace(/%20/g, ' ');
 var source_param = gup('source');
-var since_param = parseInt(gup('since'));
-var until_param = parseInt(gup('until'));
+var since_param = gup('since');
+var until_param = gup('until');
+var relevance_param = gup('relevance');
 var section_param = gup('section');
 var view_param = gup("view");
 var language_since;
 var language_until;
 var setanalysis_flag = true;
-
 var pagelocation;
 var slider, collection_status;
 var $this_a;
+
+if (since_param != "") {
+    $('#date_input_from').val(moment.unix(since_param / 1000).format("DD/MM/YYYY"))
+}
+if (until_param != "") {
+    $('#date_input_to').val(moment.unix(until_param / 1000).format("DD/MM/YYYY"))
+}
 
 if (view_param === "list") {
     $('#main').css('margin-bottom', '0');
@@ -65,6 +73,19 @@ if (flag_unique) {
     unique_param = "false";
 }
 
+var flag_relevance = true;
+$(".sub7").each(function () {
+    $this_a = $(this).find('a');
+    if (relevance_param.indexOf($this_a.data('id').toString()) > -1) {
+        $this_a.addClass('activelan');
+        flag_relevance = false;
+    }
+});
+if (flag_relevance) {
+    $('.sub7').eq(0).find('a').addClass('activelan');
+    relevance_param = "";
+}
+
 var flag_original = true;
 $(".sub3").each(function () {
     $this_a = $(this).find('a');
@@ -110,67 +131,11 @@ $.ajax({
             $("#date_range,#date_range_animate").remove();
         }
         else {
+
             $('#collection').html(json.title);
+            collection_status = json.status;
             language_since = moment(new Date(json.since)).format("X") * 1000;
             language_until = moment(new Date(json.stopDate)).format("X") * 1000;
-            if (since_param === 0) {
-                since_param = moment(new Date(json.since)).format("X") * 1000;
-            }
-            if (until_param === 1514678400000) {
-                until_param = moment(new Date(json.stopDate)).format("X") * 1000;
-            }
-            collection_status = json.status;
-            $("#range").ionRangeSlider({
-                type: "double",
-                min: moment(new Date(json.since)).format("X"),
-                max: moment(new Date(json.stopDate)).format("X"),
-                from: moment(new Date(since_param)).format("X"),
-                to: moment(new Date(until_param)).format("X"),
-                step: 900,
-                min_interval: 900,
-                drag_interval: true,
-                grid: true,
-                //grid_num: 4,
-                force_edges: true,
-                prettify: function (num) {
-                    var m = moment(num, "X");
-                    return m.format("D MMM, HH:mm");
-                },
-                onFinish: function (e) {
-                    since_param = e.from * 1000;
-                    until_param = e.to * 1000;
-                    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
-
-                    if ($('.page').data('id') === "Feed") {
-                        $("#loading").show();
-                        $('.informer').html("0").stop().animate({"opacity": "0"});
-                        $(window).unbind('.more_latest');
-                        clearInterval(intervalID);
-                        if (view_param === "list") {
-                            $(".list_table tbody").empty();
-                            $(".well,#end,#posts_info,#download_icon").hide();
-                            parse_latest_list(1);
-                        }
-                        else {
-                            $("#tiles").empty();
-                            $("#main").height(0);
-                            $("#end,#loadmore,#posts_info").hide();
-                            parse_latest(1);
-                        }
-                    }
-                    else {
-                        $("#load1,#load2,#load3,#load4,#load5,#load6,.load0").show();
-                        $('#chart_line, .minitext, #chart_pie, #heatmap, #users_locations, #active_users, #tags').animate({opacity: 0.4}, 400);
-                        show_heatmap();
-                        show_stats();
-                        draw_social_mix(0, $('.activestat').attr('id'));
-                        draw_timeline();
-                        show_locations();
-                        show_active_users();
-                        draw_hashtags("classic");
-                    }
-                }
-            });
             $("#range_animate").ionRangeSlider({
                 type: "double",
                 disable: true,
@@ -182,11 +147,15 @@ $.ajax({
                     return m.format("D MMM, HH:mm");
                 }
             });
-            slider = $("#range").data("ionRangeSlider");
-            if (query_param !== "") {
-                $('.icon-clear').show();
-                $("#ff-search input[type='text']").addClass("searchon");
-                $('#query').val(decodeURI(query_param));
+            if (keyword_query_param !== "") {
+                $('#clear_keyword_search').show();
+                $("#query_keyword").addClass("searchon");
+                $('#query_keyword').val(decodeURI(keyword_query_param));
+            }
+            if (user_query_param !== "") {
+                $('#clear_user_search').show();
+                $("#query_user").addClass("searchon");
+                $('#query_user').val(decodeURI(user_query_param));
             }
             if (section_param === "dashboard") {
                 $('.action').find('span').removeClass('page');
@@ -225,7 +194,36 @@ $.ajax({
                     interval();
                 }
             }
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+            var $items_filters = $('#items_filters');
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+            if (language_param != "all") {
+                $items_filters.append('<a href="#" class="filter_item" id="language_filter">Language: ' + language_param.toUpperCase() + '<span></span></a>')
+            }
+            if (topic_param != "*") {
+                $items_filters.append('<a href="#" class="filter_item" id="topics_filter">Topic: ' + topic_param + '<span></span></a>')
+            }
+            if (unique_param != "false") {
+                $items_filters.append('<a href="#" class="filter_item" id="unique_filter">Unique: True<span></span></a>')
+            }
+            if (original_param != "all") {
+                $items_filters.append('<a href="#" class="filter_item" id="original_filter">Original: ' + original_param + '<span></span></a>')
+            }
+            if (type_param != "all") {
+                $items_filters.append('<a href="#" class="filter_item" id="type_filter">Type: ' + type_param + '<span></span></a>')
+            }
+            if (relevance_param != "") {
+                $items_filters.append('<a href="#" class="filter_item" id="relevance_filter">Relevance: ' + relevance_param + '<span></span></a>')
+            }
+            if (sort_param != "recency") {
+                $items_filters.append('<a href="#" class="filter_item" id="sort_filter">Sort: ' + sort_param + '<span></span></a>')
+            }
+            if (since_param != "") {
+                $items_filters.append('<a href="#" class="filter_item" id="since_filter">Since: ' + moment.unix(since_param / 1000).format("DD/MM/YYYY") + '<span></span></a>')
+            }
+            if (until_param != "") {
+                $items_filters.append('<a href="#" class="filter_item" id="until_filter">Until: ' + moment.unix(until_param / 1000).format("DD/MM/YYYY") + '<span></span></a>')
+            }
+
         }
     },
     error: function () {
@@ -299,7 +297,7 @@ $(function () {
                     }
                     section_param = "feed";
                     pagelocation = "latest";
-                    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+                    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
                     $("#tiles").empty();
                     $("#main").show(0);
                     $("#loading").show();
@@ -307,7 +305,7 @@ $(function () {
                     $("#chart_pie,#chart_line").empty();
                     $("#posts_num,#users_num,#reach_num,#endo_num").html(0);
                     $(window).unbind('.more_latest');
-                    $("#hop5,.nav-sidebar:eq(0),#ff-search,.ff-filter-holder").stop(true, true).slideDown(800);
+                    $("#hop5,.nav-sidebar:eq(0),.ff-search,.ff-filter-holder").stop(true, true).slideDown(800);
                     $("#update_field").stop(true, true).slideDown(800, function () {
                         resizedw("manually");
                     });
@@ -336,7 +334,7 @@ $(function () {
                 $('#loadingbar').hide().css('width', '0%');
                 section_param = "dashboard";
                 pagelocation = "dashboard";
-                window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+                window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
                 $("#tiles").empty();
                 $("#main").hide(0);
                 $("#end,#loadmore,#list_actions,#deleted_msg_user,#deleted_msg_post").hide();
@@ -378,7 +376,7 @@ $(function () {
             }
         }
         source_param = typearr.join(",");
-        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
         if ($('.page').data('id') === "Feed") {
             $("#loading").show();
             $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -416,7 +414,11 @@ $(function () {
             $(this).find('a').addClass('activelan');
             language_param = $(".sub1 .activelan").text().toLowerCase();
             language_param = language_param.substr(0, language_param.indexOf(' '));
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+            $('#language_filter').remove();
+            if (language_param != "all") {
+                $('#items_filters').append('<a href="#" class="filter_item" id="language_filter">Language: ' + language_param.toUpperCase() + '<span></span></a>')
+            }
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
             if ($('.page').data('id') === "Feed") {
                 $("#loading").show();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -454,7 +456,11 @@ $(function () {
             $('.sub2 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             sort_param = $(".sub2 .activelan").data('id');
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+            $('#sort_filter').remove();
+            if (sort_param != "recency") {
+                $('#items_filters').append('<a href="#" class="filter_item" id="sort_filter">Sort: ' + capitalizeFirstLetter(sort_param) + '<span></span></a>')
+            }
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
             $("#loading").show();
             $('.informer').html("0").stop().animate({"opacity": "0"});
             $(window).unbind('.more_latest');
@@ -479,7 +485,11 @@ $(function () {
             $('.sub3 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             original_param = $(".sub3 .activelan").data('id').toLowerCase();
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+            $('#original_filter').remove();
+            if (original_param != "all") {
+                $('#items_filters').append('<a href="#" class="filter_item" id="original_filter">Original: ' + capitalizeFirstLetter(original_param) + '<span></span></a>')
+            }
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
             if ($('.page').data('id') === "Feed") {
                 $("#loading").show();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -517,7 +527,11 @@ $(function () {
             $('.sub4 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             type_param = $(".sub4 .activelan").data('id');
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+            $('#type_filter').remove();
+            if (type_param != "all") {
+                $('#items_filters').append('<a href="#" class="filter_item" id="type_filter">Type: ' + capitalizeFirstLetter(type_param) + '<span></span></a>')
+            }
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
             if ($('.page').data('id') === "Feed") {
                 $("#loading").show();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -555,8 +569,12 @@ $(function () {
             $('#loadingbar').hide().css('width', '0%');
             $('.sub6 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
-            unique_param = $(".sub6 .activelan").data('id');
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+            unique_param = $(".sub6 .activelan").data('id').toString();
+            $('#unique_filter').remove();
+            if (unique_param != "false") {
+                $('#items_filters').append('<a href="#" class="filter_item" id="unique_filter">Unique: True<span></span></a>')
+            }
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
             if ($('.page').data('id') === "Feed") {
                 $("#loading").show();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -587,6 +605,93 @@ $(function () {
 
         }
     });
+    $("#settings").on("click", ".sub7", function (e) {
+        e.preventDefault();
+        if (($(this).find('a').attr('data-id') === "all")) {
+            if (!($(this).find('a').hasClass('activelan'))) {
+                abort();
+                $('#loadingbar').hide().css('width', '0%');
+                $('#relevance_filter').remove();
+                $('.sub7 a').removeClass('activelan');
+                $(this).find('a').addClass('activelan');
+                relevance_param = "";
+                window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+                if ($('.page').data('id') === "Feed") {
+                    $("#loading").show();
+                    $('.informer').html("0").stop().animate({"opacity": "0"});
+                    $(window).unbind('.more_latest');
+                    if (view_param === "list") {
+                        $(".list_table tbody").empty();
+                        $(".well,#end,#posts_info,#download_icon").hide();
+                        parse_latest_list(1);
+                    }
+                    else {
+                        $("#tiles").empty();
+                        $("#main").height(0);
+                        $("#end,#loadmore,#posts_info").hide();
+                        parse_latest(1);
+                    }
+                }
+                else {
+                    $("#load1,#load2,#load3,#load4,#load5,#load6,.load0").show();
+                    $('#chart_line, .minitext, #chart_pie, #heatmap, #users_locations, #active_users, #tags').animate({opacity: 0.4}, 400);
+                    show_heatmap();
+                    show_stats();
+                    draw_social_mix(0, $('.activestat').attr('id'));
+                    draw_timeline();
+                    show_locations();
+                    show_active_users();
+                    draw_hashtags("classic");
+                }
+
+            }
+        }
+        else {
+            abort();
+            $('#loadingbar').hide().css('width', '0%');
+            $('#relevance_filter').remove();
+            $('.sub7 a[data-id="all"]').removeClass('activelan');
+            $(this).find('a').toggleClass('activelan');
+            var relevance_arr = [];
+            $('.sub7 a.activelan').each(function (i, obj) {
+                relevance_arr.push($(this).attr('data-id'))
+            });
+            relevance_param = relevance_arr.join(",");
+            $('#items_filters').append('<a href="#" class="filter_item" id="relevance_filter">Relevance: ' + relevance_param + '<span></span></a>')
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+            if (relevance_param === "") {
+                $('.sub7 a[data-id="all"]').addClass('activelan');
+                $('#relevance_filter').remove();
+            }
+            if ($('.page').data('id') === "Feed") {
+                $("#loading").show();
+                $('.informer').html("0").stop().animate({"opacity": "0"});
+                $(window).unbind('.more_latest');
+                if (view_param === "list") {
+                    $(".list_table tbody").empty();
+                    $(".well,#end,#posts_info,#download_icon").hide();
+                    parse_latest_list(1);
+                }
+                else {
+                    $("#tiles").empty();
+                    $("#main").height(0);
+                    $("#end,#loadmore,#posts_info").hide();
+                    parse_latest(1);
+                }
+            }
+            else {
+                $("#load1,#load2,#load3,#load4,#load5,#load6,.load0").show();
+                $('#chart_line, .minitext, #chart_pie, #heatmap, #users_locations, #active_users, #tags').animate({opacity: 0.4}, 400);
+                show_heatmap();
+                show_stats();
+                draw_social_mix(0, $('.activestat').attr('id'));
+                draw_timeline();
+                show_locations();
+                show_active_users();
+                draw_hashtags("classic");
+            }
+        }
+    });
     $("#settings").on("click", ".sub5", function (e) {
         e.preventDefault();
         if (!($(this).find('a').hasClass('activelan'))) {
@@ -595,7 +700,11 @@ $(function () {
             $('.sub5 a').removeClass('activelan');
             $(this).find('a').addClass('activelan');
             topic_param = $(".sub5 .activelan").find('p').data('query');
-            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+            $('#topics_filter').remove();
+            if (topic_param != "*") {
+                $('#items_filters').append('<a href="#" class="filter_item" id="topics_filter">Topic: ' + topic_param + '<span></span></a>')
+            }
+            window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
             if ($('.page').data('id') === "Feed") {
                 $("#loading").show();
                 $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -719,12 +828,12 @@ $(function () {
             draw_social_mix(0, $('.activestat').attr('id'));
         }
     });
-    $('#ff-search').on("keyup", "#query", function (e) {
+    $('.ff-search').on("keyup", "#query_keyword,#query_user", function (e) {
         if (e.keyCode === 13) {
             parse_search();
         }
     });
-    $('.icon-search').click(function (e) {
+    $('#icon_search_keyword,#icon_search_user').click(function (e) {
         parse_search();
     });
 
@@ -928,6 +1037,20 @@ $(function () {
         window.open($(this).find('img').attr('data-url'), '_blank');
     });
 
+    $('#date_input_from').datetimepicker({
+        timepicker: false,
+        format: 'd/m/Y',
+        allowTimes: [
+            '00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'
+        ]
+    });
+    $('#date_input_to').datetimepicker({
+        timepicker: false,
+        format: 'd/m/Y',
+        allowTimes: [
+            '00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'
+        ]
+    });
 });
 
 function redirect(page) {
@@ -995,20 +1118,14 @@ function interval() {
     clearInterval(intervalID);
     var titlelast, different = 0;
     intervalID = setInterval(function () {
-        slider.update({
-            max: +moment().format("X"),
-            to: +moment().format("X")
-        });
         if (different === 0) {
             titlelast = $('#tiles').find('li').eq(0).attr('data-iid');
         } else {
             titlelast = titletop;
         }
-        until_param = +moment().format("X") * 1000;
-        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
         $.ajax({
             type: "GET",
-            url: api_folder + "items?collection=" + collection_param + "&q=" + query_param + "&nPerPage=12&pageNumber=1&source=" + source_param + "&sort=" + sort_param + "&language=" + language_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+            url: api_folder + "items?collection=" + collection_param + "&user=" + user_query_param + "&q=" + keyword_query_param + "&nPerPage=12&pageNumber=1&source=" + source_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&language=" + language_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
             dataType: "json",
             success: function (json) {
                 if (pagelocation === "latest") {
@@ -1129,7 +1246,7 @@ $('#gallery_icon,#list_icon').click(function () {
         }
         abort();
         $('#loadingbar').hide().css('width', '0%');
-        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+        window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
 
         $("#loading").show();
         $('.informer').html("0").stop().animate({"opacity": "0"});
@@ -1159,11 +1276,45 @@ $('.itemsPerPage span').click(function () {
         parse_latest_list(1);
     }
 });
-$('.icon-clear').click(function () {
-    query_param = "";
-    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&sort=" + sort_param + "&query=" + query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
-    document.getElementById("query").value = "";
-    $("#ff-search").find("input[type='text']").removeClass("searchon");
+$('#clear_keyword_search').click(function () {
+    keyword_query_param = "";
+    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+    document.getElementById("query_keyword").value = "";
+    $("#query_keyword").removeClass("searchon");
+    $(this).hide();
+    if ($('.page').data('id') === "Dashboard") {
+        $("#load1,#load2,#load3,#load4,#load5,#load6,.load0").show();
+        $('#chart_line, .minitext, #chart_pie, #heatmap, #users_locations, #active_users, #tags').animate({opacity: 0.4}, 400);
+        show_heatmap();
+        show_stats();
+        draw_social_mix(0, $('.activestat').attr('id'));
+        draw_timeline();
+        show_locations();
+        show_active_users();
+        draw_hashtags("classic");
+    }
+    else {
+        $("#loading").show();
+        $('.informer').html("0").stop().animate({"opacity": "0"});
+        $(window).unbind('.more_latest');
+        if (view_param === "list") {
+            $(".list_table tbody").empty();
+            $(".well,#end,#posts_info,#download_icon").hide();
+            parse_latest_list(1);
+        }
+        else {
+            $("#tiles").empty();
+            $("#main").height(0);
+            $("#end,#loadmore,#posts_info").hide();
+            parse_latest(1);
+        }
+    }
+});
+$('#clear_user_search').click(function () {
+    user_query_param = "";
+    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+    document.getElementById("query_user").value = "";
+    $("#query_user").removeClass("searchon");
     $(this).hide();
     if ($('.page').data('id') === "Dashboard") {
         $("#load1,#load2,#load3,#load4,#load5,#load6,.load0").show();
@@ -1754,4 +1905,88 @@ $(window).scroll(function () {
     else {
         $("#list_actions").removeClass("shadow");
     }
+});
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+$("#items_filters").on("click", ".filter_item span", function (e) {
+    switch ($(this).parent().attr('id')) {
+        case "language_filter":
+            $('.sub1').eq(0).click();
+            break;
+        case "topics_filter":
+            $('.sub5').eq(0).click();
+            break;
+        case "original_filter":
+            $('.sub3').eq(0).click();
+            break;
+        case "type_filter":
+            $('.sub4').eq(0).click();
+            break;
+        case "unique_filter":
+            $('.sub6').eq(0).click();
+            break;
+        case "relevance_filter":
+            $('.sub7').eq(0).click();
+            break;
+        case "sort_filter":
+            $('.sub2').eq(0).click();
+            break;
+        case "since_filter":
+            $('#date_input_from').val("");
+            $('#date_search').click();
+            break;
+        case "until_filter":
+            $('#date_input_to').val("");
+            $('#date_search').click();
+            break;
+    }
+    $(this).parent().remove();
+});
+$('#date_search').click(function () {
+    since_param = "";
+    until_param = "";
+    if ($('#date_input_from').val() != "") {
+        since_param = moment($('#date_input_from').val(), 'DD/MM/YYYY').unix() * 1000;
+        $('#since_filter').remove();
+        $('#items_filters').append('<a href="#" class="filter_item" id="since_filter">Since: ' + moment.unix(since_param / 1000).format("DD/MM/YYYY") + '<span></span></a>')
+    }
+    if ($('#date_input_to').val() != "") {
+        until_param = moment($('#date_input_to').val(), 'DD/MM/YYYY').unix() * 1000;
+        $('#until_filter').remove();
+        $('#items_filters').append('<a href="#" class="filter_item" id="until_filter">Until: ' + moment.unix(until_param / 1000).format("DD/MM/YYYY") + '<span></span></a>')
+    }
+    window.history.replaceState('Object', 'Title', 'http://' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?collection=' + collection_param + "&language=" + language_param + "&topics=" + topic_param + "&unique=" + unique_param + "&original=" + original_param + "&type=" + type_param + "&relevance=" + relevance_param + "&sort=" + sort_param + "&queryUser=" + user_query_param + "&queryKeyword=" + keyword_query_param + "&source=" + source_param + "&since=" + since_param + "&until=" + until_param + "&section=" + section_param + "&view=" + view_param);
+
+    if ($('.page').data('id') === "Feed") {
+        $("#loading").show();
+        $('.informer').html("0").stop().animate({"opacity": "0"});
+        $(window).unbind('.more_latest');
+        clearInterval(intervalID);
+        if (view_param === "list") {
+            $(".list_table tbody").empty();
+            $(".well,#end,#posts_info,#download_icon").hide();
+            parse_latest_list(1);
+        }
+        else {
+            $("#tiles").empty();
+            $("#main").height(0);
+            $("#end,#loadmore,#posts_info").hide();
+            parse_latest(1);
+        }
+    }
+    else {
+        $("#load1,#load2,#load3,#load4,#load5,#load6,.load0").show();
+        $('#chart_line, .minitext, #chart_pie, #heatmap, #users_locations, #active_users, #tags').animate({opacity: 0.4}, 400);
+        show_heatmap();
+        show_stats();
+        draw_social_mix(0, $('.activestat').attr('id'));
+        draw_timeline();
+        show_locations();
+        show_active_users();
+        draw_hashtags("classic");
+    }
+});
+$('#reset_filters').click(function () {
+    $('.filter_item span').click();
 });

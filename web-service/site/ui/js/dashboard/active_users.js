@@ -7,7 +7,7 @@ function show_active_users() {
 
     $.ajax({
         type: "GET",
-        url: api_folder + "users?n=" + top + "&collection=" + collection_param + "&q=" + query_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "users?n=" + top + "&collection=" + collection_param + "&user=" + user_query_param + "&q=" + keyword_query_param + "&language=" + language_param + "&original=" + original_param + "&relevance=" + relevance_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             for (var i = 0; i < json.length; i++) {
@@ -61,7 +61,7 @@ function show_active_users() {
                 else {
                     onerror = "imgError2(this,null,null);"
                 }
-                var $user_images=$('#users_images');
+                var $user_images = $('#users_images');
                 $user_images.append('<div class="user" data-uid="' + json[i].id + '"><p style="float: left;"><img data-url="' + userpage + '"src="' + profile_url + '" class="user_img" alt="user_img" onerror="' + onerror + '" style="' + favicon_style + 'border-color:' + color_bar + '"/></p><p class="user_name">' + username + '</p><br/><p class="user_count">' + count + 'posts</p><img src="' + icon + '" alt="error_icon" class="user_social"/><div class="exclude_user"><img src="imgs/x-mark-16-red.png">Exclude</div><div class="remove_user"><img src="imgs/check-16-green.png"><p>Changes Saved! <span class="refresh_but_user">Refresh</span> or <span class="undo_but_user">Undo?</span></p></div></div>');
             }
             var data_bar = [{

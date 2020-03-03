@@ -69,7 +69,7 @@ function show_heatmap() {
 
     $.ajax({
         type: "GET",
-        url: api_folder + "heatmap/points?collection=" + collection_param + "&source=" + source_param + "&language=" + language_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&q=" + query_param + "&minLong=" + minLong + "&maxLong=" + maxLong + "&minLat=" + minLat + "&maxLat=" + maxLat + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "heatmap/points?collection=" + collection_param + "&source=" + source_param + "&language=" + language_param + "&relevance=" + relevance_param + "&original=" + original_param + "&unique=" + unique_param + "&type=" + type_param + "&topicQuery=" + topic_param + "&user=" + user_query_param + "&q=" + keyword_query_param + "&minLong=" + minLong + "&maxLong=" + maxLong + "&minLat=" + minLat + "&maxLat=" + maxLat + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             var $json_points = json.points;

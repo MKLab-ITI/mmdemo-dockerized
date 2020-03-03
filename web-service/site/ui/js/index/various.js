@@ -110,6 +110,78 @@ $(function () {
         });
     };
 
+    $(document).on('click', '.selectMultiple ul li', function (e) {
+        var select = $(this).parent().parent();
+        var li = $(this);
+        if (!select.hasClass('clicked')) {
+            select.addClass('clicked');
+            li.prev().addClass('beforeRemove');
+            li.next().addClass('afterRemove');
+            li.addClass('remove');
+            var a = $('<a />').addClass('notShown').html('<em>' + li.text() + '</em><i></i>').hide().appendTo(select.children('div'));
+            a.slideDown(0, function () {
+                setTimeout(function () {
+                    a.addClass('shown');
+                    select.children('div').children('span').addClass('hide');
+                    select.find('option:contains(' + li.text() + ')').prop('selected', true);
+                }, 0);
+            });
+            setTimeout(function () {
+                if (li.prev().is(':last-child')) {
+                    li.prev().removeClass('beforeRemove');
+                }
+                if (li.next().is(':first-child')) {
+                    li.next().removeClass('afterRemove');
+                }
+                setTimeout(function () {
+                    li.prev().removeClass('beforeRemove');
+                    li.next().removeClass('afterRemove');
+                }, 0);
+
+                li.slideUp(0, function () {
+                    li.remove();
+                    select.removeClass('clicked');
+                });
+            }, 0);
+        }
+    });
+
+    $(document).on('click', '.selectMultiple > div a', function (e) {
+        var select = $(this).parent().parent();
+        var self = $(this);
+        self.removeClass().addClass('remove');
+        select.addClass('open');
+        setTimeout(function () {
+            self.addClass('disappear');
+            setTimeout(function () {
+                self.animate({
+                    width: 0,
+                    height: 0,
+                    padding: 0,
+                    margin: 0
+                }, 0, function () {
+                    var li = $('<li />').text(self.children('em').text()).addClass('notShown').appendTo(select.find('ul'));
+                    li.slideDown(0, function () {
+                        li.addClass('show');
+                        setTimeout(function () {
+                            select.find('option:contains(' + self.children('em').text() + ')').prop('selected', false);
+                            if (!select.find('option:selected').length) {
+                                select.children('div').children('span').removeClass('hide');
+                            }
+                            li.removeClass();
+                        }, 0);
+                    });
+                    self.remove();
+                })
+            }, 0);
+        }, 0);
+    });
+
+    $(document).on('click', '.selectMultiple > div .arrow, .selectMultiple > div span', function (e) {
+        $(this).parent().parent().toggleClass('open');
+    });
+
+
 });
 
 var edit_mode = false;
@@ -142,6 +214,9 @@ $(document).on('focus', input_selector, function () {
         $('#location_icon').attr('src', 'imgs/location-blue.png');
         $('#search_icon_5').attr('src', 'imgs/search-blue.png');
     }
+    else if ($(this).attr('id') === "query_collection") {
+        $('#enter_icon_collection').attr('src', 'imgs/enter-blue.png');
+    }
     else {
         $('#user_icon').attr('src', 'imgs/email-blue.png');
         $('.users_icon').attr('src', 'imgs/search-blue.png');
@@ -171,13 +246,21 @@ $(document).on('blur', input_selector, function () {
             $('#location_icon').attr('src', 'imgs/location-gray.png');
             $('#search_icon_5').attr('src', 'imgs/search-gray.png');
         }
+        else if ($(this).attr('id') === "query_collection") {
+            $('#enter_icon_collection').attr('src', 'imgs/enter-gray.png');
+        }
         else {
             $('#user_icon').attr('src', 'imgs/email-gray.png');
             $('.users_icon').attr('src', 'imgs/search-gray.png');
         }
     }
 });
-
+$("#query_collection").keyup(function (e) {
+    if (e.keyCode === 13) {
+        pagination = 1;
+        get_collections_normal(true);
+    }
+});
 $("#hashtag").keyup(function (e) {
     if (e.keyCode === 13) {
         addtag($(this).val().toLowerCase());
@@ -311,10 +394,15 @@ function addtag(tag) {
                 a.innerHTML = tag_arr[i].replace(/^\s+|\s+$/g, '');
                 li.appendChild(a);
 
-                var img = document.createElement('img');
-                img.setAttribute('src', 'imgs/delete.png');
-                img.setAttribute('class', 'delete');
-                a.appendChild(img);
+                var img_edit = document.createElement('img');
+                img_edit.setAttribute('src', 'imgs/edit_tag.png');
+                img_edit.setAttribute('class', 'edit_tag');
+                a.appendChild(img_edit);
+
+                var img_delete = document.createElement('img');
+                img_delete.setAttribute('src', 'imgs/delete.png');
+                img_delete.setAttribute('class', 'delete');
+                a.appendChild(img_delete);
 
                 if (flag) {
                     if ($("#tags li").length === 20) {
@@ -333,7 +421,7 @@ function addtag(tag) {
     }
 }
 
-function addtag_advanced(tag) {
+function addtag_advanced(tag, edit) {
     var flag = 1;
     var count = 20 - $("#tags_adv li").length;
     if (count > 0) {
@@ -359,8 +447,14 @@ function addtag_advanced(tag) {
                 var a = document.createElement('a');
                 a.setAttribute('href', 'javascript:void(0);');
                 a.setAttribute('id', tag_arr[i].replace(/^\s+|\s+$/g, ''));
+                a.setAttribute('data-edit', edit.replace(/^\s+|\s+$/g, ''));
                 a.innerHTML = tag_arr[i].replace(/^\s+|\s+$/g, '');
                 li.appendChild(a);
+
+                var img_edit = document.createElement('img');
+                img_edit.setAttribute('src', 'imgs/edit_tag.png');
+                img_edit.setAttribute('class', 'edit_tag_adv');
+                a.appendChild(img_edit);
 
                 var img = document.createElement('img');
                 img.setAttribute('src', 'imgs/delete.png');
@@ -647,6 +741,51 @@ $("#user_tags,#user_tags_adv").on("click", ".delete", function () {
     $('#max_tags,#max_tags_advanced').slideUp();
 
 });
+$("#user_tags").on("click", ".edit_tag", function () {
+    if ($("#tags li").length < 20) {
+        $('#hashtag').val($(this).parent().attr('id')).focus();
+    }
+});
+$("#user_tags").on("click", ".edit_tag_adv", function () {
+    var data_edit = $(this).parent().attr('data-edit');
+    $('#advanced_tag_search').click();
+    setTimeout(function () {
+        $("#tags_adv").find("a[data-edit='" + data_edit + "']").find('.edit_tag_adv').click();
+    }, 550)
+});
+$("#user_tags_adv").on("click", ".edit_tag", function () {
+    if ($("#tags_adv li").length < 20) {
+        $('#tag_advanced').val($(this).parent().attr('id')).focus();
+    }
+});
+$("#user_tags_adv").on("click", ".edit_tag_adv", function () {
+    if ($("#tags_adv li").length < 20) {
+        var $expression = $('#expression');
+        $expression.empty();
+        var tag_arr = $(this).parent().attr('data-edit').split("S");
+        for (var i = 0; i < tag_arr.length - 1; i++) {
+            switch (tag_arr[i]) {
+                case "PARO":
+                    $expression.append('<li class="parenthesis_operator open_parenthesis operator" style="">[<img src="imgs/delete.png" class="delete_parenthesis rand-1"></li>');
+                    break;
+                case "PARC":
+                    $expression.append('<li class="parenthesis_operator close_parenthesis operator" style="">]<img src="imgs/delete.png" class="delete_parenthesis rand-1"></li>');
+                    break;
+                case "AND":
+                    $expression.append('<li class="logic_operator and_operator operator">AND<img src="imgs/delete.png" class="delete_expression"></li>')
+                    break;
+                case "OR":
+                    $expression.append('<li class="logic_operator or_operator operator" style="width: 64px">OR<img src="imgs/delete.png" class="delete_expression"></li>');
+                    break;
+                case "NOT":
+                    $expression.append('<li class="logic_operator not_operator operator">NOT<img src="imgs/delete.png" class="delete_expression"></li>')
+                    break;
+                default:
+                    $expression.append('<li id="' + tag_arr[i] + '" class="tag_operator operator" style="">' + tag_arr[i] + '<img src="imgs/delete.png" class="delete_expression"></li>')
+            }
+        }
+    }
+});
 $("#user_users").on("click", ".delete", function () {
     var height = $(this).closest('li').height();
     $(this).closest('li').css('height', height).hide('slow', function () {
@@ -709,6 +848,17 @@ $("#enter_icon").click(function () {
     addname();
     $("#interest").blur();
 });
+$("#enter_icon_collection").click(function () {
+    pagination = 1;
+    $("#query_collection").blur();
+    get_collections_normal(true);
+});
+$("#clear_query").click(function () {
+    pagination = 1;
+    $('#query_collection').val("").blur();
+    get_collections_normal(true);
+});
+
 $("#search_icon_3").click(function () {
     adduser("0", "");
     $("#user_RSS").blur();
@@ -727,7 +877,7 @@ $("#examples_2").find("li").click(function () {
     $('#logic_icon').attr('src', 'imgs/logic_32_gray.png');
     $('#search_icon_4').attr('src', 'imgs/search-gray.png');
     if ($("#tags_adv li").length < 20) {
-        addtag_advanced($(this).html());
+        addtag_advanced($(this).html(), $(this).attr('data-edit'));
     }
 });
 $("#examples_3").find("li").click(function () {
@@ -1128,7 +1278,78 @@ $('.ff-filter-users_adv').click(function (e) {
         }
     }
 });
-$("#Container").on("click", ".restart_icon", function () {
+$("#Container_normal,#Container_fav").on("click", ".fav_icon", function () {
+    $(this).removeClass('fav_icon').addClass('fav_icon_full');
+    var $this = $(this);
+    var favorite = {
+        "favorite": true
+    };
+    var temp = JSON.stringify(favorite);
+    $.ajax({
+        type: 'POST',
+        url: api_folder + 'collection/' + user_id + '/' + $this.siblings('.delete_icon').attr('id') + '/favorite',
+        data: temp,
+        success: function () {
+            if (($('#tiles_normal').find('.collection').length) === 1 && (pagination > 1)) {
+                pagination--;
+            }
+            get_collections_normal(true);
+            get_collections_fav();
+        },
+        error: function (e) {
+            $('#myModal h1').html("Oops. Something went wrong!");
+            $('#myModal p').html("We couldn't favorite this collection. Please try again.");
+            $('#myModal').reveal();
+        }
+    });
+});
+$("#Container_normal,#Container_fav").on("click", ".fav_icon_full", function () {
+    $(this).removeClass('fav_icon_full').addClass('fav_icon');
+    var $this = $(this);
+    var favorite = {
+        "favorite": false
+    };
+    var temp = JSON.stringify(favorite);
+    $.ajax({
+        type: 'POST',
+        url: api_folder + 'collection/' + user_id + '/' + $this.siblings('.delete_icon').attr('id') + '/favorite',
+        data: temp,
+        success: function () {
+            if (($('#tiles_normal').find('.collection').length) === 1 && (pagination > 1)) {
+                pagination--;
+            }
+            get_collections_normal(true);
+            get_collections_fav();
+        },
+        error: function (e) {
+            $('#myModal h1').html("Oops. Something went wrong!");
+            $('#myModal p').html("We couldn't favorite this collection. Please try again.");
+            $('#myModal').reveal();
+        }
+    });
+});
+$("#Container_normal,#Container_fav").on("click", ".copy_icon", function () {
+    var new_cid = (Math.floor(Math.random() * 90000) + 10000) + user_id + new Date().getTime();
+    var $this = $(this);
+    $.ajax({
+        type: 'POST',
+        url: api_folder + 'collection/' + user_id + '/' + $this.siblings('.delete_icon').attr('id') + '/replicate/' + new_cid,
+        success: function () {
+            if ($this.parents('ul').attr('id') === "tiles_fav") {
+                get_collections_fav();
+            }
+            else {
+                get_collections_normal(true);
+            }
+        },
+        error: function (e) {
+            $('#myModal h1').html("Oops. Something went wrong!");
+            $('#myModal p').html("We couldn't copy this collection. Please try again.");
+            $('#myModal').reveal();
+        }
+    });
+});
+$("#Container_normal").on("click", ".restart_icon", function () {
     var $this = $(this);
     $.ajax({
         url: api_folder + 'collection/start/' + $this.siblings('.delete_icon').attr('id'),
@@ -1139,10 +1360,10 @@ $("#Container").on("click", ".restart_icon", function () {
                 $this.removeClass('restart_icon').addClass('stop_icon');
             }
             else {
-                if (($('.collection').length) === 1 && (pagination > 1)) {
+                if (($('#tiles_normal').find('.collection').length) === 1 && (pagination > 1)) {
                     pagination--;
                 }
-                get_collections(true);
+                get_collections_normal(true);
             }
         },
         error: function (e) {
@@ -1152,29 +1373,80 @@ $("#Container").on("click", ".restart_icon", function () {
         }
     });
 });
-$("#Container").on("click", ".delete_icon", function () {
-    $('.cover_delete,.tooltip_delete').hide();
+$("#Container_fav").on("click", ".restart_icon", function () {
+    var $this = $(this);
+    $.ajax({
+        url: api_folder + 'collection/start/' + $this.siblings('.delete_icon').attr('id'),
+        type: 'GET',
+        success: function () {
+            $this.siblings('.details').removeClass('stop_color').addClass('run_color');
+            $this.removeClass('restart_icon').addClass('stop_icon');
+        },
+        error: function (e) {
+            $('#myModal h1').html("Oops. Something went wrong!");
+            $('#myModal p').html("We couldn't delete this collection. Please try again.");
+            $('#myModal').reveal();
+        }
+    });
+});
+$("#Container_normal,#Container_fav").on("click", ".delete_icon", function () {
+    $('.cover_delete,.tooltip_delete,.tooltip_share').hide();
     $(this).parents('.collection').find('.cover_delete').fadeIn(300);
     $(this).siblings('.tooltip_delete').fadeIn(300);
 });
+$("#Container_normal,#Container_fav").on("click", ".split_icon", function () {
+    $('.cover_delete,.tooltip_share,.tooltip_share').hide();
+    $(this).parents('.collection').find('.cover_delete').fadeIn(300);
+    $(this).siblings('.tooltip_share').fadeIn(300);
+});
 $(document).mouseup(function (e) {
-    var container = $(".delete_icon");
+    var container = $(".delete_icon,.tooltip_share");
     if (!container.is(e.target) && container.has(e.target).length === 0) {
-        $('.cover_delete,.tooltip_delete').hide();
+        $('.cover_delete,.tooltip_delete,.tooltip_share').hide();
     }
 });
-$("#Container").on("click", ".confirm_delete", function () {
+$("#Container_normal,#Container_fav").on("click", ".cancel_share", function () {
+    $('.cover_delete,.tooltip_share').hide();
+});
+$("#Container_normal,#Container_fav").on("click", ".confirm_share", function () {
+    var $this = $(this);
+    if ($this.siblings('.share_input').val() != "") {
+        var share_id = [];
+        var input_val = $this.siblings('.share_input').val().split(',');
+        for (var s = 0; s < input_val.length; s++) {
+            share_id.push(input_val[s]);
+        }
+        var temp = JSON.stringify(share_id);
+
+        $.ajax({
+            type: 'POST',
+            url: api_folder + 'collection/' + user_id + '/' + $(this).parent().siblings('.delete_icon').attr('id') + '/share',
+            data: temp,
+            success: function () {
+                $('.cover_delete,.tooltip_share').hide();
+            },
+            error: function (e) {
+                $('#myModal h1').html("Oops. Something went wrong!");
+                $('#myModal p').html("We couldn't share this collection. Please try again.");
+                $('#myModal').reveal();
+            }
+        });
+    }
+
+});
+$("#Container_normal").on("click", ".confirm_delete", function () {
     $.ajax({
-        url: api_folder + 'collection/delete/' + $(this).parent().next('.delete_icon').attr('id'),
+        url: api_folder + 'collection/delete/' + $(this).parent().siblings('.delete_icon').attr('id'),
         type: 'GET',
         success: function () {
-            if ($('.collection').length === 1) {
+
+            if ($('#tiles_normal').find('.collection').length === 1) {
                 pagination--;
                 if (pagination === 0) {
                     pagination = 1;
                 }
             }
-            get_collections(true);
+            get_collections_normal(true);
         },
         error: function (e) {
             $('#myModal h1').html("Oops. Something went wrong!");
@@ -1183,7 +1455,21 @@ $("#Container").on("click", ".confirm_delete", function () {
         }
     });
 });
-$("#Container").on("click", ".stop_icon", function () {
+$("#Container_fav").on("click", ".confirm_delete", function () {
+    $.ajax({
+        url: api_folder + 'collection/delete/' + $(this).parent().siblings('.delete_icon').attr('id'),
+        type: 'GET',
+        success: function () {
+            get_collections_fav(true);
+        },
+        error: function (e) {
+            $('#myModal h1').html("Oops. Something went wrong!");
+            $('#myModal p').html("We couldn't delete this collection. Please try again.");
+            $('#myModal').reveal();
+        }
+    });
+});
+$("#Container_normal").on("click", ".stop_icon", function () {
     var $this = $(this);
     $.ajax({
         type: 'GET',
@@ -1194,10 +1480,10 @@ $("#Container").on("click", ".stop_icon", function () {
                 $this.removeClass('stop_icon').addClass('restart_icon');
             }
             else {
-                if (($('.collection').length) === 1 && (pagination > 1)) {
+                if (($('#tiles_normal').find('.collection').length) === 1 && (pagination > 1)) {
                     pagination--;
                 }
-                get_collections(true);
+                get_collections_normal(true);
             }
         },
         error: function (e) {
@@ -1207,7 +1493,23 @@ $("#Container").on("click", ".stop_icon", function () {
         }
     });
 });
-$("#Container").on("click", ".edit_icon", function () {
+$("#Container_fav").on("click", ".stop_icon", function () {
+    var $this = $(this);
+    $.ajax({
+        type: 'GET',
+        url: api_folder + 'collection/stop/' + $this.siblings('.delete_icon').attr('id'),
+        success: function () {
+            $this.siblings('.details').removeClass('run_color').addClass('stop_color');
+            $this.removeClass('stop_icon').addClass('restart_icon');
+        },
+        error: function (e) {
+            $('#myModal h1').html("Oops. Something went wrong!");
+            $('#myModal p').html("Your collection has not be stopped. Please try again.");
+            $('#myModal').reveal();
+        }
+    });
+});
+$("#Container_normal,#Container_fav").on("click", ".edit_icon", function () {
     if (($('#advanced_tag').is(":visible")) || ($('#advanced_user').is(":visible"))) {
         $('#advanced_user,#advanced_tag').slideUp(0);
         $('#tags_section,#users_section,#name_section,#map_input').slideDown(0);
@@ -1237,9 +1539,12 @@ $("#Container").on("click", ".edit_icon", function () {
         url: api_folder + 'collection/' + user_id + '/' + id,
         success: function (e) {
             $("#interest").val("").blur().prop('disabled', true);
-
             $.each(e.keywords, function (index, keyword) {
                 addtag(keyword['keyword']);
+                if (keyword['pattern']) {
+                    $("[id='" + keyword['keyword'] + "'").find('.edit_tag').removeClass('edit_tag').addClass('edit_tag_adv');
+                    $("[id='" + keyword['keyword'] + "'").attr('data-edit', keyword['pattern']);
+                }
             });
 
             $.each(e.accounts, function (index, user) {
@@ -1284,13 +1589,14 @@ $("#Container").on("click", ".edit_icon", function () {
     });
 
 });
-$("#Container").on("click", ".overlay", function () {
-    $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&concepts=all&original=all&type=all&unique=false&sort=recency&query=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=0&until=1514678400000&section=feed&view=gallery")
+$("#Container_normal,#Container_fav").on("click", ".overlay", function () {
+    $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&unique=false&original=all&type=all&relevance=&sort=recency&queryUser=&queryKeyword=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=&until=&section=feed&view=gallery")
 });
 
 var pagination = 1;
 if (user_id != "") {
-    get_collections(true);
+    get_collections_normal(true);
+    get_collections_fav();
 }
 else {
     $('#myModal h1').html("Oops. Something went wrong!");
@@ -1299,18 +1605,141 @@ else {
     $('.fifth-section,.fourth-section,.third-section,#mainmenu,#discover').remove();
     $('.second-section').css('min-height', $(window).height() - $('.sixth-section').height());
 }
+function get_collections_fav() {
+    var $tiles = $('#tiles_fav');
+    $tiles.empty();
+    $.ajax({
+        type: 'GET',
+        url: api_folder + 'collection/' + user_id,
+        dataType: "json",
+        success: function (json) {
+            if (json.favs.length > 0) {
+                var data = json.favs;
+                for (var i = 0; i < data.length; i++) {
+                    var id = data[i]._id;
+                    var status = data[i].status;
+                    var title = data[i].title;
+                    var stop_icon = '<div class="stop_icon" title="Stop"></div>';
+                    var split_icon = '<div class="split_icon" title="Assign"></div>';
+                    var copy_icon = '<div class="copy_icon" title="Copy"></div>';
+                    var edit_icon = '<div class="edit_icon" title="Edit"></div>';
+                    var fav_icon = '<div class="fav_icon_full" title="Pin"></div>';
+                    var color_state = "run_color";
+                    if (status === "stopped") {
+                        stop_icon = '<div class="restart_icon" title="Resume"></div>';
+                        color_state = "stop_color";
+                    }
+                    var bg_img = "background-image:url('imgs/placeholder.png');";
+                    if (data[i].hasOwnProperty('mediaUrl')) {
+                        bg_img = "background-image: url('" + data[i].mediaUrl + "'),url('imgs/placeholder.png');";
+                    }
 
-function get_collections(flag) {
-    $('.no_collections,#no_stopped,#no_running').hide();
-    $('.controls,#collection_loader,#Container,.well').show();
-    var $tiles = $('#tiles');
+                    var keywords = data[i].keywords;
+                    var tags = "";
+                    for (var k = 0; k < keywords.length; k++) {
+                        tags = tags + keywords[k].keyword + ", ";
+                    }
+                    if (tags !== "") {
+                        tags = tags.slice(0, -2);
+                    }
+                    else {
+                        tags = "-";
+                    }
+
+                    var locations = data[i].polygons;
+                    var location_centroid = "";
+                    for (var l = 0; l < locations.length; l++) {
+                        location_centroid = location_centroid + locations[l].centroid + ", ";
+                    }
+                    if (location_centroid !== "") {
+                        location_centroid = location_centroid.slice(0, -2);
+                    }
+                    else {
+                        location_centroid = "-";
+                    }
+
+                    var accounts = data[i].accounts;
+                    var users = "";
+                    var users_style = "margin-top:-13px";
+                    var user_icon = "";
+                    for (var a = 0; a < accounts.length; a++) {
+                        switch (accounts[a].source) {
+                            case "Twitter":
+                                user_icon = "imgs/twitter-16-gray.png";
+                                break;
+                            case "GooglePlus":
+                                user_icon = "imgs/google+-16-gray.png";
+                                break;
+                            case "Facebook":
+                                user_icon = "imgs/facebook-16-share.png";
+                                break;
+                            case "RSS":
+                                user_icon = "imgs/rss-16-gray.png";
+                                break;
+                            case "Youtube":
+                                user_icon = "imgs/youtube-16-gray.png";
+                                break;
+                        }
+                        users = users + accounts[a].name + '<img class="user_source" src="' + user_icon + '">,&nbsp;';
+                    }
+                    if (users !== "") {
+                        users = users.slice(0, -7);
+                        users = '<p>' + users + '</p>';
+                    }
+                    else {
+                        users = "-";
+                        users_style = "";
+                    }
+
+                    var items = nFormatter(data[i].items);
+                    var creationDate = new Date(data[i].creationDate);
+                    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    var year = creationDate.getUTCFullYear();
+                    var month = months[creationDate.getUTCMonth()];
+                    var day = creationDate.getUTCDate();
+                    var date = day + ' ' + month + ' ' + year;
+
+                    var element = '<li class="collection"><div class="cover_delete"></div><div class="tiles_li"><div class="outer"><div class="tooltip_delete"><p>Are you sure you want to delete this collection? This action cannot be undone!</p><span class="cancel_delete">Cancel</span><span class="confirm_delete">Yes</span></div><div class="tooltip_share"><p>Enter comma separated users ids to share collection with</p><input class="share_input" type="text" size="40" placeholder="Users Ids..." autocomplete="off"><span class="cancel_share">Cancel</span><span class="confirm_share">Share</span></div>' + fav_icon + copy_icon + split_icon + '<div class="delete_icon" title="Delete" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20"><div class="tags_p">' + tags + '</div></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20"><div class="tags_p" style=' + users_style + '>' + users + '</div></div><div class="tags_wrapper"><img src="imgs/location-gray.png" width="20"><div class="tags_p">' + location_centroid + '</div></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></li>';
+                    $tiles.append(element);
+
+                    $('#no_collections_fav,#fav_loading').hide();
+                    $('#Container_fav').show();
+                    var options = {
+                        autoResize: true,
+                        container: $('#Container_fav'),
+                        offset: 15,
+                        itemWidth: 340,
+                        outerOffset: 0
+                    };
+                    var handler = $tiles.find('> li');
+                    handler.wookmark(options);
+
+                }
+            }
+            else {
+                $('#no_collections_fav').show();
+                $('#fav_loading,#Container_fav').hide();
+            }
+        },
+        error: function (e) {
+            $("#fav_loading").hide();
+            $('#myModal h1').html("Oops. Something went wrong!");
+            $('#myModal p').html("Your collections can not be loaded.");
+            $('#myModal').reveal();
+        }
+    });
+}
+function get_collections_normal(flag) {
+    $('#no_collections_normal,#no_stopped,#no_running,#no_query').hide();
+    $('.controls,#normal_loading,#Container_normal,.well,#query_collection_wrapper').show();
+    var $tiles = $('#tiles_normal');
     var $paginationdemo = $('#pagination-demo');
     $tiles.empty();
-    $("#collection_loader").show();
+    $("#normal_loading").show();
     var status_param = $('.controls').find('.active').attr('id');
     $.ajax({
         type: 'GET',
-        url: api_folder + 'collection/' + user_id + '?nPerPage=6&pageNumber=' + pagination + "&status=" + status_param,
+        url: api_folder + 'collection/' + user_id + '?nPerPage=6&pageNumber=' + pagination + "&q=" + $('#query_collection').val() + "&status=" + status_param,
         dataType: "json",
         success: function (json) {
             if (json.count > 0) {
@@ -1333,7 +1762,7 @@ function get_collections(flag) {
                         last: last_but,
                         onPageClick: function (event, page) {
                             pagination = page;
-                            get_collections(false);
+                            get_collections_normal(false);
                         }
                     });
                 }
@@ -1342,11 +1771,14 @@ function get_collections(flag) {
                     var id = data[i]._id;
                     var status = data[i].status;
                     var title = data[i].title;
-                    var stop_icon = '<div class="stop_icon"></div>';
-                    var edit_icon = '<div class="edit_icon"></div>';
+                    var stop_icon = '<div class="stop_icon" title="Stop"></div>';
+                    var split_icon = '<div class="split_icon" title="Assign"></div>';
+                    var copy_icon = '<div class="copy_icon" title="Copy"></div>';
+                    var edit_icon = '<div class="edit_icon" title="Edit"></div>';
+                    var fav_icon = '<div class="fav_icon" title="Pin"></div>';
                     var color_state = "run_color";
                     if (status === "stopped") {
-                        stop_icon = '<div class="restart_icon"></div>';
+                        stop_icon = '<div class="restart_icon" title="Resume"></div>';
                         color_state = "stop_color";
                     }
                     var bg_img = "background-image:url('imgs/placeholder.png');";
@@ -1419,72 +1851,79 @@ function get_collections(flag) {
                     var day = a.getUTCDate();
                     var date = day + ' ' + month + ' ' + year;
 
-                    var element = '<li class="collection"><div class="cover_delete"></div><div class="tiles_li"><div class="outer"><div class="tooltip_delete"><p>Are you sure you want to delete this collection? This action cannot be undone!</p><span class="cancel_delete">Cancel</span><span class="confirm_delete">Yes</span></div><div class="delete_icon" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20"><div class="tags_p">' + tags + '</div></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20"><div class="tags_p" style=' + users_style + '>' + users + '</div></div><div class="tags_wrapper"><img src="imgs/location-gray.png" width="20"><div class="tags_p">' + location_centroid + '</div></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></li>';
+                    var element = '<li class="collection"><div class="cover_delete"></div><div class="tiles_li"><div class="outer"><div class="tooltip_delete"><p>Are you sure you want to delete this collection? This action cannot be undone!</p><span class="cancel_delete">Cancel</span><span class="confirm_delete">Yes</span></div><div class="tooltip_share"><p>Enter comma separated users ids to share collection with</p><input class="share_input" type="text" size="40" placeholder="Users Ids..." autocomplete="off"><span class="cancel_share">Cancel</span><span class="confirm_share">Share</span></div>' + fav_icon + copy_icon + split_icon + '<div class="delete_icon" title="Delete" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20"><div class="tags_p">' + tags + '</div></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20"><div class="tags_p" style=' + users_style + '>' + users + '</div></div><div class="tags_wrapper"><img src="imgs/location-gray.png" width="20"><div class="tags_p">' + location_centroid + '</div></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></li>';
                     $tiles.append(element);
                     var options = {
                         autoResize: true,
-                        container: $('#Container'),
+                        container: $('#Container_normal'),
                         offset: 15,
                         itemWidth: 340,
                         outerOffset: 0
                     };
-                    var handler = $tiles.find('li');
+                    var handler = $tiles.find('> li');
                     handler.wookmark(options);
-                    $("#collection_loader").hide();
+                    $("#normal_loading").hide();
                 }
             }
             else {
-                switch (status_param) {
-                    case "all" :
-                        $('.no_collections').show();
-                        $('.controls,#collection_loader,#Container,.well').hide();
-                        break;
-                    case "running" :
-                        $.ajax({
-                            type: 'GET',
-                            url: api_folder + 'collection/' + user_id + '?nPerPage=1&pageNumber=1&status=all',
-                            dataType: "json",
-                            success: function (json) {
-                                if (json.count === 0) {
-                                    $('.no_collections').show();
-                                    $('.controls,#collection_loader,#Container,.well').hide();
+                if ($('#query_collection').val() === "") {
+                    switch (status_param) {
+                        case "all" :
+                            $('#no_collections_normal').show();
+                            $('.controls,#normal_loading,#Container_normal,.well,#query_collection_wrapper').hide();
+                            break;
+                        case "running" :
+                            $.ajax({
+                                type: 'GET',
+                                url: api_folder + 'collection/' + user_id + '?nPerPage=1&pageNumber=1&status=all',
+                                dataType: "json",
+                                success: function (json) {
+                                    if (json.count === 0) {
+                                        $('#no_collections_normal').show();
+                                        $('.controls,#normal_loading,#Container_normal,.well,#query_collection_wrapper').hide();
+                                    }
+                                    else {
+                                        $('#normal_loading,.well,#query_collection_wrapper').hide();
+                                        $('#no_running').show();
+                                    }
+                                },
+                                error: function (e) {
+                                    $('#no_collections_normal').show();
+                                    $('.controls,#normal_loading,#Container_normal,.well,#query_collection_wrapper').hide();
                                 }
-                                else {
-                                    $('#collection_loader,.well').hide();
-                                    $('#no_running').show();
+                            });
+                            break;
+                        case "stopped" :
+                            $.ajax({
+                                type: 'GET',
+                                url: api_folder + 'collection/' + user_id + '?nPerPage=1&pageNumber=1&status=all',
+                                dataType: "json",
+                                success: function (json) {
+                                    if (json.count === 0) {
+                                        $('#no_collections_normal').show();
+                                        $('.controls,#normal_loading,#Container_normal,.well,#query_collection_wrapper').hide();
+                                    }
+                                    else {
+                                        $('#normal_loading,.well,#query_collection_wrapper').hide();
+                                        $('#no_stopped').show();
+                                    }
+                                },
+                                error: function (e) {
+                                    $('#no_collections_normal').show();
+                                    $('.controls,#normal_loading,#Container_normal,.well,#query_collection_wrapper').hide();
                                 }
-                            },
-                            error: function (e) {
-                                $('.no_collections').show();
-                                $('.controls,#collection_loader,#Container,.well').hide();
-                            }
-                        });
-                        break;
-                    case "stopped" :
-                        $.ajax({
-                            type: 'GET',
-                            url: api_folder + 'collection/' + user_id + '?nPerPage=1&pageNumber=1&status=all',
-                            dataType: "json",
-                            success: function (json) {
-                                if (json.count === 0) {
-                                    $('.no_collections').show();
-                                    $('.controls,#collection_loader,#Container,.well').hide();
-                                }
-                                else {
-                                    $('#collection_loader,.well').hide();
-                                    $('#no_stopped').show();
-                                }
-                            },
-                            error: function (e) {
-                                $('.no_collections').show();
-                                $('.controls,#collection_loader,#Container,.well').hide();
-                            }
-                        });
+                            });
+                    }
+                }
+                else {
+                    $('#normal_loading,.well,#query_collection_wrapper').hide();
+                    $('#no_query').show();
+                    $('#no_query span').text($('#query_collection').val());
                 }
             }
         },
         error: function (e) {
-            $("#collection_loader,.well,.controls .btn_material").hide();
+            $("#normal_loading,.well,.controls .btn_material,#query_collection_wrapper").hide();
             $('#myModal h1').html("Oops. Something went wrong!");
             $('#myModal p').html("Your collections can not be loaded.");
             $('#myModal').reveal();
@@ -1497,7 +1936,7 @@ $('.controls').find('.btn_material').click(function () {
         $('.controls').find('.btn_material').removeClass('active');
         $(this).addClass('active');
         pagination = 1;
-        get_collections(true);
+        get_collections_normal(true);
     }
 });
 $('.btn_discover').click(function () {
@@ -1579,6 +2018,7 @@ function validate_expression() {
 
     var valid_expr = true;
     var string_expr = "";
+    var edit_expr = "";
     var $expression = $('#expression');
     var $error_exp = $('#error_expr');
 
@@ -1681,24 +2121,30 @@ function validate_expression() {
     $('.operator').each(function () {
         if ($(this).hasClass("open_parenthesis")) {
             string_expr = string_expr + "(";
+            edit_expr = edit_expr + "PAROS";
         }
         else if ($(this).hasClass("close_parenthesis")) {
             string_expr = string_expr + ")";
+            edit_expr = edit_expr + "PARCS"
         }
         else if ($(this).hasClass("and_operator")) {
             string_expr = string_expr + " AND ";
+            edit_expr = edit_expr + "ANDS"
         }
         else if ($(this).hasClass("or_operator")) {
             string_expr = string_expr + " OR ";
+            edit_expr = edit_expr + "ORS"
         }
         else if ($(this).hasClass("not_operator")) {
             string_expr = string_expr + " NOT ";
+            edit_expr = edit_expr + "NOTS"
         }
         else if ($(this).hasClass("tag_operator")) {
             string_expr = string_expr + $(this).attr('id');
+            edit_expr = edit_expr + $(this).attr('id') + "S";
         }
     });
-    addtag_advanced(string_expr);
+    addtag_advanced(string_expr, edit_expr);
     return "added";
 }
 
@@ -1808,35 +2254,38 @@ $("#cancel_edit").click(function () {
 
 $("#done_tags").click(function () {
     if (validate_expression() === "added") {
-        $('#name_section,#users_section,#tags_section,#map_input').slideDown(500);
-        $('#tags').html($('#tags_adv').html());
-        if ((($("#tags li").length > 0) || ($("#users li").length > 0) || ($.map_get_polygon_points().features.length > 0)) && (($('#interest').val() != "") || ($('#col_name').html() != ""))) {
-            $('#done_start,#done_edit').removeClass('deactivated');
-        }
-        else {
-            $('#done_start,#done_edit').addClass('deactivated');
-        }
-        $('#tags_adv,#expression').empty();
-        if ($("#tags").find("li").length === 20) {
-            $("#hashtag,#tag_advanced").prop('disabled', true);
-            $('#max_tags,#max_tags_advanced').slideDown();
-        }
-        $('#advanced_tag').slideUp(500);
-        $('#tag_advanced').val("").blur();
-        parenthesis_count = 0;
-        $('#error_expr').slideUp();
-        if (edit_mode) {
-            $('#edit_buttons').show();
-        }
-        else {
-            $('#start_buttons').show();
-        }
-        $('#map_toggle').show();
-        if ($('#map_button').is(":checked")) {
-            $('#map,#map_desc').show();
-            $.map_resize();
-        }
-        $('#tags').find('li').css('opacity', 1);
+        var timeout = $('#expression li').length > 0 ? 700 : 0;
+        setTimeout(function () {
+            $('#name_section,#users_section,#tags_section,#map_input').slideDown(500);
+            $('#tags').html($('#tags_adv').html());
+            if ((($("#tags li").length > 0) || ($("#users li").length > 0) || ($.map_get_polygon_points().features.length > 0)) && (($('#interest').val() != "") || ($('#col_name').html() != ""))) {
+                $('#done_start,#done_edit').removeClass('deactivated');
+            }
+            else {
+                $('#done_start,#done_edit').addClass('deactivated');
+            }
+            $('#tags_adv,#expression').empty();
+            if ($("#tags").find("li").length === 20) {
+                $("#hashtag,#tag_advanced").prop('disabled', true);
+                $('#max_tags,#max_tags_advanced').slideDown();
+            }
+            $('#advanced_tag').slideUp(500);
+            $('#tag_advanced').val("").blur();
+            parenthesis_count = 0;
+            $('#error_expr').slideUp();
+            if (edit_mode) {
+                $('#edit_buttons').show();
+            }
+            else {
+                $('#start_buttons').show();
+            }
+            $('#map_toggle').show();
+            if ($('#map_button').is(":checked")) {
+                $('#map,#map_desc').show();
+                $.map_resize();
+            }
+            $('#tags').find('li').css('opacity', 1);
+        }, timeout);
     }
 });
 
@@ -1955,7 +2404,10 @@ function collection_begin() {
     };
     var $tagsli = $('#tags').find('li');
     for (var i = 0; i < $tagsli.length; i++) {
-        viewData.keywords.push({"keyword": $tagsli.eq(i).find('a').attr('id')});
+        viewData.keywords.push({
+            "keyword": $tagsli.eq(i).find('a').attr('id'),
+            "pattern": $tagsli.eq(i).find('a').attr('data-edit')
+        });
     }
     var $usersli = $('#users').find('li');
     for (var i = 0; i < $usersli.length; i++) {
@@ -2016,7 +2468,7 @@ function collection_begin() {
                 pagination = 1;
                 $('.controls').find('.btn_material').removeClass('active');
                 $('#all').addClass('active');
-                get_collections(true);
+                get_collections_normal(true);
                 $('#col_name,#tags,#users').empty();
                 $('.user_input').prop('disabled', false).val("").blur();
                 $('.mapbox-gl-draw_polygon').attr('disabled', false);
@@ -2088,6 +2540,39 @@ function initMap() {
         });
     });
 }
+function googleMapsCustomError() {
+    $('#map_input').addClass('disabled_input');
+    $('#location_input').val("Invalid Google Map Key");
+    $('#location_input').css('background-image','none');
+    $("label[for='location_input']").remove();
+}
+(function takeOverConsole() { // taken from http://tobyho.com/2012/07/27/taking-over-console-log/
+    var console = window.console
+    if (!console) return
+
+    function intercept(method) {
+        var original = console[method]
+        console[method] = function () {
+            // check message
+            if (arguments[0] && arguments[0].indexOf('InvalidKeyMapError') !== -1) {
+                googleMapsCustomError();
+            }
+
+            if (original.apply) {
+                // Do this for normal browsers
+                original.apply(console, arguments)
+            } else {
+                // Do this for IE
+                var message = Array.prototype.slice.apply(arguments).join(' ')
+                original(message)
+            }
+        }
+    }
+
+    var methods = ['error']; // only interested in the console.error method
+    for (var i = 0; i < methods.length; i++)
+        intercept(methods[i])
+}());
 
 function codeLatLng(callback, latlng, k) {
     if (geocoder) {

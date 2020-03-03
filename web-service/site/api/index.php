@@ -1144,6 +1144,12 @@ $app->get(
                 $collection['stopDate'] = 1000 * time();
             }
 
+            $cid = $collection['_id'];
+            if (is_object($cid)) {
+                $cid = $cid->__toString();
+                $collection['_id'] = $cid;
+            }
+
             echo json_encode($collection);
             return;
         }

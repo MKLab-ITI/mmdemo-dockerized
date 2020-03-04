@@ -214,6 +214,8 @@ $app->get('/items',
         $pageNumber = $request->get('pageNumber')==null ? 1 : $request->get('pageNumber');
         $nPerPage = $request->get('nPerPage')==null ? 20 : $request->get('nPerPage');
 
+        $cached = ($request->get('cached')==null || $request->get('cached')=='') ? 'true' : $request->get('cached');
+
         $owner_id = null;
         $filters = array();
         $items = array();
@@ -265,18 +267,18 @@ $app->get('/items',
                         "topics_");
 
                 $clusters = $memcached->get($clusters_hash);
-                if($clusters == false || count($clusters) == 0) {
+                if($clusters == false || count($clusters) == 0 || $cached === 'false') {
                     $clusters = $textIndex->getClusters($collection_query, $filters, 5000);
-                    $memcached->set($clusters_hash, $clusters, time() + 301);
+                    $memcached->set($clusters_hash, $clusters, time() + 601);
                 }
 
                 $topics = $memcached->get($topics_hash);
-                if($topics == false || count($topics) == 0) {
+                if($topics == false || count($topics) == 0 || $cached === 'false') {
                     $topics = $utils->getTopicsFromClusters($clusters, $results['numFound'], 5000,
                         $collection_query, $query, $since, $until, $source, $original, $type, $language, $user,
                         $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements, $nearLocations, $textIndex);
                     if (count($topics) > 0) {
-                        $memcached->set($topics_hash, $topics, time() + 301);
+                        $memcached->set($topics_hash, $topics, time() + 601);
                     }
                 }
 

@@ -308,7 +308,14 @@ class MongoDAO {
             if(is_string($favorite)) {
                 $favorite = $favorite === 'true' ? true : false;
             }
-            $query['favorite'] = $favorite;
+
+            if ($favorite == true) {
+                $query['favorite'] = true;
+            }
+            else{
+                $query['$or'] = [['favorite' => false], ['favorite' => ['$exists'=>false]]];
+            }
+
         }
 
         if($q != null && $q != '') {

@@ -1240,6 +1240,7 @@ $app->get(
             $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
             $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
+
             $filters = $utils->getFilters($since, $until, "all", null, null, null, null, null,
                 $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
 

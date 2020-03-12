@@ -1224,6 +1224,10 @@ $app->get(
                 $collection['stopDate'] = 1000 * time();
             }
 
+            if (!array_key_exists('favorite', $collection)) {
+                $collection['favorite'] = false;
+            }
+
             $q = $utils->formulateCollectionQuery($collection);
 
             $collection['query'] = $q;
@@ -1312,6 +1316,10 @@ $app->get(
 
             if($favCollection['status'] != 'stopped') {
                 $favCollection['stopDate'] = 1000 * time();
+            }
+
+            if (!array_key_exists('favorite', $favCollection)) {
+                $favCollection['favorite'] = false;
             }
 
             $q = $utils->formulateCollectionQuery($favCollection);
@@ -1405,6 +1413,10 @@ $app->get(
                 $sharedCollection['stopDate'] = 1000 * time();
             }
 
+            if (!array_key_exists('favorite', $sharedCollection)) {
+                $sharedCollection['favorite'] = false;
+            }
+
             $q = $utils->formulateCollectionQuery($sharedCollection);
 
             $sharedCollection['query'] = $q;
@@ -1466,7 +1478,7 @@ $app->get(
 
 
         echo json_encode(array('ownerId' => $uid, 'collections'=>$collections, 'favs'=> $favCollections,
-            'shared'=>$sharedCollections, 'count'=>$c, 'test'=>$userCollections));
+            'shared'=>$sharedCollections, 'count'=>$c));
 
     }
 )->name("get_user_collections");

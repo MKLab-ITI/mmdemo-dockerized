@@ -1466,7 +1466,7 @@ $app->get(
 
 
         echo json_encode(array('ownerId' => $uid, 'collections'=>$collections, 'favs'=> $favCollections,
-            'shared'=>$sharedCollections, 'count'=>$c));
+            'shared'=>$sharedCollections, 'count'=>$c, 'test'=>$userCollections));
 
     }
 )->name("get_user_collections");

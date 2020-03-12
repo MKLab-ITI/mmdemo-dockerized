@@ -356,7 +356,7 @@ class MongoDAO {
 
         $mongoCollection = $this->db->selectCollection(MongoDAO::$COLLECTIONS);
 
-        $query = array('$or' => [array('ownerId' => $uid), array('viewers' => $uid)]);
+        $query = array('viewers' => $uid);
 
         if($status != null && ($status==='stopped' || $status==='running')) {
             $query['status'] = $status;

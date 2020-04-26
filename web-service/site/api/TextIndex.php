@@ -121,7 +121,15 @@ class TextIndex {
                     'score' => $document['score'],
                     'normalizedScore' => $document['score'] / $maxScore,
                     'minhash' => $document['minhash'],
-                    'cleanTitle' => $document['cleanTitle']
+                    'cleanTitle' => $document['cleanTitle'],
+                    'title' => $document['title'],
+                    'uid' => $document['uidFacet'],
+                    'publicationTime' => $document['publicationTimeFacet'],
+                    'language' => $document['language_s'],
+                    'comments' => $document['commentsFacet'],
+                    'tags' => $document['tags'],
+                    'likes' => $document['likesFacet'],
+                    'shares' => $document['sharesFacet']
                 );
 
                 if($hlUsed) {

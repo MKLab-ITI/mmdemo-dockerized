@@ -306,10 +306,36 @@ $app->get('/items',
         $rank = $nPerPage * ($pageNumber - 1);
         if(isset($results['docs'])) {
             foreach ($results['docs'] as $result) {
-                $item = $mongoDAO->getItem($result['id']);
-                $item['score'] = $result['score'];
-                $item['minhash'] = $result['minhash'];
-                $item['cleanTitle'] = $result['cleanTitle'];
+                if ($mongoDAO->itemExists($result['id'])) {
+                    $item = $mongoDAO->getItem($result['id']);
+                    $item['score'] = $result['score'];
+                    $item['minhash'] = $result['minhash'];
+                    $item['cleanTitle'] = $result['cleanTitle'];
+                }
+                else {
+                    $item = array();
+                    $item['id'] = $result['id'];
+                    $item['score'] = $result['score'];
+                    $item['minhash'] = $result['minhash'];
+                    $item['cleanTitle'] = $result['cleanTitle'];
+                    $item['title'] = $result['title'];
+                    $item['uid'] = $result['uid'];
+                    $item['publicationTime'] = $result['publicationTime'];
+                    $item['language'] = $result['language'];
+                    $item['comments'] = $result['comments'];
+                    $item['tags'] = $result['tags'];
+                    $item['likes'] = $result['likes'];
+                    $item['shares'] = $result['shares'];
+
+                    $uid = $item['uid'];
+                    $user = $this->getUser($uid);
+                    if($user == null) {
+                        return null;
+                    }
+                    $item['user'] = $user;
+                    $item['type'] = 'item';
+                }
+
                 $item['rank'] = $rank;
 
                 $rank += 1;

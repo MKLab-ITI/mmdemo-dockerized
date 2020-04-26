@@ -101,7 +101,9 @@ class TextIndex {
         $query->setStart(($pageNumber-1)*$nPerPage);
         $query->setRows($nPerPage);
 
-        $query->setFields(['id', 'score', 'minhash', 'cleanTitle']);
+        $query->setFields(['id', 'score', 'minhash', 'cleanTitle', 'title',
+            'uidFacet', 'publicationTimeFacet', 'language_s', 'commentsFacet',
+            'tags', 'likesFacet', 'sharesFacet']);
 
         $numFound = 0;
         $docsFound = array();

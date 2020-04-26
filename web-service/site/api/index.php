@@ -336,6 +336,12 @@ $app->get('/items',
                     if($user != null) {
                         $item['user'] = $user;
                     }
+                    else {
+                        $item['user'] = array(
+                            'id' => $uid, 'items' => 0, 'mentions' => 0,
+                            'friends' => 0, 'followers' => 0, 'shares' => 0
+                        );
+                    }
 
                     $item['type'] = 'item';
                 }

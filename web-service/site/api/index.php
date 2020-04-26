@@ -316,7 +316,7 @@ $app->get('/items',
                     $item = $result;
 
                     $uid = $item['uid'];
-                    $user = $this->getUser($uid);
+                    $user = $mongoDAO->getUser($uid);
                     if($user == null) {
                         return null;
                     }

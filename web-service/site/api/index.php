@@ -313,19 +313,7 @@ $app->get('/items',
                     $item['cleanTitle'] = $result['cleanTitle'];
                 }
                 else {
-                    $item = array();
-                    $item['id'] = $result['id'];
-                    $item['score'] = $result['score'];
-                    $item['minhash'] = $result['minhash'];
-                    $item['cleanTitle'] = $result['cleanTitle'];
-                    $item['title'] = $result['title'];
-                    $item['uid'] = $result['uid'];
-                    $item['publicationTime'] = $result['publicationTime'];
-                    $item['language'] = $result['language'];
-                    $item['comments'] = $result['comments'];
-                    $item['tags'] = $result['tags'];
-                    $item['likes'] = $result['likes'];
-                    $item['shares'] = $result['shares'];
+                    $item = $result;
 
                     $uid = $item['uid'];
                     $user = $this->getUser($uid);

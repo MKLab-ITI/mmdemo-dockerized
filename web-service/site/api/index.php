@@ -317,10 +317,13 @@ $app->get('/items',
 
                     $uid = $item['uid'];
                     $user = $mongoDAO->getUser($uid);
-                    if($user == null) {
-                        return null;
+                    if($user != null) {
+                        $item['user'] = $user;
                     }
-                    $item['user'] = $user;
+                    else {
+                        $item['user'] = array('id' => $uid);
+                    }
+
                     $item['type'] = 'item';
                 }
 

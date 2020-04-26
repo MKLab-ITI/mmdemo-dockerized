@@ -337,7 +337,7 @@ $app->get('/items',
                         $item['user'] = $user;
                     }
                     else {
-                        $item['user'] = array('id' => $uid);
+                        $item['user'] = array('id' => $uid, 'items' => 0);
                     }
 
                     $item['type'] = 'item';

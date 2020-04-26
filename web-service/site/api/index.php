@@ -327,6 +327,10 @@ $app->get('/items',
                         $item['original'] = True;
                     }
 
+                    if($item['tags'] == null) {
+                        $item['tags'] = [];
+                    }
+
                     $uid = $item['uid'];
                     $user = $mongoDAO->getUser($uid);
                     if($user != null) {

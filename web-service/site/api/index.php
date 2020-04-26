@@ -315,6 +315,18 @@ $app->get('/items',
                 else {
                     $item = $result;
 
+                    $id_parts = explode("#", $item['id']);
+                    if(count($id_parts) > 0) {
+                        $item['source'] = $id_parts[0];
+                    }
+
+                    if(strpos($item['title'], 'RT ') === 0) {
+                        $item['original'] = False;
+                    }
+                    else {
+                        $item['original'] = True;
+                    }
+
                     $uid = $item['uid'];
                     $user = $mongoDAO->getUser($uid);
                     if($user != null) {

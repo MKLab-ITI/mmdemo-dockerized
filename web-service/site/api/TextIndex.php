@@ -131,7 +131,8 @@ class TextIndex {
                     'comments' => $document['commentsFacet'],
                     'tags' => $document['tags'],
                     'likes' => $document['likesFacet'],
-                    'shares' => $document['sharesFacet']
+                    'shares' => $document['sharesFacet'],
+                    'views' => 0
                 );
 
                 if($hlUsed) {

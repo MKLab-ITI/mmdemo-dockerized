@@ -293,7 +293,7 @@ $app->get('/items',
                 $query = urldecode($query);
                 $keywords = explode(',', $query);
 
-                $query = $utils->formulateLogicalQuery($keywords);
+                $query = $utils->formulateLogicalQuery($keywords, 'OR');
                 $query = "title:($query) OR description:($query)";
 
                 $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, null, $user, null, null, null);
@@ -1478,8 +1478,14 @@ $app->get(
         }
 
 
-        echo json_encode(array('ownerId' => $uid, 'collections'=>$collections, 'favs'=> $favCollections,
-            'shared'=>$sharedCollections, 'count'=>$c));
+        echo json_encode(
+            array(
+                'ownerId' => $uid,
+                'collections'=>$collections,
+                'favs'=> $favCollections,
+                'shared'=>$sharedCollections,
+                'count'=>$c)
+        );
 
     }
 )->name("get_user_collections");

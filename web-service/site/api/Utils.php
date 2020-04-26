@@ -8,6 +8,10 @@
 
 class Utils {
 
+    /** Checks whether the query is a logical expression *
+     * @param $q
+     * @return bool
+     */
     public function isLogicalExpression($q) {
         return preg_match('/AND/',$q) || preg_match('/OR/',$q) || preg_match('/NOT/',$q);
     }
@@ -16,7 +20,7 @@ class Utils {
         return preg_match('/^NOT/',$q);
     }
 
-    public function formulateLogicalQuery($keywords) {
+    public function formulateLogicalQuery($keywords, $glue='AND') {
 
         $queryParts = array();
         foreach($keywords as $keyword) {
@@ -38,8 +42,8 @@ class Utils {
                 }
             }
         }
-        $query = implode(' AND ', $queryParts);
-        return $query;
+
+        return implode(" $glue ", $queryParts);
     }
 
     public function formulateCollectionQuery($collection) {
@@ -64,14 +68,14 @@ class Utils {
         });
 
         //$keywords = array_keys($keywords);
-        $textQuery = $this->formulateLogicalQuery($keywords);
-        $tagsQuery = $this->formulateLogicalQuery($tags);
+        $textQuery = $this->formulateLogicalQuery($keywords, 'OR');
+        $tagsQuery = $this->formulateLogicalQuery($tags, 'OR');
 
         // excluded keywords
         if(isset($collection['keywordsToExclude'])) {
             $keywordsToExclude = $collection['keywordsToExclude'];
             if ($keywordsToExclude != null && count($keywordsToExclude) > 0) {
-                $excludedTermsQuery = $this->formulateLogicalQuery($keywordsToExclude);
+                $excludedTermsQuery = $this->formulateLogicalQuery($keywordsToExclude, 'OR');
 
                 $textQuery = $textQuery . " NOT (" . $excludedTermsQuery . ")";
                 $tagsQuery = $tagsQuery . " NOT (" . $excludedTermsQuery . ")";
@@ -81,12 +85,13 @@ class Utils {
         $notParts = array();
         foreach($keywords as $keyword) {
             if ($this->isNegativeLogicalExpression($keyword)) {
-                $notParts[] = "($keyword )";
+                $keyword = preg_replace('/^NOT/', '', $keyword);
+                $notParts[] = "($keyword)";
             }
         }
 
         if(count($notParts) > 0) {
-            $textQuery = $textQuery . implode(" ", $excludedTermsQuery);
+            $textQuery = $textQuery . ' NOT (' . implode(" OR ", $notParts) . ')';
         }
 
         // user accounts to follow
@@ -126,11 +131,16 @@ class Utils {
                 $filters['{!cache=false}allText'] = $query;
             }
             else {
-                $keywords = explode(',', $query);
-                $filterTextQuery = $this->formulateLogicalQuery($keywords);
+                if($this->isLogicalExpression($query)) {
+                    $filters['{!cache=false}allText'] = $query;
+                }
+                else {
+                    $keywords = explode(',', $query);
+                    $filterTextQuery = $this->formulateLogicalQuery($keywords, 'AND');
 
-                // Do not cache it
-                $filters['{!cache=false}allText'] = $filterTextQuery;
+                    // Do not cache it
+                    $filters['{!cache=false}allText'] = $filterTextQuery;
+                }
             }
         }
 

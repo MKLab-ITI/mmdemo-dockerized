@@ -971,7 +971,8 @@ $app->get(
 
             $cachedTimeline = $memcached->get($requestHash);
             if($cachedTimeline != false) {
-                echo json_encode(array('timeline' => $cachedTimeline, 'cached' => True));
+                $r = array('timeline' => $cachedTimeline, 'cached' => True, 'since' => $since, 'until' => $until);
+                echo json_encode($r);
                 return;
             }
 
@@ -987,7 +988,13 @@ $app->get(
             }
             $memcached->set($requestHash, $tm, time()+61);
 
-            $response = array('timeline' => $tm, 'collection_query' => $q, 'filters' => $filters);
+            $response = array(
+                'timeline' => $tm,
+                'collection_query' => $q,
+                'filters' => $filters,
+                'since' => $since,
+                'until' => $until
+            );
             echo json_encode($response);
         }
         else {

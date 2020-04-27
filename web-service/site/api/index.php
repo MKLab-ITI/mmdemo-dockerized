@@ -515,7 +515,7 @@ $app->get('/collection/:cid/download',
             "ids" => $results,
         );
 
-        $redisClient->publish("job:download", $message);
+        $redisClient->publish("job:download", json_encode($message));
 
         echo json_encode(array('job_id' => $cid, 'status'=> 'not_ready'));
 

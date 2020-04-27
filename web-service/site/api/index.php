@@ -456,7 +456,8 @@ $app->get('/items',
  *  GET /collection/:id/download
  */
 $app->get('/collection/:cid/download',
-    function($cid) use($mongoDAO, $textIndex, $utils, $app) {
+    function($cid) use($mongoDAO, $textIndex, $utils, $redisClient, $app) {
+
         $request = $app->request();
 
         $s = $request->get('since');
@@ -507,13 +508,37 @@ $app->get('/collection/:cid/download',
         $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
             $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
 
-
         $results = $textIndex->getAllItemIds($collection_query,  $filters,  $unique);
 
-        echo json_encode(array('ids' => $results, 'collection_query' => $collection_query, 'filters' => $filters));
-        return;
+        $message = array(
+            "job_id" => $cid,
+            "ids" => $results,
+        );
+
+        $redisClient->publish("job:download", $message);
+
+        echo json_encode(array('job_id' => $cid, 'status'=> 'not_ready'));
+
     }
 )->name("collection_download");
+
+/**
+ *  GET /collection/:id/download
+ */
+$app->get('/download/:job_id', function($job_id) use($mongoDAO, $app) {
+
+    $response = $app->response();
+    $stream = new \Slim\Http\Stream(null);
+
+    return $response->withHeader('Content-Type', 'application/force-download')
+        ->withHeader('Content-Type', 'application/octet-stream')
+        ->withHeader('Content-Type', 'application/download')
+        ->withHeader('Content-Description', 'File Transfer')
+        ->withHeader('Content-Transfer-Encoding', 'binary')
+        ->withBody($stream);
+}
+)->name("download_result");
+
 
 /**
  *  GET /summary

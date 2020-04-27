@@ -19,6 +19,8 @@ RUN a2enmod headers
 
 RUN pip install requests
 RUN pecl install mongodb
+RUN pip install redis==3.4.1
+RUN pip install pymongo==3.5.1
 
 # Update the PHP.ini file, enable <? ?> tags and quieten logging.
 RUN sed -i "s/error_reporting = .*$/error_reporting = E_ERROR | E_WARNING | E_PARSE/" /etc/php/7.0/apache2/php.ini
@@ -39,6 +41,7 @@ ADD site /var/www/site
 ADD apache-config.conf /etc/apache2/sites-enabled/000-default.conf
 
 ADD auto_cache.py /
+ADD collection_download_scheduler.py /
 ADD run.sh /
 
 EXPOSE 80

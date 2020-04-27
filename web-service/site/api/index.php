@@ -510,7 +510,7 @@ $app->get('/collection/:cid/download',
 
         $results = $textIndex->getAllItemIds($collection_query,  $filters,  $unique);
 
-        echo json_encode($results);
+        echo json_encode(array('ids' => $results, 'collection_query' => $collection_query, 'filters' => $filters));
         return;
     }
 )->name("collection_download");

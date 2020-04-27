@@ -24,8 +24,10 @@ class TextIndex {
         $this->client = new Solarium\Client($config);
     }
 
-    public function getAllItemIds($q, $filters=null, $unique=false){
+    public function getAllItemIds($q, $filters=null, $unique=false) {
+
         $query = $this->client->createSelect();
+
         if($filters != null && isset($filters['geofilters'])) {
             $helper = $query->getHelper();
             $geoParts = array();

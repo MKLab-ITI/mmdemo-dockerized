@@ -176,7 +176,7 @@ $app->get('/items/:id/statistics',
  *  GET /items
  */
 $app->get('/items',
-    function() use($mongoDAO, $textIndex, $memcached, $utils, $app) {
+    function() use($mongoDAO, $textIndex, $memcached, $utils, $smWrapper, $app) {
         $request = $app->request();
 
         $s = $request->get('since');
@@ -337,10 +337,36 @@ $app->get('/items',
                         $item['user'] = $user;
                     }
                     else {
-                        $item['user'] = array(
-                            'id' => $uid, 'items' => 0, 'mentions' => 0,
-                            'friends' => 0, 'followers' => 0, 'shares' => 0
-                        );
+
+                        $user_link = '';
+                        $uid_parts = explode("#", $uid);
+                        if(count($uid_parts) > 1) {
+                            if ($item['source'] == 'Youtube') {
+                                $user_link = 'https://www.youtube.com/channel/' . $uid_parts[1];
+                                $item['user'] = array(
+                                    'id' => $uid, 'items' => 0, 'mentions' => 0, 'pageUrl' => $user_link,
+                                    'friends' => 0, 'followers' => 0, 'shares' => 0
+                                );
+                            } elseif ($item['source'] == 'Twitter') {
+                                $twitter_user = $smWrapper->getTwitterUser($uid_parts[1]);
+                                if ($twitter_user != null && count($twitter_user) > 0) {
+                                    $user = array(
+                                        'id' => $uid, 'username' => $twitter_user['screen_name'],
+                                        'userid' => $twitter_user['id_str'], 'url' => $twitter_user['url'],
+                                        'name' => $twitter_user['name'], 'items' => $twitter_user['statuses_count'],
+                                        'profileImage' => $twitter_user['profile_image_url_https'],
+                                        'followers' => $twitter_user['followers_count'],
+                                        'friends' => $twitter_user['friends_count'],
+                                        'favorities' => $twitter_user['favourites_count'],
+                                        'listedCount' => $twitter_user['listed_count'],
+                                        'mentions' => 0, 'source' => 'Twitter',
+                                        'pageUrl' => 'https://twitter.com/' . $twitter_user['screen_name']
+                                    );
+                                    $item['user'] = $twitter_user;
+                                }
+                            }
+                        }
+
                     }
 
                     $item['type'] = 'item';

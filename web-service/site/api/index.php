@@ -652,8 +652,10 @@ $app->get(
                     $users = array();
                     foreach($facet as $result) {
                         $user = $mongoDAO->getUser($result['field']);
-                        $user['count'] = $result['count'];
-                        $users[] = $user;
+                        if ($user != null && count($user) > 0) {
+                            $user['count'] = $result['count'];
+                            $users[] = $user;
+                        }
                     }
                     echo json_encode($users);
                 }

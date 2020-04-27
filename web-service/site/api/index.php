@@ -318,6 +318,15 @@ $app->get('/items',
                     $id_parts = explode("#", $item['id']);
                     if(count($id_parts) > 0) {
                         $item['source'] = $id_parts[0];
+                        if ($item['source'] == 'Youtube') {
+                            $item['pageUrl'] = 'https://www.youtube.com/watch?v=' . $item['id'];
+                        }
+                        elseif ($item['source'] == 'Twitter') {
+                            $item['pageUrl'] = 'https://twitter.com/username/status/' . $item['id'];
+                        }
+                        elseif ($item['source'] == 'Facebook') {
+                            $item['pageUrl'] = 'https://www.facebook.com/' . $item['id'];
+                        }
                     }
 
                     if(strpos($item['title'], 'RT ') === 0) {
@@ -337,11 +346,10 @@ $app->get('/items',
                         $item['user'] = $user;
                     }
                     else {
-
                         $user_link = '';
                         $uid_parts = explode("#", $uid);
                         if(count($uid_parts) > 1) {
-                            if ($item['source'] == 'Youtube') {
+                            if ($uid_parts[0] == 'Youtube') {
                                 $youtube_channel = $smWrapper->getYoutubeChannel($uid_parts[1]);
                                 if ($youtube_channel != null && count($youtube_channel) > 0) {
                                     $user = array(
@@ -363,7 +371,8 @@ $app->get('/items',
                                         'id' => $uid, 'items' => 0, 'mentions' => 0, 'pageUrl' => $user_link,
                                         'friends' => 0, 'followers' => 0, 'shares' => 0);
                                 }
-                            } elseif ($item['source'] == 'Twitter') {
+                            }
+                            elseif ($uid_parts[0] == 'Twitter') {
                                 $twitter_user = $smWrapper->getTwitterUser($uid_parts[1]);
                                 if ($twitter_user != null && count($twitter_user) > 0) {
                                     $user = array(
@@ -380,6 +389,11 @@ $app->get('/items',
                                         'pageUrl' => 'https://twitter.com/' . $twitter_user->screen_name
                                     );
                                     $item['user'] = $user;
+                                } else {
+                                    $item['user'] = array(
+                                        'id' => $uid, 'items' => 0, 'mentions' => 0, 'pageUrl' => $user_link,
+                                        'friends' => 0, 'followers' => 0, 'shares' => 0
+                                    );
                                 }
                             }
                             else {
@@ -389,9 +403,13 @@ $app->get('/items',
                                 );
                             }
                         }
-
+                        else {
+                            $item['user'] = array(
+                                'id' => $uid, 'items' => 0, 'mentions' => 0, 'pageUrl' => $user_link,
+                                'friends' => 0, 'followers' => 0, 'shares' => 0
+                            );
+                        }
                     }
-
                     $item['type'] = 'item';
                 }
 

@@ -316,16 +316,16 @@ $app->get('/items',
                     $item = $result;
 
                     $id_parts = explode("#", $item['id']);
-                    if(count($id_parts) > 0) {
+                    if(count($id_parts) > 1) {
                         $item['source'] = $id_parts[0];
                         if ($item['source'] == 'Youtube') {
-                            $item['pageUrl'] = 'https://www.youtube.com/watch?v=' . $item['id'];
+                            $item['pageUrl'] = 'https://www.youtube.com/watch?v=' . $id_parts[1];
                         }
                         elseif ($item['source'] == 'Twitter') {
-                            $item['pageUrl'] = 'https://twitter.com/username/status/' . $item['id'];
+                            $item['pageUrl'] = 'https://twitter.com/username/status/' . $id_parts[1];
                         }
                         elseif ($item['source'] == 'Facebook') {
-                            $item['pageUrl'] = 'https://www.facebook.com/' . $item['id'];
+                            $item['pageUrl'] = 'https://www.facebook.com/' . $id_parts[1];
                         }
                     }
 

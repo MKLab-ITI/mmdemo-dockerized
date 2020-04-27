@@ -342,28 +342,51 @@ $app->get('/items',
                         $uid_parts = explode("#", $uid);
                         if(count($uid_parts) > 1) {
                             if ($item['source'] == 'Youtube') {
-                                $user_link = 'https://www.youtube.com/channel/' . $uid_parts[1];
-                                $item['user'] = array(
-                                    'id' => $uid, 'items' => 0, 'mentions' => 0, 'pageUrl' => $user_link,
-                                    'friends' => 0, 'followers' => 0, 'shares' => 0
-                                );
+                                $youtube_channel = $smWrapper->getYoutubeChannel($uid_parts[1]);
+                                if ($youtube_channel != null && count($youtube_channel) > 0) {
+                                    $user = array(
+                                        'id' => $uid, 'username' => $youtube_channel['username'],
+                                        'name' => $youtube_channel['name'], 'userid' => $youtube_channel['id'],
+                                        'views' => $youtube_channel['viewCount'],
+                                        'comments' => $youtube_channel['commentCount'],
+                                        'followers' => $youtube_channel['subscriberCount'],
+                                        'items' => $youtube_channel['videoCount'],
+                                        'mentions' => 0, 'source' => 'Youtube',
+                                        'pageUrl' => 'https://www.youtube.com/channel/' . $youtube_channel['id'],
+                                        'favorities' => 0, 'listedCount' => 0, 'friends' => 0, 'shares' => 0
+                                    );
+                                    $item['user'] = $user;
+                                }
+                                else {
+                                    $user_link = 'https://www.youtube.com/channel/' . $uid_parts[1];
+                                    $item['user'] = array(
+                                        'id' => $uid, 'items' => 0, 'mentions' => 0, 'pageUrl' => $user_link,
+                                        'friends' => 0, 'followers' => 0, 'shares' => 0);
+                                }
                             } elseif ($item['source'] == 'Twitter') {
                                 $twitter_user = $smWrapper->getTwitterUser($uid_parts[1]);
                                 if ($twitter_user != null && count($twitter_user) > 0) {
                                     $user = array(
-                                        'id' => $uid, 'username' => $twitter_user['screen_name'],
-                                        'userid' => $twitter_user['id_str'], 'url' => $twitter_user['url'],
-                                        'name' => $twitter_user['name'], 'items' => $twitter_user['statuses_count'],
-                                        'profileImage' => $twitter_user['profile_image_url_https'],
-                                        'followers' => $twitter_user['followers_count'],
-                                        'friends' => $twitter_user['friends_count'],
-                                        'favorities' => $twitter_user['favourites_count'],
-                                        'listedCount' => $twitter_user['listed_count'],
+                                        'id' => $uid, 'username' => $twitter_user->screen_name,
+                                        'userid' => $twitter_user->id_str, 'url' => $twitter_user->url,
+                                        'name' => $twitter_user->name, 'items' => $twitter_user->statuses_count,
+                                        'profileImage' => $twitter_user->profile_image_url_https,
+                                        'followers' => $twitter_user->followers_count,
+                                        'friends' => $twitter_user->friends_count,
+                                        'favorities' => $twitter_user->favourites_count,
+                                        'listedCount' => $twitter_user->listed_count,
                                         'mentions' => 0, 'source' => 'Twitter',
-                                        'pageUrl' => 'https://twitter.com/' . $twitter_user['screen_name']
+                                        'verified' => $twitter_user->verified,
+                                        'pageUrl' => 'https://twitter.com/' . $twitter_user->screen_name
                                     );
-                                    $item['user'] = $twitter_user;
+                                    $item['user'] = $user;
                                 }
+                            }
+                            else {
+                                $item['user'] = array(
+                                    'id' => $uid, 'items' => 0, 'mentions' => 0, 'pageUrl' => $user_link,
+                                    'friends' => 0, 'followers' => 0, 'shares' => 0
+                                );
                             }
                         }
 

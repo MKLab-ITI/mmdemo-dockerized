@@ -3,11 +3,11 @@ import time
 import datetime
 import sys
 
-ip = sys.argv[0]
+ip = sys.argv[1]
 service = 'http://{}/api'.format(ip)
 collectionsUrl = '{}/collections'.format(service)
 
-time.sleep(300)
+time.sleep(600)
 
 while True:
     t1 = time.time()
@@ -29,8 +29,8 @@ while True:
             print("I/O error({0}): {1}".format(e.errno, e.strerror))
 
     dt = time.time() - t1
-    if dt < 180:
-        sleep_time = 180 - dt
+    if dt < 300:
+        sleep_time = 300 - dt
         print('Sleep time: %s' % sleep_time)
         try:
             time.sleep(sleep_time)

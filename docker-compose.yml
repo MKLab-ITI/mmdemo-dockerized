@@ -53,7 +53,7 @@ services:
           - mongodb
 
   solr:
-    image: solr:6.6.0
+    image: solr:6.6.6
     ports:
       - "8983:8983"
     volumes:

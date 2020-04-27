@@ -8,9 +8,6 @@ function settimeline_analysis_start() {
 }
 function draw_timeline() {
     var resolution = $(".activeanalysis .analysiszone").attr('id');
-    var datenow = new Date();
-    datenow.setDate(datenow.getDate() - 61);
-    var date = datenow.getTime();
     if (resolution === "hours") {
         $('#erase_analysis').html("Per Hour");
     }
@@ -23,7 +20,7 @@ function draw_timeline() {
 
     $.ajax({
         type: "GET",
-        url: api_folder + "timeline?resolution=" + resolution + "&language=" + language_param + "&relevance=" + relevance_param + "&collection=" + collection_param + "&user=" + user_query_param + "&q=" + keyword_query_param + "&since=" + date + "&original=" + original_param + "&relevance=" + relevance_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
+        url: api_folder + "timeline?resolution=" + resolution + "&language=" + language_param + "&relevance=" + relevance_param + "&collection=" + collection_param + "&user=" + user_query_param + "&q=" + keyword_query_param + "&original=" + original_param + "&relevance=" + relevance_param + "&unique=" + unique_param + "&type=" + type_param + "&source=" + source_param + "&topicQuery=" + topic_param + "&since=" + since_param + "&until=" + until_param,
         dataType: "json",
         success: function (json) {
             var timeline_values = [];

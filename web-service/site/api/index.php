@@ -453,6 +453,69 @@ $app->get('/items',
 )->name("items");
 
 /**
+ *  GET /collection/:id/download
+ */
+$app->get('/collection/:cid/download',
+    function($cid) use($mongoDAO, $textIndex, $utils, $app) {
+        $request = $app->request();
+
+        $s = $request->get('since');
+        $u = $request->get('until');
+        $since = ($s==null || $s === '') ? '*' : $s;
+        $until = ($u==null || $u === '') ? '*' : $u;
+
+        $source = $request->get('source');
+        $language = $request->get('language');
+        $original = $request->get('original');
+        $type = $request->get('type');
+
+        $relevance = $request->get('relevance');
+        if ($relevance != null && $relevance !== '') {
+            $relevance = explode(",", $relevance);
+        }
+
+        $user = $request->get('user');
+
+        $unique = $request->get('unique')==null ? false : $request->get('unique');
+        $query = $request->get('q');
+
+        $topicQuery = $request->get('topicQuery');
+        if($topicQuery != null && $topicQuery != '*') {
+            if($query == null) {
+                $query = $topicQuery;
+            }
+            else {
+                $query = $query . ',' . $topicQuery;
+            }
+        }
+
+        $collection = $mongoDAO->getCollection($cid);
+        if ($collection == null) {
+            echo json_encode(array('error' => "collection $collection does not exist."));
+            return;
+        }
+
+        // query formulation
+        $collection_query = $utils->formulateCollectionQuery($collection);
+
+        // Add filters if available
+        $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+        $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+        $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+        $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+
+        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
+            $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
+
+
+        $results = $textIndex->getAllItemIds($collection_query,  $filters,  $unique);
+
+        echo json_encode($results);
+        return;
+    }
+)->name("collection_download");
+
+/**
  *  GET /summary
  */
 $app->get('/summary', function() use($mongoDAO, $textIndex, $utils, $app) {

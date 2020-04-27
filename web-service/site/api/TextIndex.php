@@ -64,12 +64,10 @@ class TextIndex {
         $nPerPage = 5000;
         $offset = ($pageNumber - 1) * $nPerPage;
 
-        $numFound = 0;
         $docsFound = array();
-        while($numFound < $offset && $pageNumber < 100) {
+        do {
             $query->setStart($offset);
             $query->setRows($nPerPage);
-
             try {
                 $resultSet = $this->client->execute($query);
                 $numFound = $resultSet->getNumFound();
@@ -77,11 +75,12 @@ class TextIndex {
                     $docsFound[] = $document['id'];
                 }
                 $pageNumber += 1;
+                $offset = ($pageNumber - 1) * $nPerPage;
             }
             catch(Exception $e) {
                 break;
             }
-        }
+        } while($offset < $numFound && $pageNumber < 100);
 
         return $docsFound;
     }

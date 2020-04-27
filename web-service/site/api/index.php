@@ -942,13 +942,11 @@ $app->get(
 
         $collection = $mongoDAO->getCollection($collectionId);
 
-
         if($collection != null) {
-
-            $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
-            $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
-            $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
-            $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+            $itemsToExclude = isset($collection['itemsToExclude']) ? $collection['itemsToExclude'] : null;
+            $usersToExclude = isset($collection['usersToExclude']) ? $collection['usersToExclude'] : null;
+            $keywordsToExclude = isset($collection['keywordsToExclude']) ? $collection['keywordsToExclude'] : null;
+            $nearLocations = isset($collection['nearLocations']) ? $collection['nearLocations'] : null;
 
             $judgements = null;
             if ($relevance != null) {
@@ -973,7 +971,7 @@ $app->get(
 
             $cachedTimeline = $memcached->get($requestHash);
             if($cachedTimeline != false) {
-                echo json_encode(array('timeline' => $cachedTimeline));
+                echo json_encode(array('timeline' => $cachedTimeline, 'cached' => True));
                 return;
             }
 
@@ -987,12 +985,15 @@ $app->get(
                     $tm[] = $entry;
                 }
             }
-
             $memcached->set($requestHash, $tm, time()+61);
+
+            $response = array('timeline' => $tm, 'collection_query' => $q, 'filters' => $filters);
+            echo json_encode($response);
+        }
+        else {
+            echo json_encode(array('error' => "$collectionId does not exist!"));
         }
 
-        $response = array('timeline' => $tm);
-        echo json_encode($response);
     }
 )->name("timeline");
 

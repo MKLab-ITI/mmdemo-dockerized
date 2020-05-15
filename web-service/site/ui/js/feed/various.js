@@ -24,7 +24,7 @@ if (since_param != "") {
     $('#date_input_from').val(moment.unix(since_param / 1000).format("DD/MM/YYYY"))
 }
 if (until_param != "") {
-    $('#date_input_to').val(moment.unix(until_param / 1000).format("DD/MM/YYYY"))
+    $('#date_input_to').val(moment.unix((until_param-86400000) / 1000).format("DD/MM/YYYY"))
 }
 
 if (view_param === "list") {
@@ -1952,7 +1952,7 @@ $('#date_search').click(function () {
         $('#items_filters').append('<a href="#" class="filter_item" id="since_filter">Since: ' + moment.unix(since_param / 1000).format("DD/MM/YYYY") + '<span></span></a>')
     }
     if ($('#date_input_to').val() != "") {
-        until_param = moment($('#date_input_to').val(), 'DD/MM/YYYY').unix() * 1000;
+        until_param = (moment($('#date_input_to').val(), 'DD/MM/YYYY').unix() * 1000)+86400000;
         $('#until_filter').remove();
         $('#items_filters').append('<a href="#" class="filter_item" id="until_filter">Until: ' + moment.unix(until_param / 1000).format("DD/MM/YYYY") + '<span></span></a>')
     }

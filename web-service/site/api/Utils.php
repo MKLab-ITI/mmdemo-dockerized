@@ -119,7 +119,8 @@ class Utils {
 
     public function getFilters($since, $until, $source, $original, $type, $language, $query, $user,
                                $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements=null,
-                               $nearLocations=null) {
+                               $nearLocations=null)
+    {
 
         // Add filters if available
         $filters = array();
@@ -129,12 +130,10 @@ class Utils {
             $query = urldecode($query);
             if (preg_match('/^\".+\"$/m', $query)) {
                 $filters['{!cache=false}allText'] = $query;
-            }
-            else {
-                if($this->isLogicalExpression($query)) {
+            } else {
+                if ($this->isLogicalExpression($query)) {
                     $filters['{!cache=false}allText'] = $query;
-                }
-                else {
+                } else {
                     $keywords = explode(',', $query);
                     $filterTextQuery = $this->formulateLogicalQuery($keywords, 'AND');
 
@@ -146,61 +145,62 @@ class Utils {
 
 
         //filter by source
-        if($source != null) {
-            if($source !== 'all') {
+        if ($source != null) {
+            if ($source !== 'all') {
                 $sources = explode(',', $source);
-                if(count($sources) > 0 && count($sources) < 6) {
+                if (count($sources) > 0 && count($sources) < 6) {
                     $sources = implode(' OR ', $sources);
                     $filters['source'] = "$sources";
                 }
             }
-        }
-        else {
+        } else {
             $filters['-source'] = "*";
         }
 
-        if($user != null) {
+        if ($user != null) {
             $filters["username"] = "$user*";
         }
 
-        if($original != null) {
-            if($original === 'original') {
+        if ($original != null) {
+            if ($original === 'original') {
                 $filters['original'] = 'true';
             }
-            if($original === 'share') {
+            if ($original === 'share') {
                 $filters['original'] = 'false';
             }
         }
 
         //filter by type
-        if($type != null) {
-            if($type === 'media') {
+        if ($type != null) {
+            if ($type === 'media') {
                 $filters['mediaIds'] = "*";
             }
-            if($type === 'text') {
+            if ($type === 'text') {
                 $filters['-mediaIds'] = "*";
             }
         }
 
         //filter by language
-        if($language != null && $language !== '' && $language !== 'all' && $language !== 'All') {
+        if ($language != null && $language !== '' && $language !== 'all' && $language !== 'All') {
             $languages = explode(',', $language);
             $languages = implode(' OR ', $languages);
             $filters['language'] = "($languages)";
         }
 
         // filter by publication time
-        if($since !== '*' && $until !== '*') {
+        if ($since !== '*' && $until !== '*') {
             // publication time filter query is rare as changes over time. Do not cache it
             $filters['{!cache=false}publicationTime'] = "[$since TO $until]";
         }
 
 
         if ($itemsToExclude != null && count($itemsToExclude) > 0) {
-            $itemsToExclude = array_filter($itemsToExclude, function($item) { return $item != null; });
+            $itemsToExclude = array_filter($itemsToExclude, function ($item) {
+                return $item != null;
+            });
             $idsToExclude = implode(' OR ', $itemsToExclude);
             #$idsToExclude = urlencode($idsToExclude);
-            if($idsToExclude != null) {
+            if ($idsToExclude != null) {
                 $filters["-id"] = "($idsToExclude)";
                 $filters["-reference"] = "($idsToExclude)";
             }
@@ -208,40 +208,47 @@ class Utils {
 
 
         if ($usersToExclude != null && count($usersToExclude) > 0) {
-            $usersToExclude = array_filter($usersToExclude, function($user) { return $user != null; });
+            $usersToExclude = array_filter($usersToExclude, function ($user) {
+                return $user != null;
+            });
             $q = implode(' OR ', $usersToExclude);
-            if($q != null) {
+            if ($q != null) {
                 $filters["-uid"] = "($q)";
             }
         }
 
         if ($keywordsToExclude != null && count($keywordsToExclude) > 0) {
-            $keywordsToExclude = array_filter($keywordsToExclude, function($keyword) { return $keyword != null; });
+            $keywordsToExclude = array_filter($keywordsToExclude, function ($keyword) {
+                return $keyword != null;
+            });
             $q = implode(' OR ', $keywordsToExclude);
-            if($q != null) {
+            if ($q != null) {
                 $filters["-allText"] = "($q)";
             }
         }
 
         if ($nearLocations != null && count($nearLocations) > 0) {
-            foreach($nearLocations as $nearLocation) {
-                $filters['geofilters'][] = array('latitude'=>$nearLocation['center']['latitude'],
-                    'longitude'=>$nearLocation['center']['longitude'], 'radius'=>$nearLocation['radius']);
+            foreach ($nearLocations as $nearLocation) {
+                $filters['geofilters'][] = array('latitude' => $nearLocation['center']['latitude'],
+                    'longitude' => $nearLocation['center']['longitude'], 'radius' => $nearLocation['radius']);
             }
         }
 
-        if($judgements != null && count($judgements) > 0) {
-            $ids_of_rj = array_map(function($rj) { return $rj['iid'];}, $judgements);
-            $ids_of_rj = implode(' OR ', $ids_of_rj);
-            if($ids_of_rj != null) {
-                if ($filters == null) {
-                    $filters = array();
+        if ($judgements != null) {
+            if(count($judgements) > 0) {
+                $ids_of_rj = array_map(function ($rj) {
+                    return $rj['iid'];
+                }, $judgements);
+                $ids_of_rj = implode(' OR ', $ids_of_rj);
+                if ($ids_of_rj != null) {
+                    if ($filters == null) {
+                        $filters = array();
+                    }
+                    $filters["id"] = "($ids_of_rj)";
                 }
-                $filters["id"] = "($ids_of_rj)";
+            } else if (count($judgements) == 0) {
+                $filters["-id"] = "*";
             }
-        }
-        else if(count($judgements) == 0) {
-            $filters["-id"] = "*";
         }
 
         return $filters;

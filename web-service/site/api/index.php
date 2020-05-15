@@ -237,7 +237,7 @@ $app->get('/items',
 
             if($collection != null) {
                 $judgements = null;
-                if ($relevance != null && count($relevance) > 0) {
+                if ($relevance != null) {
                     $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $relevance);
                 }
 

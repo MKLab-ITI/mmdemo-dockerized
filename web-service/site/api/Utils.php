@@ -143,7 +143,6 @@ class Utils {
             }
         }
 
-
         //filter by source
         if ($source != null) {
             if ($source !== 'all') {
@@ -234,11 +233,12 @@ class Utils {
             }
         }
 
-        if ($judgements != null) {
+        if (!is_null($judgements)) {
             if(count($judgements) > 0) {
                 $ids_of_rj = array_map(function ($rj) {
                     return $rj['iid'];
                 }, $judgements);
+
                 $ids_of_rj = implode(' OR ', $ids_of_rj);
                 if ($ids_of_rj != null) {
                     if ($filters == null) {
@@ -246,7 +246,7 @@ class Utils {
                     }
                     $filters["id"] = "($ids_of_rj)";
                 }
-            } else if (count($judgements) == 0) {
+            } else {
                 $filters["-id"] = "*";
             }
         }

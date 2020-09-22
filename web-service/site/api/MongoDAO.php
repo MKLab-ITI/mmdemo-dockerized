@@ -59,6 +59,52 @@ class MongoDAO {
         return $owners;
     }
 
+    public function getItemsByIds($ids) {
+        $collection = $this->db->selectCollection( MongoDAO::$ITEMS );
+        $params = [
+            'projection' => MongoDAO::$ITEM_FIELDS
+        ];
+
+        $criteria = array('_id' => array('$in' => $ids));
+
+        $cursor = $collection->find($criteria, $params);
+        $items = iterator_to_array($cursor, false);
+
+        foreach($items as &$item) {
+            try {
+                $item['id'] = $item['_id'];
+                unset($item['_id']);
+
+                $uid = $item['uid'];
+                unset($item['uid']);
+
+                $user = $this->getUser($uid);
+                $item['user'] = $user;
+
+                if (array_key_exists('mediaIds', $item) && count($item['mediaIds']) > 0) {
+                    $item['type'] = 'mediaItem';
+                    foreach ($item['mediaIds'] as $mId) {
+                        $mediaItem = $this->getMediaItem($mId);
+                        if ($mediaItem != null) {
+                            $item['mediaUrl'] = $mediaItem['url'];
+                            $item['thumbnail'] = $mediaItem['thumbnail'];
+                            $item['views'] = $mediaItem['views'];
+                            $item['mediaType'] = $mediaItem['type'];
+                            break;
+                        }
+                    }
+                } else {
+                    $item['type'] = 'item';
+                }
+                unset($item['mediaIds']);
+            }
+            catch (Exception $e) {
+                $item['error'] = $e;
+            }
+        }
+        return $items;
+    }
+
     public function getItem($id) {
         $collection = $this->db->selectCollection( MongoDAO::$ITEMS );
 
@@ -462,6 +508,16 @@ class MongoDAO {
         else {
             $criteria = array("_id" =>$cid);
         }
+
+        $status = $mongoCollection->deleteMany($criteria);
+
+        return $status;
+    }
+
+    public function deleteRelevanceJudgementsfCollection($cid) {
+        $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
+
+        $criteria = array("cid" => $cid);
 
         $status = $mongoCollection->deleteMany($criteria);
 

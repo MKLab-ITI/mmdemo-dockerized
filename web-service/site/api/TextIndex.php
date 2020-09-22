@@ -50,6 +50,7 @@ class TextIndex {
         if($unique === 'true' OR $unique === true) {
             $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash min=publicationTime}");
         }
+
         $query->addSort('publicationTimeFacet', Solarium\QueryType\Select\Query\Query::SORT_DESC);
 
         // filters
@@ -61,7 +62,7 @@ class TextIndex {
         $query->setFields(['id']);
 
         $pageNumber = 1;
-        $nPerPage = 5000;
+        $nPerPage = 50000;
         $offset = ($pageNumber - 1) * $nPerPage;
 
         $docsFound = array();

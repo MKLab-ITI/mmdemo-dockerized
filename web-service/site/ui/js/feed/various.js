@@ -1345,24 +1345,15 @@ $('#clear_user_search').click(function () {
     }
 });
 $('#download_icon').click(function () {
-    var page = $('#pagination_list').data('twbsPagination').getCurrentPage();
-    var pagesize = $('.active_items').text();
-    var $page_desc = $('#page_desc');
-    $('#file_name').val($('#collection').text() + '_' + page + '_' + pagesize);
-    $page_desc.text("(page:" + page + ", pagesize:" + pagesize + ")");
-    $('#download_modal').reveal();
+    $.ajax({
+        type: 'GET',
+        url: api_folder + 'collection/' + collection_param + '/download',
+        data: data,
+        success: function () {},
+        error: function (e) {}
+    });
 });
 
-$(".btn-group").on("click", ".btn-default", function (e) {
-    if ($(this).attr('id') === "xls_but") {
-        $('#info_wrap').slideDown();
-    }
-    else {
-        $('#info_wrap').slideUp();
-    }
-    $('.btn-group').find('button').removeClass('btn-primary').addClass('btn-default');
-    $(this).addClass('btn-primary').removeClass('btn-default');
-});
 $("#list_table").on("click", ".list_title", function () {
     window.open($(this).attr('data-redirect'), '_blank');
 });
@@ -1695,10 +1686,6 @@ $("#users_images").on("click", ".refresh_but_user", function (e) {
     draw_hashtags("classic");
 });
 
-
-$("#download_cancel").click(function () {
-    $('#download_modal').find('.close-reveal-modal').trigger('click');
-});
 $('#exclude_user_list').click(function () {
     var viewData_user = {
         "users": []
@@ -1833,30 +1820,7 @@ $('#undo_but_user_post').click(function () {
         }
     });
 });
-$("#download_ok").click(function () {
-    var name = $('#file_name').val();
-    if (name === "") {
-        name = $('#collection').text() + '_' + page + '_' + pagesize;
-    }
-    if ($('.btn-primary').attr('id') === "xls_but") {
-        $(".list_table").table2excel({
-            exclude: ".noExl",
-            name: "Excel Document Name",
-            filename: name,
-            fileext: ".xls"
-        });
-    }
-    else {
-        $(".list_table").table_download({
-            format: "csv",
-            separator: ",",
-            filename: name,
-            linkname: "",
-            quotes: ""
-        });
-    }
-    $('#download_modal').find('.close-reveal-modal').trigger('click');
-});
+
 $("#list_table").on("change", "input:checkbox", function () {
     if ($(this).is(":checked")) {
         $('#deleted_msg_user,#deleted_msg_post').slideUp(500);

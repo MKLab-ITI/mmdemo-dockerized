@@ -18,10 +18,10 @@ function resizedw(trigger) {
     }
     var space = 0;
     if ($("#hop5").is(":visible")) {
-        space = $(window).height() - 28 - 49 - 92 - 616 - 107 + 3;
+        space = $(window).height() - 28 - 49 - 92 - 616 - 107 + 3 + 36;
     }
     else {
-        space = $(window).height() - 28 - 49 - 92 - 574 - 107 + 3+23;
+        space = $(window).height() - 28 - 49 - 92 - 574 - 107 + 3 + 23 + 36;
     }
     if (space > 0) {
         $("#footer").css({

@@ -2,10 +2,8 @@ function draw_social_mix(flag, view) {
 
     var twitter = 0,
         facebook = 0,
-        flickr = 0,
         youtube = 0,
-        rss = 0,
-        google = 0;
+        rss = 0;
 
     $.ajax({
         type: "GET",
@@ -24,14 +22,8 @@ function draw_social_mix(flag, view) {
                     case "Facebook":
                         facebook = count;
                         break;
-                    case "Flickr":
-                        flickr = count;
-                        break;
                     case "Youtube":
                         youtube = count;
-                        break;
-                    case "GooglePlus":
-                        google = count;
                         break;
                     case "RSS":
                         rss = count;
@@ -56,10 +48,6 @@ function draw_social_mix(flag, view) {
                 y: youtube,
                 image_path: "./imgs/youtube-16-color.png"
             }, {
-                key: "Google+",
-                y: google,
-                image_path: "./imgs/google+-16-color.png"
-            }, {
                 key: "RSS",
                 y: rss,
                 image_path: "./imgs/rss-16-color.png"
@@ -74,17 +62,9 @@ function draw_social_mix(flag, view) {
                 y: 0,
                 image_path: "./imgs/twitter-16-color.png"
             }, {
-                key: "<img src=" + "./imgs/flickr-16-color.png" + ">",
-                y: 0,
-                image_path: "./imgs/flickr-16-color.png"
-            }, {
                 key: "<img src=" + "./imgs/youtube-16-color.png" + ">",
                 y: 0,
                 image_path: "./imgs/youtube-16-color.png"
-            }, {
-                key: "<img src=" + "./imgs/google+-16-color.png" + ">",
-                y: 0,
-                image_path: "./imgs/google+-16-color.png"
             }, {
                 key: "<img src=" + "./imgs/rss-16-color.png" + ">",
                 y: 0,

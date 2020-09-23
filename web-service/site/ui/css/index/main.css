@@ -580,14 +580,6 @@ img.responsive-img {
     background: #3E4E81 url("../../imgs/facebook-16.png") no-repeat center;
 }
 
-.ff-type-google {
-    background: #d34836 url("../../imgs/google+-16.png") no-repeat 9px;
-}
-
-.ff-type-flickr {
-    background: #ff0084 url("../../imgs/flickr-16.png") no-repeat center;
-}
-
 .ff-type-youtube {
     background: #E12E34 url("../../imgs/youtube-16-letter.png") no-repeat 6px;
 }
@@ -670,7 +662,7 @@ img.responsive-img {
     color: #37c1e9;
 }
 
-#GooglePlus_input, #Facebook_input, #RSS_input, #Youtube_input {
+#Facebook_input, #RSS_input, #Youtube_input {
     display: none;
 }
 
@@ -874,14 +866,6 @@ img.responsive-img {
 
 .twitter_color {
     background-color: #5DBCD2;
-}
-
-.google_color {
-    background-color: #d34836;
-}
-
-.flickr_color {
-    background-color: #ff0084;
 }
 
 .youtube_color {
@@ -1346,6 +1330,7 @@ img.responsive-img {
 .stop_icon:hover {
     background: url("../../imgs/stop_icon_blue.png") no-repeat center;
 }
+
 .copy_icon {
     background: url("../../imgs/copy_24.png") no-repeat center;
     width: 24px;
@@ -1356,6 +1341,7 @@ img.responsive-img {
     z-index: 1;
     cursor: pointer;
 }
+
 .split_icon:hover {
     background: url("../../imgs/split_24_blue.png") no-repeat center;
 }
@@ -1370,6 +1356,22 @@ img.responsive-img {
     z-index: 1;
     cursor: pointer;
 }
+
+.assign_icon:hover {
+    background: url("../../imgs/assign_24_blue.png") no-repeat center;
+}
+
+.assign_icon {
+    background: url("../../imgs/assign_24.png") no-repeat center;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 11px;
+    left: 106px;
+    z-index: 1;
+    cursor: pointer;
+}
+
 .copy_icon:hover {
     background: url("../../imgs/copy_24_blue.png") no-repeat center;
 }
@@ -1384,6 +1386,7 @@ img.responsive-img {
     z-index: 1;
     cursor: pointer;
 }
+
 .fav_icon:hover {
     background: url("../../imgs/fav_icon_full.png") no-repeat center;
 }
@@ -1398,6 +1401,7 @@ img.responsive-img {
     z-index: 1;
     cursor: pointer;
 }
+
 .fav_icon_full:hover {
     background: url("../../imgs/fav_icon.png") no-repeat center;
 }
@@ -1463,14 +1467,14 @@ img.responsive-img {
 
 .ff-filter-holder, .ff-filter-holder_adv {
     text-align: center;
-    width: 210px;
+    width: 165px;
     position: absolute;
     top: -14px;
     right: 20px;
 }
 
 .ff-filter-holder_adv {
-    width: 168px;
+    width: 122px;
 }
 
 .ff-filter-holder:before, .ff-filter-holder_adv:before {
@@ -1481,12 +1485,12 @@ img.responsive-img {
     background: rgba(119, 119, 119, .4);
     top: 28px;
     left: 10px;
-    width: 180px;
+    width: 150px;
     z-index: 0;
 }
 
 .ff-filter-holder_adv:before {
-    width: 145px;
+    width: 105px;
 }
 
 .ff-filter-users, .ff-filter-users_adv {
@@ -1516,22 +1520,6 @@ img.responsive-img {
     background-image: url("../../imgs/facebook-16.png")
 }
 
-.ff-type-google-users {
-    background: #d34836 url("../../imgs/google+-16-black.png") no-repeat 9px;
-}
-
-.ff-type-google-users:hover {
-    background-image: url("../../imgs/google+-16.png")
-}
-
-/*
-.ff-type-flickr-users {
-    background: #ff0084 url("../../imgs/flickr-16-black.png") no-repeat center;
-}
-
-.ff-type-flickr-users:hover {
-    background-image: url("../../imgs/flickr-16.png")
-}*/
 .ff-type-youtube-users {
     background: #E12E34 url("../../imgs/youtube-16-black.png") no-repeat 9px;
 }
@@ -2497,7 +2485,7 @@ img.responsive-img {
     display: none;
 }
 
-.tooltip_delete p,.tooltip_share p {
+.tooltip_delete p, .tooltip_share p, .tooltip_assign p {
     margin: 5px;
 }
 
@@ -2528,7 +2516,7 @@ img.responsive-img {
     display: none;
 }
 
-.tooltip_delete span,.tooltip_share span {
+.tooltip_delete span, .tooltip_share span, .tooltip_assign span {
     display: -moz-inline-stack;
     display: inline-block;
     vertical-align: middle;
@@ -2546,19 +2534,19 @@ img.responsive-img {
     margin: 10px;
 }
 
-span.confirm_delete,span.confirm_share {
+span.confirm_delete, span.confirm_share, span.confirm_assign {
     background: #37c1e9;
 }
 
-span.confirm_delete:hover,span.confirm_share:hover {
+span.confirm_delete:hover, span.confirm_share:hover, span.confirm_assign:hover {
     background: #1b93c2
 }
 
-span.cancel_delete,span.cancel_share {
+span.cancel_delete, span.cancel_share, span.cancel_assign {
     background: #D63230;
 }
 
-span.cancel_delete:hover,span.cancel_share:hover {
+span.cancel_delete:hover, span.cancel_share:hover, span.cancel_assign:hover {
     background: #ba2725;
 }
 
@@ -2766,7 +2754,8 @@ h2.background span {
 #clear_query:hover {
     color: #37c1e9;
 }
-.tooltip_share {
+
+.tooltip_share, .tooltip_assign {
     width: 270px;
     background: #1C242B;
     position: absolute;
@@ -2783,7 +2772,7 @@ h2.background span {
     display: none;
 }
 
-.tooltip_share:after {
+.tooltip_share:after, .tooltip_assign:after {
     content: '';
     display: block;
     position: absolute;
@@ -2797,13 +2786,15 @@ h2.background span {
     left: 50%;
     bottom: -9px;
 }
-.share_input{
+
+.share_input, .assign_input {
     border: 0 none;
     font: bold 11px "Roboto Slab", sans-serif;
     width: 100%;
     padding: 4px 10px;
     font-size: 13px;
 }
+
 .disabled_input {
     opacity: 0.7;
     pointer-events: none;

@@ -315,9 +315,6 @@ function search_adv_user() {
                             case "Twitter":
                                 $user_images.append('<div class="user" style="background-color: lightgray"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,\'Twitter\',' + json[i].username + ');" style="border-color:#00acee"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].statuses_count) + ' tweets</p><img src="imgs/twitter-16-color.png" class="user_social"></div><div class="data_stats"><ul><li class="three">' + nFormatter_easy(json[i].favourites_count) + '<span>Favorites</span></li><li class="three">' + nFormatter_easy(json[i].followers_count) + '<span>Followers</span></li><li class="three">' + nFormatter_easy(json[i].friends_count) + '<span>Following</span> </li> </ul> </div><img src="imgs/add_user_green.png" class="add_user open_user" data-username="' + json[i].username + '" data-social="Twitter" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
                                 break;
-                            case "GooglePlus":
-                                $user_images.append('<div class="user" style="background-color: lightgray"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#d34836"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].plusOneCount) + ' plusOnes</p><img src="imgs/google+-16-color.png" class="user_social"></div><div class="data_stats"><ul><li class="one">' + nFormatter_easy(json[i].circledByCount) + '<span>Circled By</span></li></ul> </div><img src="imgs/add_user_green.png" class="add_user open_user" data-username="' + json[i].username + '" data-social="GooglePlus" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
-                                break;
                             case "Facebook":
                                 $user_images.append('<div class="user" style="background-color: lightgray"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#3b5998"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].likes) + ' likes</p><img src="imgs/facebook-5-16.png" class="user_social"></div><div class="data_stats"><ul></ul> </div><img src="imgs/add_user_green.png" class="add_user open_user" data-username="' + json[i].username + '" data-social="Facebook" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
                                 break;
@@ -330,9 +327,6 @@ function search_adv_user() {
                         switch (json[i].source) {
                             case "Twitter":
                                 $user_images.append('<div class="user"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,\'Twitter\',' + json[i].username + ');" style="border-color:#00acee"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].statuses_count) + ' tweets</p><img src="imgs/twitter-16-color.png" class="user_social"></div><div class="data_stats"><ul><li class="three">' + nFormatter_easy(json[i].favourites_count) + '<span>Favorites</span></li><li class="three">' + nFormatter_easy(json[i].followers_count) + '<span>Followers</span></li><li class="three">' + nFormatter_easy(json[i].friends_count) + '<span>Following</span> </li> </ul> </div><img src="imgs/add_user.png" class="add_user" data-username="' + json[i].username + '" data-social="Twitter" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
-                                break;
-                            case "GooglePlus":
-                                $user_images.append('<div class="user"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#d34836"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].plusOneCount) + ' plusOnes</p><img src="imgs/google+-16-color.png" class="user_social"></div><div class="data_stats"><ul><li class="one">' + nFormatter_easy(json[i].circledByCount) + '<span>Circled By</span></li></ul> </div><img src="imgs/add_user.png" class="add_user" data-username="' + json[i].username + '" data-social="GooglePlus" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
                                 break;
                             case "Facebook":
                                 $user_images.append('<div class="user"><div class="data_profile"><p style="float: left;cursor: pointer"><img data-url="' + json[i].link + '" src="' + json[i].profileImage + '" class="user_img" alt="user_img" onerror="imgError2(this,null,null);" style="border-color:#3b5998"></p><p class="user_name">' + json[i].username + '</p><br> <p class="user_count">' + nFormatter(json[i].likes) + ' likes</p><img src="imgs/facebook-5-16.png" class="user_social"></div><div class="data_stats"><ul></ul> </div><img src="imgs/add_user.png" class="add_user" data-username="' + json[i].username + '" data-social="Facebook" data-id="' + json[i].id + '" data-name="' + json[i].name + '"/></div>');
@@ -604,14 +598,8 @@ function adduser($id, $name, $user, $social) {
                 case "Twitter":
                     icon.setAttribute('src', 'imgs/twitter-16-black.png');
                     break;
-                case "GooglePlus":
-                    icon.setAttribute('src', 'imgs/google+-16-black.png');
-                    break;
                 case "Facebook":
                     icon.setAttribute('src', 'imgs/facebook-16-black.png');
-                    break;
-                case "Flickr":
-                    icon.setAttribute('src', 'imgs/flickr-16-black.png');
                     break;
                 case "Youtube":
                     icon.setAttribute('src', 'imgs/youtube-16-black.png');
@@ -635,7 +623,7 @@ function adduser($id, $name, $user, $social) {
                     $('#done_start,#done_edit').addClass('deactivated');
                 }
                 if ($("#users li").length === 100) {
-                    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
+                    $("#user_Twitter,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
                     $('#max_users,#max_users_advanced').slideDown();
                 }
             }
@@ -663,14 +651,8 @@ function adduser_adv($username, $social, $id, $name) {
             case "Twitter":
                 icon.setAttribute('src', 'imgs/twitter-16-black.png');
                 break;
-            case "GooglePlus":
-                icon.setAttribute('src', 'imgs/google+-16-black.png');
-                break;
             case "Facebook":
                 icon.setAttribute('src', 'imgs/facebook-16-black.png');
-                break;
-            case "Flickr":
-                icon.setAttribute('src', 'imgs/flickr-16-black.png');
                 break;
             case "Youtube":
                 icon.setAttribute('src', 'imgs/youtube-16-black.png');
@@ -797,7 +779,7 @@ $("#user_users").on("click", ".delete", function () {
             $('#done_start,#done_edit').addClass('deactivated');
         }
     });
-    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', false);
+    $("#user_Twitter,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', false);
     $('#max_users,#max_users_advanced').slideUp();
     $('#users_images').removeClass('users_full');
 
@@ -807,7 +789,7 @@ $("#user_users_adv").on("click", ".delete", function () {
     $(this).closest('li').css('height', height).hide('slow', function () {
         $(this).remove();
     });
-    $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', false);
+    $("#user_Twitter,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', false);
     $('#max_users,#max_users_advanced').slideUp();
     $('#users_images').removeClass('users_full');
     $("[data-id=" + $(this).parent().attr('id').split('------')[2] + "]").removeClass('open_user').attr('src', 'imgs/add_user.png').parent().css('background-color', 'transparent');
@@ -942,7 +924,7 @@ $("#example_1").click(function () {
                 $('#done_start,#done_edit').addClass('deactivated');
             }
             if ($("#users li").length === 100) {
-                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
+                $("#user_Twitter,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
                 $('#max_users,#max_users_advanced').slideDown();
             }
         }
@@ -1001,7 +983,7 @@ $("#example_2").click(function () {
         $('.error_expr_collection').slideUp();
         var flag = 1;
         $('#users li').children().each(function () {
-            if ($(this).attr('id') === "WWF------GooglePlus------114176126428866920097------WWF") {
+            if ($(this).attr('id') === "WWF------YouTube------114176126428866920097------WWF") {
                 var height = $(this).parent().height();
                 $(this).parent().css('height', height).hide('slow', function () {
                     $(this).remove();
@@ -1015,13 +997,13 @@ $("#example_2").click(function () {
 
         var a = document.createElement('a');
         a.setAttribute('href', 'javascript:void(0);');
-        a.setAttribute('id', 'WWF------GooglePlus------114176126428866920097------WWF');
+        a.setAttribute('id', 'WWF------YouTube------114176126428866920097------WWF');
         a.innerHTML = 'WWF';
         li.appendChild(a);
 
         var icon = document.createElement('img');
         icon.setAttribute('class', 'user_icon');
-        icon.setAttribute('src', 'imgs/google+-16-black.png');
+        icon.setAttribute('src', 'imgs/youtube-16-black.png');
         a.appendChild(icon);
 
         var img = document.createElement('img');
@@ -1037,7 +1019,7 @@ $("#example_2").click(function () {
                 $('#done_start,#done_edit').addClass('deactivated');
             }
             if ($("#users li").length === 100) {
-                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
+                $("#user_Twitter,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
                 $('#max_users,#max_users_advanced').slideDown();
             }
         }
@@ -1047,7 +1029,7 @@ $("#example_6").click(function () {
     if ($("#users_adv li").length < 100) {
         var flag = 1;
         $('#users_adv li').children().each(function () {
-            if ($(this).attr('id') === "WWF------GooglePlus------114176126428866920097------WWF") {
+            if ($(this).attr('id') === "WWF------YouTube------114176126428866920097------WWF") {
                 var height = $(this).parent().height();
                 $(this).parent().css('height', height).hide('slow', function () {
                     $(this).remove();
@@ -1061,13 +1043,13 @@ $("#example_6").click(function () {
 
         var a = document.createElement('a');
         a.setAttribute('href', 'javascript:void(0);');
-        a.setAttribute('id', 'WWF------GooglePlus------114176126428866920097------WWF');
+        a.setAttribute('id', 'WWF------YouTube------114176126428866920097------WWF');
         a.innerHTML = 'WWF';
         li.appendChild(a);
 
         var icon = document.createElement('img');
         icon.setAttribute('class', 'user_icon');
-        icon.setAttribute('src', 'imgs/google+-16-black.png');
+        icon.setAttribute('src', 'imgs/youtube-16-black.png');
         a.appendChild(icon);
 
         var img = document.createElement('img');
@@ -1085,9 +1067,9 @@ $("#example_6").click(function () {
 });
 $(".example_2").hover(
     function () {
-        $(this).find('img').attr('src', 'imgs/google+-16-color.png');
+        $(this).find('img').attr('src', 'imgs/youtube-16-color.png');
     }, function () {
-        $(this).find('img').attr('src', 'imgs/google+-16-black.png');
+        $(this).find('img').attr('src', 'imgs/youtube-16-black.png');
     }
 );
 
@@ -1132,7 +1114,7 @@ $("#example_3").click(function () {
                 $('#done_start,#done_edit').addClass('deactivated');
             }
             if ($("#users li").length === 100) {
-                $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
+                $("#user_Twitter,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
                 $('#max_users,#max_users_advanced').slideDown();
             }
         }
@@ -1231,7 +1213,7 @@ $('.ff-filter-users').click(function (e) {
     $('#' + $(this).attr('id') + '_input').css('display', 'inline-block');
     $('.ff-filter-users').addClass('close').removeClass('open');
     $(this).removeClass('close').addClass('open');
-    $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
+    $('#user_Twitter,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
     $('#user_RSS').val("").blur();
 });
 
@@ -1390,23 +1372,31 @@ $("#Container_fav").on("click", ".restart_icon", function () {
     });
 });
 $("#Container_normal,#Container_fav").on("click", ".delete_icon", function () {
-    $('.cover_delete,.tooltip_delete,.tooltip_share').hide();
+    $('.cover_delete,.tooltip_delete,.tooltip_share,.tooltip_assign').hide();
     $(this).parents('.collection').find('.cover_delete').fadeIn(300);
     $(this).siblings('.tooltip_delete').fadeIn(300);
 });
 $("#Container_normal,#Container_fav").on("click", ".split_icon", function () {
-    $('.cover_delete,.tooltip_share,.tooltip_share').hide();
+    $('.cover_delete,.tooltip_delete,.tooltip_share,.tooltip_assign').hide();
     $(this).parents('.collection').find('.cover_delete').fadeIn(300);
     $(this).siblings('.tooltip_share').fadeIn(300);
 });
+$("#Container_normal,#Container_fav").on("click", ".assign_icon", function () {
+    $('.cover_delete,.tooltip_delete,.tooltip_share,.tooltip_assign').hide();
+    $(this).parents('.collection').find('.cover_delete').fadeIn(300);
+    $(this).siblings('.tooltip_assign').fadeIn(300);
+});
 $(document).mouseup(function (e) {
-    var container = $(".delete_icon,.tooltip_share");
+    var container = $(".delete_icon,.tooltip_share,.tooltip_assign");
     if (!container.is(e.target) && container.has(e.target).length === 0) {
-        $('.cover_delete,.tooltip_delete,.tooltip_share').hide();
+        $('.cover_delete,.tooltip_delete,.tooltip_share,.tooltip_assign').hide();
     }
 });
 $("#Container_normal,#Container_fav").on("click", ".cancel_share", function () {
     $('.cover_delete,.tooltip_share').hide();
+});
+$("#Container_normal,#Container_fav").on("click", ".cancel_assign", function () {
+    $('.cover_delete,.tooltip_assign').hide();
 });
 $("#Container_normal,#Container_fav").on("click", ".confirm_share", function () {
     var $this = $(this);
@@ -1433,6 +1423,23 @@ $("#Container_normal,#Container_fav").on("click", ".confirm_share", function () 
         });
     }
 
+});
+$("#Container_normal,#Container_fav").on("click", ".confirm_assign", function () {
+    var $this = $(this);
+    if ($this.siblings('.assign_input').val() != "") {
+        $.ajax({
+            type: 'POST',
+            url: api_folder + 'collection/' + user_id + '/' + $(this).parent().siblings('.delete_icon').attr('id') + '/move_to_user/' + $this.siblings('.assign_input').val(),
+            success: function () {
+                $('.cover_delete,.tooltip_assign').hide();
+            },
+            error: function (e) {
+                $('#myModal h1').html("Oops. Something went wrong!");
+                $('#myModal p').html("We couldn't assign this collection. Please try again.");
+                $('#myModal').reveal();
+            }
+        });
+    }
 });
 $("#Container_normal").on("click", ".confirm_delete", function () {
     $.ajax({
@@ -1529,10 +1536,10 @@ $("#Container_normal,#Container_fav").on("click", ".edit_icon", function () {
     $('html,body').animate({
         scrollTop: $(".third-section").offset().top - 100
     }, 800);
-    $('#interest,#hashtag,#location_input,#tag_advanced,#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube').prop('disabled', false);
+    $('#interest,#hashtag,#location_input,#tag_advanced,#user_Twitter,#user_Facebook,#user_RSS,#user_Youtube').prop('disabled', false);
     $('#interest,#hashtag,#user_RSS,#location_input').val("").blur();
     $('.mapbox-gl-draw_polygon').attr('disabled', false);
-    $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
+    $('#user_Twitter,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
     $('#max_tags,#max_tags_advanced,#max_users,#max_users_advanced,.error_expr_collection,.error_expr_location,#max_locations,#polygons_num').slideUp(0);
     $.ajax({
         type: 'GET',
@@ -1590,7 +1597,7 @@ $("#Container_normal,#Container_fav").on("click", ".edit_icon", function () {
 
 });
 $("#Container_normal,#Container_fav").on("click", ".overlay", function () {
-    $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&unique=false&original=all&type=all&relevance=&sort=recency&queryUser=&queryKeyword=&source=Facebook,Twitter,Flickr,Youtube,RSS,GooglePlus&since=&until=&section=feed&view=gallery")
+    $(location).attr('href', 'collection.html?collection=' + $(this).siblings('.delete_icon').attr('id') + "&language=all&topics=*&unique=false&original=all&type=all&relevance=&sort=recency&queryUser=&queryKeyword=&source=Facebook,Twitter,Youtube,RSS&since=&until=&section=feed&view=gallery")
 });
 
 var pagination = 1;
@@ -1620,7 +1627,8 @@ function get_collections_fav() {
                     var status = data[i].status;
                     var title = data[i].title;
                     var stop_icon = '<div class="stop_icon" title="Stop"></div>';
-                    var split_icon = '<div class="split_icon" title="Assign"></div>';
+                    var split_icon = '<div class="split_icon" title="Share"></div>';
+                    var assign_icon = '<div class="assign_icon" title="Assign"></div>';
                     var copy_icon = '<div class="copy_icon" title="Copy"></div>';
                     var edit_icon = '<div class="edit_icon" title="Edit"></div>';
                     var fav_icon = '<div class="fav_icon_full" title="Pin"></div>';
@@ -1667,9 +1675,6 @@ function get_collections_fav() {
                             case "Twitter":
                                 user_icon = "imgs/twitter-16-gray.png";
                                 break;
-                            case "GooglePlus":
-                                user_icon = "imgs/google+-16-gray.png";
-                                break;
                             case "Facebook":
                                 user_icon = "imgs/facebook-16-share.png";
                                 break;
@@ -1699,7 +1704,7 @@ function get_collections_fav() {
                     var day = creationDate.getUTCDate();
                     var date = day + ' ' + month + ' ' + year;
 
-                    var element = '<li class="collection"><div class="cover_delete"></div><div class="tiles_li"><div class="outer"><div class="tooltip_delete"><p>Are you sure you want to delete this collection? This action cannot be undone!</p><span class="cancel_delete">Cancel</span><span class="confirm_delete">Yes</span></div><div class="tooltip_share"><p>Enter comma separated users ids to share collection with</p><input class="share_input" type="text" size="40" placeholder="Users Ids..." autocomplete="off"><span class="cancel_share">Cancel</span><span class="confirm_share">Share</span></div>' + fav_icon + copy_icon + split_icon + '<div class="delete_icon" title="Delete" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20"><div class="tags_p">' + tags + '</div></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20"><div class="tags_p" style=' + users_style + '>' + users + '</div></div><div class="tags_wrapper"><img src="imgs/location-gray.png" width="20"><div class="tags_p">' + location_centroid + '</div></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></li>';
+                    var element = '<li class="collection"><div class="cover_delete"></div><div class="tiles_li"><div class="outer"><div class="tooltip_delete"><p>Are you sure you want to delete this collection? This action cannot be undone!</p><span class="cancel_delete">Cancel</span><span class="confirm_delete">Yes</span></div><div class="tooltip_share"><p>Enter comma separated users ids to share collection with</p><input class="share_input" type="text" size="40" placeholder="Users Ids..." autocomplete="off"><span class="cancel_share">Cancel</span><span class="confirm_share">Share</span></div><div class="tooltip_assign"><p>Enter user id to assign collection to</p><input class="assign_input" type="text" size="40" placeholder="User Id..." autocomplete="off"><span class="cancel_assign">Cancel</span><span class="confirm_assign">Assign</span></div>' + fav_icon + copy_icon + split_icon + assign_icon + '<div class="delete_icon" title="Delete" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20"><div class="tags_p">' + tags + '</div></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20"><div class="tags_p" style=' + users_style + '>' + users + '</div></div><div class="tags_wrapper"><img src="imgs/location-gray.png" width="20"><div class="tags_p">' + location_centroid + '</div></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></li>';
                     $tiles.append(element);
 
                     $('#no_collections_fav,#fav_loading').hide();
@@ -1772,7 +1777,8 @@ function get_collections_normal(flag) {
                     var status = data[i].status;
                     var title = data[i].title;
                     var stop_icon = '<div class="stop_icon" title="Stop"></div>';
-                    var split_icon = '<div class="split_icon" title="Assign"></div>';
+                    var split_icon = '<div class="split_icon" title="Share"></div>';
+                    var assign_icon = '<div class="assign_icon" title="Assign"></div>';
                     var copy_icon = '<div class="copy_icon" title="Copy"></div>';
                     var edit_icon = '<div class="edit_icon" title="Edit"></div>';
                     var fav_icon = '<div class="fav_icon" title="Pin"></div>';
@@ -1819,9 +1825,6 @@ function get_collections_normal(flag) {
                             case "Twitter":
                                 user_icon = "imgs/twitter-16-gray.png";
                                 break;
-                            case "GooglePlus":
-                                user_icon = "imgs/google+-16-gray.png";
-                                break;
                             case "Facebook":
                                 user_icon = "imgs/facebook-16-share.png";
                                 break;
@@ -1851,7 +1854,7 @@ function get_collections_normal(flag) {
                     var day = a.getUTCDate();
                     var date = day + ' ' + month + ' ' + year;
 
-                    var element = '<li class="collection"><div class="cover_delete"></div><div class="tiles_li"><div class="outer"><div class="tooltip_delete"><p>Are you sure you want to delete this collection? This action cannot be undone!</p><span class="cancel_delete">Cancel</span><span class="confirm_delete">Yes</span></div><div class="tooltip_share"><p>Enter comma separated users ids to share collection with</p><input class="share_input" type="text" size="40" placeholder="Users Ids..." autocomplete="off"><span class="cancel_share">Cancel</span><span class="confirm_share">Share</span></div>' + fav_icon + copy_icon + split_icon + '<div class="delete_icon" title="Delete" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20"><div class="tags_p">' + tags + '</div></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20"><div class="tags_p" style=' + users_style + '>' + users + '</div></div><div class="tags_wrapper"><img src="imgs/location-gray.png" width="20"><div class="tags_p">' + location_centroid + '</div></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></li>';
+                    var element = '<li class="collection"><div class="cover_delete"></div><div class="tiles_li"><div class="outer"><div class="tooltip_delete"><p>Are you sure you want to delete this collection? This action cannot be undone!</p><span class="cancel_delete">Cancel</span><span class="confirm_delete">Yes</span></div><div class="tooltip_share"><p>Enter comma separated users ids to share collection with</p><input class="share_input" type="text" size="40" placeholder="Users Ids..." autocomplete="off"><span class="cancel_share">Cancel</span><span class="confirm_share">Share</span></div><div class="tooltip_assign"><p>Enter user id to assign collection to</p><input class="assign_input" type="text" size="40" placeholder="User Id..." autocomplete="off"><span class="cancel_assign">Cancel</span><span class="confirm_assign">Assign</span></div>' + fav_icon + copy_icon + split_icon + assign_icon + '<div class="delete_icon" title="Delete" id="' + id + '"></div>' + edit_icon + stop_icon + '<div class="overlay"><div class="overlay_table"><div class="overlay_cell"><h3>' + title + '</h3></div></div></div><div class="tiles_img" style="' + bg_img + '"></div><div class="tags_wrapper"><img src="imgs/hash-gray.png" width="20"><div class="tags_p">' + tags + '</div></div><div class="tags_wrapper"><img src="imgs/email-gray.png" width="20"><div class="tags_p" style=' + users_style + '>' + users + '</div></div><div class="tags_wrapper"><img src="imgs/location-gray.png" width="20"><div class="tags_p">' + location_centroid + '</div></div><div class="details ' + color_state + '"><div class="images_count"><img src="imgs/items.png" width="20"><span class="items_count">' + items + '</span></div><div class="date">' + date + '</div></div></div></div></li>';
                     $tiles.append(element);
                     var options = {
                         autoResize: true,
@@ -1989,7 +1992,7 @@ $("#advanced_user_search").click(function () {
     $('#tags_section,#users_section,#name_section,#map_input,.error_expr_collection,.error_expr_location').slideUp(500);
     $('#advanced_user').slideDown(500);
     $('#users_adv').html($('#users').html());
-    $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
+    $('#user_Twitter,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
     $('#user_RSS').val("").blur();
     $('#edit_buttons,#start_buttons,#map_toggle,#map,#map_desc').hide();
 });
@@ -2196,7 +2199,7 @@ $("#done_users").click(function () {
     $('#no_results,.Typeahead-spinner,#adv_loading').hide();
     $('#user_advanced').val("").blur();
     if ($("#users").find("li").length === 100) {
-        $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
+        $("#user_Twitter,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
         $('#max_users,#max_users_advanced').slideDown();
     }
     if (edit_mode) {
@@ -2219,7 +2222,7 @@ $("#cancel_users").click(function () {
     $('#no_results,.Typeahead-spinner,#adv_loading').hide();
     $('#user_advanced').val("").blur();
     if ($("#users").find("li").length === 100) {
-        $("#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
+        $("#user_Twitter,#user_Facebook,#user_RSS,#user_Youtube").prop('disabled', true);
         $('#max_users,#max_users_advanced').slideDown();
     }
     if (edit_mode) {
@@ -2239,10 +2242,10 @@ $("#cancel_edit").click(function () {
     $('#edit_buttons,#edit_col_heading').hide();
     edit_mode = false;
     $('#tags,#users,#col_name').empty();
-    $('#interest,#hashtag,#location_input,#tag_advanced,#user_Twitter,#user_GooglePlus,#user_Facebook,#user_RSS,#user_Youtube').prop('disabled', false);
+    $('#interest,#hashtag,#location_input,#tag_advanced,#user_Twitter,#user_Facebook,#user_RSS,#user_Youtube').prop('disabled', false);
     $('#interest,#hashtag,#location_input,#user_RSS').val("").blur();
     $('.mapbox-gl-draw_polygon').attr('disabled', false);
-    $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
+    $('#user_Twitter,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
     $('#max_tags,#max_tags_advanced,#max_users,#max_users_advanced,#valid_rss,.error_expr_collection,.error_expr_location,#max_locations,#polygons_num').slideUp(0);
     $('#start_col_heading,#start_buttons').show();
     $('html,body').animate({
@@ -2333,7 +2336,7 @@ $("#cancel_start").click(function () {
     $('#col_name,#tags,#users').empty();
     $('.user_input').prop('disabled', false).val("").blur();
     $('.mapbox-gl-draw_polygon').attr('disabled', false);
-    $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
+    $('#user_Twitter,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
     $('#max_tags,#max_tags_advanced,#max_users,#max_users_advanced,.error_expr_collection,.error_expr_location,#max_locations,#polygons_num').slideUp();
     $('#done_start').addClass('deactivated');
     if ($('#map_button').is(":checked")) {
@@ -2472,7 +2475,7 @@ function collection_begin() {
                 $('#col_name,#tags,#users').empty();
                 $('.user_input').prop('disabled', false).val("").blur();
                 $('.mapbox-gl-draw_polygon').attr('disabled', false);
-                $('#user_Twitter,#user_GooglePlus,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
+                $('#user_Twitter,#user_Facebook,#user_Youtube').typeahead('val', '').blur();
             },
             error: function (e) {
                 $('#myModal h1').html("Oops. Something went wrong!");
@@ -2543,7 +2546,7 @@ function initMap() {
 function googleMapsCustomError() {
     $('#map_input').addClass('disabled_input');
     $('#location_input').val("Invalid Google Map Key");
-    $('#location_input').css('background-image','none');
+    $('#location_input').css('background-image', 'none');
     $("label[for='location_input']").remove();
 }
 (function takeOverConsole() { // taken from http://tobyho.com/2012/07/27/taking-over-console-log/

@@ -109,7 +109,8 @@ html, body {
 .ff-filter-holder {
     text-align: center;
     width: 240px;
-    position: relative
+    position: relative;
+    margin-bottom: 20px;
 }
 
 .ff-filter-holder:before {
@@ -122,18 +123,6 @@ html, body {
     left: 0;
     width: 100%;
     z-index: 0
-}
-
-.ff-filter-holder:after {
-    position: absolute;
-    content: '';
-    height: 2px;
-    background: rgb(119, 119, 119);
-    background: rgba(119, 119, 119, .4);
-    top: 84px;
-    left: 0;
-    width: 100%;
-    z-index: -1
 }
 
 .opened:after {
@@ -176,28 +165,6 @@ html, body {
 
 .ff-type-facebook:hover {
     background-image: url("../../imgs/facebook-16.png")
-}
-
-.ff-type-google {
-    background: #d34836;
-    background-image: url("../../imgs/google+-16-black.png");
-    background-repeat: no-repeat;
-    background-position: 9px
-}
-
-.ff-type-google:hover {
-    background-image: url("../../imgs/google+-16.png")
-}
-
-.ff-type-flickr {
-    background: #ff0084;
-    background-image: url("../../imgs/flickr-16-black.png");
-    background-repeat: no-repeat;
-    background-position: center
-}
-
-.ff-type-flickr:hover {
-    background-image: url("../../imgs/flickr-16.png")
 }
 
 .ff-type-youtube {
@@ -783,16 +750,8 @@ html, body {
     background-color: #5DBCD2
 }
 
-.flickrcolor {
-    background-color: #ff0084
-}
-
 .youtubecolor {
     background-color: #E12E34
-}
-
-.googlecolor {
-    background-color: #d34836
 }
 
 .rsscolor {
@@ -2262,8 +2221,6 @@ html, body {
     cursor: pointer;
 }
 
-
-
 .btn_material {
     color: #fff;
     letter-spacing: 1px;
@@ -2301,9 +2258,6 @@ html, body {
     background-color: #D63230;
     margin-bottom: 20px;
 }
-
-
-
 
 .btn {
     outline: none !important;

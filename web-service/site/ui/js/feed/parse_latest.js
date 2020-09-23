@@ -80,20 +80,10 @@ function parse_latest(pagenum) {
                             colorclass = 'color twittercolor';
                             onerror = true;
                             break;
-                        case "Flickr":
-                            shared = nFormatter(json.items[i].views) + " views";
-                            iconsource = 'imgs/flickr-16-black.png';
-                            colorclass = 'color flickrcolor';
-                            break;
                         case "Facebook":
                             shared = nFormatter(json.items[i].shares) + " shares";
                             iconsource = 'imgs/facebook-16-black.png';
                             colorclass = 'color facebookcolor';
-                            break;
-                        case "GooglePlus":
-                            shared = nFormatter(json.items[i].shares) + " shares";
-                            iconsource = 'imgs/google+-16-black.png';
-                            colorclass = 'color googlecolor';
                             break;
                         case "RSS":
                             shared = nFormatter(json.items[i].shares) + " shares";
@@ -546,23 +536,11 @@ function parse_latest_list(pagenum) {
                                 colorclass = 'avatar-source twittercolor';
                                 onerror = true;
                                 break;
-                            case "Flickr":
-                                shared = nFormatter(json.items[i].views) + " views";
-                                shared_order = json.items[i].views;
-                                iconsource = 'imgs/flickr-16-color.png';
-                                colorclass = 'avatar-source flickrcolor';
-                                break;
                             case "Facebook":
                                 shared = nFormatter(json.items[i].shares) + " shares";
                                 shared_order = json.items[i].shares;
                                 iconsource = 'imgs/facebook-16-color.png';
                                 colorclass = 'avatar-source facebookcolor';
-                                break;
-                            case "GooglePlus":
-                                shared = nFormatter(json.items[i].shares) + " shares";
-                                shared_order = json.items[i].shares;
-                                iconsource = 'imgs/google+-16-color.png';
-                                colorclass = 'avatar-source googlecolor';
                                 break;
                             case "RSS":
                                 shared = nFormatter(json.items[i].shares) + " shares";
@@ -635,32 +613,32 @@ function parse_latest_list(pagenum) {
                             $posts_info.html(json.total + ' posts. Showing ' + start_gap + ' - ' + (start_gap + $('.list_table tbody tr').length - 1) + '</span> most recent.');
                     }
                     /*var $list_table = $("#list_table");
-                    var column;
-                    if ($('.tablesorter-headerAsc').length === 1) {
-                        column = $('.tablesorter-headerAsc').index();
-                        $list_table.trigger("destroy");
-                        $list_table.tablesorter({
-                            headers: {0: {sorter: false}, 2: {sorter: false},3: {sorter: false},5: {sorter: false},7: {sorter: false}},
-                            sortList: [[column, 0]],
-                            textExtraction: orderextraction
-                        });
-                    }
-                    else if ($('.tablesorter-headerDesc').length === 1) {
-                        column = $('.tablesorter-headerDesc').index();
-                        $list_table.trigger("destroy");
-                        $list_table.tablesorter({
-                            headers: {0: {sorter: false}, 2: {sorter: false},3: {sorter: false},5: {sorter: false},7: {sorter: false}},
-                            sortList: [[column, 1]],
-                            textExtraction: orderextraction
-                        });
-                    }
-                    else {
-                        $list_table.trigger("destroy");
-                        $list_table.tablesorter({
-                            headers: {0: {sorter: false}, 2: {sorter: false},3: {sorter: false},5: {sorter: false},7: {sorter: false}},
-                            textExtraction: orderextraction
-                        });
-                    }*/
+                     var column;
+                     if ($('.tablesorter-headerAsc').length === 1) {
+                     column = $('.tablesorter-headerAsc').index();
+                     $list_table.trigger("destroy");
+                     $list_table.tablesorter({
+                     headers: {0: {sorter: false}, 2: {sorter: false},3: {sorter: false},5: {sorter: false},7: {sorter: false}},
+                     sortList: [[column, 0]],
+                     textExtraction: orderextraction
+                     });
+                     }
+                     else if ($('.tablesorter-headerDesc').length === 1) {
+                     column = $('.tablesorter-headerDesc').index();
+                     $list_table.trigger("destroy");
+                     $list_table.tablesorter({
+                     headers: {0: {sorter: false}, 2: {sorter: false},3: {sorter: false},5: {sorter: false},7: {sorter: false}},
+                     sortList: [[column, 1]],
+                     textExtraction: orderextraction
+                     });
+                     }
+                     else {
+                     $list_table.trigger("destroy");
+                     $list_table.tablesorter({
+                     headers: {0: {sorter: false}, 2: {sorter: false},3: {sorter: false},5: {sorter: false},7: {sorter: false}},
+                     textExtraction: orderextraction
+                     });
+                     }*/
                     var doubleLabels = [
                         "<i>1</i>",
                         "<i>2</i>",
@@ -790,20 +768,10 @@ function more_latest() {
                                     colorclass = 'color twittercolor';
                                     onerror = true;
                                     break;
-                                case "Flickr":
-                                    shared = nFormatter(json.items[i].views) + " views";
-                                    iconsource = 'imgs/flickr-16-black.png';
-                                    colorclass = 'color flickrcolor';
-                                    break;
                                 case "Facebook":
                                     shared = nFormatter(json.items[i].shares) + " shares";
                                     iconsource = 'imgs/facebook-16-black.png';
                                     colorclass = 'color facebookcolor';
-                                    break;
-                                case "GooglePlus":
-                                    shared = nFormatter(json.items[i].shares) + " shares";
-                                    iconsource = 'imgs/google+-16-black.png';
-                                    colorclass = 'color googlecolor';
                                     break;
                                 case "RSS":
                                     shared = nFormatter(json.items[i].shares) + " shares";
@@ -1105,20 +1073,10 @@ function parse_new(count) {
                             colorclass = 'color twittercolor';
                             onerror = true;
                             break;
-                        case "Flickr":
-                            shared = nFormatter(json.items[i].views) + " views";
-                            iconsource = 'imgs/flickr-16-black.png';
-                            colorclass = 'color flickrcolor';
-                            break;
                         case "Facebook":
                             shared = nFormatter(json.items[i].shares) + " shares";
                             iconsource = 'imgs/facebook-16-black.png';
                             colorclass = 'color facebookcolor';
-                            break;
-                        case "GooglePlus":
-                            shared = nFormatter(json.items[i].shares) + " shares";
-                            iconsource = 'imgs/google+-16-black.png';
-                            colorclass = 'color googlecolor';
                             break;
                         case "RSS":
                             shared = nFormatter(json.items[i].shares) + " shares";

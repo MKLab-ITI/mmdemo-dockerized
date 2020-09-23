@@ -35,18 +35,10 @@ function show_active_users() {
                         color_bar = "#3b5998";
                         icon = "imgs/facebook-5-16.png";
                         break;
-                    case "Flickr":
-                        color_bar = "#ff0084";
-                        icon = "imgs/flickr-16-color.png";
-                        break;
                     case "Youtube":
                         username = json[i].name;
                         color_bar = "#FF0202";
                         icon = "imgs/youtube-16-color.png";
-                        break;
-                    case "GooglePlus":
-                        color_bar = "#d34836";
-                        icon = "imgs/google+-16-color.png";
                         break;
                 }
                 barchart_values.push({
@@ -99,14 +91,8 @@ function show_active_users() {
                         case "#3b5998":
                             image = "imgs/facebook-5-16.png";
                             break;
-                        case "#ff0084":
-                            image = "imgs/flickr-16-color.png";
-                            break;
                         case "#FF0202":
                             image = "imgs/youtube-16-color.png";
-                            break;
-                        case "#d34836":
-                            image = "imgs/google+-16-color.png";
                             break;
                     }
                     return "<img src='" + image + "' class='tooltip_img' /><p><strong>" + key.data.label + "</strong><br>" + nFormatter(key.data.value) + "</p>";

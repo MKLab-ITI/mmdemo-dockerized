@@ -1345,13 +1345,7 @@ $('#clear_user_search').click(function () {
     }
 });
 $('#download_icon').click(function () {
-    $.ajax({
-        type: 'GET',
-        url: api_folder + 'collection/' + collection_param + '/download',
-        data: data,
-        success: function () {},
-        error: function (e) {}
-    });
+    window.open(api_folder + 'collection/' + collection_param + '/download');
 });
 
 $("#list_table").on("click", ".list_title", function () {

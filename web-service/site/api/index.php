@@ -236,8 +236,9 @@ $app->get('/items',
             }
 
             if($collection != null) {
+
                 $judgements = null;
-                if ($relevance != null) {
+                if ($relevance != null && count($relevance) > 0) {
                     $judgements = $mongoDAO->getItemsOfSpecificRelevance($collectionId, $relevance);
                 }
 
@@ -462,10 +463,13 @@ $app->get('/collection/:cid/download',
 
         $s = $request->get('since');
         $u = $request->get('until');
+
         $since = ($s==null || $s === '') ? '*' : $s;
         $until = ($u==null || $u === '') ? '*' : $u;
 
         $source = $request->get('source');
+        $source = ($source===null || $u === '') ? '*' : $source;
+
         $language = $request->get('language');
         $original = $request->get('original');
         $type = $request->get('type');
@@ -477,8 +481,10 @@ $app->get('/collection/:cid/download',
 
         $user = $request->get('user');
 
-        $unique = $request->get('unique')==null ? false : $request->get('unique');
+        $unique = $request->get('unique')===null ? false : $request->get('unique');
         $query = $request->get('q');
+
+        $filename = $request->get('filename');
 
         $topicQuery = $request->get('topicQuery');
         if($topicQuery != null && $topicQuery != '*') {
@@ -491,13 +497,23 @@ $app->get('/collection/:cid/download',
         }
 
         $collection = $mongoDAO->getCollection($cid);
+
         if ($collection == null) {
             echo json_encode(array('error' => "collection $collection does not exist."));
             return;
         }
 
+        if (is_null($filename) || $filename == '') {
+            $filename = $collection['title'];
+        }
+
         // query formulation
         $collection_query = $utils->formulateCollectionQuery($collection);
+
+        $judgements = null;
+        if ($relevance != null && count($relevance) > 0) {
+            $judgements = $mongoDAO->getItemsOfSpecificRelevance($cid, $relevance);
+        }
 
         // Add filters if available
         $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
@@ -506,18 +522,94 @@ $app->get('/collection/:cid/download',
         $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
 
         $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
-            $itemsToExclude, $usersToExclude, $keywordsToExclude, null, $nearLocations);
+            $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements, $nearLocations);
+        $ids = $textIndex->getAllItemIds($collection_query,  $filters,  $unique);
 
-        $results = $textIndex->getAllItemIds($collection_query,  $filters,  $unique);
+//        $total = $textIndex->countItems($collection_query, $filters, $unique);
+//        $items_count = 0;
+//        $num_per_request = 1000;
+//        for ($i = 0; $i < count($ids); $i+=$num_per_request) {
+//            $ids_slice = array_slice($ids, $i, $num_per_request);
+//            $items = $mongoDAO->getItemsByIds($ids_slice);
+//
+//            $items_count += count($items);
+//        }
+//        $response = array(
+//            'items' => $items,
+//            'ids_count' => count($ids),
+//            'total' => $total,
+//            'filters' => $filters,
+//            'filters_count' => count($filters),
+//            'collection_query' => isset($collection_query) ? $collection_query : '',
+//            'collection' => $cid,
+//            'judgements' => $judgements,
+//            'unique' => $unique,
+//            'relevance' => $relevance
+//        );
 
-        $message = array(
-            "job_id" => $cid,
-            "ids" => $results,
-        );
+        header('Pragma: public');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Cache-Control: private', false);
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . $filename . '.csv";');
+        header('Content-Transfer-Encoding: binary');
 
-        $redisClient->publish("job:download", json_encode($message));
+        // Open the output stream
+        $fh = fopen('php://output', 'w');
 
-        echo json_encode(array('job_id' => $cid, 'status'=> 'not_ready'));
+        $csv_header = array('User', 'Title', 'Media', 'Date', 'Source', 'Url');
+
+        // Start output buffering (to capture stream contents)
+        ob_start();
+        // CSV Header
+        if(is_array($csv_header)){
+            fputcsv($fh, $csv_header);
+        }
+
+        $num_per_request = 100;
+        for ($i = 0; $i <= count($ids); $i += $num_per_request) {
+            $ids_slice = array_slice($ids, $i, $num_per_request);
+            if (count($ids_slice) == 0) {
+                continue;
+            }
+
+            $items = $mongoDAO->getItemsByIds($ids_slice);
+            foreach($items as $item) {
+                try {
+                    $title = '"' . $item['title'] . '"';
+                    $user = '-';
+                    if (array_key_exists('user', $item) && !is_null($item['user'])) {
+                        $user = $item['user']['username'];
+                    }
+
+                    $publicationTime = intval($item['publicationTime'] / 1000);
+                    $d = date('d M Y \a\t H:i', $publicationTime);
+                    $media = '-';
+                    if (array_key_exists('mediaUrl', $item) && !is_null($item['mediaUrl'])) {
+                        $media = $item['mediaUrl'];
+                    }
+                    $source = $item['source'];
+                    $pageUrl = $item['pageUrl'];
+                    $row = array($user, $title, $media, $d, $source, $pageUrl);
+
+                    fputcsv($fh, $row);
+                }
+                catch (Exception $e) {
+                    echo $e;
+                }
+
+            }
+
+            // Get the contents of the output buffer
+            $string = ob_get_clean();
+            //echo $string;
+
+            ob_flush();
+            flush();
+        }
+
+        fclose($fh);
 
     }
 )->name("collection_download");
@@ -1204,6 +1296,7 @@ $app->get(
             }
         }
 
+
         echo json_encode($statistics);
 
     }
@@ -1677,7 +1770,6 @@ $app->get(
             $memcached->set($cid, $sharedCollection, time() + 300);
             $sharedCollections[] = $sharedCollection;
         }
-
 
         echo json_encode(
             array(
@@ -2226,6 +2318,7 @@ $app->get(
             $redisClient->publish("collections:delete", $deleteMessage);
 
             $memcached->delete($cid);
+            $mongoDAO->deleteRelevanceJudgementsfCollection($cid);
         }
         echo json_encode($collection);
     }
@@ -2297,7 +2390,6 @@ $app->post('/collection/:uid/:cid/move_to_user/:new_uid',
             return;
         }
 
-        $memcached->set($cid, $collection, time() + 300);
         echo json_encode($collection);
     }
 )->name("move_collection");
@@ -2338,6 +2430,76 @@ $app->post('/collection/:uid/:cid/replicate/:new_cid',
 
 $app->post('/collection/:uid/:cid/share',
     function ($uid, $cid) use($mongoDAO, $memcached, $app) {
+        $request = $app->request();
+        $bodyJson = $request->getBody();
+        $viewers = json_decode($bodyJson);
+
+        if ($viewers === null || !is_array($viewers) || count($viewers) == 0) {
+            echo json_encode(array('error'=>"No users to share"));
+            return;
+        }
+
+        $collection = $mongoDAO->getCollection($cid);
+        if($collection == null) {
+            echo json_encode(array('error'=>"Collection $cid does not exist"));
+            return;
+        }
+
+        if($collection['ownerId'] != $uid) {
+            echo json_encode(array('error'=>"User $uid is not the owner. Only the owner can share a collection"));
+            return;
+        }
+
+        $origin_id = $collection['_id'];
+        $ownerId = $collection['ownerId'];
+        $memcached->delete($collection['_id']);
+
+        $t = 1000 * time();
+
+        foreach ($viewers as $viewer) {
+
+            if ($ownerId == $viewer) {
+                continue;
+            }
+
+            # share to viewer
+            $digits = '0123456789';
+            $digitsLength = strlen($digits);
+            $new_cid = '';
+            for ($i = 0; $i < 20; $i++) {
+                $new_cid .= $digits[rand(0, $digitsLength - 1)];
+            }
+
+            $collection['copiedFrom'] = $origin_id;
+            $collection['_id'] = $new_cid;
+            $collection['ownerId'] = $viewer;
+
+            #$collection_to_copy['creationDate'] = $t;
+            $collection['updateDate'] = $t;
+
+            $mongoDAO->insertCollection($collection);
+        }
+
+        if (in_array('viewers', $collection) && $collection['viewers'] != null && is_array($collection['viewers'])) {
+            $viewers = array_merge($viewers, $collection['viewers']);
+        }
+
+        $viewers = array_diff($viewers, [""]);
+
+        $t = 1000 * time();
+        $fieldsToUpdate = array('updateDate' => $t, 'viewers' => $viewers);
+        $mongoDAO->updateCollectionFields($origin_id, $fieldsToUpdate);
+
+        $collection['viewers'] = $viewers;
+        $collection['_id'] = $origin_id;
+        $collection['ownerId'] = $ownerId;
+
+        echo json_encode($collection);
+
+    })->name('share_collection');
+
+$app->post('/collection/:uid/:cid/sahre_to_viewers',
+    function ($uid, $cid) use($mongoDAO, $memcached, $app) {
 
         $request = $app->request();
         $bodyJson = $request->getBody();
@@ -2374,7 +2536,7 @@ $app->post('/collection/:uid/:cid/share',
         echo json_encode($collection);
 
     }
-)->name('share_collection');
+)->name('share_to_viewers');
 
 $app->get('/owners',
     function() use($mongoDAO) {

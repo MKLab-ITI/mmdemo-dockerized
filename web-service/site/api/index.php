@@ -566,7 +566,7 @@ $app->get('/collection/:cid/download',
 			ob_start();
 		
 			// CSV Header
-			$csv_header = array('User', 'Title', 'Media', 'Date', 'Source', 'Url', 'Score', 'Relevance', 'likes', 'Shares');
+			$csv_header = array('User', 'Title', 'Media', 'Date', 'Source', 'Url', 'Score', 'Relevance', 'Likes', 'Shares');
 			fputcsv($fh, $csv_header);
         
 			$num_per_request = 500;
@@ -615,7 +615,7 @@ $app->get('/collection/:cid/download',
 						$source = $item['source'];
 						$pageUrl = $item['pageUrl'];
 						
-						$row = array($i, $user, $title, $media, $pdd, $source, $pageUrl, $score, $relevance, $likes, $shares);
+						$row = array($user, $title, $media, $pdd, $source, $pageUrl, $score, $relevance, $likes, $shares);
 
 						fputcsv($fh, $row);
 					}

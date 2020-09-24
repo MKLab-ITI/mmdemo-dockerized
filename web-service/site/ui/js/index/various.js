@@ -1424,14 +1424,37 @@ $("#Container_normal,#Container_fav").on("click", ".confirm_share", function () 
     }
 
 });
-$("#Container_normal,#Container_fav").on("click", ".confirm_assign", function () {
+$("#Container_normal").on("click", ".confirm_assign", function () {
     var $this = $(this);
     if ($this.siblings('.assign_input').val() != "") {
         $.ajax({
             type: 'POST',
             url: api_folder + 'collection/' + user_id + '/' + $(this).parent().siblings('.delete_icon').attr('id') + '/move_to_user/' + $this.siblings('.assign_input').val(),
             success: function () {
-                $('.cover_delete,.tooltip_assign').hide();
+                if ($('#tiles_normal').find('.collection').length === 1) {
+                    pagination--;
+                    if (pagination === 0) {
+                        pagination = 1;
+                    }
+                }
+                get_collections_normal(true);
+            },
+            error: function (e) {
+                $('#myModal h1').html("Oops. Something went wrong!");
+                $('#myModal p').html("We couldn't assign this collection. Please try again.");
+                $('#myModal').reveal();
+            }
+        });
+    }
+});
+$("#Container_fav").on("click", ".confirm_assign", function () {
+    var $this = $(this);
+    if ($this.siblings('.assign_input').val() != "") {
+        $.ajax({
+            type: 'POST',
+            url: api_folder + 'collection/' + user_id + '/' + $(this).parent().siblings('.delete_icon').attr('id') + '/move_to_user/' + $this.siblings('.assign_input').val(),
+            success: function () {
+                get_collections_fav(true);
             },
             error: function (e) {
                 $('#myModal h1').html("Oops. Something went wrong!");

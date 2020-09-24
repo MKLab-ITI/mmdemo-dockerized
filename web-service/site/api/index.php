@@ -631,7 +631,7 @@ $app->get('/collection/:cid/download',
 				flush();
 			}
 		
-			sleep(1);
+			usleep(200000);
 		
 		} 
 		while($pageNumber <= 100);

@@ -503,8 +503,10 @@ $app->get('/collection/:cid/download',
             return;
         }
 
+        $owner_id = $collection['ownerId'];
+			
         if (is_null($filename) || $filename == '') {
-            $filename = $collection['title'];
+            $filename = $collection['title'].'_'.$cid;
         }
 
         // query formulation
@@ -523,114 +525,264 @@ $app->get('/collection/:cid/download',
 
         $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
             $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements, $nearLocations);
-        $ids = $textIndex->getAllItemIds($collection_query,  $filters,  $unique);
+        
+		$user_relevance_judgments = $mongoDAO->getUserRelevanceJudgements($owner_id, $cid);
+		
+		set_time_limit(0);
+		ini_set('memory_limit', '2G');
 
-//        $total = $textIndex->countItems($collection_query, $filters, $unique);
-//        $items_count = 0;
-//        $num_per_request = 1000;
-//        for ($i = 0; $i < count($ids); $i+=$num_per_request) {
-//            $ids_slice = array_slice($ids, $i, $num_per_request);
-//            $items = $mongoDAO->getItemsByIds($ids_slice);
-//
-//            $items_count += count($items);
-//        }
-//        $response = array(
-//            'items' => $items,
-//            'ids_count' => count($ids),
-//            'total' => $total,
-//            'filters' => $filters,
-//            'filters_count' => count($filters),
-//            'collection_query' => isset($collection_query) ? $collection_query : '',
-//            'collection' => $cid,
-//            'judgements' => $judgements,
-//            'unique' => $unique,
-//            'relevance' => $relevance
-//        );
+		header('Pragma: public');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		header('Cache-Control: private', false);
+		header('Content-Transfer-Encoding: binary');
+		header('Content-Disposition: attachment;filename="' . $filename . '.csv";');
+		header('Content-Type: application/csv;charset=UTF-8');
+		header('Content-Encoding: UTF-8');
 
-        header('Pragma: public');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Cache-Control: private', false);
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="' . $filename . '.csv";');
-        header('Content-Transfer-Encoding: binary');
+		$pageNumber = 1;
+		$nPerPage = 10000;			
+		do {
+			$ids_result = $textIndex->getItemIds($collection_query,  $filters,  $unique, $pageNumber, $nPerPage);
+			$pageNumber += 1;
+			
+			if (array_key_exists('error', $ids_result)) {
+				// error
+				break;
+			}
+			
+			if (count($ids_result) == 0) {
+				// no more results
+				break;
+			}
+			
+			// clean output buffer
+			ob_end_clean();
+	
+			// Open the output stream
+			$fh = fopen('php://output', 'w');
 
-        // Open the output stream
-        $fh = fopen('php://output', 'w');
+			// Start output buffering (to capture stream contents)
+			ob_start();
+		
+			// CSV Header
+			$csv_header = array('User', 'Title', 'Media', 'Date', 'Source', 'Url', 'Score', 'Relevance', 'likes', 'Shares');
+			fputcsv($fh, $csv_header);
+        
+			$num_per_request = 500;
+			for ($i = 0; $i <= count($ids_result); $i += $num_per_request) {
+				$result_slice = array_slice($ids_result, $i, $num_per_request);
+				if (count($result_slice) == 0) {
+					continue;
+				}
+			
+				$ids_slice = array_map(function($r){ return $r[0];}, $result_slice);
+				$items = $mongoDAO->getItemsByIds($ids_slice);
+			
+				foreach($items as $item) {
+					try {
+						$item_id = $item['id'];
+						$relevance = '-';
+						try {
+							$rel_entry = current(array_filter($user_relevance_judgments, function($rj) use($item_id) {return $rj['iid']==$item_id;}));
+							if ($rel_entry) {
+								$relevance = $rel_entry['relevance'];
+							}
+						} catch (Exception $e) {}
 
-        $csv_header = array('User', 'Title', 'Media', 'Date', 'Source', 'Url');
+						$score = 0;
+						$likes = 0;
+						$shares = 0;
+						$item_key = array_search($item_id, array_column($result_slice, 0));
+						if ($item_key) {
+							$score = $result_slice[$item_key][1];
+							$likes = $result_slice[$item_key][2];
+							$shares = $result_slice[$item_key][3];
+						}
+					
+						$title = $item['title'];
+						$user = '-';
+						if (array_key_exists('user', $item) && !is_null($item['user'])) {
+							$user = $item['user']['username'];
+						}
 
-        // Start output buffering (to capture stream contents)
-        ob_start();
-        // CSV Header
-        if(is_array($csv_header)){
-            fputcsv($fh, $csv_header);
+						$publicationTime = intval($item['publicationTime'] / 1000);
+						$pdd = date('d M Y \a\t H:i', $publicationTime);
+						$media = '-';
+						if (array_key_exists('mediaUrl', $item) && !is_null($item['mediaUrl'])) {
+							$media = $item['mediaUrl'];
+						}
+						$source = $item['source'];
+						$pageUrl = $item['pageUrl'];
+						
+						$row = array($i, $user, $title, $media, $pdd, $source, $pageUrl, $score, $relevance, $likes, $shares);
+
+						fputcsv($fh, $row);
+					}
+					catch (Exception $e) {
+						continue;
+					}
+				}
+
+				// Get the contents of the output buffer
+				//$string = ob_get_clean();
+				//echo $string;
+				ob_flush();
+				flush();
+			}
+		
+			sleep(1);
+		
+		} 
+		while($pageNumber <= 100);
+		
+        fclose($fh);
+		
+		// flush buffer
+		ob_flush();
+    }
+)->name("collection_download");
+
+
+/**
+ *  GET /collection/:id/test_download
+ */
+$app->get('/collection/:cid/test_download',
+    function($cid) use($mongoDAO, $textIndex, $utils, $redisClient, $app) {
+		
+		$response = array();
+        $request = $app->request();
+
+        $s = $request->get('since');
+        $u = $request->get('until');
+
+        $since = ($s==null || $s === '') ? '*' : $s;
+        $until = ($u==null || $u === '') ? '*' : $u;
+
+        $source = $request->get('source');
+        $source = ($source===null || $u === '') ? '*' : $source;
+
+        $language = $request->get('language');
+        $original = $request->get('original');
+        $type = $request->get('type');
+
+        $relevance = $request->get('relevance');
+        if ($relevance != null && $relevance !== '') {
+            $relevance = explode(",", $relevance);
         }
 
+        $user = $request->get('user');
+
+        $unique = $request->get('unique')===null ? false : $request->get('unique');
+        $query = $request->get('q');
+
+        $filename = $request->get('filename');
+
+        $topicQuery = $request->get('topicQuery');
+        if($topicQuery != null && $topicQuery != '*') {
+            if($query == null) {
+                $query = $topicQuery;
+            }
+            else {
+                $query = $query . ',' . $topicQuery;
+            }
+        }
+
+        $collection = $mongoDAO->getCollection($cid);
+
+        if ($collection == null) {
+            echo json_encode(array('error' => "collection $collection does not exist."));
+            return;
+        }
+
+        $owner_id = $collection['ownerId'];
+			
+        if (is_null($filename) || $filename == '') {
+            $filename = $collection['title'].'_'.$cid;
+        }
+
+        // query formulation
+        $collection_query = $utils->formulateCollectionQuery($collection);
+
+        $judgements = null;
+        if ($relevance != null && count($relevance) > 0) {
+            $judgements = $mongoDAO->getItemsOfSpecificRelevance($cid, $relevance);
+        }
+
+        // Add filters if available
+        $itemsToExclude = isset($collection['itemsToExclude'])?$collection['itemsToExclude']:null;
+        $usersToExclude = isset($collection['usersToExclude'])?$collection['usersToExclude']:null;
+        $keywordsToExclude = isset($collection['keywordsToExclude'])?$collection['keywordsToExclude']:null;
+        $nearLocations = isset($collection['nearLocations'])?$collection['nearLocations']:null;
+
+        $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
+            $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements, $nearLocations);
+        $ids_result = $textIndex->getAllItemIds($collection_query,  $filters,  $unique);
+
+
+		$user_relevance_judgments = $mongoDAO->getUserRelevanceJudgements($owner_id, $cid);
+
         $num_per_request = 100;
-        for ($i = 0; $i <= count($ids); $i += $num_per_request) {
-            $ids_slice = array_slice($ids, $i, $num_per_request);
-            if (count($ids_slice) == 0) {
+        for ($i = 0; $i <= count($ids_result); $i += $num_per_request) {
+            $result_slice = array_slice($ids_result, $i, $num_per_request);
+            if (count($result_slice) == 0) {
                 continue;
             }
-
+			
+			$ids_slice = array_map(function($r){ return $r[0];}, $result_slice);
             $items = $mongoDAO->getItemsByIds($ids_slice);
+			
             foreach($items as $item) {
                 try {
-                    $title = '"' . $item['title'] . '"';
+					$item_id = $item['id'];
+					$relevance = '-';
+					try {
+						$rel_entry = current(array_filter($user_relevance_judgments, function($rj) use($item_id) {return $rj['iid']==$item_id;}));
+						if ($rel_entry) {
+							$relevance = $rel_entry['relevance'];
+						}
+					} catch (Exception $e) {
+						$relevance =  $e->getMessage();
+					}
+
+					$score = 0;
+					$likes = 0;
+					$shares = 0;
+					$item_key = array_search($item_id, array_column($result_slice, 0));
+					if ($item_key) {
+						$score = $result_slice[$item_key][1];
+						$likes = $result_slice[$item_key][2];
+						$shares = $result_slice[$item_key][3];
+					}
+					
+                    $title = $item['title'];
                     $user = '-';
                     if (array_key_exists('user', $item) && !is_null($item['user'])) {
                         $user = $item['user']['username'];
                     }
 
                     $publicationTime = intval($item['publicationTime'] / 1000);
-                    $d = date('d M Y \a\t H:i', $publicationTime);
+                    $pdd = date('d M Y \a\t H:i', $publicationTime);
                     $media = '-';
                     if (array_key_exists('mediaUrl', $item) && !is_null($item['mediaUrl'])) {
                         $media = $item['mediaUrl'];
                     }
                     $source = $item['source'];
                     $pageUrl = $item['pageUrl'];
-                    $row = array($user, $title, $media, $d, $source, $pageUrl);
-
-                    fputcsv($fh, $row);
+					
+                    $row = array($user, $title, $media, $pdd, $source, $pageUrl, $score, $relevance, $likes, $shares);
+					$response[] = $row;
                 }
                 catch (Exception $e) {
-                    echo $e;
+					$row = array($e->getMessage(), '', '', '', '', '', '', '', '', '');
+					$response[] = $row;
                 }
-
             }
-
-            // Get the contents of the output buffer
-            $string = ob_get_clean();
-            //echo $string;
-
-            ob_flush();
-            flush();
         }
-
-        fclose($fh);
-
+		
+		echo json_encode($response);
     }
-)->name("collection_download");
-
-/**
- *  GET /collection/:id/download
- */
-$app->get('/download/:job_id', function($job_id) use($mongoDAO, $app) {
-
-    $response = $app->response();
-    $stream = new \Slim\Http\Stream(null);
-
-    return $response->withHeader('Content-Type', 'application/force-download')
-        ->withHeader('Content-Type', 'application/octet-stream')
-        ->withHeader('Content-Type', 'application/download')
-        ->withHeader('Content-Description', 'File Transfer')
-        ->withHeader('Content-Transfer-Encoding', 'binary')
-        ->withBody($stream);
-}
-)->name("download_result");
-
+)->name("test_collection_download");
 
 /**
  *  GET /summary
@@ -2570,7 +2722,8 @@ $app->get(
 $app->get(
     '/relevance/user/:uid/:cid',
     function($uid, $cid) use ($mongoDAO, $app) {
-        $judgements = $mongoDAO->getUserRelevanceJudgements($uid, $cid);
+
+		$judgements = $mongoDAO->getUserRelevanceJudgements($uid, $cid);
 
         echo json_encode($judgements);
     }

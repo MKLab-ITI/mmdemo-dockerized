@@ -589,31 +589,28 @@ class MongoDAO {
     }
 
     public function getUserRelevanceJudgements($uid, $cid=null, $iid=null, $n=-1) {
-        $mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
+		$mongoCollection = $this->db->selectCollection(MongoDAO::$RELEVANCE_JUDGMENTS);
+		$q = array("uid" => $uid);
 
-        $q = array("uid" => $uid);
+		if(!is_null($cid)) {
+			$q['cid'] = $cid;
+		}
 
-        if($cid != null) {
-            $q['cid'] = $cid;
-        }
+		if(!is_null($iid)) {
+			$q['iid'] = $iid;
+		}
+		
+		$params = array('sort' => ['relevance' => -1]);
 
-        if($iid != null) {
-            $q['iid'] = $iid;
-        }
+		if ($n > 0) {
+			$params['limit'] = $n;
+		}
 
-        $params = [
-            'sort' => ['relevance' => -1],
-        ];
+		$cursor = $mongoCollection->find($q, $params);
 
-        if ($n > 0) {
-            $params['limit'] = $n;
-        }
-
-        $cursor = $mongoCollection->find($q, $params);
-
-        $rj = iterator_to_array($cursor, false);
-        return $rj;
-    }
+		$rj = iterator_to_array($cursor, false);
+		return $rj;
+	}
 
     public function getRelevanceJudgement($uid, $cid, $iid) {
         $q = array("uid" => $uid, "cid" => $cid, "iid" => $iid);

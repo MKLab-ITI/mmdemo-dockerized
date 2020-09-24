@@ -51,7 +51,7 @@ class TextIndex {
             $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash min=publicationTime}");
         }
 
-        $query->addSort('publicationTimeFacet', Solarium\QueryType\Select\Query\Query::SORT_DESC);
+        //$query->addSort('publicationTimeFacet', Solarium\QueryType\Select\Query\Query::SORT_DESC);
 
         // filters
         if($filters != null) {
@@ -59,7 +59,8 @@ class TextIndex {
                 $query->createFilterQuery($filterKey)->setQuery("$filterKey:($filterValue)");
             }
         }
-        $query->setFields(['id']);
+		$query->setFields(['id', 'score', 'likesFacet', 'sharesFacet']);
+			
 
         $pageNumber = 1;
         $nPerPage = 50000;
@@ -72,21 +73,82 @@ class TextIndex {
             try {
                 $resultSet = $this->client->execute($query);
                 $numFound = $resultSet->getNumFound();
-                foreach ($resultSet as $document) {
-                    $docsFound[] = $document['id'];
+				$maxScore = $resultSet->getMaxScore();
+                foreach ($resultSet as $doc) {
+                    $docsFound[] = array($doc['id'], $doc['score'], $doc['likesFacet'], $doc['sharesFacet']);
                 }
                 $pageNumber += 1;
                 $offset = ($pageNumber - 1) * $nPerPage;
             }
             catch(Exception $e) {
-                break;
+                return array('error' => $e->getMessage());
             }
         } while($offset < $numFound && $pageNumber < 100);
 
         return $docsFound;
     }
 
-    public function searchItems($q, $pageNumber=1, $nPerPage=20, $filters=null, $sort=null, $unique=false, $hlq=null) {
+    
+	public function getItemIds($q, $filters=null, $unique=false, $pageNumber=1, $nPerPage=50000) {
+
+        $query = $this->client->createSelect();
+
+        if($filters != null && isset($filters['geofilters'])) {
+            $helper = $query->getHelper();
+            $geoParts = array();
+            foreach($filters['geofilters'] as $geo) {
+                $geoFilterPart = $helper->geofilt('latlonRPT', $geo['latitude'], $geo['longitude'], $geo['radius']);
+                $geoParts[] = "latlonRPT:$geoFilterPart";
+            }
+            if($q != null &&  $q !== '') {
+                $q = $q . ' OR (' . implode(' OR ', $geoParts) . ')';
+            }
+            else {
+                $q = implode(' OR ', $geoParts);
+            }
+            unset($filters['geofilters']);
+        }
+        if($q != null) {
+            $query->setQuery($q);
+        }
+        if($unique === 'true' OR $unique === true) {
+            $query->createFilterQuery("collapse")->setQuery("{!collapse field=minhash min=publicationTime}");
+        }
+
+        $query->addSort('publicationTimeFacet', Solarium\QueryType\Select\Query\Query::SORT_DESC);
+
+        // filters
+        if($filters != null) {
+            foreach($filters as $filterKey=>$filterValue) {
+                $query->createFilterQuery($filterKey)->setQuery("$filterKey:($filterValue)");
+            }
+        }
+		
+		$query->setFields(['id', 'score', 'likesFacet', 'sharesFacet']);
+			
+        $offset = ($pageNumber - 1) * $nPerPage;
+
+        $docsFound = array();
+		$query->setStart($offset);
+		$query->setRows($nPerPage);
+		
+		try {
+			$resultSet = $this->client->execute($query);
+			$numFound = $resultSet->getNumFound();
+			$maxScore = $resultSet->getMaxScore();
+			foreach ($resultSet as $doc) {
+				$docsFound[] = array($doc['id'], $doc['score'], $doc['likesFacet'], $doc['sharesFacet']);
+			}
+		}
+		catch(Exception $e) {
+			
+		}
+
+        return $docsFound;
+    }
+
+    
+	public function searchItems($q, $pageNumber=1, $nPerPage=20, $filters=null, $sort=null, $unique=false, $hlq=null) {
         $query = $this->client->createSelect();
 
         if($filters != null && isset($filters['geofilters'])) {

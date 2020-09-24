@@ -39,11 +39,7 @@ function draw_social_mix(flag, view) {
                 key: "Twitter",
                 y: twitter,
                 image_path: "./imgs/twitter-16-color.png"
-            }, {
-                key: "Flickr",
-                y: flickr,
-                image_path: "./imgs/flickr-16-color.png"
-            }, {
+            },  {
                 key: "Youtube",
                 y: youtube,
                 image_path: "./imgs/youtube-16-color.png"

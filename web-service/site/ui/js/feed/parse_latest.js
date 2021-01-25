@@ -380,7 +380,7 @@ function parse_latest_list(pagenum) {
                     $update_field.html("Last item in current view: -");
                     var $myModal = $('#myModal');
                     var $end = $('#end');
-                    $('.list_table,#posts_info,#download_icon,.well').hide();
+                    $('.list_table,#posts_info,#download_icon_csv,#download_icon_xls,.well').hide();
                     if ((keyword_query_param !== "") && (user_query_param !== "")) {
                         $myModal.find('h1').html("No results!");
                         $myModal.find('p').html("The internet is not talking about this keyword and user combination.");
@@ -439,7 +439,7 @@ function parse_latest_list(pagenum) {
                     last_but = "Last";
                     var title, source, publicationTime, shared, shared_order, relevance_order, screenname, profileimage, page, userpage, thumb, colorclass, iconsource, onerror, uid, id, language;
                     var $pagination_list = $('#pagination_list');
-                    $('.list_table,#posts_info,#download_icon,.well').show();
+                    $('.list_table,#posts_info,#download_icon_csv,#download_icon_xls,.well').show();
                     if ($pagination_list.data("twbs-pagination")) {
                         $pagination_list.twbsPagination('destroy');
                     }
@@ -453,7 +453,7 @@ function parse_latest_list(pagenum) {
                         last: last_but,
                         onPageClick: function (event, page) {
                             $(".list_table tbody").empty();
-                            $('.well,#posts_info,#download_icon').hide();
+                            $('.well,#posts_info,#download_icon_csv,#download_icon_xls').hide();
                             $('#loading').show();
                             parse_latest_list(page);
                         }

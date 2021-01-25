@@ -35,7 +35,7 @@ try {
     $mongoDAO = new MongoDAO($mongoHost, $mongoDatabase, 27017, $_ENV["MONGO_USER"],  $_ENV["MONGO_PASSWORD"]);
 
     $utils = new Utils();
-
+    
     $redisParams = array('scheme' => 'tcp', 'host' => 'redis', 'port' => 6379);
     $redisClient = new Predis\Client($redisParams);
 
@@ -540,6 +540,19 @@ $app->get('/collection/:cid/download',
 		header('Content-Type: application/csv;charset=UTF-8');
 		header('Content-Encoding: UTF-8');
 
+        // clean output buffer
+		ob_end_clean();
+	
+		// Open the output stream
+        $fh = fopen('php://output', 'w');
+        
+        // Start output buffering (to capture stream contents)
+		ob_start();
+		
+		// CSV Header
+		$csv_header = array('User', 'Title', 'Media', 'Date', 'Source', 'Url', 'Score', 'Relevance', 'Likes', 'Shares');
+        fputcsv($fh, $csv_header);
+            
 		$pageNumber = 1;
 		$nPerPage = 10000;			
 		do {
@@ -555,19 +568,6 @@ $app->get('/collection/:cid/download',
 				// no more results
 				break;
 			}
-			
-			// clean output buffer
-			ob_end_clean();
-	
-			// Open the output stream
-			$fh = fopen('php://output', 'w');
-
-			// Start output buffering (to capture stream contents)
-			ob_start();
-		
-			// CSV Header
-			$csv_header = array('User', 'Title', 'Media', 'Date', 'Source', 'Url', 'Score', 'Relevance', 'Likes', 'Shares');
-			fputcsv($fh, $csv_header);
         
 			$num_per_request = 500;
 			for ($i = 0; $i <= count($ids_result); $i += $num_per_request) {
@@ -578,7 +578,6 @@ $app->get('/collection/:cid/download',
 			
 				$ids_slice = array_map(function($r){ return $r[0];}, $result_slice);
 				$items = $mongoDAO->getItemsByIds($ids_slice);
-			
 				foreach($items as $item) {
 					try {
 						$item_id = $item['id'];
@@ -588,7 +587,9 @@ $app->get('/collection/:cid/download',
 							if ($rel_entry) {
 								$relevance = $rel_entry['relevance'];
 							}
-						} catch (Exception $e) {}
+						} catch (Exception $e) {
+
+                        }
 
 						$score = 0;
 						$likes = 0;
@@ -600,7 +601,9 @@ $app->get('/collection/:cid/download',
 							$shares = $result_slice[$item_key][3];
 						}
 					
-						$title = $item['title'];
+                        $title = $item['title'];
+                        $title = str_replace(array("\n", "\r"), ' ', $title);
+
 						$user = '-';
 						if (array_key_exists('user', $item) && !is_null($item['user'])) {
 							$user = $item['user']['username'];
@@ -611,13 +614,17 @@ $app->get('/collection/:cid/download',
 						$media = '-';
 						if (array_key_exists('mediaUrl', $item) && !is_null($item['mediaUrl'])) {
 							$media = $item['mediaUrl'];
-						}
+                        }
+                        
 						$source = $item['source'];
 						$pageUrl = $item['pageUrl'];
 						
 						$row = array($user, $title, $media, $pdd, $source, $pageUrl, $score, $relevance, $likes, $shares);
+                        $separator = ',';
+                        $enclosure = '"';
+                        $escape = '\\';
 
-						fputcsv($fh, $row);
+						fputcsv($fh, $row, $separator, $enclosure, $escape);
 					}
 					catch (Exception $e) {
 						continue;
@@ -644,13 +651,9 @@ $app->get('/collection/:cid/download',
 )->name("collection_download");
 
 
-/**
- *  GET /collection/:id/test_download
- */
-$app->get('/collection/:cid/test_download',
+$app->get('/collection/:cid/xls_download',
     function($cid) use($mongoDAO, $textIndex, $utils, $redisClient, $app) {
-		
-		$response = array();
+
         $request = $app->request();
 
         $s = $request->get('since');
@@ -658,24 +661,20 @@ $app->get('/collection/:cid/test_download',
 
         $since = ($s==null || $s === '') ? '*' : $s;
         $until = ($u==null || $u === '') ? '*' : $u;
-
         $source = $request->get('source');
         $source = ($source===null || $u === '') ? '*' : $source;
-
         $language = $request->get('language');
         $original = $request->get('original');
         $type = $request->get('type');
-
         $relevance = $request->get('relevance');
+
         if ($relevance != null && $relevance !== '') {
             $relevance = explode(",", $relevance);
         }
 
         $user = $request->get('user');
-
         $unique = $request->get('unique')===null ? false : $request->get('unique');
         $query = $request->get('q');
-
         $filename = $request->get('filename');
 
         $topicQuery = $request->get('topicQuery');
@@ -717,72 +716,132 @@ $app->get('/collection/:cid/test_download',
 
         $filters = $utils->getFilters($since, $until, $source, $original, $type, $language, $query, $user,
             $itemsToExclude, $usersToExclude, $keywordsToExclude, $judgements, $nearLocations);
-        $ids_result = $textIndex->getAllItemIds($collection_query,  $filters,  $unique);
-
-
+        
 		$user_relevance_judgments = $mongoDAO->getUserRelevanceJudgements($owner_id, $cid);
-
-        $num_per_request = 100;
-        for ($i = 0; $i <= count($ids_result); $i += $num_per_request) {
-            $result_slice = array_slice($ids_result, $i, $num_per_request);
-            if (count($result_slice) == 0) {
-                continue;
-            }
-			
-			$ids_slice = array_map(function($r){ return $r[0];}, $result_slice);
-            $items = $mongoDAO->getItemsByIds($ids_slice);
-			
-            foreach($items as $item) {
-                try {
-					$item_id = $item['id'];
-					$relevance = '-';
-					try {
-						$rel_entry = current(array_filter($user_relevance_judgments, function($rj) use($item_id) {return $rj['iid']==$item_id;}));
-						if ($rel_entry) {
-							$relevance = $rel_entry['relevance'];
-						}
-					} catch (Exception $e) {
-						$relevance =  $e->getMessage();
-					}
-
-					$score = 0;
-					$likes = 0;
-					$shares = 0;
-					$item_key = array_search($item_id, array_column($result_slice, 0));
-					if ($item_key) {
-						$score = $result_slice[$item_key][1];
-						$likes = $result_slice[$item_key][2];
-						$shares = $result_slice[$item_key][3];
-					}
-					
-                    $title = $item['title'];
-                    $user = '-';
-                    if (array_key_exists('user', $item) && !is_null($item['user'])) {
-                        $user = $item['user']['username'];
-                    }
-
-                    $publicationTime = intval($item['publicationTime'] / 1000);
-                    $pdd = date('d M Y \a\t H:i', $publicationTime);
-                    $media = '-';
-                    if (array_key_exists('mediaUrl', $item) && !is_null($item['mediaUrl'])) {
-                        $media = $item['mediaUrl'];
-                    }
-                    $source = $item['source'];
-                    $pageUrl = $item['pageUrl'];
-					
-                    $row = array($user, $title, $media, $pdd, $source, $pageUrl, $score, $relevance, $likes, $shares);
-					$response[] = $row;
-                }
-                catch (Exception $e) {
-					$row = array($e->getMessage(), '', '', '', '', '', '', '', '', '');
-					$response[] = $row;
-                }
-            }
-        }
 		
-		echo json_encode($response);
+		set_time_limit(0);
+		ini_set('memory_limit', '2G');
+
+		header('Pragma: public');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		header('Cache-Control: private', false);
+		header('Content-Transfer-Encoding: binary');
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx";');
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8');
+		header('Content-Encoding: UTF-8');
+
+        // clean output buffer
+		ob_end_clean();
+	
+		// Open the output stream
+        $fh = fopen('php://output', 'w');
+        
+        $spreadsheet = new PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+
+		$pageNumber = 1;
+		$nPerPage = 10000;			
+		do {
+			$ids_result = $textIndex->getItemIds($collection_query,  $filters,  $unique, $pageNumber, $nPerPage);
+			$pageNumber += 1;
+			
+			if (array_key_exists('error', $ids_result)) {
+				// error
+				break;
+            }	
+            	
+			if (count($ids_result) == 0) {
+				// no more results
+				break;
+			}
+
+			// Start output buffering (to capture stream contents)
+			ob_start();
+		
+			// CSV Header
+			$header_names = array('User', 'Title', 'Media', 'Date', 'Source', 'Url', 'Score', 'Relevance', 'Likes', 'Shares');
+            $sheet->fromArray($header_names,  NULL, 'A1');
+
+            $row_number = 2;
+
+			$num_per_request = 500;
+			for ($i = 0; $i <= count($ids_result); $i += $num_per_request) {
+				$result_slice = array_slice($ids_result, $i, $num_per_request);
+				if (count($result_slice) == 0) {
+                    $sheet->fromArray(["NO DATA"],  NULL, 'A2');
+                    $row_number += 1;
+					continue;
+				}
+			
+				$ids_slice = array_map(function($r){ return $r[0];}, $result_slice);
+				$items = $mongoDAO->getItemsByIds($ids_slice);
+				foreach($items as $item) {
+					try {
+						$item_id = $item['id'];
+						$relevance = '-';
+						try {
+							$rel_entry = current(array_filter($user_relevance_judgments, function($rj) use($item_id) {return $rj['iid']==$item_id;}));
+							if ($rel_entry) {
+								$relevance = $rel_entry['relevance'];
+							}
+						} catch (Exception $e) {
+
+                        }
+
+						$score = 0;
+						$likes = 0;
+						$shares = 0;
+						$item_key = array_search($item_id, array_column($result_slice, 0));
+						if ($item_key) {
+							$score = $result_slice[$item_key][1];
+							$likes = $result_slice[$item_key][2];
+							$shares = $result_slice[$item_key][3];
+						}
+					
+                        $title = $item['title'];
+                        $title = str_replace(array("\n", "\r"), ' ', $title);
+
+						$user = '-';
+						if (array_key_exists('user', $item) && !is_null($item['user'])) {
+							$user = $item['user']['username'];
+						}
+
+						$publicationTime = intval($item['publicationTime'] / 1000);
+						$pdd = date('d M Y \a\t H:i', $publicationTime);
+						$media = '-';
+						if (array_key_exists('mediaUrl', $item) && !is_null($item['mediaUrl'])) {
+							$media = $item['mediaUrl'];
+                        }
+                        
+						$source = $item['source'];
+						$pageUrl = $item['pageUrl'];
+						
+						$row = array($user, $title, $media, $pdd, $source, $pageUrl, $score, $relevance, $likes, $shares);
+
+                        $sheet->fromArray($row,  NULL, "A$row_number");
+                        $row_number += 1;
+					}
+					catch (Exception $e) {
+						continue;
+					}
+				}
+
+				ob_flush();
+				flush();
+			}
+			usleep(200000);
+		} 
+		while($pageNumber <= 100);
+		$writer->save($fh);
+        
+        // flush buffer
+        fclose($fh);
+		ob_flush();
     }
-)->name("test_collection_download");
+)->name("collection_xls_download");
+
 
 /**
  *  GET /summary
@@ -1865,7 +1924,7 @@ $app->get(
             }
 
             $q = $utils->formulateCollectionQuery($sharedCollection);
-
+			
             $sharedCollection['query'] = $q;
 
             $since = $sharedCollection['since'];

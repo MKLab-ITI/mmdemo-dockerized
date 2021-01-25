@@ -7,6 +7,7 @@
         "facebook/graph-sdk": "5.4.4",
         "cosenary/instagram": "v2.3",
         "abraham/twitteroauth": "0.6.2",
-        "mongodb/mongodb": "1.0.4"
+        "mongodb/mongodb": "1.0.4",
+        "phpoffice/phpspreadsheet": "1.15.0"
     }
 }

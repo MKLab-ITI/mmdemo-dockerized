@@ -1,0 +1,5 @@
+mongo_data_dir/
+solr-cores/Items/data/
+solr-cores/MediaItems/data/
+solr-cores/WebPages/data/
+web-service/site/api/vendor/

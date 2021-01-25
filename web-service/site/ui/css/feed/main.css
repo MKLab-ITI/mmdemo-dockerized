@@ -2213,7 +2213,7 @@ html, body {
     display: inline-block;
 }
 
-#download_icon {
+#download_icon_csv,#download_icon_xls {
     display: none;
     width: 18px;
     position: relative;

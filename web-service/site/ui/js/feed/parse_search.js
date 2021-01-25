@@ -22,7 +22,7 @@ function parse_search() {
     if (pagelocation === "latest") {
         if (view_param === "list") {
             $(".list_table tbody").empty();
-            $(".well,#end,#posts_info,#download_icon").hide();
+            $(".well,#end,#posts_info,#download_icon_csv,#download_icon_xls").hide();
             parse_latest_list(1);
         }
         else {

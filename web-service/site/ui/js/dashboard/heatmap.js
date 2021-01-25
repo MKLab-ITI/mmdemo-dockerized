@@ -9,13 +9,14 @@ function show_heatmap() {
         bounds = L.latLngBounds(southWest, northEast);
 
     L.mapbox.accessToken = 'pk.eyJ1IjoibGFhcG9zdG8iLCJhIjoic21tVGtEQSJ9.tH3Q3MuElddX8xe26KkoHw';
-    map = L.mapbox.map('heatmap', 'examples.map-h68a1pf7', {
+    map = L.mapbox.map('heatmap', 'mapbox.satellite', {
         center: [centerLat, centerLong],
         zoom: zoom,
         minZoom: 1,
         maxZoom: 11,
         maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180))
-    })
+    });
+	//L.mapbox.styleLayer('mapbox://styles/examples/cji3d7gpt1i8m2rn7l7w0vl99').addTo(map);
     //console.log(bounds);
     //map.fitBounds(bounds);
     var heat = L.heatLayer([]).addTo(map);

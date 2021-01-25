@@ -177,16 +177,16 @@
         <![CDATA[gr.iti.mklab.sfc.streams.impl.TwitterStream]]>
       </Parameter>
       <Parameter name="Key">
-        <![CDATA[w4kdLqTmPkgqm5irBj1oykEzI]]>
+        <![CDATA[]]>
       </Parameter>
       <Parameter name="Secret">
-        <![CDATA[1snrktQuQIYEnwf5YITO6hEtOdVYdaH5AGFpTMx2oDp2oBI8W5]]>
+        <![CDATA[]]>
       </Parameter>
       <Parameter name="AccessToken">
-        <![CDATA[204974667-f1KwhG3DyOmbRD2WcEmRFTDILOQQj6P220aXL56B]]>
+        <![CDATA[]]>
       </Parameter>
       <Parameter name="AccessTokenSecret">
-        <![CDATA[5TZjIG368g8zIRp78r9yAoHyeNbwymr1JnEkTLDygU3yk]]>
+        <![CDATA[]]>
       </Parameter>
       <Parameter name="maxRequests">
         <![CDATA[180]]>

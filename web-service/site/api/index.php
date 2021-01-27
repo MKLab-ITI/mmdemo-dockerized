@@ -2012,6 +2012,9 @@ $app->post(
             if(isset($collection->accounts)) {
                 foreach($collection->accounts as $account) {
                     $account->_id = $account->id;
+                    if ($account->source === 'YouTube') {
+                        $account->source = 'Youtube';
+                    }
                 }
             }
 

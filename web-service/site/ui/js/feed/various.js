@@ -1347,13 +1347,13 @@ $('#clear_user_search').click(function () {
 
 $('#download_icon_csv').click(function () {
     window.open(api_folder + 'collection/' + collection_param + '/download?collection=' + collection_param + '&language=' + language_param + '&topics=' + topic_param + 
-    '&unique=' + unique_param + '&original=' + original_param + '&type=' + type_param + '&relevance=' + relevance_param + '&sort=' + sort_param + '&queryUser=' + user_query_param + 
-    '&queryKeyword=' + keyword_query_param + '&source=' + source_param + '&since=' + since_param + '&until=' + until_param + '&section=' + section_param + '&view=' + view_param);
+    '&unique=' + unique_param + '&original=' + original_param + '&type=' + type_param + '&relevance=' + relevance_param + '&sort=' + sort_param + '&user=' + user_query_param + 
+    '&q=' + keyword_query_param + '&source=' + source_param + '&since=' + since_param + '&until=' + until_param + '&section=' + section_param + '&view=' + view_param);
 });
 $('#download_icon_xls').click(function () {
     window.open(api_folder + 'collection/' + collection_param + '/xls_download?collection=' + collection_param + '&language=' + language_param + '&topics=' + topic_param + 
-    '&unique=' + unique_param + '&original=' + original_param + '&type=' + type_param + '&relevance=' + relevance_param + '&sort=' + sort_param + '&queryUser=' + user_query_param + 
-    '&queryKeyword=' + keyword_query_param + '&source=' + source_param + '&since=' + since_param + '&until=' + until_param + '&section=' + section_param + '&view=' + view_param);
+    '&unique=' + unique_param + '&original=' + original_param + '&type=' + type_param + '&relevance=' + relevance_param + '&sort=' + sort_param + '&user=' + user_query_param + 
+    '&q=' + keyword_query_param + '&source=' + source_param + '&since=' + since_param + '&until=' + until_param + '&section=' + section_param + '&view=' + view_param);
 });
 
 

@@ -25,18 +25,19 @@ function draw_timeline() {
         success: function (json) {
             var timeline_values = [];
             var timeline = json.timeline;
-            /*for (var i = 0; i < timeline.length; i++) {
+            for (var i = 0; i < timeline.length; i++) {
                 timeline_values.push({
                     x: parseInt(timeline[i].timestamp),
                     y: timeline[i].count
                 });
-            }*/
-			for (var i = 0; i < 100; i++) {
-                timeline_values.push({
-                    x: 1598918400000+(i*86400000),
-                    y: Math.floor(Math.random() * (100 - 10 + 1) + 10)
-                });
             }
+			// for (var i = 0; i < 100; i++) {
+            //     timeline_values.push({
+            //         x: 1598918400000+(i*86400000),
+            //         y: Math.floor(Math.random() * (100 - 10 + 1) + 10)
+            //     });
+            // }
+
             nv.addGraph(function () {
                 var chart = nv.models.lineWithFocusChart()
                     .showLegend(false)

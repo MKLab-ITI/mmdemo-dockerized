@@ -8,6 +8,6 @@
         "cosenary/instagram": "v2.3",
         "abraham/twitteroauth": "0.6.2",
         "mongodb/mongodb": "1.0.4",
-        "phpoffice/phpspreadsheet": "1.15.0"
+        "phpoffice/phpspreadsheet": "1.16.0"
     }
 }
